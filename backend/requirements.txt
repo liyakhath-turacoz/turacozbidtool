@@ -3,3 +3,4 @@ uvicorn[standard]==0.34.0
 pymysql==1.1.1
 pydantic==2.10.4
 python-multipart==0.0.20
+tzdata>=2025.1

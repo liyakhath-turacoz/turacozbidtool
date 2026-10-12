@@ -34,3 +34,9 @@ can instead run the explicit import command as a pre-start/release task.
 
 Temporary global indexes, per-product raw responses, and the discovery database
 are deleted after a successful build.
+
+## Catalog audit and live sources
+
+The inspected directory has no nested `products/products` folder. Its local data lives in `manifest.json` and `data/*.jsonl.gz`. New imports and admin schedules are documented in [the product source guide](../PRODUCT_SOURCES_GUIDE.md); current counts and date confidence are in [the catalog report](../PRODUCT_CATALOG_REPORT.md). Private detailed CSVs and backup snapshots live in `reports/`.
+
+The importer preserves removed products and existing bidding history. The builder now requires a release date rather than substituting catalog-added dates; previously generated bundles may still contain unverified years.

@@ -105,7 +105,7 @@ flutter build apk --release --dart-define=API_BASE_URL=http://10.0.2.2:8000
 
 ## Product catalog
 
-The current local database contains **21,676 products, all active**, verified on 12 October 2026 after removing temporary test records. The database, downloaded catalog shards, account data and private settings are excluded from the Git repository. A fresh clone can seed demo products or import an independently supplied catalog bundle.
+The current local database contains **21,710 available products, all active**, audited on 12 October 2026. Fourteen confirmed pre-2017 variants were retired with bidding history retained; verified recent source imports were added. Legacy release years still need verification. The database, downloaded catalog shards, account data and private settings are excluded from the Git repository. A fresh clone can seed demo products or import an independently supplied catalog bundle.
 
 When `products/manifest.json` and all referenced compressed catalog shards are present, backend startup imports that catalog once per version by default. Set `TURACOZ_IMPORT_PRODUCTS_ON_STARTUP=false` to disable startup imports and import manually:
 
@@ -115,9 +115,13 @@ python backend\scripts\import_product_catalog.py --products-root products
 
 The `add_dummy_data.py` seed does not clear catalog data. See [products/README.md](products/README.md) for the bundle format and the explicit `--replace-existing` option.
 
+See [PRODUCT_CATALOG_REPORT.md](PRODUCT_CATALOG_REPORT.md) for category/year/brand totals and [PRODUCT_SOURCES_GUIDE.md](PRODUCT_SOURCES_GUIDE.md) for the 12 manufacturer adapters, TechAPI, Icecat downloads and source configuration. Buyer and admin filters include manufacturer, item type, release year and category-specific specifications, with full-database pagination and no review-rating filters. Appliances have their own parent category.
+
 ## Admin panel
 
 **Products / Catalog** searches the complete catalog, with category, brand, status, price and sorting filters and 50 products per page. Product creation and editing validate required fields and price ranges. Archived products remain available to admin and are hidden from buyers. Products with bidding history retain their identity; prices, specifications and status remain editable. Product deletion preserves historical requests and offers. Categories used by products or dealer profiles cannot be deleted until those records are reassigned.
+
+**Product Fetch & Reports** supports manual imports, hourly intervals, daily local times, fixed one-time schedules, custom public JSON feeds, durable job history, review links and CSV statistics. New imports require release evidence and a three-year age limit. Credentials remain in private server settings. Restart an already running backend to load the new routes.
 
 **Buyer Management** includes saved addresses even before a buyer creates a request and shows actual winning purchase prices/counts. **Dealer Management** includes verification, subscription, coverage details, reports and status history. Pending, verified, active, held, suspended, flagged and banned states are available; deletion requires confirmation. Held, suspended and banned accounts lose marketplace access. Admin accounts are protected from marketplace moderation and profile deletion.
 

@@ -14,18 +14,39 @@ class ApiClient {
 
   final http.Client _http;
 
-  Future<List<Map<String, dynamic>>> bidMessages(String token, String bidId) async => _list(await _get('/bids/$bidId/messages', token));
-  Future<Map<String, dynamic>> sendBidMessage(String token, String bidId, String message) async {
-    final response = await _http.post(Uri.parse('$apiBaseUrl/bids/$bidId/messages'), headers: _headers(token), body: jsonEncode({'message': message}));
+  Future<List<Map<String, dynamic>>> bidMessages(
+    String token,
+    String bidId,
+  ) async => _list(await _get('/bids/$bidId/messages', token));
+  Future<Map<String, dynamic>> sendBidMessage(
+    String token,
+    String bidId,
+    String message,
+  ) async {
+    final response = await _http.post(
+      Uri.parse('$apiBaseUrl/bids/$bidId/messages'),
+      headers: _headers(token),
+      body: jsonEncode({'message': message}),
+    );
     _throwIfBad(response);
     return Map<String, dynamic>.from(jsonDecode(response.body));
   }
 
-  Future<List<Map<String, dynamic>>> searchLocations(String token, String query) async =>
-      _list(await _get('/locations/search?q=${Uri.encodeQueryComponent(query)}', token));
+  Future<List<Map<String, dynamic>>> searchLocations(
+    String token,
+    String query,
+  ) async => _list(
+    await _get('/locations/search?q=${Uri.encodeQueryComponent(query)}', token),
+  );
 
-  Future<Map<String, dynamic>> reverseLocation(String token, double latitude, double longitude) =>
-      getMap('/locations/reverse?latitude=$latitude&longitude=$longitude', token);
+  Future<Map<String, dynamic>> reverseLocation(
+    String token,
+    double latitude,
+    double longitude,
+  ) => getMap(
+    '/locations/reverse?latitude=$latitude&longitude=$longitude',
+    token,
+  );
 
   Future<SessionUser> login(String username, String password) async {
     final response = await _http
@@ -54,6 +75,64 @@ class ApiClient {
       token,
     );
     return _list(response).map((item) => ProductItem.fromJson(item)).toList();
+  }
+
+  Future<Map<String, dynamic>> catalogSearch(
+    String token,
+    Map<String, dynamic> filters,
+  ) async {
+    final query = <String, dynamic>{};
+    for (final entry in filters.entries) {
+      if (entry.value == null || entry.value == '') continue;
+      query[entry.key] = entry.key == 'specs'
+          ? jsonEncode(entry.value)
+          : entry.value is List
+          ? (entry.value as List).map((value) => value.toString()).toList()
+          : entry.value.toString();
+    }
+    final response = await _http.get(
+      Uri.parse('$apiBaseUrl/catalog/search').replace(queryParameters: query),
+      headers: _headers(token),
+    );
+    _throwIfBad(response);
+    return Map<String, dynamic>.from(jsonDecode(response.body));
+  }
+
+  Future<Map<String, dynamic>> productSources(String token) =>
+      getMap('/admin/product-sources', token);
+  Future<Map<String, dynamic>> productStatistics(String token) =>
+      getMap('/admin/product-statistics', token);
+  Future<void> createProductSource(
+    String token,
+    Map<String, dynamic> settings,
+  ) async {
+    final response = await _http.post(
+      Uri.parse('$apiBaseUrl/admin/product-sources'),
+      headers: _headers(token),
+      body: jsonEncode(settings),
+    );
+    _throwIfBad(response);
+  }
+
+  Future<void> saveProductSource(
+    String token,
+    String id,
+    Map<String, dynamic> settings,
+  ) async {
+    final response = await _http.put(
+      Uri.parse('$apiBaseUrl/admin/product-sources/$id'),
+      headers: _headers(token),
+      body: jsonEncode(settings),
+    );
+    _throwIfBad(response);
+  }
+
+  Future<void> fetchProductSource(String token, String id) async {
+    final response = await _http.post(
+      Uri.parse('$apiBaseUrl/admin/product-sources/$id/fetch'),
+      headers: _headers(token),
+    );
+    _throwIfBad(response);
   }
 
   Future<void> createProduct(String token, ProductDraft draft) async {
@@ -439,15 +518,16 @@ class ApiClient {
     _throwIfBad(response);
   }
 
-  Future<void> markSingleNotificationRead(String token, String notificationId) async {
+  Future<void> markSingleNotificationRead(
+    String token,
+    String notificationId,
+  ) async {
     final response = await _http.post(
       Uri.parse('$apiBaseUrl/notifications/$notificationId/mark-read'),
       headers: _headers(token),
     );
     _throwIfBad(response);
   }
-
-
 
   Future<String> createReport(
     String token,

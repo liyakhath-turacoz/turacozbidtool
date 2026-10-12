@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import argparse
-from contextlib import suppress
+from contextlib import suppress, nullcontext
 import gzip
 import hashlib
 import json
@@ -14,9 +14,11 @@ from typing import Any, Iterator
 import pymysql
 
 try:
+    from . import catalog_filters
     from .configuration import load_local_environment
     from .database_health import assert_tables_readable
 except ImportError:
+    import catalog_filters
     from configuration import load_local_environment
     from database_health import assert_tables_readable
 
@@ -205,6 +207,7 @@ def ensure_catalog_schema(conn) -> None:
             """
         )
     conn.commit()
+    catalog_filters.ensure_schema(lambda:nullcontext(conn))
 
 
 def iter_bundle_records(products_root: Path, manifest: dict[str, Any]) -> Iterator[dict[str, Any]]:
@@ -272,7 +275,15 @@ def flush_sample_catalog(cursor) -> None:
 def upsert_product(cursor, record: dict[str, Any], electronics_id: str, subcategory_id: str) -> str:
     source_id = str(record["source_product_id"])
     product_id = stable_id("icecat-product", source_id)
-    highlights = record.get("highlights") or {}
+    cursor.execute('SELECT p.name,p.brand,p.model,p.category_id,p.subcategory_id,p.status,p.deleted_at,p.manual_specifications,p.release_year,p.release_date_basis,EXISTS(SELECT 1 FROM bid_requests br WHERE br.product_id=p.id) history FROM products p WHERE p.id=%s FOR UPDATE',[product_id])
+    existing=cursor.fetchone()
+    if existing and (existing['deleted_at'] is not None or existing['status']!='active'):return product_id
+    if existing and existing['release_date_basis']!='legacy_reported_year' and not record.get('release_date_basis'):
+        record={**record,'release_year':existing['release_year']}
+    if existing and existing['history']:
+        record={**record,'name':existing['name'],'brand':existing['brand'],'model':existing['model']}
+        electronics_id=existing['category_id'];subcategory_id=existing['subcategory_id']
+    highlights = {**(record.get("highlights") or {}),**catalog_filters.decode(existing.get('manual_specifications'),{})} if existing else record.get('highlights') or {}
     cursor.execute(
         """
         INSERT INTO products (
@@ -297,7 +308,7 @@ def upsert_product(cursor, record: dict[str, Any], electronics_id: str, subcateg
           highlights=VALUES(highlights), technical_specifications=VALUES(technical_specifications),
           software_specifications=VALUES(software_specifications), gallery=VALUES(gallery),
           multimedia=VALUES(multimedia), image_url=VALUES(image_url), status='active',
-          deleted_at=NULL, updated_at=NOW()
+          updated_at=NOW()
         """,
         (
             product_id,
@@ -364,6 +375,8 @@ def upsert_product(cursor, record: dict[str, Any], electronics_id: str, subcateg
                     order,
                 ),
             )
+    cursor.execute('SELECT id,highlights,technical_specifications,software_specifications,manual_specifications FROM products WHERE id=%s',[product_id])
+    catalog_filters.index_product(cursor,cursor.fetchone())
     return product_id
 
 
@@ -415,7 +428,7 @@ def import_bundle_if_needed(
             )
             electronics_id = category_id(cursor, "Electronics", None)
             subcategory_ids = {
-                name: category_id(cursor, name, electronics_id)
+                catalog_filters.product_type(name): category_id(cursor, catalog_filters.product_type(name), category_id(cursor,catalog_filters.parent_category(name),None))
                 for name in (manifest.get("category_counts") or {})
             }
             conn.commit()
@@ -424,12 +437,15 @@ def import_bundle_if_needed(
         imported = 0
         with conn.cursor() as cursor:
             for record in iter_bundle_records(products_root, manifest):
-                subcategory = str(record.get("subcategory") or "Other electronics")
+                if record.get('release_year') and int(record['release_year'])<2017:continue
+                if record.get('brand')=='Samsung' and any(str(record.get('name','')).startswith('Samsung '+prefix) for prefix in ['Galaxy Tab 3 SM-T3110','Galaxy Tab 4 SM-T330N','Galaxy Tab 4 SM-T331N','Galaxy Tab Active SM-T365']):continue
+                subcategory = catalog_filters.product_type(record.get("subcategory"))
+                parent_id=category_id(cursor,catalog_filters.parent_category(subcategory),None)
                 subcategory_identifier = subcategory_ids.get(subcategory)
                 if not subcategory_identifier:
-                    subcategory_identifier = category_id(cursor, subcategory, electronics_id)
+                    subcategory_identifier = category_id(cursor, subcategory, parent_id)
                     subcategory_ids[subcategory] = subcategory_identifier
-                upsert_product(cursor, record, electronics_id, subcategory_identifier)
+                upsert_product(cursor, record, parent_id, subcategory_identifier)
                 imported += 1
                 if imported % 200 == 0:
                     cursor.execute(

@@ -31,6 +31,8 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import AliasChoices, BaseModel, ConfigDict, Field, model_validator
 
 try:
+    from . import catalog_filters
+    from .product_sources import ImportService,cutoff as product_import_cutoff
     from .configuration import load_local_environment
     from .catalog_importer import import_bundle_if_needed
     from .connection_cache import ConnectionCache
@@ -38,6 +40,8 @@ try:
     from . import geocoding
     from .logging_filters import install_token_filters
 except ImportError:
+    import catalog_filters
+    from product_sources import ImportService,cutoff as product_import_cutoff
     from configuration import load_local_environment
     from catalog_importer import import_bundle_if_needed
     from connection_cache import ConnectionCache
@@ -737,7 +741,7 @@ class CatalogRepository:
                 [product_id],
             )
             manual_specs = {spec["spec_name"]: spec["spec_value"] for spec in cursor.fetchall()}
-            row["specifications"] = {**(row["specifications"] or {}), **manual_specs}
+            row["specifications"] = {**manual_specs, **(row["specifications"] or {}), **catalog_filters.decode(row.get('manual_specifications'),{})}
             cursor.execute(
                 """
                 SELECT asset_type, url, thumbnail_url, content_type, description,
@@ -774,11 +778,13 @@ class CatalogRepository:
                     [new_id(), product_id, key, value, index],
                 )
             audit(cursor, admin_id, "product.created", "products", product_id, {"name": draft.name})
+            cursor.execute('UPDATE products SET manual_specifications=%s WHERE id=%s',[json.dumps(draft.specifications),product_id])
+            catalog_filters.index_product(cursor,{'id':product_id,'specifications':draft.specifications,'subcategory':draft.subcategory})
         return product_id
 
     def update_product(self, product_id: str, draft: "ProductIn", admin_id: str) -> None:
         with db() as conn, conn.cursor() as cursor:
-            cursor.execute("SELECT name,brand,model,category_id,subcategory_id FROM products WHERE id=%s AND deleted_at IS NULL FOR UPDATE", [product_id])
+            cursor.execute("SELECT name,brand,model,category_id,subcategory_id,source,highlights,manual_specifications FROM products WHERE id=%s AND deleted_at IS NULL FOR UPDATE", [product_id])
             current = cursor.fetchone()
             if not current:
                 raise HTTPException(status_code=404, detail="Product not found")
@@ -806,6 +812,12 @@ class CatalogRepository:
                     [new_id(), product_id, key, value, index],
                 )
             audit(cursor, admin_id, "product.updated", "products", product_id, {"name": draft.name})
+            prior=catalog_filters.decode(current.get('manual_specifications'),{})
+            imported=catalog_filters.decode(current.get('highlights'),{})
+            overrides=draft.specifications if current.get('source') in {None,'','manual'} else {key:value for key,value in draft.specifications.items() if key in prior or value!=imported.get(key)}
+            cursor.execute('UPDATE products SET manual_specifications=%s WHERE id=%s',[json.dumps(overrides),product_id])
+            cursor.execute('SELECT id,highlights,technical_specifications,software_specifications,manual_specifications FROM products WHERE id=%s',[product_id])
+            catalog_filters.index_product(cursor,cursor.fetchone())
 
     def soft_delete_product(self, product_id: str, admin_id: str) -> None:
         with db() as conn, conn.cursor() as cursor:
@@ -2868,6 +2880,7 @@ def report_message_visible_to(row: dict[str, Any], user: dict[str, Any]) -> bool
         return True
     return group == user["role"]
 settings_repo = SettingsRepository()
+product_imports = ImportService(db)
 
 
 @asynccontextmanager
@@ -2884,11 +2897,17 @@ async def lifespan(app_instance: FastAPI):
         logger.info("Product catalog startup import: %s", import_result)
     check_database_storage()
     schedule_existing_bid_expiries()
+    product_imports.initialize()
+    import_scheduler = asyncio.create_task(product_imports.scheduler())
     if WEB_BUILD.exists():
         app_instance.mount("/assets", StaticFiles(directory=WEB_BUILD / "assets"), name="assets")
     try:
         yield
     finally:
+        import_scheduler.cancel()
+        with suppress(asyncio.CancelledError):
+            await import_scheduler
+        product_imports.close()
         for task in list(bid_expiry_tasks.values()):
             if not task.done():
                 task.cancel()
@@ -3790,10 +3809,62 @@ def delete_category(cat_id: str, user: dict[str, Any] = Depends(require_role("ad
 
 
 @app.get("/admin/products")
-def admin_catalog(q: str="", category: str="", brand: str="", status: Literal['','active','inactive','archived']="", minimum: float | None=Query(default=None,ge=0), maximum: float | None=Query(default=None,ge=0), sort: Literal['Newest','Name','Lowest Price','Highest Price']='Newest', limit:int=Query(default=50,ge=1,le=250), offset:int=Query(default=0,ge=0), user:dict=Depends(require_role('admin'))):
+def admin_catalog(q: str="", category: str="", brand: str="", status: Literal['','active','inactive','archived']="", minimum: float | None=Query(default=None,ge=0), maximum: float | None=Query(default=None,ge=0), sort: Literal['Newest','Name','Lowest Price','Highest Price','Year']='Newest', limit:int=Query(default=50,ge=1,le=250), offset:int=Query(default=0,ge=0), product_type:str='',years:list[str]=Query(default=[]),specs:str='{}',user:dict=Depends(require_role('admin'))):
+    if any(year!='unknown' and (not year.isdigit() or not 1900<=int(year)<=2200) for year in years):raise HTTPException(status_code=400,detail='Invalid release year')
     if minimum is not None and maximum is not None and minimum > maximum:
         raise HTTPException(status_code=400,detail="Minimum price must not exceed maximum price")
-    return catalog_repo.admin_catalog(q,category,brand,status,minimum,maximum,sort,limit,offset)
+    filters={'q':q,'category':category,'brand':brand,'status':status,'minimum':minimum,'maximum':maximum,'sort':sort,'limit':limit,'offset':offset,'product_type':product_type,'years':years,'specs':parse_catalog_specs(specs)}
+    return catalog_filters.search(db,filters,admin=True)
+
+
+def parse_catalog_specs(value):
+    try:
+        parsed=json.loads(value)
+        if not isinstance(parsed,dict) or len(parsed)>25 or any(key not in catalog_filters.SPEC_DEFINITIONS for key in parsed) or any(not isinstance(values,list) or len(values)>100 or any(not isinstance(val,str) or len(val)>160 for val in values) for values in parsed.values()):
+            raise ValueError('Invalid specification filters')
+        return parsed
+    except (ValueError,TypeError):
+        raise HTTPException(status_code=400,detail='Specification filters must be a JSON object of value lists')
+
+
+@app.get('/catalog/search')
+def catalog_search(q:str='',category:str='',product_type:str='',categories:list[str]=Query(default=[]),product_types:list[str]=Query(default=[]),brands:list[str]=Query(default=[]),years:list[str]=Query(default=[]),specs:str='{}',status:str='',minimum:float|None=Query(default=None,ge=0),maximum:float|None=Query(default=None,ge=0),sort:str='Newest',limit:int=Query(default=50,ge=1,le=250),offset:int=Query(default=0,ge=0),user:dict=Depends(current_user)):
+    if minimum is not None and maximum is not None and minimum>maximum:raise HTTPException(status_code=400,detail='Minimum price must not exceed maximum price')
+    if any(year!='unknown' and (not year.isdigit() or not 1900<=int(year)<=2200) for year in years):raise HTTPException(status_code=400,detail='Invalid release year')
+    return catalog_filters.search(db,{'q':q,'category':category,'product_type':product_type,'categories':categories,'product_types':product_types,'brands':brands,'years':years,'specs':parse_catalog_specs(specs),'status':status,'minimum':minimum,'maximum':maximum,'sort':sort,'limit':limit,'offset':offset},admin=user['role']=='admin')
+
+
+@app.get('/admin/product-statistics')
+def admin_product_statistics(user:dict=Depends(require_role('admin'))):
+    return catalog_filters.statistics(db)
+
+
+@app.get('/admin/product-statistics.csv')
+def admin_product_statistics_csv(user:dict=Depends(require_role('admin'))):
+    return Response(content=catalog_filters.statistics_csv(catalog_filters.statistics(db)),media_type='text/csv',headers={'Content-Disposition':'attachment; filename="product-statistics.csv"'})
+
+
+@app.get('/admin/product-sources')
+def admin_product_sources(user:dict=Depends(require_role('admin'))):
+    return {'sources':product_imports.sources(),'jobs':product_imports.jobs(),'cutoff':str(product_import_cutoff())}
+
+
+@app.put('/admin/product-sources/{source_id}')
+def admin_save_product_source(source_id:str,payload:dict[str,Any],user:dict=Depends(require_role('admin'))):
+    try:return product_imports.save_source(source_id,payload)
+    except (ValueError,KeyError,TypeError) as error:raise HTTPException(status_code=400,detail=str(error))
+
+
+@app.post('/admin/product-sources',status_code=201)
+def admin_create_product_source(payload:dict[str,Any],user:dict=Depends(require_role('admin'))):
+    try:return product_imports.create_source(payload)
+    except (ValueError,KeyError,TypeError) as error:raise HTTPException(status_code=400,detail=str(error))
+
+
+@app.post('/admin/product-sources/{source_id}/fetch',status_code=202)
+def admin_fetch_products(source_id:str,user:dict=Depends(require_role('admin'))):
+    try:return product_imports.enqueue(source_id,user['sub'])
+    except ValueError as error:raise HTTPException(status_code=409,detail=str(error))
 
 
 @app.get("/products")

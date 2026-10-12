@@ -1,0 +1,15 @@
+"""Official manufacturer discovery structures; credentials and scraped data stay out of this registry."""
+MANUFACTURERS = {
+    'samsung': {'brand':'Samsung','url':'https://news.samsung.com/in/category/press-resources','structure':'WordPress HTML articles; og:title and date metadata','domains':['news.samsung.com','www.samsung.com'],'types':['Smartphones','Tablets','Televisions','Refrigerators','Air conditioners','Ovens']},
+    'oppo': {'brand':'OPPO','url':'https://www.oppo.com/in/newsroom/','structure':'Embedded newsroom JSON: page_url, title, sort_date','domains':['www.oppo.com','oppo.com'],'types':['Smartphones','Tablets']},
+    'apple': {'brand':'Apple','url':'https://www.apple.com/newsroom/rss-feed.rss','structure':'Atom feed: entry/link, title, published; linked announcement HTML','domains':['www.apple.com','apple.com'],'types':['Smartphones','Tablets','Laptops','Smartwatches']},
+    'lenovo': {'brand':'Lenovo','url':'https://news.lenovo.com/','structure':'WordPress press-release links and JSON-LD datePublished','domains':['news.lenovo.com'],'types':['Laptops','Tablets','Monitors']},
+    'hp': {'brand':'HP','url':'https://www.hp.com/us-en/newsroom.html','structure':'AEM HTML links to dated press-release pages','domains':['www.hp.com'],'types':['Laptops','Monitors','Printers']},
+    'asus': {'brand':'ASUS','url':'https://press.asus.com/rss.xml','structure':'RSS feed items with article links and publication dates','domains':['press.asus.com','www.asus.com'],'types':['Laptops','Tablets','Monitors','Smartphones']},
+    'acer': {'brand':'Acer','url':'https://news.acer.com/feed','structure':'RSS feed items; article HTML and JSON-LD','domains':['news.acer.com'],'types':['Laptops','Tablets','Monitors']},
+    'midea': {'brand':'Midea','url':'https://www.midea.com/global/news','structure':'AEM news cards and /global/news/ article links','domains':['www.midea.com'],'types':['Air conditioners','Refrigerators','Ovens','Washing machines','Dishwashers']},
+    'tcl': {'brand':'TCL','url':'https://www.tcl.com/global/en/news','structure':'AEM news cards and /global/en/news/ article links','domains':['www.tcl.com'],'types':['Televisions','Smartphones','Tablets','Air conditioners','Refrigerators','Washing machines']},
+    'panasonic': {'brand':'Panasonic','url':'https://news.panasonic.com/global/press/','structure':'Public newsroom JSON API: articles/url, title, publish_start_at','domains':['news.panasonic.com'],'types':['Televisions','Air conditioners','Refrigerators','Ovens','Microwave ovens','Washing machines']},
+    'whirlpool': {'brand':'Whirlpool','url':'https://www.whirlpoolcorp.com/latest-news.html','structure':'HTML newsroom cards and linked dated announcements','domains':['www.whirlpoolcorp.com','whirlpoolcorp.com'],'types':['Refrigerators','Ovens','Washing machines','Dishwashers','Freezers','Microwave ovens']},
+    'bosch': {'brand':'Bosch','url':'https://www.bosch-presse.de/pressportal/de/en/news/','structure':'HTML news listing; numbered .html press articles','domains':['www.bosch-presse.de'],'types':['Refrigerators','Ovens','Washing machines','Dishwashers','Vacuum cleaners']},
+}

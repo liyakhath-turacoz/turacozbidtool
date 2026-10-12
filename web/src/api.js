@@ -1,5 +1,14 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
+function queryString(filters) {
+  const query=new URLSearchParams();
+  Object.entries(filters).forEach(([key,value])=>{
+    if(value===undefined||value===null||value==='')return;
+    if(Array.isArray(value))value.forEach(item=>query.append(key,item));else query.set(key,value);
+  });
+  return query;
+}
+
 const jsonHeaders = (token) => ({
   'Content-Type': 'application/json',
   ...(token ? { Authorization: `Bearer ${token}` } : {}),
@@ -43,7 +52,14 @@ export const api = {
   deleteOwnAccount: (token) => request('/profile', { token, method: 'DELETE' }),
   products: (token, query = '', limit = 250, offset = 0, category = '', brand = '') =>
     request(`/products?q=${encodeURIComponent(query)}&limit=${limit}&offset=${offset}&category=${encodeURIComponent(category)}&brand=${encodeURIComponent(brand)}`, { token }),
-  adminProducts: (token, filters) => request(`/admin/products?${new URLSearchParams(Object.entries(filters).filter(([,value]) => value !== '' && value !== null && value !== undefined))}`, {token}),
+  adminProducts: (token, filters) => request(`/admin/products?${queryString(filters)}`, {token}),
+  catalogSearch: (token, filters) => request(`/catalog/search?${queryString(filters)}`, {token}),
+  productSources: token => request('/admin/product-sources',{token}),
+  createProductSource: (token,payload)=>request('/admin/product-sources',{token,method:'POST',body:payload}),
+  saveProductSource: (token,id,payload) => request(`/admin/product-sources/${id}`,{token,method:'PUT',body:payload}),
+  fetchProductSource: (token,id) => request(`/admin/product-sources/${id}/fetch`,{token,method:'POST'}),
+  productStatistics: token => request('/admin/product-statistics',{token}),
+  productStatisticsCsv: async token => {const response=await fetch(`${API_BASE_URL}/admin/product-statistics.csv`,{headers:jsonHeaders(token)});if(!response.ok)throw new Error('Statistics download failed');return response.blob();},
   productDetail: (token, id) => request(`/products/${id}`, { token }),
   createProduct: (token, payload) => request('/products', { token, method: 'POST', body: payload }),
   updateProduct: (token, id, payload) => request(`/products/${id}`, { token, method: 'PUT', body: payload }),

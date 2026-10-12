@@ -28,5 +28,12 @@
   "Video wall displays": [9074],
   "Meeting room displays": [8729],
   "3D scanners": [4161],
-  "Camera drones": [3241]
+  "Camera drones": [3241],
+  "Ovens": [2286],
+  "Refrigerators": [1873, 1912, 4964],
+  "Freezers": [1322],
+  "Microwave ovens": [1325],
+  "Air conditioners": [1176, 2723, 2724],
+  "Washing machines": [1331],
+  "Dishwashers": [1324]
 }

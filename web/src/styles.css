@@ -1852,3 +1852,19 @@ tr:last-child td {
 .location-confirm-row { display: flex; gap: 12px; justify-content: space-between; align-items: center; }
 .coordinate-details summary { cursor: pointer; margin-bottom: 10px; }
 @media (max-width: 600px) { .location-confirm-row { flex-direction: column; align-items: stretch; } .location-map { height: 300px; } }
+/* Shared full-catalog facets and product import controls. */
+.catalog-facet { border-bottom: 1px solid #e5e7eb; padding: 10px 0; }
+.catalog-facet summary { cursor: pointer; font-weight: 600; }
+.catalog-facet-values { max-height: 240px; overflow: auto; margin-top: 8px; }
+.catalog-facet .check { display: flex; align-items: center; gap: 8px; margin: 7px 0; }
+.catalog-facet .check span { flex: 1; }
+.catalog-facet .check small { color: #64748b; }
+.catalog-facet input:not([type="checkbox"]) { width: 100%; margin-top: 8px; }
+.panel .catalog-facets { display: grid; grid-template-columns: repeat(auto-fit,minmax(210px,1fr)); gap: 16px; }
+.source-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap: 16px; }
+.source-grid .panel { min-width: 0; }
+.product-sources-page .panel { margin: 12px 0; padding: 16px; }
+.table-scroll { overflow: auto; max-width: 100%; }
+.table-scroll table { width: 100%; border-collapse: collapse; }
+.table-scroll td, .table-scroll th { padding: 10px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+.table-scroll th { white-space: nowrap; }

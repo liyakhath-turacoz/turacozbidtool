@@ -37,6 +37,8 @@ import {
 import { api, apiBaseUrl } from './api.js';
 import MapCoordinatePicker from './MapCoordinatePicker.jsx';
 import BidConversation, { mergeMessages } from './BidConversation.jsx';
+import CatalogFilters, {emptyCatalogFilters, catalogParams} from './CatalogFilters.jsx';
+import ProductSourcesPage from './ProductSourcesPage.jsx';
 
 const sessionKey = 'turacoz_bid_tool_web_session';
 
@@ -80,6 +82,7 @@ const adminNav = [
   ['Bid History', Gavel],
   ['Reports', FileText],
   ['Platform Rules & Categories', Settings],
+  ['Product Fetch & Reports', Download],
 ];
 
 const buyerNav = [
@@ -802,6 +805,7 @@ function renderPage(ctx) {
       <BidHistoryPage admin {...ctx} />,
       <ReportsPage {...ctx} />,
       <SettingsPage {...ctx} />,
+      <ProductSourcesPage user={user} />,
     ][tab] || null;
   }
   if (user.role === 'dealer') {
@@ -947,100 +951,37 @@ function DashboardPage({ title, subtitle, data, extra }) {
 }
 
 function BuyerHomePage({ data, setBidProduct, run, user }) {
-  const [products, setProducts] = useState(list(data.products));
-  const [nextOffset, setNextOffset] = useState(list(data.products).length);
-  const [catalogLoading, setCatalogLoading] = useState(false);
-  const [query, setQuery] = useState('');
-  const [filters, setFilters] = useState({ categories: [], subcategories: [], brands: [], min: '', max: '', onlyAvailable: false, sort: 'Newest' });
-  const [selected, setSelected] = useState(null);
-  useEffect(() => {
-    setProducts(list(data.products));
-    setNextOffset(list(data.products).length);
-  }, [data.products]);
-  const searchCatalog = async () => {
-    setCatalogLoading(true);
-    try {
-      const rows = await api.products(user.access_token, query, 250, 0);
-      setProducts(rows);
-      setNextOffset(rows.length);
-    } finally {
-      setCatalogLoading(false);
-    }
+  const [products,setProducts]=useState([]);
+  const [query,setQuery]=useState('');const [appliedQuery,setAppliedQuery]=useState('');
+  const [filters,setFilters]=useState(emptyCatalogFilters);
+  const [facets,setFacets]=useState({});const [total,setTotal]=useState(0);
+  const [catalogLoading,setCatalogLoading]=useState(false);const [catalogError,setCatalogError]=useState('');
+  const [selected,setSelected]=useState(null);const requestVersion=useRef(0);
+  useEffect(()=>{
+    const version=++requestVersion.current;setCatalogLoading(true);setCatalogError('');
+    api.catalogSearch(user.access_token,catalogParams(filters,{q:appliedQuery,limit:50,offset:0}))
+      .then(result=>{if(version===requestVersion.current){setProducts(result.items);setFacets(result.facets);setTotal(result.total);}})
+      .catch(error=>{if(version===requestVersion.current)setCatalogError(friendlyErrorMessage(error));})
+      .finally(()=>{if(version===requestVersion.current)setCatalogLoading(false);});
+    return()=>{requestVersion.current++;};
+  },[user.access_token,appliedQuery,filters]);
+  const loadMore=async()=>{
+    const version=requestVersion.current;setCatalogLoading(true);
+    try {const result=await api.catalogSearch(user.access_token,catalogParams(filters,{q:appliedQuery,limit:50,offset:products.length}));if(version===requestVersion.current)setProducts(old=>[...old,...result.items.filter(row=>!old.some(item=>item.id===row.id))]);}
+    catch(error){setCatalogError(friendlyErrorMessage(error));}
+    finally{if(version===requestVersion.current)setCatalogLoading(false);}
   };
-  const loadMore = async () => {
-    setCatalogLoading(true);
-    try {
-      const rows = await api.products(user.access_token, query, 250, nextOffset);
-      setProducts((old) => [...old, ...rows.filter((row) => !old.some((item) => item.id === row.id))]);
-      setNextOffset((old) => old + rows.length);
-    } finally {
-      setCatalogLoading(false);
-    }
-  };
-  const openProduct = async (product) => {
-    setSelected(product);
-    try {
-      setSelected(await api.productDetail(user.access_token, product.id));
-    } catch {
-      setSelected(product);
-    }
-  };
-  const categories = [...new Set(products.map((item) => item.category).filter(Boolean))];
-  const subcategories = filters.categories.length
-    ? [...new Set(products.filter((item) => filters.categories.includes(item.category)).map((item) => item.subcategory || item.item).filter(Boolean))]
-    : [];
-  const brands = filters.subcategories.length
-    ? [...new Set(products.filter((item) => filters.subcategories.includes(item.subcategory || item.item)).map((item) => item.brand).filter(Boolean))]
-    : filters.categories.length
-      ? [...new Set(products.filter((item) => filters.categories.includes(item.category)).map((item) => item.brand).filter(Boolean))]
-      : [];
-  const toggle = (key, value) => setFilters((old) => ({ ...old, [key]: old[key].includes(value) ? old[key].filter((item) => item !== value) : [...old[key], value] }));
-  const queryText = lower(query);
-  const filtered = products
-    .filter((item) => !queryText || [item.name, item.brand, item.model, item.category, item.subcategory, item.item, productSpecs(item)].some((value) => lower(value).includes(queryText)))
-    .filter((item) => !filters.categories.length || filters.categories.includes(item.category))
-    .filter((item) => !filters.subcategories.length || filters.subcategories.includes(item.subcategory || item.item))
-    .filter((item) => !filters.brands.length || filters.brands.includes(item.brand))
-    .filter((item) => !filters.onlyAvailable || (item.status || 'active') === 'active')
-    .sort((a, b) => {
-      if (filters.sort === 'A-Z') return text(a.name).localeCompare(text(b.name));
-      if (filters.sort === 'Year') return Number(b.release_year || 0) - Number(a.release_year || 0);
-      return text(b.id).localeCompare(text(a.id));
-    });
-  const wonCategories = new Set(data.bids.filter((bid) => bid.status === 'won').map((bid) => products.find((item) => item.name === bid.product)?.category).filter(Boolean));
-  const recommendations = (wonCategories.size ? products.filter((item) => wonCategories.has(item.category)) : products.slice().reverse()).slice(0, 4);
-  return (
-    <Page>
-      <div className="toolbar buyer-search">
-        <div className="search-box wide-search"><Search size={17} /><input value={query} onChange={(event) => setQuery(event.target.value)} onKeyDown={(event) => { if (event.key === 'Enter') searchCatalog(); }} placeholder="Search brand, model, specifications..." /></div>
-        <button className="primary" disabled={catalogLoading} onClick={searchCatalog}>Search</button>
-      </div>
-      <div className="buyer-catalog-layout">
-        <aside className="filter-panel">
-          <div><strong>Filters</strong><button className="link-button" onClick={() => setFilters({ categories: [], subcategories: [], brands: [], min: '', max: '', onlyAvailable: false, sort: 'Newest' })}>Reset</button></div>
-          <hr />
-          <FilterChecks title="Categories" values={categories} selected={filters.categories} onToggle={(value) => toggle('categories', value)} />
-          {subcategories.length ? <FilterChecks title="Subcategories" values={subcategories} selected={filters.subcategories} onToggle={(value) => toggle('subcategories', value)} /> : null}
-          {brands.length ? <FilterChecks title="Brands" values={brands} selected={filters.brands} onToggle={(value) => toggle('brands', value)} /> : null}
-          <label className="check"><input type="checkbox" checked={filters.onlyAvailable} onChange={(event) => setFilters((old) => ({ ...old, onlyAvailable: event.target.checked }))} /> Only Available</label>
-        </aside>
-        <section className="catalog-results">
-          <div className="catalog-summary"><strong>{filtered.length} products loaded</strong><span /> <label>Sort: <select value={filters.sort} onChange={(event) => setFilters((old) => ({ ...old, sort: event.target.value }))}>{['Newest', 'Year', 'A-Z'].map((item) => <option key={item}>{item}</option>)}</select></label></div>
-          <div className="product-grid buyer-grid">
-            {filtered.map((product) => <ProductCard key={product.id} product={product} onSelect={() => openProduct(product)} onCart={() => run((token) => api.addCartItem(token, product.id, 1), 'Added to cart.')} onBid={() => setBidProduct(product)} />)}
-          </div>
-          <div className="row-actions"><button disabled={catalogLoading} onClick={loadMore}>{catalogLoading ? 'Loading…' : 'Load more products'}</button></div>
-          {recommendations.length ? (
-            <>
-              <h2 className="subsection-title">Recommended for You</h2>
-              <div className="product-grid buyer-grid">{recommendations.map((product) => <ProductCard key={`rec-${product.id}`} product={product} onSelect={() => setSelected(product)} onCart={() => run((token) => api.addCartItem(token, product.id, 1), 'Added to cart.')} onBid={() => setBidProduct(product)} />)}</div>
-            </>
-          ) : null}
-        </section>
-      </div>
-      {selected ? <ProductDetailsModal product={selected} onClose={() => setSelected(null)} onCart={() => run((token) => api.addCartItem(token, selected.id, 1), 'Added to cart.')} onBid={() => { setSelected(null); setBidProduct(selected); }} /> : null}
-    </Page>
-  );
+  const openProduct=async product=>{setSelected(product);try{setSelected(await api.productDetail(user.access_token,product.id));}catch{setSelected(product);}};
+  return <Page>
+    <div className="toolbar buyer-search"><div className="search-box wide-search"><Search size={17}/><input value={query} onChange={event=>setQuery(event.target.value)} onKeyDown={event=>{if(event.key==='Enter')setAppliedQuery(query.trim());}} placeholder="Search brand, model, specifications..."/></div><button className="primary" disabled={catalogLoading} onClick={()=>setAppliedQuery(query.trim())}>Search</button></div>
+    <div className="buyer-catalog-layout"><aside className="filter-panel"><div><strong>Filters</strong><button className="link-button" onClick={()=>setFilters(emptyCatalogFilters())}>Reset</button></div><CatalogFilters facets={facets} filters={filters} onChange={setFilters}/><label>Minimum price<input type="number" min="0" value={filters.minimum} onChange={event=>setFilters({...filters,minimum:event.target.value})}/></label><label>Maximum price<input type="number" min="0" value={filters.maximum} onChange={event=>setFilters({...filters,maximum:event.target.value})}/></label></aside>
+    <section className="catalog-results"><div className="catalog-summary"><strong>{total.toLocaleString()} matching products · {products.length} loaded</strong><label>Sort: <select value={filters.sort} onChange={event=>setFilters({...filters,sort:event.target.value})}>{['Newest','Year','A-Z','Lowest Price','Highest Price'].map(value=><option key={value}>{value}</option>)}</select></label></div>
+    {catalogError&&<p role="alert">{catalogError}</p>}{catalogLoading&&<p role="status">Loading products…</p>}
+    <div className="product-grid buyer-grid">{products.map(product=><ProductCard key={product.id} product={product} onSelect={()=>openProduct(product)} onCart={()=>run(token=>api.addCartItem(token,product.id,1),'Added to cart.')} onBid={()=>setBidProduct(product)}/>)}</div>
+    {!catalogLoading&&!products.length&&<Empty title="No products match these filters."/>}
+    {products.length<total&&<button disabled={catalogLoading} onClick={loadMore}>Load more products</button>}</section></div>
+    {selected&&<ProductDetailsModal product={selected} onClose={()=>setSelected(null)} onCart={()=>run(token=>api.addCartItem(token,selected.id,1),'Added to cart.')} onBid={()=>{setSelected(null);setBidProduct(selected);}}/>}
+  </Page>;
 }
 
 function BuyerBidPage({ user, data, setBidProduct, run, setReportBid }) {
@@ -1239,7 +1180,7 @@ function ProductAdminPage({ user, data, run, onExport }) {
   const [search, setSearch] = useState('');
   const [modal, setModal] = useState(null);
   const [form, setForm] = useState(empty);
-  const [filters, setFilters] = useState({ category: 'All', brand: '', status: '', min: '', max: '', sort: 'Newest' });
+  const [filters, setFilters] = useState({ category: 'All', brand: '', status: '', min: '', max: '', sort: 'Newest', product_type:'', years:[], specs:{} });
   const [catalog, setCatalog] = useState({items:[],total:0,catalog_total:0,brands:[]});
   const [appliedSearch, setAppliedSearch] = useState('');
   const [page, setPage] = useState(0);
@@ -1252,7 +1193,7 @@ function ProductAdminPage({ user, data, run, onExport }) {
   useEffect(() => {
     let cancelled=false;
     setCatalogLoading(true); setCatalogError('');
-    api.adminProducts(user.access_token,{q:appliedSearch,category:filters.category==='All'?'':filters.category,brand:filters.brand,status:filters.status,minimum:filters.min,maximum:filters.max,sort:filters.sort,limit:50,offset:page*50})
+    api.adminProducts(user.access_token,{q:appliedSearch,category:filters.category==='All'?'':filters.category,brand:filters.brand,status:filters.status,minimum:filters.min,maximum:filters.max,sort:filters.sort,product_type:filters.product_type,years:filters.years,specs:JSON.stringify(filters.specs||{}),limit:50,offset:page*50})
       .then(result=>{if(!cancelled)setCatalog(result);})
       .catch(error=>{if(!cancelled)setCatalogError(friendlyErrorMessage(error));})
       .finally(()=>{if(!cancelled)setCatalogLoading(false);});
@@ -1306,12 +1247,14 @@ function ProductAdminPage({ user, data, run, onExport }) {
         <Panel title="Catalog Filters">
           <div className="filter-row">
             <select aria-label="Product brand filter" value={filters.brand} onChange={(event) => setFilters((old) => ({ ...old, brand: event.target.value }))}><option value="">Brand</option>{brands.map((brand) => <option key={brand}>{brand}</option>)}</select>
+            <select aria-label="Product type filter" value={filters.product_type||''} onChange={event=>setFilters({...filters,product_type:event.target.value,specs:{}})}><option value="">All product types</option>{(catalog.facets?.product_types||[]).map(row=><option key={row.value} value={row.value}>{row.value} ({row.count})</option>)}</select>
             <select aria-label="Product status filter" value={filters.status} onChange={(event) => setFilters((old) => ({ ...old, status: event.target.value }))}><option value="">Status</option>{['active', 'archived', 'inactive'].map((status) => <option key={status}>{status}</option>)}</select>
             <input placeholder="Min Price" value={filters.min} onChange={(event) => setFilters((old) => ({ ...old, min: event.target.value }))} />
             <input placeholder="Max Price" value={filters.max} onChange={(event) => setFilters((old) => ({ ...old, max: event.target.value }))} />
-            <select value={filters.sort} onChange={(event) => setFilters((old) => ({ ...old, sort: event.target.value }))}>{['Newest', 'Lowest Price', 'Highest Price', 'Name'].map((item) => <option key={item}>{item}</option>)}</select>
-            <button className="link-button" onClick={() => setFilters({ category: 'All', brand: '', status: '', min: '', max: '', sort: 'Newest' })}>Reset</button>
+            <select value={filters.sort} onChange={(event) => setFilters((old) => ({ ...old, sort: event.target.value }))}>{['Newest', 'Lowest Price', 'Highest Price', 'Name', 'Year'].map((item) => <option key={item}>{item}</option>)}</select>
+            <button className="link-button" onClick={() => setFilters({ category: 'All', brand: '', status: '', min: '', max: '', sort: 'Newest', product_type:'', years:[], specs:{} })}>Reset</button>
           </div>
+          <CatalogFilters facets={catalog.facets||{}} filters={filters} onChange={setFilters} specsOnly />
         </Panel>
       ) : null}
       {catalogError && <p role="alert">{catalogError}</p>}
@@ -1349,7 +1292,7 @@ function ProductAdminPage({ user, data, run, onExport }) {
             setSaving(true); setEditorError('');
             try {
               const ok=await run(async token=>{try{return await (modal==='add'?api.createProduct(token,draft()):api.updateProduct(token,modal,draft()));}catch(error){setEditorError(friendlyErrorMessage(error));throw error;}},modal==='add'?'Product added successfully!':'Product updated.');
-              if(ok){if(modal==='add'){setSearch(form.name.trim());setAppliedSearch(form.name.trim());setFilters({category:'All',brand:'',status:'',min:'',max:'',sort:'Newest'});setPage(0);}setModal(null);setRefreshKey(value=>value+1);}
+              if(ok){if(modal==='add'){setSearch(form.name.trim());setAppliedSearch(form.name.trim());setFilters({category:'All',brand:'',status:'',min:'',max:'',sort:'Newest',product_type:'',years:[],specs:{}});setPage(0);}setModal(null);setRefreshKey(value=>value+1);}
             } finally {setSaving(false);}
           }}
         />
@@ -2849,7 +2792,7 @@ function ProductCard({ product, onCart, onBid, onSelect }) {
       <span>{product.brand}</span>
       <h3>{product.name}</h3>
       <p>{productSpecs(product) || 'Standard Edition'}</p>
-      <strong>{product.release_year ? `${product.release_year} model` : 'Current model'} · Bid for price</strong>
+      <strong>{product.release_year ? `${product.release_date_basis === 'legacy_reported_year' ? 'Reported year' : 'Release year'}: ${product.release_year}` : 'Release year unknown'} · Bid for price</strong>
       <div className="product-actions">
         <button className="success" onClick={(event) => { event.stopPropagation(); onCart(); }}><ShoppingCart size={15} /> Add</button>
         <button onClick={(event) => { event.stopPropagation(); onBid(); }}><Bolt size={15} /> Bid</button>

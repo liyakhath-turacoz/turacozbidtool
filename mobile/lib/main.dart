@@ -10,6 +10,8 @@ import 'package:geolocator/geolocator.dart';
 
 import 'core/api_client.dart';
 import 'core/bid_conversation.dart';
+import 'core/catalog_filters.dart';
+import 'core/product_sources_page.dart';
 import 'core/csv_download.dart';
 import 'core/models.dart';
 import 'core/session_store.dart';
@@ -110,6 +112,7 @@ const adminNav = [
   NavItem('Bid History', Icons.gavel_outlined),
   NavItem('Reports', Icons.report_outlined),
   NavItem('Platform Rules & Settings', Icons.tune_outlined),
+  NavItem('Product Fetch & Reports', Icons.cloud_download_outlined),
 ];
 
 const buyerNav = [
@@ -1184,6 +1187,8 @@ class _AppShellState extends State<AppShell> {
           onSaveSetting: _saveSetting,
           token: user.accessToken,
         );
+      case 7:
+        return ProductSourcesPage(token: user.accessToken);
       default:
         return const Center(child: Text('Page not found'));
     }
@@ -1806,7 +1811,9 @@ class _AppShellState extends State<AppShell> {
                       InfoChip('Category', product.category),
                       InfoChip(
                         'Range',
-                        '${money(product.priceMin)} - ${money(product.priceMax)}',
+                        product.priceMin == 0 && product.priceMax == 0
+                            ? 'Bid for price'
+                            : '${money(product.priceMin)} - ${money(product.priceMax)}',
                       ),
                       InfoChip('Location', product.location),
                     ],
@@ -3005,6 +3012,9 @@ class _BuyerHomePageState extends State<BuyerHomePage> {
 
   List<ProductItem> _allItems = [];
   bool _loading = false;
+  Map<String, dynamic> _catalogFilters = emptyCatalogFilters(), _facets = {};
+  int _total = 0, _fetchVersion = 0;
+  String? _catalogError;
 
   final Set<String> _selectedCategories = {};
   final Set<String> _selectedSubcategories = {};
@@ -3018,80 +3028,47 @@ class _BuyerHomePageState extends State<BuyerHomePage> {
     _fetchProducts();
   }
 
-  Future<void> _fetchProducts() async {
+  Future<void> _fetchProducts({bool append = false}) async {
     if (!mounted) return;
+    final version = ++_fetchVersion;
     setState(() => _loading = true);
     try {
-      final list = await widget.api.products(
-        widget.token,
-        query: _search.text.trim(),
-      );
-      if (mounted) {
+      final result = await widget.api.catalogSearch(widget.token, {
+        ..._catalogFilters,
+        'q': _search.text.trim(),
+        'limit': 50,
+        'offset': append ? _allItems.length : 0,
+      });
+      if (mounted && version == _fetchVersion)
         setState(() {
-          _allItems = list;
-          _loading = false;
+          final rows = (result['items'] as List)
+              .map(
+                (row) => ProductItem.fromJson(Map<String, dynamic>.from(row)),
+              )
+              .toList();
+          _allItems = append ? [..._allItems, ...rows] : rows;
+          _facets = Map<String, dynamic>.from(result['facets']);
+          _total = result['total'];
+          _catalogError = null;
         });
-      }
-    } catch (e) {
-      if (mounted) {
-        setState(() => _loading = false);
-      }
+    } catch (error) {
+      if (mounted && version == _fetchVersion)
+        setState(() => _catalogError = error.toString());
+    } finally {
+      if (mounted && version == _fetchVersion) setState(() => _loading = false);
     }
   }
 
   void _clearFilters() {
     setState(() {
-      _selectedCategories.clear();
-      _selectedSubcategories.clear();
-      _selectedBrands.clear();
+      _catalogFilters = emptyCatalogFilters();
       _minPrice.clear();
       _maxPrice.clear();
-      _onlyAvailable = false;
     });
+    _fetchProducts();
   }
 
-  List<ProductItem> _getFilteredProducts() {
-    Iterable<ProductItem> items = _allItems;
-
-    if (_selectedCategories.isNotEmpty) {
-      items = items.where(
-        (item) => _selectedCategories.contains(item.category),
-      );
-    }
-    if (_selectedSubcategories.isNotEmpty) {
-      items = items.where(
-        (item) => _selectedSubcategories.contains(item.subcategory),
-      );
-    }
-    if (_selectedBrands.isNotEmpty) {
-      items = items.where((item) => _selectedBrands.contains(item.brand));
-    }
-
-    final minVal = double.tryParse(_minPrice.text);
-    if (minVal != null) {
-      items = items.where((item) => item.priceMax >= minVal);
-    }
-    final maxVal = double.tryParse(_maxPrice.text);
-    if (maxVal != null) {
-      items = items.where((item) => item.priceMin <= maxVal);
-    }
-
-    if (_onlyAvailable) {
-      items = items.where((item) => item.status == 'active');
-    }
-
-    final list = items.toList();
-    if (_sortMode == 'Price Low') {
-      list.sort((a, b) => a.priceMin.compareTo(b.priceMin));
-    } else if (_sortMode == 'Price High') {
-      list.sort((a, b) => b.priceMax.compareTo(a.priceMax));
-    } else if (_sortMode == 'A-Z') {
-      list.sort((a, b) => a.name.compareTo(b.name));
-    } else {
-      list.sort((a, b) => b.id.compareTo(a.id));
-    }
-    return list;
-  }
+  List<ProductItem> _getFilteredProducts() => _allItems;
 
   List<ProductItem> _getRecommendations() {
     final wonCategories = widget.bids
@@ -3162,143 +3139,43 @@ class _BuyerHomePageState extends State<BuyerHomePage> {
     final screenWidth = MediaQuery.of(context).size.width;
     final isDesktop = screenWidth >= 1000;
 
-    Widget filtersWidget() {
-      return Scrollbar(
-        child: ListView(
-          shrinkWrap: true,
+    Widget filtersWidget() => ListView(
+      shrinkWrap: true,
+      children: [
+        Row(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Filters',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                TextButton(
-                  onPressed: _clearFilters,
-                  child: const Text('Reset'),
-                ),
-              ],
-            ),
-            const Divider(),
-
-            const Text(
-              'Price Range',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _minPrice,
-                    decoration: const InputDecoration(labelText: 'Min Rs'),
-                    keyboardType: TextInputType.number,
-                    onChanged: (_) => setState(() {}),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: TextField(
-                    controller: _maxPrice,
-                    decoration: const InputDecoration(labelText: 'Max Rs'),
-                    keyboardType: TextInputType.number,
-                    onChanged: (_) => setState(() {}),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-
-            const Text(
-              'Categories',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            ...buyerCategories.map(
-              (cat) => CheckboxListTile(
-                title: Text(cat),
-                value: _selectedCategories.contains(cat),
-                dense: true,
-                contentPadding: EdgeInsets.zero,
-                onChanged: (val) {
-                  setState(() {
-                    if (val == true) {
-                      _selectedCategories.add(cat);
-                    } else {
-                      _selectedCategories.remove(cat);
-                      _selectedSubcategories.clear();
-                      _selectedBrands.clear();
-                    }
-                  });
-                },
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            if (allSubcategories.isNotEmpty) ...[
-              const Text(
-                'Subcategories',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              ...allSubcategories.map(
-                (sub) => CheckboxListTile(
-                  title: Text(sub),
-                  value: _selectedSubcategories.contains(sub),
-                  dense: true,
-                  contentPadding: EdgeInsets.zero,
-                  onChanged: (val) {
-                    setState(() {
-                      if (val == true) {
-                        _selectedSubcategories.add(sub);
-                      } else {
-                        _selectedSubcategories.remove(sub);
-                        _selectedBrands.clear();
-                      }
-                    });
-                  },
-                ),
-              ),
-              const SizedBox(height: 16),
-            ],
-
-            if (allBrands.isNotEmpty) ...[
-              const Text(
-                'Brands',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              ...allBrands.map(
-                (brand) => CheckboxListTile(
-                  title: Text(brand),
-                  value: _selectedBrands.contains(brand),
-                  dense: true,
-                  contentPadding: EdgeInsets.zero,
-                  onChanged: (val) {
-                    setState(() {
-                      if (val == true) {
-                        _selectedBrands.add(brand);
-                      } else {
-                        _selectedBrands.remove(brand);
-                      }
-                    });
-                  },
-                ),
-              ),
-              const SizedBox(height: 16),
-            ],
-
-            SwitchListTile(
-              title: const Text(
-                'Only Available',
-                style: TextStyle(fontSize: 14),
-              ),
-              value: _onlyAvailable,
-              contentPadding: EdgeInsets.zero,
-              onChanged: (val) => setState(() => _onlyAvailable = val),
-            ),
+            const Expanded(child: Text('Filters')),
+            TextButton(onPressed: _clearFilters, child: const Text('Reset')),
           ],
         ),
-      );
-    }
+        CatalogFacetPicker(
+          facets: _facets,
+          filters: _catalogFilters,
+          onChanged: (value) {
+            setState(() => _catalogFilters = value);
+            _fetchProducts();
+          },
+        ),
+        TextField(
+          controller: _minPrice,
+          keyboardType: TextInputType.number,
+          decoration: const InputDecoration(labelText: 'Minimum price'),
+          onChanged: (value) {
+            _catalogFilters = {..._catalogFilters, 'minimum': value};
+            _fetchProducts();
+          },
+        ),
+        TextField(
+          controller: _maxPrice,
+          keyboardType: TextInputType.number,
+          decoration: const InputDecoration(labelText: 'Maximum price'),
+          onChanged: (value) {
+            _catalogFilters = {..._catalogFilters, 'maximum': value};
+            _fetchProducts();
+          },
+        ),
+      ],
+    );
 
     return PageScaffold(
       scrollable: false,
@@ -3371,7 +3248,7 @@ class _BuyerHomePageState extends State<BuyerHomePage> {
                               child: Row(
                                 children: [
                                   Text(
-                                    '${filtered.length} products found',
+                                    '$_total matches · ${filtered.length} loaded',
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -3395,8 +3272,20 @@ class _BuyerHomePageState extends State<BuyerHomePage> {
                                             )
                                             .toList(),
                                     onChanged: (val) {
-                                      if (val != null)
-                                        setState(() => _sortMode = val);
+                                      if (val != null) {
+                                        setState(() {
+                                          _sortMode = val;
+                                          _catalogFilters = {
+                                            ..._catalogFilters,
+                                            'sort': val == 'Price Low'
+                                                ? 'Lowest Price'
+                                                : val == 'Price High'
+                                                ? 'Highest Price'
+                                                : val,
+                                          };
+                                        });
+                                        _fetchProducts();
+                                      }
                                     },
                                   ),
                                 ],
@@ -3412,6 +3301,18 @@ class _BuyerHomePageState extends State<BuyerHomePage> {
                                     onSelect: widget.onSelect,
                                     grid: true,
                                   ),
+                                  if (_catalogError != null)
+                                    Text(
+                                      _catalogError!,
+                                      style: const TextStyle(color: Colors.red),
+                                    ),
+                                  if (_allItems.length < _total)
+                                    TextButton(
+                                      onPressed: _loading
+                                          ? null
+                                          : () => _fetchProducts(append: true),
+                                      child: const Text('Load more products'),
+                                    ),
                                   if (recommendations.isNotEmpty) ...[
                                     const Padding(
                                       padding: EdgeInsets.only(
@@ -4845,6 +4746,11 @@ class _ProductAdminPageState extends State<ProductAdminPage> {
   double? _maxPriceFilter;
   String _sortMode = 'Newest';
   bool _showFilters = false;
+  List<ProductItem> _serverProducts = [];
+  Map<String, dynamic> _facets = {}, _catalogFilters = emptyCatalogFilters();
+  int _total = 0, _offset = 0, _fetchVersion = 0;
+  bool _catalogLoading = false;
+  String? _catalogError;
 
   // Bulk Upload Overlay State
   bool _showUploadOverlay = false;
@@ -4870,6 +4776,46 @@ class _ProductAdminPageState extends State<ProductAdminPage> {
   void initState() {
     super.initState();
     _loadCategoryTree();
+    _fetchCatalog();
+  }
+
+  @override
+  void didUpdateWidget(covariant ProductAdminPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.products != widget.products) _fetchCatalog();
+  }
+
+  Future<void> _fetchCatalog({int? offset}) async {
+    final version = ++_fetchVersion;
+    setState(() => _catalogLoading = true);
+    try {
+      final result = await ApiClient().catalogSearch(widget.token, {
+        ..._catalogFilters,
+        'q': widget.search.text.trim(),
+        'category': _selectedCategory == 'All' ? '' : _selectedCategory,
+        'status': _statusFilter ?? '',
+        'limit': 50,
+        'offset': offset ?? 0,
+      });
+      if (mounted && version == _fetchVersion)
+        setState(() {
+          _serverProducts = (result['items'] as List)
+              .map(
+                (row) => ProductItem.fromJson(Map<String, dynamic>.from(row)),
+              )
+              .toList();
+          _facets = Map<String, dynamic>.from(result['facets']);
+          _total = result['total'];
+          _offset = offset ?? 0;
+          _catalogError = null;
+        });
+    } catch (error) {
+      if (mounted && version == _fetchVersion)
+        setState(() => _catalogError = error.toString());
+    } finally {
+      if (mounted && version == _fetchVersion)
+        setState(() => _catalogLoading = false);
+    }
   }
 
   Future<void> _loadCategoryTree() async {
@@ -5080,54 +5026,17 @@ class _ProductAdminPageState extends State<ProductAdminPage> {
 
   @override
   Widget build(BuildContext context) {
-    // 1. Calculate stats from live list
-    final Map<String, int> catDistribution = {};
-    for (final p in widget.products) {
-      catDistribution[p.category] = (catDistribution[p.category] ?? 0) + 1;
-    }
-
-    // 2. Apply filtering & sorting
-    var filtered = widget.products.where((p) {
-      if (_selectedCategory != 'All' &&
-          p.category.toLowerCase() != _selectedCategory.toLowerCase()) {
-        return false;
-      }
-      if (_statusFilter != null &&
-          p.status.toLowerCase() != _statusFilter!.toLowerCase()) {
-        return false;
-      }
-      if (_brandFilter != null &&
-          p.brand.toLowerCase() != _brandFilter!.toLowerCase()) {
-        return false;
-      }
-      if (_minPriceFilter != null && p.priceMin < _minPriceFilter!) {
-        return false;
-      }
-      if (_maxPriceFilter != null && p.priceMax > _maxPriceFilter!) {
-        return false;
-      }
-      return true;
-    }).toList();
-
-    // Sorting
-    filtered.sort((a, b) {
-      if (_sortMode == 'Newest') {
-        return b.id.compareTo(a.id);
-      } else if (_sortMode == 'Lowest Price') {
-        return a.priceMin.compareTo(b.priceMin);
-      } else if (_sortMode == 'Highest Price') {
-        return b.priceMax.compareTo(a.priceMax);
-      } else {
-        return a.name.toLowerCase().compareTo(b.name.toLowerCase());
-      }
-    });
-
-    final uniqueBrands = widget.products
-        .map((p) => p.brand)
-        .where((b) => b.isNotEmpty)
-        .toSet()
-        .toList();
-    final categories = ['All', ...catDistribution.keys];
+    final catDistribution = <String, int>{
+      for (final row in List<Map<String, dynamic>>.from(
+        _facets['categories'] ?? [],
+      ))
+        row['value'].toString(): row['count'] as int,
+    };
+    final filtered = _serverProducts;
+    final uniqueBrands = List<Map<String, dynamic>>.from(
+      _facets['brands'] ?? [],
+    ).map((row) => row['value'].toString()).toList();
+    final categories = ['All', ..._dynamicCategories];
 
     return PageScaffold(
       scrollable: false,
@@ -5148,6 +5057,28 @@ class _ProductAdminPageState extends State<ProductAdminPage> {
               const SizedBox(height: 12),
               // Top Search and Buttons Bar
               _buildCatalogToolsBar(),
+              if (_catalogLoading) const LinearProgressIndicator(),
+              if (_catalogError != null)
+                Text(_catalogError!, style: const TextStyle(color: Colors.red)),
+              Row(
+                children: [
+                  Text('$_total matching products'),
+                  const Spacer(),
+                  TextButton(
+                    onPressed: _offset > 0 && !_catalogLoading
+                        ? () => _fetchCatalog(offset: _offset - 50)
+                        : null,
+                    child: const Text('Previous'),
+                  ),
+                  Text('${_offset ~/ 50 + 1}'),
+                  TextButton(
+                    onPressed: _offset + 50 < _total && !_catalogLoading
+                        ? () => _fetchCatalog(offset: _offset + 50)
+                        : null,
+                    child: const Text('Next'),
+                  ),
+                ],
+              ),
               const SizedBox(height: 12),
               // Category horizontal selector
               _buildCategorySelector(categories),
@@ -5240,12 +5171,12 @@ class _ProductAdminPageState extends State<ProductAdminPage> {
               prefixIcon: Icon(Icons.search),
               hintText: 'Search products by SKU, Name, brand, model, spec...',
             ),
-            onSubmitted: (_) => widget.onSearch(),
+            onSubmitted: (_) => _fetchCatalog(),
           ),
         ),
         const SizedBox(width: 8),
         FilledButton.icon(
-          onPressed: widget.onSearch,
+          onPressed: () => _fetchCatalog(),
           icon: const Icon(Icons.search),
           label: const Text('Search'),
         ),
@@ -5604,7 +5535,11 @@ class _ProductAdminPageState extends State<ProductAdminPage> {
               selected: isSelected,
               onSelected: (val) {
                 if (val) {
-                  setState(() => _selectedCategory = cat);
+                  setState(() {
+                    _selectedCategory = cat;
+                    _catalogFilters = emptyCatalogFilters();
+                  });
+                  _fetchCatalog();
                 }
               },
             ),
@@ -5614,91 +5549,63 @@ class _ProductAdminPageState extends State<ProductAdminPage> {
     );
   }
 
-  Widget _buildFiltersRow(List<String> brands) {
-    return Card(
-      margin: const EdgeInsets.only(bottom: 12),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Wrap(
-          spacing: 16,
-          runSpacing: 10,
-          crossAxisAlignment: WrapCrossAlignment.center,
-          children: [
-            DropdownButton<String>(
-              hint: const Text('Brand'),
-              value: _brandFilter,
-              onChanged: (val) => setState(() => _brandFilter = val),
-              items: brands
-                  .map((b) => DropdownMenuItem(value: b, child: Text(b)))
-                  .toList(),
-            ),
-            DropdownButton<String>(
-              hint: const Text('Status'),
-              value: _statusFilter,
-              onChanged: (val) => setState(() => _statusFilter = val),
-              items: ['active', 'archived']
-                  .map(
-                    (s) => DropdownMenuItem(
-                      value: s,
-                      child: Text(s.toUpperCase()),
-                    ),
-                  )
-                  .toList(),
-            ),
-            SizedBox(
-              width: 120,
-              child: TextField(
-                decoration: const InputDecoration(
-                  labelText: 'Min Price',
-                  isDense: true,
-                ),
-                keyboardType: TextInputType.number,
-                onChanged: (val) =>
-                    setState(() => _minPriceFilter = double.tryParse(val)),
-              ),
-            ),
-            SizedBox(
-              width: 120,
-              child: TextField(
-                decoration: const InputDecoration(
-                  labelText: 'Max Price',
-                  isDense: true,
-                ),
-                keyboardType: TextInputType.number,
-                onChanged: (val) =>
-                    setState(() => _maxPriceFilter = double.tryParse(val)),
-              ),
-            ),
-            DropdownButton<String>(
-              hint: const Text('Sort By'),
-              value: _sortMode,
-              onChanged: (val) {
-                if (val != null) setState(() => _sortMode = val);
-              },
-              items: [
-                'Newest',
-                'Lowest Price',
-                'Highest Price',
-                'Name',
-              ].map((s) => DropdownMenuItem(value: s, child: Text(s))).toList(),
-            ),
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  _brandFilter = null;
-                  _statusFilter = null;
-                  _minPriceFilter = null;
-                  _maxPriceFilter = null;
-                  _sortMode = 'Newest';
-                });
-              },
-              child: const Text('Reset'),
-            ),
-          ],
-        ),
+  Widget _buildFiltersRow(List<String> brands) => SizedBox(
+    height: 300,
+    child: SingleChildScrollView(
+      child: Column(
+        children: [
+          DropdownButtonFormField<String>(
+            value: _statusFilter ?? '',
+            decoration: const InputDecoration(labelText: 'Product status'),
+            items: ['', 'active', 'inactive', 'archived']
+                .map(
+                  (value) => DropdownMenuItem(
+                    value: value,
+                    child: Text(value.isEmpty ? 'All statuses' : value),
+                  ),
+                )
+                .toList(),
+            onChanged: (value) {
+              setState(() => _statusFilter = value);
+              _fetchCatalog();
+            },
+          ),
+          CatalogFacetPicker(
+            facets: _facets,
+            filters: _catalogFilters,
+            onChanged: (value) {
+              setState(() => _catalogFilters = value);
+              _fetchCatalog();
+            },
+          ),
+          DropdownButtonFormField<String>(
+            value: _catalogFilters['sort'],
+            decoration: const InputDecoration(labelText: 'Sort products'),
+            items: ['Newest', 'Year', 'A-Z', 'Lowest Price', 'Highest Price']
+                .map(
+                  (value) => DropdownMenuItem(value: value, child: Text(value)),
+                )
+                .toList(),
+            onChanged: (value) {
+              _catalogFilters = {..._catalogFilters, 'sort': value};
+              _fetchCatalog();
+            },
+          ),
+          TextButton(
+            onPressed: () {
+              setState(() {
+                _selectedCategory = 'All';
+                _statusFilter = null;
+                _catalogFilters = emptyCatalogFilters();
+              });
+              _fetchCatalog();
+            },
+            child: const Text('Reset filters'),
+          ),
+        ],
       ),
-    );
-  }
+    ),
+  );
 
   Widget _buildAmazonStyleCard(ProductItem product) {
     final specsList = product.specifications.entries.toList();
@@ -5755,7 +5662,9 @@ class _ProductAdminPageState extends State<ProductAdminPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '${money(product.priceMin)} - ${money(product.priceMax)}',
+                        product.priceMin == 0 && product.priceMax == 0
+                            ? 'Bid for price'
+                            : '${money(product.priceMin)} - ${money(product.priceMax)}',
                         style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w900,

@@ -345,7 +345,7 @@ class IcecatCatalogBuilder:
     def normalize(self, candidate: Candidate, data: dict[str, Any]) -> dict[str, Any]:
         general = data.get("GeneralInfo") or {}
         release_date = parse_icecat_date(general.get("ReleaseDate"))
-        effective_date = release_date or parse_icecat_date(candidate.added)
+        effective_date = release_date
         end_of_life = parse_icecat_date(general.get("EndOfLifeDate"))
 
         technical_groups: list[dict[str, Any]] = []
@@ -448,7 +448,9 @@ class IcecatCatalogBuilder:
             "product_series": localized_value(general.get("ProductSeries")),
             "description": text(description),
             "summary_description": localized_value(general.get("SummaryDescription")),
-            "release_date": release_date.isoformat() if release_date else candidate.added,
+            "release_date": release_date.isoformat() if release_date else None,
+            "release_date_basis": "icecat_release_date" if release_date else "unknown",
+            "catalog_added_at": candidate.added,
             "release_year": effective_date.year if effective_date else None,
             "end_of_life_date": end_of_life.isoformat() if end_of_life else "",
             "source_updated_at": candidate.updated,
@@ -527,7 +529,7 @@ class IcecatCatalogBuilder:
                             self.log_failure(candidate, error or "empty normalized record")
                             continue
                         effective_date = parse_icecat_date(record.get("release_date"))
-                        if effective_date and effective_date < self.cutoff:
+                        if not effective_date or effective_date < self.cutoff or effective_date > date.today():
                             state["rejected_old"] += 1
                             continue
                         if record.get("end_of_life_date"):
