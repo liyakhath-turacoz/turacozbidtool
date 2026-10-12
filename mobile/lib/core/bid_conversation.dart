@@ -43,6 +43,7 @@ class _BidConversationState extends State<BidConversation> {
   @override
   void initState() {
     super.initState();
+    if (widget.user.role != UserRole.admin) return;
     bidChatReconnects.addListener(_load);
     _load();
   }
@@ -93,54 +94,59 @@ class _BidConversationState extends State<BidConversation> {
   }
 
   @override
-  Widget build(
-    BuildContext context,
-  ) => ValueListenableBuilder<Map<String, List<Map<String, dynamic>>>>(
-    valueListenable: liveBidMessages,
-    builder: (context, updates, _) {
-      final messages = mergeBidMessages(_messages, updates[widget.bidId] ?? []);
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Divider(),
-          const Text(
-            'Private bid conversation',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          if (messages.isEmpty) const Text('No messages yet.'),
-          for (final message in messages)
-            ListTile(
-              dense: true,
-              title: Text(message['message'].toString()),
-              subtitle: Text(
-                '${message['sender_name']} · ${message['created_at']}',
-              ),
-            ),
-          if (_error != null)
-            Text(_error!, style: const TextStyle(color: Colors.red)),
-          if (widget.user.role != UserRole.admin)
-            Row(
+  Widget build(BuildContext context) => widget.user.role != UserRole.admin
+      ? const SizedBox.shrink()
+      : ValueListenableBuilder<Map<String, List<Map<String, dynamic>>>>(
+          valueListenable: liveBidMessages,
+          builder: (context, updates, _) {
+            final messages = mergeBidMessages(
+              _messages,
+              updates[widget.bidId] ?? [],
+            );
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Expanded(
-                  child: TextField(
-                    controller: _draft,
-                    maxLength: 4000,
-                    decoration: const InputDecoration(labelText: 'Bid message'),
-                    onSubmitted: (_) => _send(),
+                const Divider(),
+                const Text(
+                  'Private bid conversation',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                if (messages.isEmpty) const Text('No messages yet.'),
+                for (final message in messages)
+                  ListTile(
+                    dense: true,
+                    title: Text(message['message'].toString()),
+                    subtitle: Text(
+                      '${message['sender_name']} · ${message['created_at']}',
+                    ),
                   ),
-                ),
-                IconButton(
-                  tooltip: 'Send bid message',
-                  onPressed: _sending ? null : _send,
-                  icon: const Icon(Icons.send),
-                ),
+                if (_error != null)
+                  Text(_error!, style: const TextStyle(color: Colors.red)),
+                if (widget.user.role != UserRole.admin)
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _draft,
+                          maxLength: 4000,
+                          decoration: const InputDecoration(
+                            labelText: 'Bid message',
+                          ),
+                          onSubmitted: (_) => _send(),
+                        ),
+                      ),
+                      IconButton(
+                        tooltip: 'Send bid message',
+                        onPressed: _sending ? null : _send,
+                        icon: const Icon(Icons.send),
+                      ),
+                    ],
+                  ),
               ],
-            ),
-        ],
-      );
-    },
-  );
+            );
+          },
+        );
 }
 
 void showLiveBidDialog(
@@ -200,8 +206,6 @@ void showLiveBidDialog(
                       Text(bid.dealerEmail),
                       Text(bid.businessAddress),
                     ],
-                    if (user != null)
-                      BidConversation(bidId: bid.id, user: user),
                   ],
                 ],
               ),

@@ -6442,7 +6442,7 @@ class BuyerBidPage extends StatelessWidget {
                     subtitle: Text('Request ${bid.bidRequestId}'),
                     trailing: TextButton(
                       onPressed: () => showLiveBidDialog(context, bid),
-                      child: const Text('Contacts & Chat'),
+                      child: const Text('Contact details'),
                     ),
                   ),
                 )
@@ -8032,8 +8032,9 @@ class ReportsPage extends StatelessWidget {
               children: [
                 SectionHeader(
                   title: 'Reports & Dispute Center',
-                  subtitle:
-                      'Moderate dispute logs, selective broadcast message threads, and resolve client complaints.',
+                  subtitle: userRole == 'admin'
+                      ? 'Moderate dispute logs, selective broadcast message threads, and resolve client complaints.'
+                      : 'View your reports and their review status.',
                   icon: Icons.report_outlined,
                   trailing: OutlinedButton.icon(
                     onPressed: onExport,
@@ -8320,7 +8321,7 @@ class ReportsPage extends StatelessWidget {
                             ? null
                             : () => onDetails!(rId),
                         child: Text(
-                          '- Report by ${r['reporter']}: "${r['reason']}" (${r['status']})${isCurrent ? ' [Currently Viewing]' : ' [Click to View Chat]'}',
+                          '- Report by ${r['reporter']}: "${r['reason']}" (${r['status']})${isCurrent ? ' [Currently Viewing]' : ' [Click to View Report]'}',
                           style: TextStyle(
                             fontSize: 12,
                             color: isCurrent
@@ -8431,7 +8432,9 @@ class ReportsPage extends StatelessWidget {
           ),
           // Thread Messages List
           Expanded(
-            child: messages.isEmpty
+            child: userRole != 'admin'
+                ? const SizedBox.shrink()
+                : messages.isEmpty
                 ? const Center(child: Text('No messages in this chat yet.'))
                 : ListView.builder(
                     padding: const EdgeInsets.all(16),
@@ -8513,75 +8516,80 @@ class ReportsPage extends StatelessWidget {
                   ),
           ),
           // Selective Broadcast message box
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: const BoxDecoration(
-              border: Border(top: BorderSide(color: Color(0xFFE5E7EB))),
-            ),
-            child: Row(
-              children: [
-                // Broadcast Dropdown
-                DropdownButton<String>(
-                  value: recipientGroup,
-                  onChanged: onRecipientGroupChanged == null
-                      ? null
-                      : (val) {
-                          if (val != null) onRecipientGroupChanged!(val);
-                        },
-                  items: userRole == 'admin'
-                      ? const [
-                          DropdownMenuItem(value: 'both', child: Text('Both')),
-                          DropdownMenuItem(
-                            value: 'buyer',
-                            child: Text('Buyer Only'),
-                          ),
-                          DropdownMenuItem(
-                            value: 'dealer',
-                            child: Text('Dealer Only'),
-                          ),
-                        ]
-                      : userRole == 'buyer'
-                      ? const [
-                          DropdownMenuItem(
-                            value: 'both',
-                            child: Text('To Everyone (Public)'),
-                          ),
-                          DropdownMenuItem(
-                            value: 'admin',
-                            child: Text('To Admin Only (Private)'),
-                          ),
-                        ]
-                      : const [
-                          DropdownMenuItem(
-                            value: 'both',
-                            child: Text('To Everyone (Public)'),
-                          ),
-                          DropdownMenuItem(
-                            value: 'admin',
-                            child: Text('To Admin Only (Private)'),
-                          ),
-                        ],
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: TextField(
-                    controller: messageController,
-                    decoration: const InputDecoration(
-                      hintText: 'Type your message/resolution details here...',
-                    ),
-                    onSubmitted: onSendMessage == null
+          if (userRole == 'admin')
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: const BoxDecoration(
+                border: Border(top: BorderSide(color: Color(0xFFE5E7EB))),
+              ),
+              child: Row(
+                children: [
+                  // Broadcast Dropdown
+                  DropdownButton<String>(
+                    value: recipientGroup,
+                    onChanged: onRecipientGroupChanged == null
                         ? null
-                        : (_) => onSendMessage!(),
+                        : (val) {
+                            if (val != null) onRecipientGroupChanged!(val);
+                          },
+                    items: userRole == 'admin'
+                        ? const [
+                            DropdownMenuItem(
+                              value: 'both',
+                              child: Text('Both'),
+                            ),
+                            DropdownMenuItem(
+                              value: 'buyer',
+                              child: Text('Buyer Only'),
+                            ),
+                            DropdownMenuItem(
+                              value: 'dealer',
+                              child: Text('Dealer Only'),
+                            ),
+                          ]
+                        : userRole == 'buyer'
+                        ? const [
+                            DropdownMenuItem(
+                              value: 'both',
+                              child: Text('To Everyone (Public)'),
+                            ),
+                            DropdownMenuItem(
+                              value: 'admin',
+                              child: Text('To Admin Only (Private)'),
+                            ),
+                          ]
+                        : const [
+                            DropdownMenuItem(
+                              value: 'both',
+                              child: Text('To Everyone (Public)'),
+                            ),
+                            DropdownMenuItem(
+                              value: 'admin',
+                              child: Text('To Admin Only (Private)'),
+                            ),
+                          ],
                   ),
-                ),
-                const SizedBox(width: 8),
-                IconButton(
-                  icon: const Icon(Icons.send, color: Color(0xFF6D28D9)),
-                  onPressed: onSendMessage,
-                ),
-              ],
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: TextField(
+                      controller: messageController,
+                      decoration: const InputDecoration(
+                        hintText:
+                            'Type your message/resolution details here...',
+                      ),
+                      onSubmitted: onSendMessage == null
+                          ? null
+                          : (_) => onSendMessage!(),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  IconButton(
+                    icon: const Icon(Icons.send, color: Color(0xFF6D28D9)),
+                    onPressed: onSendMessage,
+                  ),
+                ],
+              ),
             ),
-          ),
         ],
       ),
     );
@@ -9047,7 +9055,7 @@ class _SettingsPageState extends State<SettingsPage>
       title: 'Subscription billing',
       children: [
         Text(
-          'Dealers participate with an active subscription. Selecting a winning bid adds no commission. Contacts and private chat open immediately for the buyer and winning dealer. Historical payment records remain in the audit history.',
+          'Dealers participate with an active subscription. Selecting a winning bid adds no commission. Contact details are revealed immediately to the buyer and winning dealer. Historical payment records remain in the audit history.',
         ),
       ],
     );
@@ -9617,7 +9625,7 @@ class DealerBidSubmissionPage extends StatelessWidget {
                       onPressed: () =>
                           showLiveBidDialog(context, bid, isMine: bid.isMine),
                       child: Text(
-                        bid.isMine ? 'Contacts & Chat' : 'Final offer details',
+                        bid.isMine ? 'Contact details' : 'Final offer details',
                       ),
                     ),
                   ),

@@ -6,7 +6,12 @@ export function mergeMessages(...groups) {
     .sort((a, b) => String(a.created_at).localeCompare(String(b.created_at)) || a.id.localeCompare(b.id));
 }
 
-export default function BidConversation({ bidId, user, liveMessages = [], readOnly = false }) {
+export default function BidConversation(props) {
+  if (props.user?.role !== 'admin') return null;
+  return <AdminBidConversation {...props} readOnly />;
+}
+
+function AdminBidConversation({ bidId, user, liveMessages = [], readOnly = false }) {
   const [messages, setMessages] = useState([]);
   const [draft, setDraft] = useState('');
   const [error, setError] = useState('');

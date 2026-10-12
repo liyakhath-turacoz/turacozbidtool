@@ -1072,7 +1072,7 @@ function BuyerBidPage({ user, data, setBidProduct, run, setReportBid }) {
         </AdminList>
       </Panel>
       {data.products[0] ? <button className="fab" onClick={() => setBidProduct(data.products[0])}><Plus size={18} /> Start Bid</button> : null}
-      <Panel title="Finalized winning offers"><AdminList rows={data.bids.filter((bid) => bid.status === 'won')} empty="No finalized offers yet.">{(bid) => <AdminListItem title={`${bid.product} | ${money(bid.amount)}`} subtitle={`Request ${bid.bid_request_id} | ${bid.dealer}`} trailing={<button onClick={() => setRequestDetails(data.buyerRequests.find((request) => request.id === bid.bid_request_id) || { id: bid.bid_request_id, product: bid.product, status: 'awarded' })}>Contacts & Chat</button>} />}</AdminList></Panel>
+      <Panel title="Finalized winning offers"><AdminList rows={data.bids.filter((bid) => bid.status === 'won')} empty="No finalized offers yet.">{(bid) => <AdminListItem title={`${bid.product} | ${money(bid.amount)}`} subtitle={`Request ${bid.bid_request_id} | ${bid.dealer}`} trailing={<button onClick={() => setRequestDetails(data.buyerRequests.find((request) => request.id === bid.bid_request_id) || { id: bid.bid_request_id, product: bid.product, status: 'awarded' })}>Contact details</button>} />}</AdminList></Panel>
       {requestDetails ? <BuyerRequestDetailsModal user={user} data={data} onReport={setReportBid} request={data.buyerRequests.find((row) => row.id === requestDetails.id) || requestDetails} bids={data.bids} onClose={() => setRequestDetails(null)} onAccept={(bid) => run((token) => api.acceptBid(token, bid.id), 'Bid accepted.')} onCancel={() => run((token) => api.cancelBuyerRequest(token, requestDetails.id), 'Request closed.')} /> : null}
     </Page>
   );
@@ -1490,7 +1490,7 @@ function ReportsPage({ user, data, run, onExport }) {
   };
   return (
     <Page>
-      <Section title={user.role === 'admin' ? 'Reports & Dispute Center' : 'Reports / Support'} subtitle="Moderate dispute logs, selective broadcast message threads, and resolve client complaints." icon={FileText} />
+      <Section title={user.role === 'admin' ? 'Reports & Dispute Center' : 'Reports / Support'} subtitle={user.role === 'admin' ? 'Moderate dispute logs, selective broadcast message threads, and resolve client complaints.' : 'View your reports and their review status.'} icon={FileText} />
       <div className="toolbar">
         <button className="button" onClick={() => onExport('reports')}><Download size={16} /> Export CSV</button>
       </div>
@@ -1556,7 +1556,7 @@ function ReportDetailsPanel({ user, details, message, setMessage, recipient, set
         <span>Delivery: {details.delivery || 'N/A'} days</span>
         {details.description ? <p>Dispute Description: {details.description}</p> : null}
       </div>
-      <div className="message-list chat-thread">
+      {user.role === 'admin' && <><div className="message-list chat-thread">
         {list(details._messages).length ? list(details._messages).map((msg) => {
           const mine = msg.sender_id === user.id || (user.role === 'admin' && ['admin', 'agent'].includes(msg.sender_role));
           return (
@@ -1574,7 +1574,7 @@ function ReportDetailsPanel({ user, details, message, setMessage, recipient, set
           : <select value={recipient} onChange={(event) => setRecipient(event.target.value)}><option value="both">To Everyone (Public)</option><option value="admin">To Admin Only (Private)</option></select>}
         <input value={message} onChange={(event) => setMessage(event.target.value)} placeholder="Type your message/resolution details here..." />
         <button className="icon-button" onClick={onSend} title="Send message"><Send size={18} /></button>
-      </div>
+      </div></>}
       {user.role === 'admin' ? (
         <div className="inline-form">
           <input value={note} onChange={(event) => setNote(event.target.value)} placeholder="Admin note" />
@@ -1616,7 +1616,7 @@ function SettingsPage({ data, run }) {
   return (
     <Page>
       <Section title="Platform Rules & Categories" subtitle="Manage bid duration, dealer eligibility, service limits and product types." icon={Settings} />
-      <Panel title="Subscription billing"><p>Dealers bid with an active subscription. Winning a bid adds no commission. Contacts and private chat open immediately for the buyer and winning dealer.</p></Panel>
+      <Panel title="Subscription billing"><p>Dealers bid with an active subscription. Winning a bid adds no commission. Contact details are revealed immediately to the buyer and winning dealer.</p></Panel>
       <Panel title="Bid timing & rules"><form onSubmit={(event) => save(event, 'bid_rules', rules)}>
         <div className="form-grid">
           {numberField('Default bidding duration (hours)', 'expiry_hours', rules, setRules, 1 / 60, 72)}
@@ -1770,7 +1770,7 @@ function BidDetailsModal({ bid, payments, onClose, onReport, user, liveMessages 
       {linkedPayments.length > 0 && <Panel title="Historical commission payments">
         <SimpleList rows={linkedPayments} primary={(row) => `${row.product || bid.product} | ${money(row.amount || row.commission_amount)}`} secondary={(row) => `${row.payment_status || row.status} | ${row.created_at || ''}`} />
       </Panel>}
-      {won && user && <BidConversation bidId={bid.id} user={user} liveMessages={liveMessages} readOnly={user.role === 'admin'} />}
+      {won && user?.role === 'admin' && <BidConversation bidId={bid.id} user={user} liveMessages={liveMessages} readOnly />}
       {onReport ? <button onClick={onReport}>Report</button> : null}
     </Modal>
   );
@@ -2003,7 +2003,7 @@ function BuyerRequestDetailsModal({ user, data, onReport, request, bids, onClose
           )}
         </AdminList>
       </Panel>
-      {winner && <><Panel title="Winning dealer contact"><p>{winner.dealer} | {winner.owner_name} | {winner.dealer_phone} | {winner.dealer_email}</p><p>{winner.business_address}</p><button onClick={() => onReport(winner)}>Report dealer</button></Panel><BidConversation bidId={winner.id} user={user} liveMessages={data.liveBidMessages[winner.id] || []} /></>}
+      {winner && <Panel title="Winning dealer contact"><p>{winner.dealer} | {winner.owner_name} | {winner.dealer_phone} | {winner.dealer_email}</p><p>{winner.business_address}</p><button onClick={() => onReport(winner)}>Report dealer</button></Panel>}
     </Modal>
   );
 }
@@ -2114,7 +2114,7 @@ function DealerBidDetailModal({ user, data, onReport, bid, mine, onClose }) {
         ) : null}
       </div>
       <Panel title={`All offers for request ${bid.bid_request_id}`}><AdminList rows={data.bids.filter((offer) => offer.bid_request_id === bid.bid_request_id && offer.status !== 'withdrawn')} empty="No offers.">{(offer) => <AdminListItem title={`${offer.dealer} | ${money(offer.amount)}`} subtitle={`${offer.warranty_text || 'No warranty'} | ${offer.delivery_time || ''}`} trailing={<Status text={offer.status} />} />}</AdminList></Panel>
-      {buyerDetailsUnlocked && <><BidConversation bidId={bid.id} user={user} liveMessages={data.liveBidMessages[bid.id] || []} /><button onClick={() => onReport(bid)}>Report buyer</button></>}
+      {buyerDetailsUnlocked && <button onClick={() => onReport(bid)}>Report buyer</button>}
     </Modal>
   );
 }
@@ -2194,7 +2194,7 @@ function DealerActiveBidsPage({ user, data, setDealerOffer, setReportBid }) {
           )}
         </AdminList>
       </Panel>
-      <Panel title="Finalized requests"><AdminList rows={data.bids.filter((bid) => bid.status === 'won')} empty="No finalized requests yet.">{(bid) => <AdminListItem title={`${bid.product} | Winning offer ${money(bid.amount)}`} subtitle={`Request ${bid.bid_request_id} | ${bid.warranty_text || ''} | ${bid.delivery_time || ''}`} trailing={<button onClick={() => setDetails({ bid, mine: bid.is_mine })}>{bid.is_mine ? 'Contacts & Chat' : 'Final offer details'}</button>} />}</AdminList></Panel>
+      <Panel title="Finalized requests"><AdminList rows={data.bids.filter((bid) => bid.status === 'won')} empty="No finalized requests yet.">{(bid) => <AdminListItem title={`${bid.product} | Winning offer ${money(bid.amount)}`} subtitle={`Request ${bid.bid_request_id} | ${bid.warranty_text || ''} | ${bid.delivery_time || ''}`} trailing={<button onClick={() => setDetails({ bid, mine: bid.is_mine })}>{bid.is_mine ? 'Contact details' : 'Final offer details'}</button>} />}</AdminList></Panel>
       {details ? <DealerBidDetailModal user={user} data={data} onReport={setReportBid} bid={data.bids.find((bid) => bid.id === details.bid.id) || details.bid} mine={details.mine} onClose={() => setDetails(null)} /> : null}
     </Page>
   );
@@ -2732,7 +2732,8 @@ function DetailsModal({ details, user, run, refresh, onClose }) {
           <span>Delivery: {details.delivery || 'N/A'} days</span>
           {details.description ? <p>Dispute Description: {details.description}</p> : null}
         </div>
-        <Panel title="Messages">
+        <Panel title={user.role === 'admin' ? 'Messages' : 'Report status'}>
+          {user.role === 'admin' && <>
           <div className="message-list chat-thread">
             {details._messages.length ? details._messages.map((msg) => {
               const mine = ['admin', 'agent'].includes(msg.sender_role);
@@ -2750,6 +2751,7 @@ function DetailsModal({ details, user, run, refresh, onClose }) {
             <input value={message} onChange={(event) => setMessage(event.target.value)} placeholder="Type your message/resolution details here..." />
             <button className="icon-button" onClick={() => run((token) => api.sendReportMessage(token, details.id, recipient, message), 'Message sent.').then((ok) => ok && refresh())}><Send size={18} /></button>
           </div>
+          </>}
           {user.role === 'admin' ? (
             <div className="inline-form">
               <input value={note} onChange={(event) => setNote(event.target.value)} placeholder="Admin note" />
