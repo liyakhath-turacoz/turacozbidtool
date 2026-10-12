@@ -1261,7 +1261,7 @@ function ProductAdminPage({ user, data, run, onExport }) {
       <div className="admin-product-grid">
         {filtered.length ? filtered.map((product) => (
           <article className="admin-product-card" key={product.id}>
-            <div className="admin-product-image">{product.image_url ? <img src={product.image_url} alt="" loading="lazy" /> : <Package size={44} />}</div>
+            <ProductImage key={product.image_url||'none'} product={product} className="admin-product-image" iconSize={44}/>
             <div className="admin-product-body">
               <span>{product.category || 'General'}</span>
               <h3>{product.name}</h3>
@@ -1867,7 +1867,7 @@ function ProductDetailsModal({ product, onClose, onCart, onBid }) {
   return (
     <Modal title={product.name} onClose={onClose} wide>
       <div className="product-detail-layout">
-        <div className="product-detail-art">{product.image_url ? <img src={product.image_url} alt={product.name} /> : <Package size={72} />}</div>
+        <ProductImage key={product.image_url||'none'} product={product} className="product-detail-art" iconSize={72}/>
         <div className="product-detail-info">
           <span className="eyebrow">{product.category}{product.subcategory || product.item ? ` / ${product.subcategory || product.item}` : ''}</span>
           <h2>{product.brand} {product.model}</h2>
@@ -2784,10 +2784,18 @@ function AdminAccountDetails({ details, role, onClose }) {
   );
 }
 
+function ProductImage({product,className='product-art',iconSize=42}) {
+  const [loaded,setLoaded]=useState(false);const [failed,setFailed]=useState(false);
+  return <div className={className}>
+    {!loaded&&<Package size={iconSize} aria-hidden="true"/>}
+    {product.image_url&&!failed&&<img src={product.image_url} alt={product.name} loading={className==='product-detail-art'?'eager':'lazy'} className="catalog-product-photo" style={{opacity:loaded?1:0}} onLoad={()=>setLoaded(true)} onError={()=>setFailed(true)}/>}
+  </div>;
+}
+
 function ProductCard({ product, onCart, onBid, onSelect }) {
   return (
     <article className="product-card" onClick={onSelect}>
-      <div className="product-art">{product.image_url ? <img src={product.image_url} alt="" loading="lazy" /> : <Package size={42} />}</div>
+      <ProductImage key={product.image_url||'none'} product={product}/>
       <span>{product.brand}</span>
       <h3 title={product.name}>{product.name}</h3>
       <p title={productSpecs(product)}>{productSpecs(product) || 'Standard Edition'}</p>

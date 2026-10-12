@@ -93,6 +93,21 @@ try {
     return image.height>box.height+1 || image.width>box.width+1;
   }).length);
   assert.equal(overflowingImages,0);check('Product images stay within their card image area');
+  const failedImages=async route=>{
+    const response=await route.fetch();const data=await response.json();
+    data.items=data.items.map(item=>({...item,image_url:apiUrl+'/assets/missing-product-image-for-test.png'}));
+    await route.fulfill({json:data});
+  };
+  await context.route('**/catalog/search?*',failedImages);
+  await page.getByRole('button',{name:'Search',exact:true}).click();
+  await wait(async()=>assert.equal(await page.locator('.product-card').count(),50));
+  await wait(async()=>assert.equal(await page.locator('.product-card').first().locator('.product-art img').count(),0));
+  assert.equal(await page.locator('.product-card').first().locator('.product-art svg').count(),1);
+  check('Unavailable product images show a placeholder instead of an empty or broken image');
+  await context.unroute('**/catalog/search?*',failedImages);
+  await page.getByRole('button',{name:'Search',exact:true}).click();
+  await wait(async()=>assert.equal(await page.locator('.product-card').count(),50));
+  await page.evaluate(()=>window.scrollTo(0,0));
   assert.deepEqual(errors,[]);
   fs.mkdirSync('web/tests/artifacts',{recursive:true});
   await page.screenshot({path:`web/tests/artifacts/catalog-${new URL(webUrl).port || 'default'}.png`,fullPage:false});

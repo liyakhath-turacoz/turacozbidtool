@@ -182,3 +182,4 @@ Detailed results: [original scenarios](E2E_RESULTS.md), [concurrent bidding](LIV
 - Verification passed: React build, Flutter web release build, Python compilation, buyer browser checks for every appliance type, HTML-error retry, image bounds and load more. All 21,720 available products were checked across 87 API pages without missing or duplicate IDs. Admin browser checks covered login, panel/API loading, creation, editing price/status, buyer exclusion for archived records and deletion. Temporary QA products were removed from availability; bidding/account history was preserved.
 
 - Built frontend clients use the current origin when served by the backend on port 8000, avoiding a default localhost/127.0.0.1 mismatch. Explicit API URL overrides remain supported.
+- Product cards and details now show a package placeholder while supplier photos load or if an image fails, rather than leaving an empty image region. Browser regression checks cover unavailable images.
