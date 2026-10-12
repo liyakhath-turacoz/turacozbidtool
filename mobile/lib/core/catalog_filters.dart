@@ -5,10 +5,7 @@ Map<String, dynamic> emptyCatalogFilters() => {
   'product_types': <String>[],
   'brands': <String>[],
   'years': <String>[],
-  'specs': <String, dynamic>{},
   'sort': 'Newest',
-  'minimum': '',
-  'maximum': '',
 };
 
 class CatalogFacetPicker extends StatelessWidget {
@@ -25,7 +22,14 @@ class CatalogFacetPicker extends StatelessWidget {
   void toggle(String key, String value) {
     final selected = List<String>.from(filters[key] ?? []);
     selected.contains(value) ? selected.remove(value) : selected.add(value);
-    onChanged({...filters, key: selected});
+    final next = <String, dynamic>{...filters, key: selected};
+    if (key == 'categories')
+      next.addAll({
+        'product_types': <String>[],
+        'brands': <String>[],
+        'years': <String>[],
+      });
+    onChanged(next);
   }
 
   @override
@@ -39,6 +43,9 @@ class CatalogFacetPicker extends StatelessWidget {
           'brands': 'Brand / manufacturer',
         }.entries)
           FacetChoices(
+            key: ValueKey(
+              '${entry.key}:${filters['categories']}:${filters['product_types']}',
+            ),
             label: entry.value,
             rows: List<Map<String, dynamic>>.from(facets[entry.key] ?? []),
             selected: List<String>.from(filters[entry.key] ?? []),
@@ -50,27 +57,6 @@ class CatalogFacetPicker extends StatelessWidget {
         selected: List<String>.from(filters['years'] ?? []),
         onToggle: (value) => toggle('years', value),
       ),
-      for (final facet in List<Map<String, dynamic>>.from(
-        facets['specifications'] ?? [],
-      ))
-        FacetChoices(
-          label: facet['label'].toString(),
-          rows: List<Map<String, dynamic>>.from(facet['values'] ?? []),
-          selected: List<String>.from(
-            (filters['specs'] ?? {})[facet['key']] ?? [],
-          ),
-          onToggle: (value) {
-            final specs = Map<String, dynamic>.from(filters['specs'] ?? {});
-            final values = List<String>.from(specs[facet['key']] ?? []);
-            values.contains(value) ? values.remove(value) : values.add(value);
-            if (values.isEmpty) {
-              specs.remove(facet['key']);
-            } else {
-              specs[facet['key']] = values;
-            }
-            onChanged({...filters, 'specs': specs});
-          },
-        ),
     ],
   );
 }
@@ -96,13 +82,23 @@ class _FacetChoicesState extends State<FacetChoices> {
   bool expanded = false;
   @override
   Widget build(BuildContext context) {
-    final rows = widget.rows
+    final choices = [
+      ...widget.rows,
+      ...widget.selected
+          .where(
+            (value) =>
+                !widget.rows.any((row) => row['value'].toString() == value),
+          )
+          .map((value) => <String, dynamic>{'value': value, 'count': 0}),
+    ];
+    final rows = choices
         .where(
           (row) => row['value'].toString().toLowerCase().contains(
             search.toLowerCase(),
           ),
         )
         .toList();
+    final showAll = ['Categories', 'Product type'].contains(widget.label);
     return ExpansionTile(
       key: PageStorageKey(widget.label),
       initiallyExpanded: [
@@ -121,7 +117,7 @@ class _FacetChoicesState extends State<FacetChoices> {
             ),
             onChanged: (value) => setState(() => search = value),
           ),
-        for (final row in rows.take(expanded ? rows.length : 25))
+        for (final row in rows.take(showAll || expanded ? rows.length : 25))
           CheckboxListTile(
             dense: true,
             title: Text(
@@ -133,7 +129,7 @@ class _FacetChoicesState extends State<FacetChoices> {
             value: widget.selected.contains(row['value'].toString()),
             onChanged: (_) => widget.onToggle(row['value'].toString()),
           ),
-        if (rows.length > 25)
+        if (!showAll && rows.length > 25)
           TextButton(
             onPressed: () => setState(() => expanded = !expanded),
             child: Text(expanded ? 'Show fewer' : 'Show all values'),

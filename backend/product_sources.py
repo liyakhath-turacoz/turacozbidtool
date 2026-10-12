@@ -4,7 +4,9 @@ import base64
 import csv
 import gzip
 import hashlib
+import heapq
 import io
+import itertools
 import ipaddress
 import json
 import os
@@ -119,27 +121,43 @@ class Redirects(urllib.request.HTTPRedirectHandler):
         return super().redirect_request(request,fp,code,msg,headers,newurl)
 
 
-def fetch(url,adapter,max_bytes=32*1024*1024,cache_seconds=3600):
+def fetch(url,adapter,max_bytes=32*1024*1024,cache_seconds=3600,as_file=False,max_seconds=180,download_progress=None,revalidate=False):
     validate_url(url,adapter);CACHE.mkdir(parents=True,exist_ok=True)
     path=CACHE/(hashlib.sha256(url.encode()).hexdigest()+'.cache')
-    if path.exists() and time.time()-path.stat().st_mtime<cache_seconds:return path.read_bytes()
+    if path.exists() and time.time()-path.stat().st_mtime<cache_seconds and not revalidate:
+        if path.stat().st_size>max_bytes:raise ValueError('Cached source exceeds the configured download limit')
+        return path if as_file else path.read_bytes()
     headers={'User-Agent':'TuracozCatalog/1.0','Accept':'application/json,text/html,application/xml,*/*'}
     if adapter=='icecat':
         user=os.getenv('ICECAT_USERNAME','');password=os.getenv('ICECAT_PASSWORD','')
         if not user or not password:raise ValueError('Configure ICECAT_USERNAME and ICECAT_PASSWORD in private .env')
         headers['Authorization']='Basic '+base64.b64encode((user+':'+password).encode()).decode()
-    started=time.monotonic();chunks=[];size=0
-    with urllib.request.build_opener(Redirects(adapter)).open(urllib.request.Request(url,headers=headers),timeout=30) as response:
-        while True:
-            chunk=response.read(64*1024)
-            if not chunk:break
-            size+=len(chunk)
-            if size>max_bytes:raise ValueError('Source response exceeds the configured download limit')
-            if time.monotonic()-started>180:raise TimeoutError('Source download exceeded three minutes')
-            chunks.append(chunk)
-    data=b''.join(chunks)
-    temporary=path.with_suffix('.'+uuid.uuid4().hex+'.tmp');temporary.write_bytes(data);temporary.replace(path)
-    return data
+    if revalidate and path.exists():
+        try:
+            with urllib.request.build_opener(Redirects(adapter)).open(urllib.request.Request(url,headers=headers,method='HEAD'),timeout=30) as response:
+                modified=response.headers.get('Last-Modified');length=response.headers.get('Content-Length')
+                if modified and length and path.stat().st_size==int(length) and path.stat().st_mtime>=parsedate_to_datetime(modified).timestamp():
+                    if path.stat().st_size>max_bytes:raise ValueError('Cached source exceeds the configured download limit')
+                    return path if as_file else path.read_bytes()
+        except urllib.error.HTTPError as error:
+            if error.code not in {405,501}:raise
+    started=time.monotonic();size=0;reported=0
+    temporary=path.with_suffix('.'+uuid.uuid4().hex+'.tmp')
+    try:
+        with urllib.request.build_opener(Redirects(adapter)).open(urllib.request.Request(url,headers=headers),timeout=30) as response,temporary.open('wb') as output:
+            while True:
+                chunk=response.read(64*1024)
+                if not chunk:break
+                size+=len(chunk)
+                if size>max_bytes:raise ValueError('Source response exceeds the configured download limit')
+                if time.monotonic()-started>max_seconds:raise TimeoutError('Source download exceeded its time limit')
+                output.write(chunk)
+                if download_progress and size-reported>=32*1024*1024:download_progress(size);reported=size
+        temporary.replace(path)
+    except BaseException:
+        temporary.unlink(missing_ok=True)
+        raise
+    return path if as_file else path.read_bytes()
 
 
 def json_fetch(url,adapter):return json.loads(fetch(url,adapter))
@@ -224,25 +242,31 @@ def icecat_xml(row,item):
 
 def icecat_records(source,progress):
     ids={str(identifier):item for item in source['categories'] for identifier in ICECAT_CATEGORIES.get(item,[])}
-    candidates=[];limit=source['max_products']
+    limit=source['max_products'];pools={};sequence=0
+    pool_limit=max(200,min(5000,limit*10//max(1,len(source['categories']))))
     # Daily discovery is the default; admins may configure the full index for a broader scan.
-    raw=fetch(source['endpoint'],'icecat',max_bytes=256*1024*1024,cache_seconds=24*3600)
-    with gzip.open(io.BytesIO(raw),'rt',encoding='utf-8-sig',newline='') as stream:
+    index=fetch(source['endpoint'],'icecat',max_bytes=512*1024*1024,cache_seconds=3600,as_file=True,max_seconds=600,revalidate=True)
+    with gzip.open(index,'rt',encoding='utf-8-sig',newline='') as stream:
         for row in csv.DictReader(stream,delimiter='\t'):
             item=ids.get(row.get('catid'))
             if item and row.get('on_market')=='1' and row.get('quality','').upper() not in {'REMOVED','NOEDITOR'}:
-                candidates.append((item,row))
+                sequence+=1;pool=pools.setdefault(item,[])
+                candidate=(row.get('Date_Added',''),row.get('updated',''),sequence,row)
+                if len(pool)<pool_limit:heapq.heappush(pool,candidate)
+                elif candidate[:3]>pool[0][:3]:heapq.heapreplace(pool,candidate)
     # Index-added date is a discovery hint only, never proof of release age.
-    candidates.sort(key=lambda pair:(pair[1].get('Date_Added',''),pair[1].get('updated','')),reverse=True)
-    per_type=max(1,limit//max(1,len(ids)));accepted=0;counts={};attempts=0
-    for item,row in candidates:
-        if accepted>=limit or attempts>=max(200,limit*10):break
-        if counts.get(item,0)>=max(1,limit//max(1,len(source['categories']))):continue
+    candidates=[[(item,entry[3]) for entry in sorted(pool,reverse=True)] for item,pool in pools.items()]
+    attempts=0
+    # Share discovery attempts across item types so one large category cannot starve the others.
+    for pair in itertools.chain.from_iterable(itertools.zip_longest(*candidates)):
+        if pair is None:continue
+        item,row=pair
+        if attempts>=max(200,limit*10):break
         attempts+=1
         try:
             record=icecat_xml(row,item);allowed,reason=is_recent(record)
             if not allowed:progress(reason);continue
-            accepted+=1;counts[item]=counts.get(item,0)+1;yield record
+            yield record
         except (ET.ParseError,ValueError,urllib.error.HTTPError,TimeoutError,OSError):progress('unavailable_source_record')
 
 

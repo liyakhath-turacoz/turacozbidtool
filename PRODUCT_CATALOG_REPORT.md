@@ -1,6 +1,6 @@
 # Product catalog audit
 
-As of 2026-10-12: **21,710 available product/SKU records**.
+As of 2026-10-12: **21,720 available product/SKU records**.
 
 Verified pre-2017 variants identified: **14**; retired: **14**. Original rows were backed up privately before retirement and bidding history is retained.
 
@@ -44,7 +44,7 @@ Counts are product/SKU records, including configurations and regional variants; 
 | Home Appliances | Freezers | 0 | 0 | 0 | 0 | 2 | 0 | 2 |
 | Home Appliances | Microwave ovens | 0 | 0 | 0 | 0 | 0 | 1 | 1 |
 | Home Appliances | Ovens | 0 | 0 | 1 | 1 | 2 | 1 | 5 |
-| Home Appliances | Refrigerators | 0 | 0 | 0 | 1 | 17 | 2 | 20 |
+| Home Appliances | Refrigerators | 0 | 0 | 0 | 9 | 19 | 2 | 30 |
 | Home Appliances | Washing machines | 0 | 0 | 0 | 2 | 1 | 0 | 3 |
 
 ## Brands
@@ -67,7 +67,7 @@ Counts are product/SKU records, including configurations and regional variants; 
 | Acer | 326 |
 | Canon | 325 |
 | Zebra | 298 |
-| Hisense | 261 |
+| Hisense | 263 |
 | iiyama | 261 |
 | Brother | 259 |
 | EMC | 250 |
@@ -105,13 +105,13 @@ Counts are product/SKU records, including configurations and regional variants; 
 | iggual | 35 |
 | SMART Technologies | 35 |
 | NEC | 34 |
+| Gorenje | 33 |
 | Seagate | 33 |
 | Buffalo | 30 |
 | OPPO | 29 |
 | LevelOne | 28 |
 | upcycle it | 28 |
 | AG Neovo | 27 |
-| Gorenje | 25 |
 | EIZO | 23 |
 | Ugreen | 23 |
 | Brainboxes | 22 |
@@ -177,15 +177,15 @@ Counts are product/SKU records, including configurations and regional variants; 
 
 ## Model codes by reported release year
 
-**21,710 distinct brand/model codes** across the available catalog. Configuration variants are counted separately in product totals.
+**21,720 distinct brand/model codes** across the available catalog. Configuration variants are counted separately in product totals.
 
 | Reported year | Product records | Distinct brand/model codes | Verified release records |
 |---|---:|---:|---:|
 | 2017 | 1 | 1 | 1 |
 | 2020 | 17 | 17 | 17 |
 | 2023 | 2531 | 2531 | 1 |
-| 2024 | 4658 | 4658 | 6 |
-| 2025 | 8238 | 8238 | 23 |
+| 2024 | 4666 | 4666 | 14 |
+| 2025 | 8240 | 8240 | 25 |
 | 2026 | 6265 | 6265 | 18 |
 
 **21,644 records have unverified legacy release years.** Their exact ages cannot be certified from the existing bundle. The older-products CSV distinguishes confirmed release information from reported catalog years.

@@ -4,7 +4,6 @@ import io
 import json
 import re
 import hashlib
-from collections import defaultdict
 from datetime import date,datetime
 from zoneinfo import ZoneInfo
 
@@ -182,12 +181,13 @@ def search(db,filters,admin=False,include_facets=True):
         if include_facets:
             scope,scope_args=conditions(filters,admin,facets=True)
             for key,column in [('categories','c.name'),('product_types','sc.name'),('brands','p.brand'),('years',"COALESCE(CAST(p.release_year AS CHAR),'unknown')")]:
-                cursor.execute(f'SELECT {column} value,COUNT(*) count {JOINS} WHERE {scope} AND {column} IS NOT NULL GROUP BY {column} ORDER BY {column}',scope_args)
+                facet_scope,facet_args=scope,scope_args
+                if key=='categories':
+                    facet_scope,facet_args=conditions({**filters,'category':'','categories':[],'product_type':'','product_types':[]},admin,facets=True)
+                elif key=='product_types':
+                    facet_scope,facet_args=conditions({**filters,'product_type':'','product_types':[]},admin,facets=True)
+                cursor.execute(f'SELECT {column} value,COUNT(*) count {JOINS} WHERE {facet_scope} AND {column} IS NOT NULL GROUP BY {column} ORDER BY {column}',facet_args)
                 facets[key]=cursor.fetchall()
-            cursor.execute(f'SELECT f.spec_key,f.spec_value value,COUNT(DISTINCT p.id) count {JOINS} JOIN product_filter_values f ON f.product_id=p.id WHERE {scope} GROUP BY f.spec_key,f.spec_value ORDER BY f.spec_key,f.spec_value',scope_args)
-            grouped=defaultdict(list)
-            for row in cursor.fetchall(): grouped[row['spec_key']].append({'value':row['value'],'count':row['count']})
-            facets['specifications']=[{'key':key,'label':label,'values':grouped[key]} for key,(label,_) in SPEC_DEFINITIONS.items() if grouped[key]]
         return {'items':items,'total':total,'catalog_total':catalog_total,'facets':facets,'brands':[row['value'] for row in facets.get('brands',[])]}
 
 

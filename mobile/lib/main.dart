@@ -3031,13 +3031,21 @@ class _BuyerHomePageState extends State<BuyerHomePage> {
   Future<void> _fetchProducts({bool append = false}) async {
     if (!mounted) return;
     final version = ++_fetchVersion;
-    setState(() => _loading = true);
+    setState(() {
+      _loading = true;
+      _catalogError = null;
+      if (!append) {
+        _allItems = [];
+        _total = 0;
+      }
+    });
     try {
       final result = await widget.api.catalogSearch(widget.token, {
         ..._catalogFilters,
         'q': _search.text.trim(),
         'limit': 50,
         'offset': append ? _allItems.length : 0,
+        'include_facets': !append,
       });
       if (mounted && version == _fetchVersion)
         setState(() {
@@ -3047,7 +3055,8 @@ class _BuyerHomePageState extends State<BuyerHomePage> {
               )
               .toList();
           _allItems = append ? [..._allItems, ...rows] : rows;
-          _facets = Map<String, dynamic>.from(result['facets']);
+          if ((result['facets'] as Map).isNotEmpty)
+            _facets = Map<String, dynamic>.from(result['facets']);
           _total = result['total'];
           _catalogError = null;
         });
@@ -3153,24 +3162,6 @@ class _BuyerHomePageState extends State<BuyerHomePage> {
           filters: _catalogFilters,
           onChanged: (value) {
             setState(() => _catalogFilters = value);
-            _fetchProducts();
-          },
-        ),
-        TextField(
-          controller: _minPrice,
-          keyboardType: TextInputType.number,
-          decoration: const InputDecoration(labelText: 'Minimum price'),
-          onChanged: (value) {
-            _catalogFilters = {..._catalogFilters, 'minimum': value};
-            _fetchProducts();
-          },
-        ),
-        TextField(
-          controller: _maxPrice,
-          keyboardType: TextInputType.number,
-          decoration: const InputDecoration(labelText: 'Maximum price'),
-          onChanged: (value) {
-            _catalogFilters = {..._catalogFilters, 'maximum': value};
             _fetchProducts();
           },
         ),
@@ -3305,6 +3296,15 @@ class _BuyerHomePageState extends State<BuyerHomePage> {
                                     Text(
                                       _catalogError!,
                                       style: const TextStyle(color: Colors.red),
+                                    ),
+                                  if (_catalogError != null)
+                                    TextButton(
+                                      onPressed: _loading
+                                          ? null
+                                          : _fetchProducts,
+                                      child: const Text(
+                                        'Retry loading products',
+                                      ),
                                     ),
                                   if (_allItems.length < _total)
                                     TextButton(
@@ -5554,22 +5554,6 @@ class _ProductAdminPageState extends State<ProductAdminPage> {
     child: SingleChildScrollView(
       child: Column(
         children: [
-          DropdownButtonFormField<String>(
-            value: _statusFilter ?? '',
-            decoration: const InputDecoration(labelText: 'Product status'),
-            items: ['', 'active', 'inactive', 'archived']
-                .map(
-                  (value) => DropdownMenuItem(
-                    value: value,
-                    child: Text(value.isEmpty ? 'All statuses' : value),
-                  ),
-                )
-                .toList(),
-            onChanged: (value) {
-              setState(() => _statusFilter = value);
-              _fetchCatalog();
-            },
-          ),
           CatalogFacetPicker(
             facets: _facets,
             filters: _catalogFilters,

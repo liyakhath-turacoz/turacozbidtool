@@ -957,28 +957,30 @@ function BuyerHomePage({ data, setBidProduct, run, user }) {
   const [facets,setFacets]=useState({});const [total,setTotal]=useState(0);
   const [catalogLoading,setCatalogLoading]=useState(false);const [catalogError,setCatalogError]=useState('');
   const [selected,setSelected]=useState(null);const requestVersion=useRef(0);
+  const [refreshKey,setRefreshKey]=useState(0);
+  const search=()=>{setAppliedQuery(query.trim());setRefreshKey(value=>value+1);};
   useEffect(()=>{
-    const version=++requestVersion.current;setCatalogLoading(true);setCatalogError('');
+    const version=++requestVersion.current;setCatalogLoading(true);setCatalogError('');setProducts([]);setTotal(0);
     api.catalogSearch(user.access_token,catalogParams(filters,{q:appliedQuery,limit:50,offset:0}))
       .then(result=>{if(version===requestVersion.current){setProducts(result.items);setFacets(result.facets);setTotal(result.total);}})
       .catch(error=>{if(version===requestVersion.current)setCatalogError(friendlyErrorMessage(error));})
       .finally(()=>{if(version===requestVersion.current)setCatalogLoading(false);});
     return()=>{requestVersion.current++;};
-  },[user.access_token,appliedQuery,filters]);
+  },[user.access_token,appliedQuery,filters,refreshKey]);
   const loadMore=async()=>{
     const version=requestVersion.current;setCatalogLoading(true);
-    try {const result=await api.catalogSearch(user.access_token,catalogParams(filters,{q:appliedQuery,limit:50,offset:products.length}));if(version===requestVersion.current)setProducts(old=>[...old,...result.items.filter(row=>!old.some(item=>item.id===row.id))]);}
+    try {const result=await api.catalogSearch(user.access_token,catalogParams(filters,{q:appliedQuery,limit:50,offset:products.length,include_facets:false}));if(version===requestVersion.current)setProducts(old=>[...old,...result.items.filter(row=>!old.some(item=>item.id===row.id))]);}
     catch(error){setCatalogError(friendlyErrorMessage(error));}
     finally{if(version===requestVersion.current)setCatalogLoading(false);}
   };
   const openProduct=async product=>{setSelected(product);try{setSelected(await api.productDetail(user.access_token,product.id));}catch{setSelected(product);}};
   return <Page>
-    <div className="toolbar buyer-search"><div className="search-box wide-search"><Search size={17}/><input value={query} onChange={event=>setQuery(event.target.value)} onKeyDown={event=>{if(event.key==='Enter')setAppliedQuery(query.trim());}} placeholder="Search brand, model, specifications..."/></div><button className="primary" disabled={catalogLoading} onClick={()=>setAppliedQuery(query.trim())}>Search</button></div>
-    <div className="buyer-catalog-layout"><aside className="filter-panel"><div><strong>Filters</strong><button className="link-button" onClick={()=>setFilters(emptyCatalogFilters())}>Reset</button></div><CatalogFilters facets={facets} filters={filters} onChange={setFilters}/><label>Minimum price<input type="number" min="0" value={filters.minimum} onChange={event=>setFilters({...filters,minimum:event.target.value})}/></label><label>Maximum price<input type="number" min="0" value={filters.maximum} onChange={event=>setFilters({...filters,maximum:event.target.value})}/></label></aside>
+    <div className="toolbar buyer-search"><div className="search-box wide-search"><Search size={17}/><input value={query} onChange={event=>setQuery(event.target.value)} onKeyDown={event=>{if(event.key==='Enter')search();}} placeholder="Search brand, model, specifications..."/></div><button className="primary" disabled={catalogLoading} onClick={search}>Search</button></div>
+    <div className="buyer-catalog-layout"><aside className="filter-panel"><div><strong>Filters</strong><button className="link-button" onClick={()=>setFilters(emptyCatalogFilters())}>Reset</button></div><CatalogFilters facets={facets} filters={filters} onChange={setFilters}/></aside>
     <section className="catalog-results"><div className="catalog-summary"><strong>{total.toLocaleString()} matching products · {products.length} loaded</strong><label>Sort: <select value={filters.sort} onChange={event=>setFilters({...filters,sort:event.target.value})}>{['Newest','Year','A-Z','Lowest Price','Highest Price'].map(value=><option key={value}>{value}</option>)}</select></label></div>
-    {catalogError&&<p role="alert">{catalogError}</p>}{catalogLoading&&<p role="status">Loading products…</p>}
+    {catalogError&&<div role="alert"><p>{catalogError}</p><button disabled={catalogLoading} onClick={()=>setRefreshKey(value=>value+1)}>Retry loading products</button></div>}{catalogLoading&&<p role="status">Loading products…</p>}
     <div className="product-grid buyer-grid">{products.map(product=><ProductCard key={product.id} product={product} onSelect={()=>openProduct(product)} onCart={()=>run(token=>api.addCartItem(token,product.id,1),'Added to cart.')} onBid={()=>setBidProduct(product)}/>)}</div>
-    {!catalogLoading&&!products.length&&<Empty title="No products match these filters."/>}
+    {!catalogLoading&&!catalogError&&!products.length&&<Empty title="No products match these filters."/>}
     {products.length<total&&<button disabled={catalogLoading} onClick={loadMore}>Load more products</button>}</section></div>
     {selected&&<ProductDetailsModal product={selected} onClose={()=>setSelected(null)} onCart={()=>run(token=>api.addCartItem(token,selected.id,1),'Added to cart.')} onBid={()=>{setSelected(null);setBidProduct(selected);}}/>}
   </Page>;
@@ -1180,7 +1182,7 @@ function ProductAdminPage({ user, data, run, onExport }) {
   const [search, setSearch] = useState('');
   const [modal, setModal] = useState(null);
   const [form, setForm] = useState(empty);
-  const [filters, setFilters] = useState({ category: 'All', brand: '', status: '', min: '', max: '', sort: 'Newest', product_type:'', years:[], specs:{} });
+  const [filters, setFilters] = useState({ category: 'All', brand: '', sort: 'Newest', product_type:'', years:[] });
   const [catalog, setCatalog] = useState({items:[],total:0,catalog_total:0,brands:[]});
   const [appliedSearch, setAppliedSearch] = useState('');
   const [page, setPage] = useState(0);
@@ -1193,7 +1195,7 @@ function ProductAdminPage({ user, data, run, onExport }) {
   useEffect(() => {
     let cancelled=false;
     setCatalogLoading(true); setCatalogError('');
-    api.adminProducts(user.access_token,{q:appliedSearch,category:filters.category==='All'?'':filters.category,brand:filters.brand,status:filters.status,minimum:filters.min,maximum:filters.max,sort:filters.sort,product_type:filters.product_type,years:filters.years,specs:JSON.stringify(filters.specs||{}),limit:50,offset:page*50})
+    api.adminProducts(user.access_token,{q:appliedSearch,category:filters.category==='All'?'':filters.category,brand:filters.brand,sort:filters.sort,product_type:filters.product_type,years:filters.years,limit:50,offset:page*50})
       .then(result=>{if(!cancelled)setCatalog(result);})
       .catch(error=>{if(!cancelled)setCatalogError(friendlyErrorMessage(error));})
       .finally(()=>{if(!cancelled)setCatalogLoading(false);});
@@ -1203,7 +1205,7 @@ function ProductAdminPage({ user, data, run, onExport }) {
   const products=catalog.items;
   const categories=['All',...data.categories.map(category=>category.name)];
   const brands=catalog.brands;
-  const distribution=products.reduce((counts,product)=>({...counts,[product.category]:(counts[product.category]||0)+1}),{});
+  const distribution=Object.fromEntries((catalog.facets?.categories||[]).map(row=>[row.value,row.count]));
   const filtered=products;
   const update = (key, value) => { setEditorError(''); setForm((old) => ({ ...old, [key]: value })); };
   const openAdd = () => { setEditorError(''); setForm({ ...empty, category: categories.find((item) => item !== 'All') || '' }); setModal('add'); };
@@ -1241,18 +1243,15 @@ function ProductAdminPage({ user, data, run, onExport }) {
         <button className="primary" onClick={openAdd}><Plus size={16} /> + Add Product</button>
       </div>
       <div className="choice-row">
-        {categories.map((category) => <button key={category} className={filters.category === category ? 'active' : ''} onClick={() => setFilters((old) => ({ ...old, category }))}>{category}</button>)}
+        {categories.map((category) => <button key={category} className={filters.category === category ? 'active' : ''} onClick={() => setFilters((old) => ({ ...old, category, product_type:'',brand:'',years:[] }))}>{category}</button>)}
       </div>
       {filtersOpen ? (
         <Panel title="Catalog Filters">
           <div className="filter-row">
             <select aria-label="Product brand filter" value={filters.brand} onChange={(event) => setFilters((old) => ({ ...old, brand: event.target.value }))}><option value="">Brand</option>{brands.map((brand) => <option key={brand}>{brand}</option>)}</select>
-            <select aria-label="Product type filter" value={filters.product_type||''} onChange={event=>setFilters({...filters,product_type:event.target.value,specs:{}})}><option value="">All product types</option>{(catalog.facets?.product_types||[]).map(row=><option key={row.value} value={row.value}>{row.value} ({row.count})</option>)}</select>
-            <select aria-label="Product status filter" value={filters.status} onChange={(event) => setFilters((old) => ({ ...old, status: event.target.value }))}><option value="">Status</option>{['active', 'archived', 'inactive'].map((status) => <option key={status}>{status}</option>)}</select>
-            <input placeholder="Min Price" value={filters.min} onChange={(event) => setFilters((old) => ({ ...old, min: event.target.value }))} />
-            <input placeholder="Max Price" value={filters.max} onChange={(event) => setFilters((old) => ({ ...old, max: event.target.value }))} />
+            <select aria-label="Product type filter" value={filters.product_type||''} onChange={event=>setFilters({...filters,product_type:event.target.value})}><option value="">All product types</option>{(catalog.facets?.product_types||[]).map(row=><option key={row.value} value={row.value}>{row.value} ({row.count})</option>)}</select>
             <select value={filters.sort} onChange={(event) => setFilters((old) => ({ ...old, sort: event.target.value }))}>{['Newest', 'Lowest Price', 'Highest Price', 'Name', 'Year'].map((item) => <option key={item}>{item}</option>)}</select>
-            <button className="link-button" onClick={() => setFilters({ category: 'All', brand: '', status: '', min: '', max: '', sort: 'Newest', product_type:'', years:[], specs:{} })}>Reset</button>
+            <button className="link-button" onClick={() => setFilters({ category: 'All', brand: '', sort: 'Newest', product_type:'', years:[] })}>Reset</button>
           </div>
           <CatalogFilters facets={catalog.facets||{}} filters={filters} onChange={setFilters} specsOnly />
         </Panel>
@@ -1292,7 +1291,7 @@ function ProductAdminPage({ user, data, run, onExport }) {
             setSaving(true); setEditorError('');
             try {
               const ok=await run(async token=>{try{return await (modal==='add'?api.createProduct(token,draft()):api.updateProduct(token,modal,draft()));}catch(error){setEditorError(friendlyErrorMessage(error));throw error;}},modal==='add'?'Product added successfully!':'Product updated.');
-              if(ok){if(modal==='add'){setSearch(form.name.trim());setAppliedSearch(form.name.trim());setFilters({category:'All',brand:'',status:'',min:'',max:'',sort:'Newest',product_type:'',years:[],specs:{}});setPage(0);}setModal(null);setRefreshKey(value=>value+1);}
+              if(ok){if(modal==='add'){setSearch(form.name.trim());setAppliedSearch(form.name.trim());setFilters({category:'All',brand:'',sort:'Newest',product_type:'',years:[]});setPage(0);}setModal(null);setRefreshKey(value=>value+1);}
             } finally {setSaving(false);}
           }}
         />
@@ -1670,7 +1669,7 @@ function ProductEditorModal({ title, form, categories, onUpdate, onClose, onSave
         <label>Model Name / Number<input maxLength={190} disabled={!!form.has_bid_history} value={form.model} onChange={(event) => onUpdate('model', event.target.value)} /></label>
         <label>Min Price (Rs.)<input type="number" min="0" step="0.01" value={form.price_min} onChange={(event) => onUpdate('price_min', event.target.value)} /></label>
         <label>Max Price (Rs.)<input type="number" min={Number(form.price_min)||0} step="0.01" value={form.price_max} onChange={(event) => onUpdate('price_max', event.target.value)} /></label>
-        <label>Status<select value={form.status || 'active'} onChange={(event) => onUpdate('status', event.target.value)}><option value="active">Active</option><option value="inactive">Inactive</option><option value="archived">Archived</option></select></label>
+        <label>Status<select aria-label="Status" value={form.status || 'active'} onChange={(event) => onUpdate('status', event.target.value)}><option value="active">Active</option><option value="inactive">Inactive</option><option value="archived">Archived</option></select></label>
         <label>Location<input value={form.location || ''} onChange={(event) => onUpdate('location', event.target.value)} /></label>
         <label className="wide">Specifications<textarea aria-label="Specifications" value={form.specifications} onChange={(event) => onUpdate('specifications', event.target.value)} /></label>
       </div>
@@ -2790,8 +2789,8 @@ function ProductCard({ product, onCart, onBid, onSelect }) {
     <article className="product-card" onClick={onSelect}>
       <div className="product-art">{product.image_url ? <img src={product.image_url} alt="" loading="lazy" /> : <Package size={42} />}</div>
       <span>{product.brand}</span>
-      <h3>{product.name}</h3>
-      <p>{productSpecs(product) || 'Standard Edition'}</p>
+      <h3 title={product.name}>{product.name}</h3>
+      <p title={productSpecs(product)}>{productSpecs(product) || 'Standard Edition'}</p>
       <strong>{product.release_year ? `${product.release_date_basis === 'legacy_reported_year' ? 'Reported year' : 'Release year'}: ${product.release_year}` : 'Release year unknown'} · Bid for price</strong>
       <div className="product-actions">
         <button className="success" onClick={(event) => { event.stopPropagation(); onCart(); }}><ShoppingCart size={15} /> Add</button>

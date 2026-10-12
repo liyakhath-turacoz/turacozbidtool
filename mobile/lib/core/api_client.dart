@@ -1,13 +1,18 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'models.dart';
 
-const apiBaseUrl = String.fromEnvironment(
-  'API_BASE_URL',
-  defaultValue: 'http://localhost:8000',
-);
+const configuredApiBaseUrl = String.fromEnvironment('API_BASE_URL');
+final apiBaseUrl =
+    (configuredApiBaseUrl.isNotEmpty
+            ? configuredApiBaseUrl
+            : kIsWeb && Uri.base.port == 8000
+            ? Uri.base.origin
+            : 'http://localhost:8000')
+        .replaceFirst(RegExp(r'/+$'), '');
 
 class ApiClient {
   ApiClient({http.Client? httpClient}) : _http = httpClient ?? http.Client();
@@ -83,6 +88,8 @@ class ApiClient {
   ) async {
     final query = <String, dynamic>{};
     for (final entry in filters.entries) {
+      if (['specs', 'minimum', 'maximum', 'status'].contains(entry.key))
+        continue;
       if (entry.value == null || entry.value == '') continue;
       query[entry.key] = entry.key == 'specs'
           ? jsonEncode(entry.value)
@@ -615,6 +622,7 @@ class ApiClient {
   }
 
   Map<String, String> _headers(String token) => {
+    'Accept': 'application/json',
     'Content-Type': 'application/json',
     if (token.isNotEmpty) 'Authorization': 'Bearer $token',
   };
@@ -629,6 +637,14 @@ class ApiClient {
   }
 
   void _throwIfBad(http.Response response) {
+    if ((response.headers['content-type'] ?? '').toLowerCase().contains(
+          'text/html',
+        ) ||
+        response.body.trimLeft().startsWith('<')) {
+      throw Exception(
+        'The server returned a webpage instead of API data. Restart the backend to load the latest routes and check the API address. Then retry.',
+      );
+    }
     if (response.statusCode >= 400) {
       throw Exception('API error ${response.statusCode}: ${response.body}');
     }

@@ -23,7 +23,7 @@ from pathlib import Path
 from typing import Any, Literal
 
 import pymysql
-from fastapi import BackgroundTasks, Depends, FastAPI, File, Header, HTTPException, Query, UploadFile, WebSocket, WebSocketDisconnect
+from fastapi import BackgroundTasks, Depends, FastAPI, File, Header, HTTPException, Query, Request, UploadFile, WebSocket, WebSocketDisconnect
 from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse, Response
@@ -3828,10 +3828,10 @@ def parse_catalog_specs(value):
 
 
 @app.get('/catalog/search')
-def catalog_search(q:str='',category:str='',product_type:str='',categories:list[str]=Query(default=[]),product_types:list[str]=Query(default=[]),brands:list[str]=Query(default=[]),years:list[str]=Query(default=[]),specs:str='{}',status:str='',minimum:float|None=Query(default=None,ge=0),maximum:float|None=Query(default=None,ge=0),sort:str='Newest',limit:int=Query(default=50,ge=1,le=250),offset:int=Query(default=0,ge=0),user:dict=Depends(current_user)):
+def catalog_search(q:str='',category:str='',product_type:str='',categories:list[str]=Query(default=[]),product_types:list[str]=Query(default=[]),brands:list[str]=Query(default=[]),years:list[str]=Query(default=[]),specs:str='{}',status:str='',minimum:float|None=Query(default=None,ge=0),maximum:float|None=Query(default=None,ge=0),sort:str='Newest',limit:int=Query(default=50,ge=1,le=250),offset:int=Query(default=0,ge=0),include_facets:bool=True,user:dict=Depends(current_user)):
     if minimum is not None and maximum is not None and minimum>maximum:raise HTTPException(status_code=400,detail='Minimum price must not exceed maximum price')
     if any(year!='unknown' and (not year.isdigit() or not 1900<=int(year)<=2200) for year in years):raise HTTPException(status_code=400,detail='Invalid release year')
-    return catalog_filters.search(db,{'q':q,'category':category,'product_type':product_type,'categories':categories,'product_types':product_types,'brands':brands,'years':years,'specs':parse_catalog_specs(specs),'status':status,'minimum':minimum,'maximum':maximum,'sort':sort,'limit':limit,'offset':offset},admin=user['role']=='admin')
+    return catalog_filters.search(db,{'q':q,'category':category,'product_type':product_type,'categories':categories,'product_types':product_types,'brands':brands,'years':years,'specs':parse_catalog_specs(specs),'status':status,'minimum':minimum,'maximum':maximum,'sort':sort,'limit':limit,'offset':offset},admin=user['role']=='admin',include_facets=include_facets)
 
 
 @app.get('/admin/product-statistics')
@@ -4856,7 +4856,10 @@ def upload_file(file: UploadFile = File(...), user: dict[str, Any] = Depends(cur
 
 
 @app.get("/{path:path}")
-def react_web(path: str):
+def react_web(path: str, request: Request):
+    api_namespaces={'admin','auth','bids','buyer','cart','catalog','dealer','export','locations','notifications','products','profile','reports','settings','uploads','ws','api'}
+    if path.split('/',1)[0] in api_namespaces or 'application/json' in request.headers.get('accept','').lower():
+        raise HTTPException(status_code=404,detail='API route not found. Check the endpoint and restart the backend after code updates.')
     if not WEB_BUILD.exists():
         raise HTTPException(status_code=404, detail="Run npm run build in the web directory first")
     requested = (WEB_BUILD / path).resolve()

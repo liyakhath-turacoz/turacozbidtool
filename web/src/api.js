@@ -1,4 +1,5 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+const defaultApiUrl=globalThis.location?.port==='8000' ? globalThis.location.origin : 'http://localhost:8000';
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || defaultApiUrl).replace(/\/+$/, '');
 
 function queryString(filters) {
   const query=new URLSearchParams();
@@ -10,6 +11,7 @@ function queryString(filters) {
 }
 
 const jsonHeaders = (token) => ({
+  Accept: 'application/json',
   'Content-Type': 'application/json',
   ...(token ? { Authorization: `Bearer ${token}` } : {}),
 });
@@ -20,13 +22,18 @@ async function request(path, { token = '', method = 'GET', body, raw = false } =
     headers: jsonHeaders(token),
     body: body === undefined ? undefined : JSON.stringify(body),
   });
+  if (response.headers.get('content-type')?.toLowerCase().includes('text/html')) {
+    throw new Error('The server returned a webpage instead of API data. Restart the backend to load the latest routes and check the API address. Then retry.');
+  }
   if (!response.ok) {
     const text = await response.text();
     throw new Error(`API error ${response.status}: ${text}`);
   }
   if (raw) return response;
   const text = await response.text();
-  return text ? JSON.parse(text) : null;
+  if (!text) return null;
+  try { return JSON.parse(text); }
+  catch { throw new Error('The server returned invalid API data. Check the API address and restart the backend, then retry.'); }
 }
 
 export const apiBaseUrl = API_BASE_URL;
@@ -59,7 +66,7 @@ export const api = {
   saveProductSource: (token,id,payload) => request(`/admin/product-sources/${id}`,{token,method:'PUT',body:payload}),
   fetchProductSource: (token,id) => request(`/admin/product-sources/${id}/fetch`,{token,method:'POST'}),
   productStatistics: token => request('/admin/product-statistics',{token}),
-  productStatisticsCsv: async token => {const response=await fetch(`${API_BASE_URL}/admin/product-statistics.csv`,{headers:jsonHeaders(token)});if(!response.ok)throw new Error('Statistics download failed');return response.blob();},
+  productStatisticsCsv: async token => (await request('/admin/product-statistics.csv',{token,raw:true})).blob(),
   productDetail: (token, id) => request(`/products/${id}`, { token }),
   createProduct: (token, payload) => request('/products', { token, method: 'POST', body: payload }),
   updateProduct: (token, id, payload) => request(`/products/${id}`, { token, method: 'PUT', body: payload }),

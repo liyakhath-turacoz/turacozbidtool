@@ -105,7 +105,7 @@ flutter build apk --release --dart-define=API_BASE_URL=http://10.0.2.2:8000
 
 ## Product catalog
 
-The current local database contains **21,710 available products, all active**, audited on 12 October 2026. Fourteen confirmed pre-2017 variants were retired with bidding history retained; verified recent source imports were added. Legacy release years still need verification. The database, downloaded catalog shards, account data and private settings are excluded from the Git repository. A fresh clone can seed demo products or import an independently supplied catalog bundle.
+The current local database contains **21,720 available products, all active**, audited on 12 October 2026. Fourteen confirmed pre-2017 variants were retired with bidding history retained; verified recent source imports were added. Legacy release years still need verification. The database, downloaded catalog shards, account data and private settings are excluded from the Git repository. A fresh clone can seed demo products or import an independently supplied catalog bundle.
 
 When `products/manifest.json` and all referenced compressed catalog shards are present, backend startup imports that catalog once per version by default. Set `TURACOZ_IMPORT_PRODUCTS_ON_STARTUP=false` to disable startup imports and import manually:
 
@@ -115,11 +115,11 @@ python backend\scripts\import_product_catalog.py --products-root products
 
 The `add_dummy_data.py` seed does not clear catalog data. See [products/README.md](products/README.md) for the bundle format and the explicit `--replace-existing` option.
 
-See [PRODUCT_CATALOG_REPORT.md](PRODUCT_CATALOG_REPORT.md) for category/year/brand totals and [PRODUCT_SOURCES_GUIDE.md](PRODUCT_SOURCES_GUIDE.md) for the 12 manufacturer adapters, TechAPI, Icecat downloads and source configuration. Buyer and admin filters include manufacturer, item type, release year and category-specific specifications, with full-database pagination and no review-rating filters. Appliances have their own parent category.
+See [PRODUCT_CATALOG_REPORT.md](PRODUCT_CATALOG_REPORT.md) for category/year/brand totals and [PRODUCT_SOURCES_GUIDE.md](PRODUCT_SOURCES_GUIDE.md) for the 12 manufacturer adapters, TechAPI, Icecat downloads and source configuration. Buyer and admin product filters include only category, product type, manufacturer and release year, with full-database pagination and no review-rating filters. Appliances have their own parent category.
 
 ## Admin panel
 
-**Products / Catalog** searches the complete catalog, with category, brand, status, price and sorting filters and 50 products per page. Product creation and editing validate required fields and price ranges. Archived products remain available to admin and are hidden from buyers. Products with bidding history retain their identity; prices, specifications and status remain editable. Product deletion preserves historical requests and offers. Categories used by products or dealer profiles cannot be deleted until those records are reassigned.
+**Products / Catalog** searches the complete catalog, with category, product type, manufacturer and release-year filters, sorting and 50 products per page. Product creation and editing validate required fields and price ranges. Archived products remain available to admin and are hidden from buyers. Products with bidding history retain their identity; prices, specifications and status remain editable. Product deletion preserves historical requests and offers. Categories used by products or dealer profiles cannot be deleted until those records are reassigned.
 
 **Product Fetch & Reports** supports manual imports, hourly intervals, daily local times, fixed one-time schedules, custom public JSON feeds, durable job history, review links and CSV statistics. New imports require release evidence and a three-year age limit. Credentials remain in private server settings. Restart an already running backend to load the new routes.
 
@@ -179,3 +179,21 @@ The backend serves `web/dist` when a production web bundle is present. To update
 - [Mobile app README](mobile/README.md)
 - [Product catalog README](products/README.md)
 - [Current code audit and fixes](ISSUES.md)
+
+## Catalog response errors and verification
+
+If a product request returned HTML (`Unexpected token <`), the previous running backend had not loaded the catalog routes and its website fallback answered the request. Unknown API paths now return JSON 404, both clients show useful errors, and the buyer catalog supports retrying the request. Restart the backend after Python changes and refresh the browser after frontend builds.
+
+The catalog has four filter groups. Product images are constrained to their own area above the name, specification summary and actions. [ICECAT_DATA_REPORT.md](ICECAT_DATA_REPORT.md) explains appliance coverage and how to download the larger source index.
+
+Catalog regression checks against an existing local buyer account:
+
+```powershell
+$env:E2E_WEB_URL = "http://localhost:8000"
+node web\tests\catalog.e2e.mjs
+node web\tests\catalog_pages.e2e.mjs
+```
+
+`web/tests/admin_catalog.e2e.mjs` additionally checks admin panels and creates, edits, archives and deletes one temporary product. It requires the existing admin password in `TURACOZ_ADMIN_PASSWORD`; credentials are not embedded in the test.
+
+The built site can be opened at `http://localhost:8000` or `http://127.0.0.1:8000`; its default API URL uses that same origin. Explicit `VITE_API_BASE_URL` / `API_BASE_URL` settings take precedence.

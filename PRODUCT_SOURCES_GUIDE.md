@@ -94,4 +94,6 @@ Read [PRODUCT_CATALOG_REPORT.md](PRODUCT_CATALOG_REPORT.md) for category/year/br
 python backend\scripts\audit_product_catalog.py
 ```
 
-Buyer and admin filters search the full database, using the same item types and normalized specifications. Dealer selection and bid routing continue to use those category/item IDs. Counts include configurations and regional product variants; distinct brand/model-code counts are also reported and are not guaranteed to represent distinct marketing model families.
+Buyer and admin filters search the full database using four groups: Categories, Product type, Brand/manufacturer and Release year. Technical specifications remain available in product details. Dealer selection and bid routing continue to use those category/item IDs. Counts include configurations and regional product variants; distinct brand/model-code counts are also reported and are not guaranteed to represent distinct marketing model families.
+
+For the current appliance counts, daily-feed rejection reasons and the longer full-index download command, see [ICECAT_DATA_REPORT.md](ICECAT_DATA_REPORT.md). Index imports now stream files to disk with a 512 MiB limit, distribute discovery attempts across item types, and count new/updated records toward the import limit. Unchanged records do not consume that limit. Remote index metadata is checked on each import so scheduled runs do not blindly reuse a day-old index.
