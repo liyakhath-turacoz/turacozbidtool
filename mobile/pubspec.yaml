@@ -1,0 +1,25 @@
+name: turacozbidtool
+description: "Single Flutter Web and Android app for the Turacoz local dealer bidding marketplace."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.12.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  http: ^1.1.0
+  flutter_map: ^6.1.0
+  latlong2: ^0.9.0
+  web_socket_channel: ^3.0.3
+  geolocator: ^14.1.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
