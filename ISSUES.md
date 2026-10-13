@@ -183,3 +183,11 @@ Detailed results: [original scenarios](E2E_RESULTS.md), [concurrent bidding](LIV
 
 - Built frontend clients use the current origin when served by the backend on port 8000, avoiding a default localhost/127.0.0.1 mismatch. Explicit API URL overrides remain supported.
 - Product cards and details now show a package placeholder while supplier photos load or if an image fails, rather than leaving an empty image region. Browser regression checks cover unavailable images.
+
+## Household product expansion and current health review — 13 October 2026
+
+- Expanded the local database by 322 household products (134 LG India catalog, 17 Open Icecat household index and 171 verified EPREL records); 2 existing records were refreshed. The database now has 22,042 available records: 21,676 electronics and 366 household appliances.
+- Air conditioners, dishwashers, freezers, ovens, refrigerators, tumble dryers and washing machines each have 50 records. Microwave ovens have 16 date-verified recent records; Icecat's large index is not the same as accessible products with recent launch evidence. Older, undated or misclassified models were not used to fill the target.
+- The original bundled catalog was electronics-only: 21,676 records across 29 electronics types and no appliance types. Source and date limitations, appliance provenance, the existing type breakdown and remaining gap are in [HOUSEHOLD_PRODUCTS_REPORT.md](HOUSEHOLD_PRODUCTS_REPORT.md) and [ICECAT_DATA_REPORT.md](ICECAT_DATA_REPORT.md).
+- Added bounded household vertical XML-index support, fair multi-category candidate discovery, LG catalog import, EPREL market-date normalization, safe cache handling, deleted-category import safeguards and a profile-loading race fix. Active source schedules and API secrets were not changed.
+- Final validation for this pass: backend unit tests and Python compilation, React production build, Flutter web release build, backend health/login and buyer/admin product pagination. Local MariaDB tables remained readable. Native Android runtime remains unverified.

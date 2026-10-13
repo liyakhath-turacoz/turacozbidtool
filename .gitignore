@@ -13,6 +13,7 @@ __pycache__/
 *.pyc
 node_modules/
 .runtime*
+.firecrawl/
 _count_products.py
 _private_configuration.py
 mobile/android/.kotlin/

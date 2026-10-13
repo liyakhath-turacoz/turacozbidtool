@@ -232,12 +232,12 @@ def validate_bundle(products_root: Path, manifest: dict[str, Any]) -> None:
 def category_id(cursor, name: str, parent_id: str | None) -> str:
     if parent_id is None:
         cursor.execute(
-            "SELECT id FROM categories WHERE name=%s AND parent_id IS NULL AND deleted_at IS NULL LIMIT 1",
+            "SELECT id FROM categories WHERE name=%s AND parent_id IS NULL ORDER BY (deleted_at IS NULL) DESC LIMIT 1",
             (name,),
         )
     else:
         cursor.execute(
-            "SELECT id FROM categories WHERE name=%s AND parent_id=%s AND deleted_at IS NULL LIMIT 1",
+            "SELECT id FROM categories WHERE name=%s AND parent_id=%s ORDER BY (deleted_at IS NULL) DESC LIMIT 1",
             (name, parent_id),
         )
     row = cursor.fetchone()

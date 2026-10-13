@@ -2239,6 +2239,9 @@ function BusinessProfilePage({ user, data, run, onDeleteAccount }) {
     if (ok) dirty.current = false;
     setSaving(false);
   };
+  // Wait for the saved profile to populate the form before accepting edits.
+  // Otherwise an early keystroke marks the empty form dirty and drops hydration.
+  if (!data.profile || !form.delivery_method) return <Page><Section title="Business Profile & Configurations" icon={Store} /><Panel><p role="status">Loading your saved business profile…</p></Panel></Page>;
   const parentCategories = data.categories.filter((item) => !item.parent_id);
   const selectedCategoryNames = list(form.categories);
   const childCategories = parentCategories

@@ -110,6 +110,11 @@ def ensure_schema(db):
             if sizes.get(name,0)<size:cursor.execute(f'ALTER TABLE products MODIFY COLUMN {name} VARCHAR({size})'+(' NOT NULL' if name=='name' else ' NULL'))
         for name,definition in {'release_date':'DATE NULL','release_date_precision':"VARCHAR(12) NOT NULL DEFAULT 'unknown'",'release_date_basis':"VARCHAR(30) NOT NULL DEFAULT 'legacy_reported_year'",'catalog_added_at':'DATE NULL','source_url':'VARCHAR(1000) NULL','source_attribution':'VARCHAR(255) NULL','manual_specifications':'JSON NULL'}.items():
             if name not in columns: cursor.execute(f'ALTER TABLE products ADD COLUMN {name} {definition}')
+        # Source matching locks the product it updates. Without these indexes,
+        # brand/MPN and model lookups scan and lock much of the catalog per row.
+        cursor.execute('SHOW INDEX FROM products');indexes={row['Key_name'] for row in cursor.fetchall()}
+        for name,keys in {'idx_products_brand_mpn':'brand,mpn','idx_products_brand_model':'brand,model,release_year,subcategory_id'}.items():
+            if name not in indexes:cursor.execute(f'ALTER TABLE products ADD INDEX {name} ({keys})')
 
 
 def rebuild_index(db, progress=None):

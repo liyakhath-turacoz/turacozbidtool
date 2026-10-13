@@ -1,5 +1,6 @@
 """Official manufacturer discovery structures; credentials and scraped data stay out of this registry."""
 MANUFACTURERS = {
+    'lg': {'brand':'LG','url':'https://www.lg.com/in/air-conditioners/all-air-conditioners/','structure':'Official India catalog/Coveo search: model code, manufacturer release date, model year, images and active/preorder status','domains':['www.lg.com','lgcorporationproduction0fxcu0qx.org.coveo.com'],'types':['Air conditioners','Refrigerators','Washing machines','Microwave ovens','Dishwashers','Freezers']},
     'samsung': {'brand':'Samsung','url':'https://news.samsung.com/in/category/press-resources','structure':'WordPress HTML articles; og:title and date metadata','domains':['news.samsung.com','www.samsung.com'],'types':['Smartphones','Tablets','Televisions','Refrigerators','Air conditioners','Ovens']},
     'oppo': {'brand':'OPPO','url':'https://www.oppo.com/in/newsroom/','structure':'Embedded newsroom JSON: page_url, title, sort_date','domains':['www.oppo.com','oppo.com'],'types':['Smartphones','Tablets']},
     'apple': {'brand':'Apple','url':'https://www.apple.com/newsroom/rss-feed.rss','structure':'Atom feed: entry/link, title, published; linked announcement HTML','domains':['www.apple.com','apple.com'],'types':['Smartphones','Tablets','Laptops','Smartwatches']},

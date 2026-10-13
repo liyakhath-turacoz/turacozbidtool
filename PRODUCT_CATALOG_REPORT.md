@@ -1,6 +1,6 @@
 # Product catalog audit
 
-As of 2026-10-12: **21,720 available product/SKU records**.
+As of 2026-10-13: **22,042 available product/SKU records**.
 
 Verified pre-2017 variants identified: **14**; retired: **14**. Original rows were backed up privately before retirement and bidding history is retained.
 
@@ -39,25 +39,26 @@ Counts are product/SKU records, including configurations and regional variants; 
 | Electronics | Televisions | 0 | 0 | 14 | 76 | 316 | 366 | 772 |
 | Electronics | Video conferencing systems | 0 | 0 | 135 | 126 | 124 | 69 | 454 |
 | Electronics | Video wall displays | 0 | 0 | 32 | 31 | 56 | 39 | 158 |
-| Home Appliances | Air conditioners | 0 | 0 | 0 | 0 | 0 | 1 | 1 |
-| Home Appliances | Dishwashers | 0 | 0 | 0 | 2 | 0 | 0 | 2 |
-| Home Appliances | Freezers | 0 | 0 | 0 | 0 | 2 | 0 | 2 |
-| Home Appliances | Microwave ovens | 0 | 0 | 0 | 0 | 0 | 1 | 1 |
-| Home Appliances | Ovens | 0 | 0 | 1 | 1 | 2 | 1 | 5 |
-| Home Appliances | Refrigerators | 0 | 0 | 0 | 9 | 19 | 2 | 30 |
-| Home Appliances | Washing machines | 0 | 0 | 0 | 2 | 1 | 0 | 3 |
+| Home Appliances | Air conditioners | 0 | 0 | 0 | 0 | 0 | 50 | 50 |
+| Home Appliances | Dishwashers | 0 | 0 | 0 | 3 | 0 | 47 | 50 |
+| Home Appliances | Freezers | 0 | 0 | 0 | 2 | 3 | 45 | 50 |
+| Home Appliances | Microwave ovens | 0 | 0 | 0 | 7 | 3 | 6 | 16 |
+| Home Appliances | Ovens | 0 | 0 | 2 | 2 | 2 | 44 | 50 |
+| Home Appliances | Refrigerators | 0 | 0 | 0 | 9 | 19 | 22 | 50 |
+| Home Appliances | Tumble dryers | 0 | 0 | 0 | 0 | 0 | 50 | 50 |
+| Home Appliances | Washing machines | 0 | 0 | 0 | 2 | 27 | 21 | 50 |
 
 ## Brands
 
 | Brand | Product records |
 |---|---:|
 | HP | 5704 |
-| Samsung | 2832 |
+| Samsung | 2833 |
 | Lenovo | 1602 |
 | DELL | 1062 |
 | ASUS | 839 |
+| LG | 695 |
 | QNAP | 654 |
-| LG | 561 |
 | Epson | 516 |
 | Origin Storage | 494 |
 | Integral | 429 |
@@ -67,7 +68,7 @@ Counts are product/SKU records, including configurations and regional variants; 
 | Acer | 326 |
 | Canon | 325 |
 | Zebra | 298 |
-| Hisense | 263 |
+| Hisense | 266 |
 | iiyama | 261 |
 | Brother | 259 |
 | EMC | 250 |
@@ -89,6 +90,7 @@ Counts are product/SKU records, including configurations and regional variants; 
 | Zyxel | 72 |
 | BSI-Refurbished | 66 |
 | HP Poly | 66 |
+| TCL | 65 |
 | MAXHUB | 62 |
 | Yealink | 60 |
 | Honor | 57 |
@@ -98,14 +100,13 @@ Counts are product/SKU records, including configurations and regional variants; 
 | ADATA | 47 |
 | bluechip | 46 |
 | Verbatim | 46 |
+| Gorenje | 44 |
 | Jabra | 44 |
 | Ricoh | 43 |
-| TCL | 42 |
 | Memblaze | 36 |
 | iggual | 35 |
 | SMART Technologies | 35 |
 | NEC | 34 |
-| Gorenje | 33 |
 | Seagate | 33 |
 | Buffalo | 30 |
 | OPPO | 29 |
@@ -121,15 +122,20 @@ Counts are product/SKU records, including configurations and regional variants; 
 | Yamaha | 20 |
 | Alienware | 18 |
 | ATEN | 18 |
+| AEG | 17 |
 | Biwin | 17 |
 | Owl Labs | 17 |
+| Bosch | 16 |
 | EnGenius | 16 |
 | Klevv | 16 |
 | Nilox | 15 |
 | Allied Telesis | 14 |
+| Electrolux | 14 |
 | JBL | 14 |
 | Biamp | 13 |
+| Siemens | 13 |
 | TERRA | 13 |
+| GALA | 12 |
 | Haier | 12 |
 | XPG | 10 |
 | Barco | 9 |
@@ -138,55 +144,95 @@ Counts are product/SKU records, including configurations and regional variants; 
 | Lanview | 6 |
 | SilverNet | 6 |
 | Hama | 5 |
+| Inventum | 5 |
 | Predator | 5 |
+| SCHAUB LORENZ | 5 |
 | Vaddio | 5 |
 | AVer | 4 |
+| BAUKNECHT | 4 |
 | Cellularline | 4 |
+| CHiQ | 4 |
 | HyperX | 4 |
+| KOENIC | 4 |
 | Linksys | 4 |
+| Miele | 4 |
 | ProDVX | 4 |
 | Securepoint | 4 |
 | Synetech | 4 |
+| Beko | 3 |
+| HEINNER | 3 |
 | InLine | 3 |
 | Peach | 3 |
 | Peerless | 3 |
+| Pitsos | 3 |
+| Powerpoint | 3 |
+| Ströme | 3 |
 | AudioCodes | 2 |
 | Celly | 2 |
+| Continental Edison | 2 |
 | CoreParts | 2 |
+| ELBA | 2 |
 | Equip | 2 |
 | ERAZER | 2 |
+| GRANDI ELETTRODOMESTICI-XD | 2 |
+| Hoover | 2 |
+| HOTPOINT/ARISTON | 2 |
+| LG Electronics | 2 |
 | Premier | 2 |
 | SureFire | 2 |
+| VALBERG | 2 |
+| WHIRLPOOL | 2 |
+| AVANT | 1 |
+| AVG | 1 |
+| Candy | 1 |
+| Caple | 1 |
 | Capture | 1 |
+| Cody's Drinks | 1 |
+| CROMBERG | 1 |
 | Dreame | 1 |
+| FINLUX | 1 |
+| FRIONOR | 1 |
+| GRATUS | 1 |
 | Hannspree | 1 |
+| HOMCOM | 1 |
+| homeX | 1 |
 | Honor Choice | 1 |
 | Iconic Arcade | 1 |
+| ILVE | 1 |
 | Kenwood | 1 |
+| KERNAU | 1 |
+| La Réserve | 1 |
 | LogiLink | 1 |
 | Marmitek | 1 |
 | Matrox | 1 |
 | MEDION | 1 |
+| Origial | 1 |
+| Otsein | 1 |
+| ROMO | 1 |
 | Salora | 1 |
+| SMEG | 1 |
 | StarTech.com | 1 |
 | SumUp | 1 |
 | T1A | 1 |
+| TEKA | 1 |
 | Trust | 1 |
 | UNYKAch | 1 |
+| VENTUX | 1 |
+| VOV | 1 |
 | ZOWIE | 1 |
 
 ## Model codes by reported release year
 
-**21,720 distinct brand/model codes** across the available catalog. Configuration variants are counted separately in product totals.
+**22,042 distinct brand/model codes** across the available catalog. Configuration variants are counted separately in product totals.
 
 | Reported year | Product records | Distinct brand/model codes | Verified release records |
 |---|---:|---:|---:|
 | 2017 | 1 | 1 | 1 |
 | 2020 | 17 | 17 | 17 |
-| 2023 | 2531 | 2531 | 1 |
-| 2024 | 4666 | 4666 | 14 |
-| 2025 | 8240 | 8240 | 25 |
-| 2026 | 6265 | 6265 | 18 |
+| 2023 | 2532 | 2532 | 2 |
+| 2024 | 4677 | 4677 | 25 |
+| 2025 | 8270 | 8270 | 55 |
+| 2026 | 6545 | 6545 | 298 |
 
 **21,644 records have unverified legacy release years.** Their exact ages cannot be certified from the existing bundle. The older-products CSV distinguishes confirmed release information from reported catalog years.
 

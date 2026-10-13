@@ -4,6 +4,7 @@ from tempfile import TemporaryDirectory
 from unittest.mock import patch
 
 from fastapi import HTTPException
+from starlette.requests import Request
 from backend import main
 
 
@@ -38,7 +39,7 @@ class AdminSafetyTests(unittest.TestCase):
             (root/'private.env').write_text('private configuration',encoding='utf-8')
             with patch.object(main, 'WEB_BUILD', build):
                 with self.assertRaises(HTTPException) as caught:
-                    main.react_web('../private.env')
+                    main.react_web('../private.env', Request({'type':'http','headers':[]}))
                 self.assertEqual(caught.exception.status_code, 404)
 
 

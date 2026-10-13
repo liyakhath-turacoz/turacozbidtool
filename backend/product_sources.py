@@ -5,6 +5,7 @@ import csv
 import gzip
 import hashlib
 import heapq
+import http.client
 import io
 import itertools
 import ipaddress
@@ -19,7 +20,7 @@ import urllib.parse
 import urllib.request
 import uuid
 import xml.etree.ElementTree as ET
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor,wait,FIRST_COMPLETED
 from datetime import date,datetime,timedelta,timezone
 from email.utils import parsedate_to_datetime
 from html.parser import HTMLParser
@@ -40,8 +41,9 @@ CACHE=ROOT/'products'/'tmp'/'source-imports'
 DEFAULTS=[
     ('icecat','Open Icecat XML','icecat','https://data.icecat.biz/export/freexml/EN/daily.index.csv.gz',['Ovens','Refrigerators','Air conditioners','Microwave ovens','Televisions','Washing machines','Dishwashers','Freezers']),
     ('techapi','TechAPI','techapi','https://gettechapi.github.io/TechAPI/v1',['Smartphones','Tablets','Laptops','Monitors','Smartwatches']),
+    ('eprel','EU EPREL appliance registry','eprel','https://eprel.ec.europa.eu/screen/product/ovens',['Ovens','Freezers','Dishwashers','Refrigerators','Washing machines','Tumble dryers']),
 ]
-DEFAULTS += [(key,info['brand']+' official announcements',key,info['url'],info['types']) for key,info in MANUFACTURERS.items()]
+DEFAULTS += [(key,info['brand']+(' official product catalog' if key=='lg' else ' official announcements'),key,info['url'],info['types']) for key,info in MANUFACTURERS.items()]
 ICECAT_CATEGORIES={'Ovens':[2286],'Refrigerators':[1873,1912,4964],'Freezers':[1322],'Microwave ovens':[1325],'Air conditioners':[1176,2723,2724],'Washing machines':[1331],'Dishwashers':[1324],'Televisions':[1302,1345,1584,2344,7206],'Laptops':[151],'Smartphones':[1893],'Tablets':[897]}
 TECH_RESOURCES={'Smartphones':'smartphones','Tablets':'tablets','Laptops':'laptops','Monitors':'monitors','Smartwatches':'watches','Graphics cards (GPUs)':'gpus','Processors (CPUs)':'cpus'}
 
@@ -92,7 +94,8 @@ def next_run(source,now=None):
     elif kind=='fixed':
         value=source.get('run_at')
         if not value:return None
-        due=datetime.fromisoformat(str(value)).replace(tzinfo=local.tzinfo)
+        due=datetime.fromisoformat(str(value))
+        if due.tzinfo is None:due=due.replace(tzinfo=local.tzinfo)
         if due<=local:return None
     else:raise ValueError('Unknown schedule type')
     return due.astimezone(timezone.utc).replace(tzinfo=None)
@@ -102,7 +105,7 @@ def validate_url(url,adapter):
     parsed=urllib.parse.urlparse(url)
     if parsed.username or parsed.password or parsed.fragment:raise ValueError('Use a source URL without credentials or fragments')
     host=(parsed.hostname or '').lower()
-    domains={'icecat':{'data.icecat.biz'},'techapi':{'gettechapi.github.io','techapi.dev'},'samsung':{'news.samsung.com','www.samsung.com'},'oppo':{'www.oppo.com','oppo.com'}}
+    domains={'eprel':{'eprel.ec.europa.eu'},'icecat':{'data.icecat.biz'},'techapi':{'gettechapi.github.io','techapi.dev'},'samsung':{'news.samsung.com','www.samsung.com'},'oppo':{'www.oppo.com','oppo.com'}}
     domains.update({key:set(info['domains']) for key,info in MANUFACTURERS.items()})
     if adapter in domains and (parsed.scheme!='https' or host not in domains[adapter]):raise ValueError('This adapter requires its official HTTPS source domain')
     if parsed.scheme!='https' or parsed.port not in {None,443}:raise ValueError('Use a public HTTPS source URL')
@@ -121,13 +124,15 @@ class Redirects(urllib.request.HTTPRedirectHandler):
         return super().redirect_request(request,fp,code,msg,headers,newurl)
 
 
-def fetch(url,adapter,max_bytes=32*1024*1024,cache_seconds=3600,as_file=False,max_seconds=180,download_progress=None,revalidate=False):
+def fetch(url,adapter,max_bytes=32*1024*1024,cache_seconds=3600,as_file=False,max_seconds=180,download_progress=None,revalidate=False,data=None,request_headers=None):
     validate_url(url,adapter);CACHE.mkdir(parents=True,exist_ok=True)
-    path=CACHE/(hashlib.sha256(url.encode()).hexdigest()+'.cache')
+    cache_key=url.encode()+(b'\n'+data if data is not None else b'')
+    path=CACHE/(hashlib.sha256(cache_key).hexdigest()+'.cache')
     if path.exists() and time.time()-path.stat().st_mtime<cache_seconds and not revalidate:
         if path.stat().st_size>max_bytes:raise ValueError('Cached source exceeds the configured download limit')
         return path if as_file else path.read_bytes()
-    headers={'User-Agent':'TuracozCatalog/1.0','Accept':'application/json,text/html,application/xml,*/*'}
+    headers={'User-Agent':'TuracozCatalog/1.0','Accept':'application/json,text/html,application/xml,*/*','Accept-Encoding':'identity'}
+    if request_headers:headers.update(request_headers)
     if adapter=='icecat':
         user=os.getenv('ICECAT_USERNAME','');password=os.getenv('ICECAT_PASSWORD','')
         if not user or not password:raise ValueError('Configure ICECAT_USERNAME and ICECAT_PASSWORD in private .env')
@@ -144,16 +149,26 @@ def fetch(url,adapter,max_bytes=32*1024*1024,cache_seconds=3600,as_file=False,ma
     started=time.monotonic();size=0;reported=0
     temporary=path.with_suffix('.'+uuid.uuid4().hex+'.tmp')
     try:
-        with urllib.request.build_opener(Redirects(adapter)).open(urllib.request.Request(url,headers=headers),timeout=30) as response,temporary.open('wb') as output:
+        with urllib.request.build_opener(Redirects(adapter)).open(urllib.request.Request(url,headers=headers,data=data),timeout=30) as response,temporary.open('wb') as output:
+            advertised=response.headers.get('Content-Length')
+            expected=int(advertised) if advertised and advertised.isdigit() else None
+            if expected is not None and expected>max_bytes:raise ValueError('Source response exceeds the configured download limit')
             while True:
-                chunk=response.read(64*1024)
+                # read1 returns available network data instead of waiting for a full
+                # buffer, so a trickling response cannot bypass the wall time limit.
+                chunk=response.read1(64*1024)
+                if time.monotonic()-started>max_seconds:raise TimeoutError('Source download exceeded its time limit')
                 if not chunk:break
                 size+=len(chunk)
                 if size>max_bytes:raise ValueError('Source response exceeds the configured download limit')
-                if time.monotonic()-started>max_seconds:raise TimeoutError('Source download exceeded its time limit')
                 output.write(chunk)
-                if download_progress and size-reported>=32*1024*1024:download_progress(size);reported=size
+                if download_progress and size-reported>=32*1024*1024:
+                    output.flush();download_progress(size);reported=size
+            if expected is not None and size!=expected:raise ValueError('Incomplete source download; previous cache retained')
         temporary.replace(path)
+    except http.client.HTTPException as error:
+        temporary.unlink(missing_ok=True)
+        raise ValueError('Source transfer was interrupted; incomplete download discarded') from error
     except BaseException:
         temporary.unlink(missing_ok=True)
         raise
@@ -194,7 +209,7 @@ def normalize_tech(record,item,url):
 
 
 def tech_records(source,progress):
-    base=source['endpoint'].rstrip('/');limit=source['max_products'];accepted=0;attempts=0
+    base=source['endpoint'].rstrip('/');limit=source['max_products'];attempts=0
     for item in source['categories']:
         resource=TECH_RESOURCES.get(item)
         if not resource:continue
@@ -203,7 +218,7 @@ def tech_records(source,progress):
         # Latest named releases first; detail release_date remains the final gate.
         candidates.sort(key=lambda row:max([int(year) for year in re.findall(r'20(?:2[3-9])',str(row))] or [0]),reverse=True)
         for row in candidates:
-            if attempts>=max(limit*8,200) or accepted>=limit:return
+            if attempts>=max(limit*8,200):return
             attempts+=1
             slug=row.get('slug')
             if not slug:continue
@@ -213,7 +228,7 @@ def tech_records(source,progress):
                 if record.get('verified') is False:progress('unverified_source_record');continue
                 allowed,reason=is_recent(record)
                 if not allowed:progress(reason);continue
-                accepted+=1;yield record
+                yield record
             except (ValueError,urllib.error.HTTPError,TimeoutError,OSError):progress('unavailable_source_record')
 
 
@@ -224,7 +239,10 @@ def icecat_xml(row,item):
     root=ET.fromstring(fetch(url,'icecat',max_bytes=5*1024*1024))
     product=root.find('.//Product')
     if product is None:raise ValueError('Icecat response contains no product')
-    released=product.attrib.get('ReleaseDate') or product.findtext('ReleaseDate')
+    # Current Icecat exports supply locale/international dates in nested nodes.
+    # Prefer those over the legacy attribute; never use Date_Added as release age.
+    dates=product.findall('./ReleaseDate/Date')
+    released=next((node.get('Value') for node in dates if node.get('Value')),None) or product.attrib.get('ReleaseDate') or product.findtext('ReleaseDate')
     supplier=product.find('Supplier');brand=supplier.attrib.get('Name','') if supplier is not None else row.get('m_supplier_name','')
     specs={};features=[]
     for feature in product.findall('ProductFeature'):
@@ -240,34 +258,77 @@ def icecat_xml(row,item):
         'description':description.attrib.get('LongDesc','') if description is not None else '', 'on_market':row.get('on_market')=='1'}
 
 
+def icecat_index_rows(path):
+    """Stream CSV or the smaller official XML vertical indexes into one shape."""
+    with gzip.open(path,'rb') as stream:
+        prefix=stream.read(64).lstrip(b'\xef\xbb\xbf \r\n\t');stream.seek(0)
+        if not prefix.startswith(b'<'):
+            with io.TextIOWrapper(stream,encoding='utf-8-sig',newline='') as text:
+                yield from csv.DictReader(text,delimiter='\t')
+            return
+        events=ET.iterparse(stream,events=('start','end'));_,root=next(events)
+        parent=root if root.tag.rsplit('}',1)[-1]=='files.index' else None
+        mapping={'path':'path','Product_ID':'product_id','Updated':'updated','Quality':'quality','Supplier_id':'supplier_id',
+            'Prod_ID':'prod_id','Catid':'catid','On_Market':'on_market','Model_Name':'model_name','HighPic':'high_pic','Date_Added':'Date_Added'}
+        for event,node in events:
+            tag=node.tag.rsplit('}',1)[-1]
+            if event=='start' and tag=='files.index':parent=node
+            if event=='end' and tag=='file':
+                row={target:node.get(source,'') for source,target in mapping.items()}
+                row['ean_upc']=';'.join(child.get('Value','') for child in node.findall('./EAN_UPCS/EAN_UPC'))
+                yield row
+                if parent is not None:parent.clear()
+                else:node.clear()
+
+
 def icecat_records(source,progress):
     ids={str(identifier):item for item in source['categories'] for identifier in ICECAT_CATEGORIES.get(item,[])}
-    limit=source['max_products'];pools={};sequence=0
+    limit=source['max_products'];pools={};pooled_ids={};sequence=0
     pool_limit=max(200,min(5000,limit*10//max(1,len(source['categories']))))
     # Daily discovery is the default; admins may configure the full index for a broader scan.
-    index=fetch(source['endpoint'],'icecat',max_bytes=512*1024*1024,cache_seconds=3600,as_file=True,max_seconds=600,revalidate=True)
-    with gzip.open(index,'rt',encoding='utf-8-sig',newline='') as stream:
-        for row in csv.DictReader(stream,delimiter='\t'):
-            item=ids.get(row.get('catid'))
-            if item and row.get('on_market')=='1' and row.get('quality','').upper() not in {'REMOVED','NOEDITOR'}:
-                sequence+=1;pool=pools.setdefault(item,[])
-                candidate=(row.get('Date_Added',''),row.get('updated',''),sequence,row)
-                if len(pool)<pool_limit:heapq.heappush(pool,candidate)
-                elif candidate[:3]>pool[0][:3]:heapq.heapreplace(pool,candidate)
+    full_index='daily.index' not in urllib.parse.urlparse(source['endpoint']).path
+    index=fetch(source['endpoint'],'icecat',max_bytes=512*1024*1024,cache_seconds=3600,as_file=True,max_seconds=3600 if full_index else 600,revalidate=True,
+        download_progress=lambda size:progress(None,{'phase':'download','downloaded_bytes':size}))
+    for row_number,row in enumerate(icecat_index_rows(index),1):
+        item=ids.get(row.get('catid'))
+        if item and row.get('on_market')=='1' and row.get('quality','').upper() not in {'REMOVED','NOEDITOR'}:
+            pool=pools.setdefault(item,[]);selected=pooled_ids.setdefault(item,set())
+            if row['product_id'] in selected:continue
+            sequence+=1
+            candidate=(row.get('Date_Added',''),row.get('updated',''),sequence,row)
+            if len(pool)<pool_limit:heapq.heappush(pool,candidate);selected.add(row['product_id'])
+            elif candidate[:3]>pool[0][:3]:
+                removed=heapq.heapreplace(pool,candidate);selected.discard(removed[3]['product_id']);selected.add(row['product_id'])
+        if row_number%100000==0:progress(None,{'phase':'discovery','index_rows':row_number})
     # Index-added date is a discovery hint only, never proof of release age.
     candidates=[[(item,entry[3]) for entry in sorted(pool,reverse=True)] for item,pool in pools.items()]
-    attempts=0
-    # Share discovery attempts across item types so one large category cannot starve the others.
-    for pair in itertools.chain.from_iterable(itertools.zip_longest(*candidates)):
-        if pair is None:continue
-        item,row=pair
-        if attempts>=max(200,limit*10):break
-        attempts+=1
-        try:
-            record=icecat_xml(row,item);allowed,reason=is_recent(record)
+    attempts=0;pending={};workers=max(1,min(8,int(source.get('xml_workers',4))))
+    # Keep a bounded number of independent XML reads in flight. Database writes and progress
+    # updates stay sequential; no thousands-of-futures backlog is created.
+    pairs=(pair for pair in itertools.chain.from_iterable(itertools.zip_longest(*candidates)) if pair is not None)
+    with ThreadPoolExecutor(max_workers=workers,thread_name_prefix='icecat-xml') as readers:
+        exhausted=False
+        while pending or not exhausted:
+            while len(pending)<workers and not exhausted:
+                try:pair=next(pairs)
+                except StopIteration:exhausted=True;break
+                item,row=pair
+                if item in source.get('_completed_types',set()):continue
+                if attempts>=max(200,limit*10):exhausted=True;break
+                attempts+=1;pending[readers.submit(icecat_xml,row,item)]=item
+            if not pending:continue
+            ready,_=wait(pending,return_when=FIRST_COMPLETED)
+            future=next(iter(ready));item=pending.pop(future)
+            try:
+                record=future.result()
+            except urllib.error.HTTPError as error:
+                reason='source_access_denied' if error.code in {401,403} else 'source_rate_limited' if error.code in {429,499} else 'source_not_found' if error.code==404 else 'unavailable_source_record'
+                progress(reason);continue
+            except (ET.ParseError,ValueError,urllib.error.HTTPError,TimeoutError,OSError):progress('unavailable_source_record');continue
+            if item in source.get('_completed_types',set()):continue
+            allowed,reason=is_recent(record)
             if not allowed:progress(reason);continue
             yield record
-        except (ET.ParseError,ValueError,urllib.error.HTTPError,TimeoutError,OSError):progress('unavailable_source_record')
 
 
 class Page(HTMLParser):
@@ -311,6 +372,11 @@ def article_release(article,published):
 
 def manufacturer_records(source,progress):
     adapter=source['adapter'];base=source['endpoint'];brand=MANUFACTURERS[adapter]['brand']
+    if adapter=='lg':
+        try:from .lg_catalog import records
+        except ImportError:from lg_catalog import records
+        yield from records(source,progress)
+        return
     if adapter not in {'samsung','oppo'}:
         yield from company_records(source,progress)
         return
@@ -445,7 +511,7 @@ def company_records(source,progress):
                 valid,reason=is_recent(record)
                 if valid and record['subcategory'] in source['categories']:
                     yield record;emitted+=1;accepted_article=True
-                    if emitted>=source['max_products']:return
+                    if emitted>=max(200,source['max_products']*10):return
                 else:progress(reason or 'unselected_product_type')
             if not accepted_article:progress('news_lead',{'url':url,'title':title,'published_at':published})
         except (ValueError,ET.ParseError,urllib.error.HTTPError,TimeoutError,OSError):progress('unavailable_source_record')
@@ -455,7 +521,8 @@ def feed_records(source,progress):
     payload=json_fetch(source['endpoint'],'json_feed')
     records=payload if isinstance(payload,list) else payload.get('products') or payload.get('results') or payload.get('items') or []
     if not isinstance(records,list):raise ValueError('JSON source must return a product list')
-    for record in records[:source['max_products']]:
+    # Unchanged/invalid records must not consume the actual write quota.
+    for record in records[:max(200,source['max_products']*10)]:
         if not isinstance(record,dict):progress('invalid_record');continue
         yield {**record,'subcategory':record.get('product_type') or record.get('subcategory'),'source_product_id':record.get('id') or record.get('sku') or record.get('source_product_id'),
             'source_url':source['endpoint'],'source_attribution':source['name'],'release_date_basis':'admin_configured_source','highlights':record.get('specifications') or record.get('highlights') or {}}
@@ -512,12 +579,12 @@ class ImportService:
                 row['enabled']=bool(row['enabled'])
                 row['credential_configured']=bool(os.getenv('ICECAT_USERNAME') and os.getenv('ICECAT_PASSWORD')) if row['adapter']=='icecat' else bool(row['endpoint'])
                 info=MANUFACTURERS.get(row['adapter'],{})
-                row['structure']=info.get('structure','Structured product records with release dates')
-                row['available_types']=info.get('types') or list(ICECAT_CATEGORIES if row['adapter']=='icecat' else TECH_RESOURCES if row['adapter']=='techapi' else [])
+                row['structure']=info.get('structure','Manufacturer-declared first EU market dates and product specifications' if row['adapter']=='eprel' else 'Structured product records with release dates')
+                row['available_types']=info.get('types') or list(ICECAT_CATEGORIES if row['adapter']=='icecat' else TECH_RESOURCES if row['adapter']=='techapi' else ['Ovens','Freezers','Dishwashers','Refrigerators','Washing machines','Tumble dryers'] if row['adapter']=='eprel' else [])
             return rows
     def create_source(self,payload):
         adapter=payload.get('adapter','json_feed')
-        if adapter not in {'json_feed','techapi','icecat',*MANUFACTURERS}:raise ValueError('Unsupported source adapter')
+        if adapter not in {'json_feed','techapi','icecat','eprel',*MANUFACTURERS}:raise ValueError('Unsupported source adapter')
         identifier=str(uuid.uuid4())
         endpoint=str(payload.get('endpoint') or '')
         validate_url(endpoint,adapter)
@@ -582,6 +649,8 @@ class ImportService:
         allowed,reason=is_recent(record)
         if not allowed:return 'skipped',reason
         if not record.get('name') or not record.get('brand') or not record.get('source_product_id'):return 'skipped','missing_identity'
+        if any(not isinstance(record[key],str) for key in ('name','brand')) or isinstance(record['source_product_id'],bool) or not isinstance(record['source_product_id'],(str,int)):return 'skipped','invalid_identity'
+        if record.get('highlights') is not None and not isinstance(record['highlights'],dict):return 'skipped','invalid_specifications'
         item=catalog.product_type(record.get('subcategory'))
         if item not in source['categories']:return 'skipped','unselected_product_type'
         external=hashlib.sha256(str(record.get('source_product_id') or record['source_url']).encode()).hexdigest()
@@ -600,7 +669,12 @@ class ImportService:
             if not existing:
                 cursor.execute("SELECT p.id,p.deleted_at,p.status FROM products p LEFT JOIN categories sc ON sc.id=p.subcategory_id WHERE p.brand=%s AND p.model=%s AND sc.name=%s AND p.release_year=%s AND (p.mpn IS NULL OR p.mpn='') LIMIT 1 FOR UPDATE",[record['brand'],record.get('model') or record['name'],item,release.year]);existing=cursor.fetchone()
             if existing and (existing['deleted_at'] is not None or existing['status']!='active'):return 'skipped','admin_removed_or_inactive'
-            parent=category_id(cursor,catalog.parent_category(item),None);child=category_id(cursor,item,parent)
+            parent=category_id(cursor,catalog.parent_category(item),None)
+            cursor.execute('SELECT status,deleted_at FROM categories WHERE id=%s',[parent]);parent_state=cursor.fetchone()
+            if parent_state['deleted_at'] is not None or parent_state['status']!='active':return 'skipped','admin_removed_or_inactive_category'
+            child=category_id(cursor,item,parent)
+            cursor.execute('SELECT status,deleted_at FROM categories WHERE id=%s',[child]);child_state=cursor.fetchone()
+            if child_state['deleted_at'] is not None or child_state['status']!='active':return 'skipped','admin_removed_or_inactive_category'
             product_id=existing['id'] if existing else stable_id('icecat-product',str(record['source_product_id'])) if source['adapter']=='icecat' else stable_id('sourced-product',source['id']+':'+external)
             highlights=record.get('highlights') or {}
             fields={'name':str(record['name'])[:255],'brand':str(record['brand'])[:190],'model':str(record.get('model') or record['name'])[:190],
@@ -617,10 +691,16 @@ class ImportService:
             if existing:
                 # Existing auction identities, prices and manual specifications remain authoritative.
                 for key in ('name','brand','model','category_id','subcategory_id'):fields.pop(key,None)
-                cursor.execute('SELECT highlights,technical_specifications,manual_specifications,source_updated_at FROM products WHERE id=%s',[product_id]);retained=cursor.fetchone()
+                cursor.execute('SELECT highlights,technical_specifications,manual_specifications,source_updated_at,release_date,release_year,release_date_precision,release_date_basis FROM products WHERE id=%s',[product_id]);retained=cursor.fetchone()
                 if modified and retained['source_updated_at'] and modified<retained['source_updated_at']:return 'skipped','older_source_version'
                 fields['highlights']=json.dumps({**catalog.decode(retained['highlights'],{}),**highlights,**catalog.decode(retained['manual_specifications'],{})},ensure_ascii=False)
                 if not record.get('technical_specifications'):fields.pop('technical_specifications',None)
+                if not record.get('image_url'):fields.pop('image_url',None)
+                if not record.get('description'):fields.pop('description',None)
+                # A later regional introduction or catalog refresh must not make
+                # an already dated model look newer than its earliest known release.
+                if retained['release_date'] and retained['release_date_basis']!='legacy_reported_year' and retained['release_date']<release:
+                    for key in ('release_date','release_year','release_date_precision','release_date_basis'):fields.pop(key,None)
                 cursor.execute('UPDATE products SET '+','.join(key+'=%s' for key in fields)+',updated_at=UTC_TIMESTAMP() WHERE id=%s',[*fields.values(),product_id])
             else:
                 source_key=str(record['source_product_id'])
@@ -631,12 +711,25 @@ class ImportService:
         return ('updated' if existing else 'created'),''
     def run(self,job_id,source):
         counts={'created':0,'updated':0,'skipped':0};details={'reasons':{},'leads':[]};started=time.monotonic()
+        minimum=source.get('minimum_per_type')
+        if minimum:
+            with self.db() as conn,conn.cursor() as cursor:
+                where,args=catalog.conditions({},False)
+                cursor.execute(f'SELECT sc.name,COUNT(*) count {catalog.JOINS} WHERE {where} GROUP BY sc.name',args)
+                available={row['name']:row['count'] for row in cursor.fetchall()}
+            source={**source,'_completed_types':{item for item in source['categories'] if available.get(item,0)>=minimum}}
+            details['minimum_per_type']=minimum;details['index_url']=source['endpoint']
+            details['category_totals']={item:available.get(item,0) for item in source['categories']}
+        run_seconds=5400 if source['adapter']=='icecat' and 'daily.index' not in urllib.parse.urlparse(source['endpoint']).path else 1800
         def progress(reason,lead=None):
-            details['reasons'][reason]=details['reasons'].get(reason,0)+1
-            if lead and len(details['leads'])<100:details['leads'].append(lead)
-            counts['skipped']+=1
-            if sum(counts.values())%10==0:save('running')
-            if self.closed or time.monotonic()-started>1800:raise TimeoutError('Import stopped after its 30-minute run limit')
+            if reason is None:
+                details['discovery']=lead or {};save('running')
+            else:
+                details['reasons'][reason]=details['reasons'].get(reason,0)+1
+                if lead and len(details['leads'])<100:details['leads'].append(lead)
+                counts['skipped']+=1
+                if sum(counts.values())%10==0:save('running')
+            if self.closed or time.monotonic()-started>run_seconds:raise TimeoutError(f'Import stopped after its {run_seconds//60}-minute run limit')
         def save(status,error=None):
             with self.db() as conn,conn.cursor() as cursor:
                 cursor.execute("UPDATE product_import_jobs SET status=%s,created_count=%s,updated_count=%s,skipped_count=%s,details_json=%s,error_message=%s,started_at=COALESCE(started_at,UTC_TIMESTAMP()),finished_at=IF(%s IN ('completed','failed'),UTC_TIMESTAMP(),NULL),updated_at=UTC_TIMESTAMP() WHERE id=%s",[status,counts['created'],counts['updated'],counts['skipped'],json.dumps(details),error,status,job_id])
@@ -649,14 +742,25 @@ class ImportService:
                     claimed=lock.rowcount;lock_conn.commit()
                     if not claimed:return
                     save('running')
-                    adapter=manufacturer_records if source['adapter'] in MANUFACTURERS else {'icecat':icecat_records,'techapi':tech_records,'json_feed':feed_records}[source['adapter']]
+                    if minimum and len(source['_completed_types'])==len(source['categories']):save('completed');return
+                    if source['adapter']=='eprel':
+                        try:from .eprel_catalog import records as adapter
+                        except ImportError:from eprel_catalog import records as adapter
+                    else:adapter=manufacturer_records if source['adapter'] in MANUFACTURERS else {'icecat':icecat_records,'techapi':tech_records,'json_feed':feed_records}[source['adapter']]
                     for record in adapter(source,progress):
+                        if minimum and catalog.product_type(record.get('subcategory')) in source['_completed_types']:continue
                         if counts['created']+counts['updated']>=source['max_products']:break
-                        if self.closed or time.monotonic()-started>1800:raise TimeoutError('Import run time limit reached')
+                        if self.closed or time.monotonic()-started>run_seconds:raise TimeoutError('Import run time limit reached')
                         result,reason=self.store_record(source,record)
                         counts[result]+=1
+                        if minimum and result=='created':
+                            item=catalog.product_type(record['subcategory']);available[item]=available.get(item,0)+1
+                            if available[item]>=minimum:source['_completed_types'].add(item)
+                        if minimum:details['category_totals']={item:available.get(item,0) for item in source['categories']}
                         if reason:details['reasons'][reason]=details['reasons'].get(reason,0)+1
                         save('running')
+                        if minimum and len(source['_completed_types'])==len(source['categories']):break
+                    if minimum:details['unmet_targets']={item:minimum-available.get(item,0) for item in source['categories'] if available.get(item,0)<minimum}
                     save('completed')
                 finally:lock.execute("SELECT RELEASE_LOCK('turacoz_catalog_source_import')")
         except Exception as error:
