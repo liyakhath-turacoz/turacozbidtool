@@ -1587,6 +1587,9 @@ class AdminRepository:
         return bid_id, recipients
 
 
+MAX_ACTIVE_BUYER_BID_REQUESTS = 5
+
+
 class CartRepository:
     def get_cart(self, buyer_id: str) -> dict[str, Any]:
         with db() as conn, conn.cursor() as cursor:
@@ -1633,6 +1636,15 @@ class CartRepository:
             cursor.execute("SELECT id FROM users WHERE id=%s AND deleted_at IS NULL FOR UPDATE", [buyer_id])
             if not cursor.fetchone():
                 raise HTTPException(status_code=404, detail="Buyer not found")
+            cursor.execute(
+                "SELECT COUNT(*) AS active_count FROM bid_requests WHERE buyer_id=%s AND status='active' AND expires_at>NOW() AND deleted_at IS NULL",
+                [buyer_id],
+            )
+            if int((cursor.fetchone() or {}).get("active_count", 0)) >= MAX_ACTIVE_BUYER_BID_REQUESTS:
+                raise HTTPException(
+                    status_code=409,
+                    detail="You can have up to 5 active product bids at a time. Cancel one or wait for one to close before creating another.",
+                )
             rules = SettingsRepository.read_setting(cursor, "bid_rules")
             expiry_minutes = int(expiry_minutes if expiry_minutes is not None else round(float(rules["expiry_hours"]) * 60))
             if not float(rules["min_time_hours"]) * 60 - 1e-9 <= expiry_minutes <= float(rules["max_time_hours"]) * 60 + 1e-9:
