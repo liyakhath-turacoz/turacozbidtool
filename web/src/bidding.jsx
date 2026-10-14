@@ -424,7 +424,6 @@ export function BidSetupModal({ product, locations, rules = {}, onClose, onStart
     expiry_minutes: defaultMinutes,
     notes: '',
     location_id: defaultLocation ? String(defaultLocation.location_id || defaultLocation.id) : '',
-    skip_flagged_dealers: true,
   });
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
@@ -459,7 +458,6 @@ export function BidSetupModal({ product, locations, rules = {}, onClose, onStart
         product_id: product.id,
         quantity,
         location_id: form.location_id,
-        skip_flagged_dealers: form.skip_flagged_dealers,
         expiry_minutes: Number(form.expiry_minutes || 1440),
         fields: form.notes.trim() ? { Notes: form.notes.trim() } : {},
       });
@@ -479,14 +477,14 @@ export function BidSetupModal({ product, locations, rules = {}, onClose, onStart
               <h3>{product.name}</h3>
             </div>
           </div>
-          <p className="muted-small">Nearby shops will see this request and send their best final price. You choose the offer you like.</p>
+          <p className="muted-small">Every active shop that sells this product and delivers to your location will see this request and can send its best final price. You choose the offer you like.</p>
         </div>
 
         {!locations.length ? (
           <div className="page-banner warn">
             <div>
               <strong>Add a delivery location first.</strong>
-              <p>Shops are matched by distance, so we need a pinned location on the map.</p>
+              <p>Shops choose where they deliver, so we need a pinned location on the map to find the ones that reach you.</p>
             </div>
             {onAddLocation ? <button type="button" className="primary" onClick={onAddLocation}>Add location</button> : null}
           </div>
@@ -513,10 +511,6 @@ export function BidSetupModal({ product, locations, rules = {}, onClose, onStart
             </select>
             <p className="hint">Shops can bid until then. Longer windows usually bring more offers.</p>
           </div>
-          <label className="check field-aligned">
-            <input type="checkbox" checked={form.skip_flagged_dealers} onChange={(event) => update('skip_flagged_dealers', event.target.checked)} />
-            <span>Only invite shops in good standing</span>
-          </label>
           <div className="field wide">
             <label htmlFor="setup-notes">Anything shops should know? (optional)</label>
             <textarea id="setup-notes" value={form.notes} onChange={(event) => update('notes', event.target.value)} placeholder="Preferred colour, delivery floor, exchange of an old unit..." />

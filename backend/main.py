@@ -1799,21 +1799,16 @@ class CartRepository:
                 raise HTTPException(status_code=403, detail="Select one of your saved locations")
             if not valid_coordinates(selected_location):
                 raise HTTPException(status_code=400, detail="Selected saved location needs a valid map pin")
-            # Zero means no additional buyer distance limit. Dealer coverage
-            # always applies; a saved profile preference must not override this request.
-            buyer_radius_km = float(radius_km or 0)
-            location_rules = SettingsRepository.read_setting(cursor, "location_rules")
-            if buyer_radius_km > float(location_rules["max_radius_km"]):
-                raise HTTPException(status_code=400, detail="Buyer radius exceeds the configured maximum")
+            # The dealer's own service area decides who is reached, so a distance sent by the client is
+            # ignored (older clients may still send one). There is no cap on how many dealers are notified.
+            buyer_radius_km = 0.0
+            skip_flagged_dealers = True
 
             eligible = dealer_ops.matching_dealer_ids(cursor, product_id, location_id, buyer_radius_km, skip_flagged_dealers)
-            maximum_dealers = int(rules["max_dealers"])
-            if maximum_dealers > 0:
-                eligible = eligible[:maximum_dealers]
             if not eligible:
                 raise HTTPException(
                     status_code=400,
-                    detail="No subscribed dealers match this product's brand/category and your saved location. Check dealer company, product-type, and service-area preferences, or choose another product or saved location.",
+                    detail="No active, subscribed shop deals in this product and covers your saved location yet. Try another product or saved location.",
                 )
 
             product_reference.register_product(cursor, product_id)
@@ -2018,6 +2013,12 @@ class DealerOpsRepository:
         )
 
     def matching_dealer_ids(self, cursor, product_id: str, location_id: str, radius_km: float, skip_flagged_dealers: bool = True, dealer_id: str | None = None) -> list[str]:
+        """Every active, subscribed dealer who deals in the product and whose own service area covers the buyer.
+
+        The dealer's coverage (radius, cities, districts or states) is the only geographic rule, and there is no
+        cap on how many dealers are notified. Flagged and pending dealers are never included, so
+        `skip_flagged_dealers` is kept only for older callers and has no effect.
+        """
         rules = SettingsRepository.read_setting(cursor, "dealer_rules")
         location_rules = SettingsRepository.read_setting(cursor, "location_rules")
         cursor.execute(
@@ -2064,19 +2065,15 @@ class DealerOpsRepository:
             ) dsl ON dsl.dealer_id=u.id
             LEFT JOIN locations l ON l.id=dsl.location_id AND l.deleted_at IS NULL
             JOIN dealer_profiles dp ON dp.user_id=u.id AND dp.subscribed=TRUE AND dp.deleted_at IS NULL
-            WHERE u.status IN ('active','verified','flagged','pending') AND u.deleted_at IS NULL
-              AND (u.status <> 'pending' OR %s = FALSE)
+            WHERE u.status IN ('active','verified') AND u.deleted_at IS NULL
               AND (%s = FALSE OR dp.verification_status='verified')
               AND dp.verification_status <> 'rejected' AND dp.rating >= %s
               AND (%s IS NULL OR u.id=%s)
-              AND (%s = FALSE OR u.status <> 'flagged')
             """,
             [
                 bool(rules["verification_required"]),
-                bool(rules["verification_required"]),
                 float(rules["min_rating_threshold"]),
                 dealer_id, dealer_id,
-                skip_flagged_dealers,
             ],
         )
         candidates = cursor.fetchall()
@@ -2217,7 +2214,7 @@ class DealerOpsRepository:
                 JOIN locations l ON l.id=br.location_id
                 JOIN users u ON u.id=brd.dealer_id
                 JOIN dealer_profiles dp ON dp.user_id=u.id AND dp.subscribed=TRUE
-                WHERE brd.dealer_id=%s AND u.status IN ('active','verified','flagged','pending')
+                WHERE brd.dealer_id=%s AND u.status IN ('active','verified')
                   AND u.deleted_at IS NULL AND br.status='active' AND br.expires_at > NOW()
                   AND br.deleted_at IS NULL AND dp.deleted_at IS NULL
                   AND brd.status IN ('notified','viewed','bid')

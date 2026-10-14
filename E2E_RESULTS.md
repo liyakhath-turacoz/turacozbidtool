@@ -2,12 +2,12 @@
 
 - PASS: Separate incognito tabs retain different accounts, including after reload
 - PASS: Buyer browser location and confirmed pin save exact latitude/longitude
-- PASS: Only subscribed dealers with the selected item and buyer inside their circular range receive the request (4.99 km included, 5.01 km excluded)
+- PASS: Only active, subscribed dealers with the selected item and buyer inside their circular range receive the request (4.99 km included, 5.01 km excluded); flagged and pending dealers next door receive nothing
 - PASS: Out-of-range, wrong-item and unsubscribed accounts cannot submit; login returns current subscription
 - PASS: Live request, competitor bids, own-tab updates, bid revision and winner selection work without refresh
 - PASS: Subscription revoked after login blocks bid changes and acceptance of that offer; eligible dealer still wins
 - PASS: Changing buyer pin switches delivery eligibility: formerly distant shop receives new-location request; old nearby shops do not
-- PASS: Buyer distance cap adds a stricter limit to the dealer radius
+- PASS: A distance sent by the buyer is ignored: the dealers own service area alone decides who receives a request
 - PASS: A buyer can open their own report; buyer and dealer messaging stays hidden by design
 - PASS: Multiple sockets for the same account stay connected and receive events; no idle reconnect/refresh loop
 - PASS: No browser JavaScript errors

@@ -82,7 +82,11 @@ def run(suite="bidding"):
             "unsubscribed": ("dealer", 12.9736, product["item_id"], False),
             "edgeInside": ("dealer", 12.9716 + 4.99 / 111.1949266, product["item_id"], True),
             "edgeOutside": ("dealer", 12.9716 + 5.01 / 111.1949266, product["item_id"], True),
+            # Next to the buyer, subscribed and selling the item, but not in good standing: they get nothing.
+            "flaggedNear": ("dealer", 12.9718, product["item_id"], True),
+            "pendingNear": ("dealer", 12.9719, product["item_id"], True),
         }
+        standing_overrides = {"flaggedNear": "flagged", "pendingNear": "pending"}
         for label, (role, latitude, item, subscribe) in configurations.items():
             username = f"e2e_{run_id}_{label.lower()}"
             request("/auth/register", {"name": "E2E " + label, "username": username, "password": password, "role": role})
@@ -92,7 +96,7 @@ def run(suite="bidding"):
             if role == "dealer":
                 profile = {"full_name": "E2E " + label, "business_name": "E2E " + label, "country": country, "state": "Karnataka", "city": "Bengaluru", "area": "Test area", "address": "Test shop", "latitude": latitude, "longitude": 77.5946, "service_radius_km": 5, "delivery_method": "radius", "categories": [item], "brands": []}
                 request("/profile", profile, account["access_token"], "PUT")
-                request(f"/admin/users/{account['id']}/status", {"status": "verified", "reason": "Temporary E2E fixture"}, admin["access_token"])
+                request(f"/admin/users/{account['id']}/status", {"status": standing_overrides.get(label, "verified"), "reason": "Temporary E2E fixture"}, admin["access_token"])
                 with db() as conn, conn.cursor() as cursor:
                     cursor.execute("UPDATE dealer_profiles SET rating=5 WHERE user_id=%s", [account["id"]])
                 if subscribe:

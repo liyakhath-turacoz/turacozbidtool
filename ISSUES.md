@@ -6,6 +6,10 @@ This report covers the FastAPI backend, React web app, Flutter app, and local se
 
 A full review of the backend, the React app and the bidding flow, followed by a redesign of the web interface. The Flutter app was not run or changed in this pass (Flutter is not installed on the review machine); it keeps working because every API change is backward compatible.
 
+### Changed: who receives a request (14 October 2026)
+
+A request now reaches every dealer who deals in the product and whose own service area covers the buyer, with no cap on how many are notified. Only dealers with an active subscription and an account that is active or verified receive it; pending, flagged, rejected, held, suspended and banned accounts never do. A buyer's own distance limit and the "invite only shops in good standing" option no longer apply, and the admin "maximum invited dealers" setting is ignored (the Flutter admin screen still shows it). The API fields remain for compatibility. Verified against the database with 20 matching shops (all 20 notified, previously at most 10) and with flagged, pending, unsubscribed, banned, rejected, suspended and held shops (none notified).
+
 ### Fixed: backend
 
 - **Accepting an offer was not tied to what the buyer saw.** A dealer could revise warranty, delivery or extras at the same price between the buyer reading the offer and clicking accept. Offers now carry a `terms_token`; `POST /buyer/bids/{id}/accept` accepts it and answers 409 with a plain message when the terms changed. Clients that do not send it (the Flutter app today) behave as before.

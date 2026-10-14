@@ -941,7 +941,7 @@ function shopSetupSteps(profile, subscribed) {
     { key: 'subscription', done: Boolean(subscribed), title: 'Activate your subscription', hint: 'Needed to receive buyer requests and place bids.', action: 'subscribe' },
     { key: 'business', done: Boolean(text(p.business_name) && text(p.address)), title: 'Add your shop details', hint: 'Shop name and address are shown to a buyer after they choose you.', action: 'shop' },
     { key: 'area', done: hasCoverage, title: 'Set the area you serve', hint: 'Pin your shop on the map and choose how far you deliver.', action: 'shop' },
-    { key: 'products', done: list(p.category_ids).length > 0, title: 'Choose the products you sell', hint: 'You only receive requests for the categories you pick.', action: 'shop' },
+    { key: 'products', done: list(p.category_ids).length > 0, title: 'Choose the products you sell', hint: 'Pick your categories so you only get requests for what you sell. Until you do, you receive requests for every product.', action: 'shop' },
   ];
 }
 
@@ -2086,7 +2086,7 @@ function SettingsPage({ data, run, confirm }) {
   const numberField = (label, key, values, setter, min, max) => <label key={key}>{label}<input type="number" min={min} max={max} step="any" required value={values[key] ?? ''} onChange={(event) => { setDirty(true); setter({ ...values, [key]: event.target.value }); }} /></label>;
   const save = async (event, key, values) => {
     event.preventDefault();
-    const numericKeys = key === 'bid_rules' ? ['expiry_hours', 'min_time_hours', 'max_time_hours', 'max_dealers', 'min_bidding_increment'] : key === 'location_rules' ? ['max_radius_km'] : ['min_rating_threshold'];
+    const numericKeys = key === 'bid_rules' ? ['expiry_hours', 'min_time_hours', 'max_time_hours', 'min_bidding_increment'] : key === 'location_rules' ? ['max_radius_km'] : ['min_rating_threshold'];
     const payload = { ...values };
     numericKeys.forEach((field) => { payload[field] = Number(values[field]); });
     if (await run((token) => api.saveSetting(token, key, payload), 'Platform rules saved.')) setDirty(false);
@@ -2100,7 +2100,6 @@ function SettingsPage({ data, run, confirm }) {
           {numberField('Default bidding duration (hours)', 'expiry_hours', rules, setRules, 1 / 60, 72)}
           {numberField('Minimum bidding duration (hours)', 'min_time_hours', rules, setRules, 1 / 60, 72)}
           {numberField('Maximum bidding duration (hours)', 'max_time_hours', rules, setRules, 1 / 60, 72)}
-          {numberField('Maximum invited dealers (0 = unlimited)', 'max_dealers', rules, setRules, 0, 10000)}
           {numberField('Minimum price decrease (Rs., 0 = disabled)', 'min_bidding_increment', rules, setRules, 0, 9999999999.99)}
         </div><p>Buyers choose a duration within these limits. Set minimum, default and maximum to the same value for a fixed duration. Existing requests keep their saved deadline.</p><button className="button" type="submit">Save bid rules</button>
       </form></Panel>
@@ -2893,7 +2892,6 @@ function ProfilePage({ user, data, run, confirm, onDeleteAccount }) {
   const [location, setLocation] = useState(emptyLocation);
   const [editingLocationId, setEditingLocationId] = useState('');
   const [locationError, setLocationError] = useState('');
-  const [detailsError, setDetailsError] = useState('');
   const initialLocationLoaded = useRef(false);
   const locations = list(data.buyerLocations);
   const toForm = (row) => ({
@@ -2944,12 +2942,6 @@ function ProfilePage({ user, data, run, confirm, onDeleteAccount }) {
   // Details only change the person's own fields. Address and pin stay as stored, so editing
   // another saved location here can never silently move the default address.
   const saveProfile = async () => {
-    const radius = Number(profile.preferred_radius);
-    if (!Number.isFinite(radius) || radius <= 0 || radius > 5000) {
-      setDetailsError('Enter a matching radius between 1 and 5000 km.');
-      return;
-    }
-    setDetailsError('');
     const stored = data.profile || {};
     const ok = await run((token) => api.updateProfile(token, {
       full_name: profile.full_name || profile.name || user.name,
@@ -2960,7 +2952,7 @@ function ProfilePage({ user, data, run, confirm, onDeleteAccount }) {
       city: stored.city || '',
       area: stored.area || '',
       pincode: stored.pincode || '',
-      preferred_radius: radius,
+      preferred_radius: Number(stored.preferred_radius || profile.preferred_radius || 15),
       latitude: Number(stored.latitude || 0),
       longitude: Number(stored.longitude || 0),
     }), 'Details saved.');
@@ -3032,12 +3024,6 @@ function ProfilePage({ user, data, run, confirm, onDeleteAccount }) {
             <label htmlFor="acct-phone">Phone</label>
             <input id="acct-phone" type="tel" value={profile.phone || ''} autoComplete="tel" onChange={(event) => update('phone', event.target.value)} />
           </div>
-          <div className="field">
-            <label htmlFor="acct-radius">Search for shops within (km)</label>
-            <input id="acct-radius" type="number" min="1" max="5000" inputMode="numeric" value={profile.preferred_radius || ''} aria-invalid={Boolean(detailsError)} onChange={(event) => update('preferred_radius', event.target.value)} />
-            <p className="hint">Only shops inside this distance can bid on your requests.</p>
-            {detailsError ? <p className="field-error" role="alert">{detailsError}</p> : null}
-          </div>
         </div>
         <div className="row-actions">
           <button type="button" className="primary" disabled={!dirty} onClick={saveProfile}><Check size={16} aria-hidden="true" /> Save details</button>
@@ -3064,7 +3050,7 @@ function ProfilePage({ user, data, run, confirm, onDeleteAccount }) {
             )}
           </AdminList>
         ) : (
-          <Empty title="No delivery location yet" hint="Add one below. You need it to start a bid, because nearby shops are matched by distance." />
+          <Empty title="No delivery location yet" hint="Add one below. You need it to start a bid, because shops are matched by where they deliver." />
         )}
       </Panel>
 

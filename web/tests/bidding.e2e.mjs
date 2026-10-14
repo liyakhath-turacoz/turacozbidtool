@@ -127,7 +127,7 @@ try {
     if (requests.some((row) => row.id === request1.id)) eligible.push(label);
   }
   assert.deepEqual(eligible.sort(), ['edgeInside', 'near1', 'near2']);
-  check('Only subscribed dealers with the selected item and buyer inside their circular range receive the request (4.99 km included, 5.01 km excluded)');
+  check('Only active, subscribed dealers with the selected item and buyer inside their circular range receive the request (4.99 km included, 5.01 km excluded); flagged and pending dealers next door receive nothing');
   for (const label of ['far', 'wrongItem', 'unsubscribed']) await api(accounts[label], '/dealer/bids', { bid_request_id: request1.id, amount: 10000 }, 'POST', 403);
   assert.equal((await api(accounts.unsubscribed, '/auth/login', { username: accounts.unsubscribed.username, password: accounts.unsubscribed.password })).subscribed, false);
   check('Out-of-range, wrong-item and unsubscribed accounts cannot submit; login returns current subscription');
@@ -187,9 +187,9 @@ try {
   const capped = await start(home.location_id, 2);
   const cappedReceiving = [];
   for (const [label, account] of Object.entries(accounts)) if (account.role === 'dealer' && (await api(account, '/dealer/requests')).some((row) => row.id === capped.id)) cappedReceiving.push(label);
-  assert.deepEqual(cappedReceiving, ['near2']);
+  assert.deepEqual(cappedReceiving.sort(), ['edgeInside', 'near2']);
   await api(accounts.buyer, `/buyer/requests/${capped.id}`, undefined, 'DELETE');
-  check('Buyer distance cap adds a stricter limit to the dealer radius');
+  check('A distance sent by the buyer is ignored: the dealers own service area alone decides who receives a request');
 
   const report = await api(accounts.buyer, '/reports', { bid_id: winner.id, reason: 'E2E Live conversation', description: 'Temporary message test' });
   await navigate(buyerPage, 'Help & reports');
