@@ -121,7 +121,28 @@ export const api = {
   dealerRequests: (token) => request('/dealer/requests', { token }),
   submitDealerBid: (token, payload) => request('/dealer/bids', { token, method: 'POST', body: payload }),
   withdrawBid: (token, id) => request(`/dealer/bids/${id}/withdraw`, { token, method: 'POST' }),
+  dealerProducts: (token, { q = '', limit = 50, offset = 0 } = {}) =>
+    request(`/dealer/products?q=${encodeURIComponent(q)}&limit=${limit}&offset=${offset}`, { token }),
+  addDealerProduct: (token, payload) => request('/dealer/products', { token, method: 'POST', body: payload }),
+  removeDealerProduct: (token, id) => request(`/dealer/products/${id}`, { token, method: 'DELETE' }),
+  dealerProductCategories: (token) => request('/dealer/product-categories', { token }),
+  dealerProductTemplate: async (token) => (await request('/dealer/products/template.csv', { token, raw: true })).blob(),
+  uploadDealerCatalogue: async (token, file) => {
+    const form = new FormData();
+    form.append('file', file);
+    const response = await fetch(`${API_BASE_URL}/dealer/products/upload`, { method: 'POST', headers: { Accept: 'application/json', Authorization: `Bearer ${token}` }, body: form });
+    if (!response.ok) {
+      const error = new Error(`API error ${response.status}: ${await response.text()}`);
+      error.status = response.status;
+      throw error;
+    }
+    return response.json();
+  },
   activateDealerSubscription: (token) => request('/dealer/subscription/activate', { token, method: 'POST' }),
+  subscription: (token) => request('/dealer/subscription', { token }),
+  subscriptionOrder: (token) => request('/dealer/subscription/order', { token, method: 'POST' }),
+  subscriptionTestPay: (token, orderId) => request('/dealer/subscription/test-pay', { token, method: 'POST', body: { order_id: orderId } }),
+  subscriptionVerify: (token, proof) => request('/dealer/subscription/verify', { token, method: 'POST', body: proof }),
   exportCsv: async (token, kind) => {
     const response = await request(`/export/${encodeURIComponent(kind)}.csv`, { token, raw: true });
     return response.blob();

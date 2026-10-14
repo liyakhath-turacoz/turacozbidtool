@@ -28,6 +28,8 @@ The interface is built around the **quote slip**: a bid is a quote, and quotes l
 | [src/styles.css](src/styles.css) | All styling. Colours, type, radii and shadows are tokens at the top of the file (`--brand`, `--tag`, `--paper`, `--go`, `--warn`, `--bad`). Change the brand there. |
 | [src/ui.jsx](src/ui.jsx) | Shared pieces: accessible `Modal` (focus trap, Escape, restores focus, shows server errors inside itself), `ConfirmProvider` / `useConfirm()`, `Countdown`, `Status`, `Panel`, `Section`. |
 | [src/bidding.jsx](src/bidding.jsx) | The bidding screens' building blocks: `RequestSlip`, `MyBidSlip`, `OfferSlip`, `BidSheet` (dealer), `BidSetupModal` (buyer), `CompareOffersModal`. |
+| [src/subscription.jsx](src/subscription.jsx) | The pay-and-renew dialog (Razorpay, test gateway or demo) and the subscription panel with payment history on My shop. [src/payments.js](src/payments.js) only opens the Razorpay window; the server decides the price and checks the payment. |
+| [src/catalogue.jsx](src/catalogue.jsx) | The dealer's **My products** page: search-and-add from the catalogue, manual entry, file upload and the "is this the same product?" decisions. |
 | [src/format.js](src/format.js) | Pure helpers with unit tests in [tests/format.test.mjs](tests/format.test.mjs): rupee formatting with Indian grouping, countdown labels, "where do I stand" ranking. |
 
 Conventions to keep:

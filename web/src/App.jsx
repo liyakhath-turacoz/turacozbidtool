@@ -42,6 +42,9 @@ import MapCoordinatePicker from './MapCoordinatePicker.jsx';
 import BidConversation, { mergeMessages } from './BidConversation.jsx';
 import CatalogFilters, {emptyCatalogFilters, catalogParams} from './CatalogFilters.jsx';
 import ProductSourcesPage from './ProductSourcesPage.jsx';
+import { SubscribeModal, SubscriptionPanel } from './subscription.jsx';
+import { DealerProductsPage } from './catalogue.jsx';
+import { friendlyErrorMessage } from './format.js';
 import {
   Countdown,
   DialogErrorContext,
@@ -77,38 +80,6 @@ import {
 
 const sessionKey = 'turacoz_bid_tool_web_session';
 
-function friendlyErrorMessage(err) {
-  const message = String(err?.message || err || '');
-  const jsonStart = message.indexOf('{');
-  if (jsonStart >= 0) {
-    try {
-      const parsed = JSON.parse(message.slice(jsonStart));
-      const detail = parsed.detail;
-      if (Array.isArray(detail) && detail[0]) {
-        const field = detail[0].loc?.[detail[0].loc.length - 1] || 'field';
-        if (detail[0].type === 'greater_than') return `${fieldLabel(field)} must be greater than 0.`;
-        if (detail[0].type?.includes('missing')) return `${fieldLabel(field)} is required.`;
-        if (detail[0].type?.includes('float') || detail[0].type?.includes('int')) return `${fieldLabel(field)} must be a valid number.`;
-        return detail[0].msg || 'Please check the highlighted form fields.';
-      }
-      if (typeof detail === 'string') {
-        if (detail.toLowerCase().includes('no matching dealers')) return 'No dealers found for your selected location and product. Try another saved location, radius, category, or dealer coverage area.';
-        if (detail.toLowerCase().includes('saved location')) return detail;
-        return detail;
-      }
-    } catch {
-      // Fall through to text matching.
-    }
-  }
-  if (message.includes('No matching dealers') || message.includes('No subscribed dealers')) return 'No subscribed dealers match this location and product. Try another saved location or category, or check dealer subscriptions and service coverage.';
-  if (message.includes('Duplicate entry') && message.includes('uq_buyer_location')) return 'This location is already saved. Update the existing saved location instead.';
-  return message.replace(/^API error \d+:\s*/, '') || 'Something went wrong. Please try again.';
-}
-
-function fieldLabel(field) {
-  return text(field).replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
-}
-
 const adminNav = [
   ['Dashboard', Home],
   ['Dealer Management', Store],
@@ -135,6 +106,7 @@ const dealerNav = [
   ['Open requests', Inbox],
   ['My bids', Gavel],
   ['Past bids', ClipboardList],
+  ['My products', Package],
   ['My shop', Store],
   ['Alerts', Bell],
   ['Help & reports', LifeBuoy],
@@ -242,6 +214,7 @@ function App() {
   const [dismissSubscriptionBanner, setDismissSubscriptionBanner] = useState(false);
   const [toast, setToast] = useState('');
   const [live, setLive] = useState('connecting');
+  const [subscribing, setSubscribing] = useState(false);
   const confirm = useConfirm();
   const [data, setData] = useState({
     dashboard: {},
@@ -364,6 +337,7 @@ function App() {
         ['dealerRequests', 'bids', 'profile', 'settings'],
         ['bids', 'dealerRequests', 'profile', 'settings'],
         ['bids'],
+        ['profile'],
         ['profile', 'categories', 'settings'],
         ['notifications'],
         ['reports'],
@@ -699,6 +673,7 @@ function App() {
         refresh: () => loadPageData(user, tab),
         run,
         confirm,
+        subscribe: () => setSubscribing(true),
         onExport: handleExport,
         onDeleteAccount: () => run((token) => api.deleteOwnAccount(token)).then((ok) => ok && logout()),
       })
@@ -708,7 +683,7 @@ function App() {
 
   if (!user) return page;
 
-  const alertsIndex = user.role === 'buyer' ? 4 : user.role === 'dealer' ? 5 : -1;
+  const alertsIndex = user.role === 'buyer' ? 4 : user.role === 'dealer' ? 6 : -1;
   const roleLabel = user.role === 'dealer' ? 'Shop account' : user.role === 'buyer' ? 'Buyer account' : 'Administrator';
   const liveLabel = live === 'live' ? 'Live' : live === 'reconnecting' ? 'Reconnecting' : 'Connecting';
 
@@ -769,20 +744,13 @@ function App() {
           {error ? <div className={`notice page-notice ${error.includes('successful') ? 'success' : ''}`} role="alert">{error}</div> : null}
           {toast ? <div className="toast-pop" role="status">{toast}</div> : null}
           {loading ? <div className="loading-strip" aria-hidden="true" /> : null}
-          {user.role === 'dealer' && data.profile && !data.dealerSubscribed && !dismissSubscriptionBanner ? (
-            <SubscriptionBanner
-              onSubscribe={async () => {
-                const ok = await confirm({
-                  title: 'Activate your subscription?',
-                  body: <p>Your shop will receive matching buyer requests right away. The plan costs ₹999 a month.</p>,
-                  confirmLabel: 'Activate subscription',
-                  cancelLabel: 'Not now',
-                });
-                if (ok) run((token) => api.activateDealerSubscription(token), 'Subscription activated. Requests will start arriving.');
-              }}
-              onDismiss={() => setDismissSubscriptionBanner(true)}
-            />
-          ) : null}
+          {user.role === 'dealer' && data.profile && !dismissSubscriptionBanner ? (() => {
+            const endsAt = toTime(data.profile.subscription_ends_at);
+            const daysLeft = Number.isNaN(endsAt) ? null : Math.max(0, Math.ceil(Math.round((endsAt - Date.now()) / 8640000) / 10));
+            if (!data.dealerSubscribed) return <SubscriptionBanner state="new" onSubscribe={() => setSubscribing(true)} onDismiss={() => setDismissSubscriptionBanner(true)} />;
+            if (daysLeft !== null && daysLeft <= 7) return <SubscriptionBanner state="ending" daysLeft={daysLeft} onSubscribe={() => setSubscribing(true)} onDismiss={() => setDismissSubscriptionBanner(true)} />;
+            return null;
+          })() : null}
           <main>{page}</main>
         </div>
         <nav className="bottom-nav" aria-label="Quick navigation">
@@ -819,6 +787,13 @@ function App() {
             onSubmit={(payload) => run((token) => api.submitDealerBid(token, payload), dealerOffer.bid ? 'Bid updated.' : 'Bid submitted.').then((ok) => ok && setDealerOffer(null))}
           />
         ) : null}
+        {subscribing ? (
+          <SubscribeModal
+            user={user}
+            onClose={() => setSubscribing(false)}
+            onPaid={() => { setToast('Subscription active. Requests will start arriving.'); loadPageData(user, tab); }}
+          />
+        ) : null}
         {reportBid ? (
           <ReportModal
             bid={reportBid}
@@ -852,6 +827,7 @@ function renderPage(ctx) {
       <DealerRequestsPage {...ctx} />,
       <DealerBidsPage {...ctx} />,
       <DealerHistoryPage {...ctx} />,
+      <DealerProductsPage {...ctx} />,
       <BusinessProfilePage {...ctx} />,
       <NotificationsPage {...ctx} />,
       <ReportsPage {...ctx} />,
@@ -941,11 +917,12 @@ function shopSetupSteps(profile, subscribed) {
     { key: 'subscription', done: Boolean(subscribed), title: 'Activate your subscription', hint: 'Needed to receive buyer requests and place bids.', action: 'subscribe' },
     { key: 'business', done: Boolean(text(p.business_name) && text(p.address)), title: 'Add your shop details', hint: 'Shop name and address are shown to a buyer after they choose you.', action: 'shop' },
     { key: 'area', done: hasCoverage, title: 'Set the area you serve', hint: 'Pin your shop on the map and choose how far you deliver.', action: 'shop' },
-    { key: 'products', done: list(p.category_ids).length > 0, title: 'Choose the products you sell', hint: 'Pick your categories so you only get requests for what you sell. Until you do, you receive requests for every product.', action: 'shop' },
+    { key: 'payment', done: Boolean(p.payment?.upi_id || p.payment?.account_number), title: 'Add how buyers pay you', hint: 'Buyers see your UPI ID or bank details on every bid, so they can pay you directly.', action: 'shop' },
+    { key: 'products', done: list(p.category_ids).length > 0 || Number(p.listed_products) > 0, title: 'Add the products you sell', hint: 'List your products or tick categories so you get requests for what you sell. Until you do, you receive requests for every product.', action: 'products' },
   ];
 }
 
-function DealerHomePage({ user, data, loading, setTab, setDealerOffer, run, confirm }) {
+function DealerHomePage({ user, data, loading, setTab, setDealerOffer, subscribe }) {
   const profile = data.profile;
   const subscribed = data.dealerSubscribed;
   const steps = shopSetupSteps(profile, subscribed);
@@ -957,15 +934,6 @@ function DealerHomePage({ user, data, loading, setTab, setDealerOffer, run, conf
   const won = Number(metrics.won_bids || 0);
   const lost = Number(metrics.lost_bids || 0);
   const decided = won + lost;
-  const subscribe = async () => {
-    const ok = await confirm({
-      title: 'Activate your subscription?',
-      body: <p>Your shop will receive matching buyer requests right away. The plan costs ₹999 a month.</p>,
-      confirmLabel: 'Activate subscription',
-      cancelLabel: 'Not now',
-    });
-    if (ok) run((token) => api.activateDealerSubscription(token), 'Subscription activated. Requests will start arriving.');
-  };
   return (
     <Page>
       <Section title="Today at your shop" subtitle="New buyer requests, your live bids and how you are doing." />
@@ -981,7 +949,7 @@ function DealerHomePage({ user, data, loading, setTab, setDealerOffer, run, conf
                   <span>{step.hint}</span>
                 </div>
                 {step.done ? <span className="muted-small">Done</span> : (
-                  <button type="button" className="small primary" onClick={() => (step.action === 'subscribe' ? subscribe() : setTab(4))}>{step.action === 'subscribe' ? 'Subscribe' : 'Set up'}</button>
+                  <button type="button" className="small primary" onClick={() => (step.action === 'subscribe' ? subscribe() : setTab(step.action === 'products' ? 4 : 5))}>{step.action === 'subscribe' ? 'Subscribe' : 'Set up'}</button>
                 )}
               </li>
             ))}
@@ -1012,7 +980,7 @@ function DealerHomePage({ user, data, loading, setTab, setDealerOffer, run, conf
           <Empty
             title="No open requests right now"
             hint={subscribed ? 'New requests show up here the moment a nearby buyer posts one. Keep this page open, or check the alerts.' : 'Activate your subscription to start receiving requests from buyers near you.'}
-            action={subscribed ? <button type="button" onClick={() => setTab(4)}>Review what my shop sells</button> : <button type="button" className="primary" onClick={subscribe}>Activate subscription</button>}
+            action={subscribed ? <button type="button" onClick={() => setTab(4)}>Review what I sell</button> : <button type="button" className="primary" onClick={subscribe}>Activate subscription</button>}
           />
         )}
       </section>
@@ -1035,7 +1003,7 @@ function DealerHomePage({ user, data, loading, setTab, setDealerOffer, run, conf
   );
 }
 
-function DealerRequestsPage({ data, loading, setDealerOffer, setTab, run, confirm }) {
+function DealerRequestsPage({ data, loading, setDealerOffer, setTab, subscribe }) {
   const [sort, setSort] = useState('soonest');
   const subscribed = data.dealerSubscribed;
   const rows = [...list(data.dealerRequests)].sort((a, b) => {
@@ -1043,15 +1011,6 @@ function DealerRequestsPage({ data, loading, setDealerOffer, setTab, run, confir
     if (sort === 'nearest') return (a.distance_km ?? 1e9) - (b.distance_km ?? 1e9);
     return toTime(a.expires_at) - toTime(b.expires_at);
   });
-  const subscribe = async () => {
-    const ok = await confirm({
-      title: 'Activate your subscription?',
-      body: <p>Your shop will receive matching buyer requests right away. The plan costs ₹999 a month.</p>,
-      confirmLabel: 'Activate subscription',
-      cancelLabel: 'Not now',
-    });
-    if (ok) run((token) => api.activateDealerSubscription(token), 'Subscription activated. Requests will start arriving.');
-  };
   return (
     <Page>
       <Section
@@ -1087,7 +1046,7 @@ function DealerRequestsPage({ data, loading, setDealerOffer, setTab, run, confir
         <Empty
           title="No open requests right now"
           hint="You are shown requests for products you sell, from buyers inside your service area. If nothing arrives for a while, check that your shop lists the right products and area."
-          action={<button type="button" onClick={() => setTab(4)}>Check my shop settings</button>}
+          action={<button type="button" onClick={() => setTab(5)}>Check my shop settings</button>}
         />
       )}
     </Page>
@@ -2584,7 +2543,7 @@ function DealerHistoryPage({ user, data, setReportBid, onExport }) {
   );
 }
 
-function BusinessProfilePage({ user, data, run, confirm, onDeleteAccount }) {
+function BusinessProfilePage({ user, data, run, confirm, subscribe, onDeleteAccount }) {
   const profile = data.profile || {};
   const [form, setForm] = useState({});
   const [pinConfirmed, setPinConfirmed] = useState(false);
@@ -2619,6 +2578,13 @@ function BusinessProfilePage({ user, data, run, confirm, onDeleteAccount }) {
       delivery_method: profile.delivery_method || 'radius',
       categories: Array.isArray(profile.category_ids) ? profile.category_ids : list(profile.categories),
       brands: Array.isArray(profile.brands) ? profile.brands : text(profile.brands).split(',').map((item) => item.trim()).filter(Boolean),
+      payment: {
+        upi_id: profile.payment?.upi_id || '',
+        account_holder: profile.payment?.account_holder || '',
+        bank_name: profile.payment?.bank_name || '',
+        account_number: profile.payment?.account_number || '',
+        ifsc: profile.payment?.ifsc || '',
+      },
     });
   }, [data.profile, user]);
   const parentCategories = list(data.categories).filter((item) => !item.parent_id);
@@ -2686,6 +2652,7 @@ function BusinessProfilePage({ user, data, run, confirm, onDeleteAccount }) {
     return () => { cancelled = true; };
   }, [user.access_token, companyScopeKey]);
   const update = (key, value) => { dirty.current = true; setForm((old) => ({ ...old, [key]: value })); };
+  const updatePayment = (key, value) => { dirty.current = true; setForm((old) => ({ ...old, payment: { ...old.payment, [key]: value } })); };
   const save = async () => {
     setSaving(true);
     const ok = await run((token) => api.updateProfile(token, {
@@ -2743,7 +2710,7 @@ function BusinessProfilePage({ user, data, run, confirm, onDeleteAccount }) {
   return (
     <Page>
       <Section title="My shop" subtitle="What you sell, where you deliver and how buyers see you. Buyers only see your shop name until they accept your bid." />
-      {data.dealerSubscribed ? <span className="subscription-chip"><Check size={16} /> Subscribed</span> : null}
+      <SubscriptionPanel user={user} refreshKey={`${data.dealerSubscribed}-${profile.subscription_ends_at || ""}`} onSubscribe={subscribe} />
       <Panel title="Store & Verification Info">
         <div className="form-grid">
           <label>Shop Name<input value={form.business_name || ''} onChange={(event) => update('business_name', event.target.value)} /></label>
@@ -2793,6 +2760,16 @@ function BusinessProfilePage({ user, data, run, confirm, onDeleteAccount }) {
           </div> : null}
         </label>
       </Panel>
+      <Panel title="How buyers pay you">
+        <p className="muted-small">Buyers see these on every bid you send, with your shop name and contact details, so they know how to pay you. UPI is the quickest. Bank details are optional, but must be complete if you add them.</p>
+        <div className="form-grid">
+          <label>UPI ID<input value={form.payment?.upi_id || ''} onChange={(event) => updatePayment('upi_id', event.target.value)} placeholder="shopname@bank" autoComplete="off" /></label>
+          <label>Account holder name<input value={form.payment?.account_holder || ''} onChange={(event) => updatePayment('account_holder', event.target.value)} autoComplete="off" /></label>
+          <label>Bank name<input value={form.payment?.bank_name || ''} onChange={(event) => updatePayment('bank_name', event.target.value)} autoComplete="off" /></label>
+          <label>Account number<input value={form.payment?.account_number || ''} inputMode="numeric" onChange={(event) => updatePayment('account_number', event.target.value)} autoComplete="off" /></label>
+          <label>IFSC code<input value={form.payment?.ifsc || ''} onChange={(event) => updatePayment('ifsc', event.target.value.toUpperCase())} placeholder="HDFC0001234" autoComplete="off" /></label>
+        </div>
+      </Panel>
       <Panel title="Physical Address">
         <div className="form-grid">
           <label className="wide">Shop Street Address<input value={form.address || ''} onChange={(event) => update('address', event.target.value)} /></label>
@@ -2840,15 +2817,6 @@ function BusinessProfilePage({ user, data, run, confirm, onDeleteAccount }) {
           });
           if (ok) onDeleteAccount();
         }}>Delete account</button>
-        {!data.dealerSubscribed ? <button type="button" onClick={async () => {
-          const ok = await confirm({
-            title: 'Activate your subscription?',
-            body: <p>Your shop will receive matching buyer requests right away. The plan costs ₹999 a month.</p>,
-            confirmLabel: 'Activate subscription',
-            cancelLabel: 'Not now',
-          });
-          if (ok) run((token) => api.activateDealerSubscription(token), 'Subscription activated. Requests will start arriving.');
-        }}>Subscribe</button> : null}
       </div>
     </Page>
   );
@@ -3275,15 +3243,16 @@ function ProductCard({ product, onCart, onBid, onSelect }) {
   );
 }
 
-function SubscriptionBanner({ onSubscribe, onDismiss }) {
+function SubscriptionBanner({ state, daysLeft, onSubscribe, onDismiss }) {
+  const ending = state === 'ending';
   return (
     <div className="subscription-banner" role="region" aria-label="Subscription">
       <Bolt size={20} aria-hidden="true" />
       <div>
-        <strong>Subscribe to start receiving requests</strong>
-        <span>Buyers near you are asking for prices. Plan: ₹999 a month.</span>
+        <strong>{ending ? (daysLeft === 0 ? 'Your subscription ends today' : `Your subscription ends in ${plural(daysLeft, 'day')}`) : 'Subscribe to start receiving requests'}</strong>
+        <span>{ending ? 'Renew now so you do not miss new requests. Days you have left are kept.' : 'Buyers near you are asking for prices. Subscribe to see and bid on them.'}</span>
       </div>
-      <button type="button" onClick={onSubscribe}>Subscribe now</button>
+      <button type="button" onClick={onSubscribe}>{ending ? 'Renew' : 'Subscribe now'}</button>
       <button type="button" className="icon-button" onClick={onDismiss} aria-label="Dismiss" title="Dismiss"><X size={18} aria-hidden="true" /></button>
     </div>
   );

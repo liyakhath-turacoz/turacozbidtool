@@ -10,6 +10,16 @@ A full review of the backend, the React app and the bidding flow, followed by a 
 
 A request now reaches every dealer who deals in the product and whose own service area covers the buyer, with no cap on how many are notified. Only dealers with an active subscription and an account that is active or verified receive it; pending, flagged, rejected, held, suspended and banned accounts never do. A buyer's own distance limit and the "invite only shops in good standing" option no longer apply, and the admin "maximum invited dealers" setting is ignored (the Flutter admin screen still shows it). The API fields remain for compatibility. Verified against the database with 20 matching shops (all 20 notified, previously at most 10) and with flagged, pending, unsubscribed, banned, rejected, suspended and held shops (none notified).
 
+### Changed: three marketplace features (14 October 2026)
+
+1. **Buyers see each shop's contact and payment details on every bid**, before accepting. Shops see each other only as "Dealer N". See the README section "What buyers see on a bid".
+2. **Dealers pay their subscription through the platform** (Razorpay, with a built-in test gateway and the old free demo mode). Subscriptions now end after 30 days and a shop stops receiving requests until it renews. Verified with 30 checks against the running server: order creation, forged and replayed payments, another dealer claiming a payment, webhooks with bad signatures and wrong amounts, early renewal, expiry notification and a fresh period after expiry. Real Razorpay calls could not be tested without live account keys, so the first test payment with Razorpay's test keys must be done by you.
+3. **Dealers can list, enter and upload the products they sell**, feeding one common product database with no duplicates. Verified with 30 checks including nine shops adding the same new product at the same instant (one product created) and uploading the same file twice (nothing changes).
+
+Found and fixed while building these: treating "+" as punctuation would have linked "Galaxy S24+" to "Galaxy S24", and a brand repeated inside the model field ("Samsung Galaxy S26" against "Galaxy S26") was missed. The existing imported catalogue contains four real duplicate pairs (Crompton Optimus and three Samsung Galaxy S26 variants), listed by `backend/scripts/audit_product_duplicates.py`; they were left in place for an administrator to decide.
+
+Still open for these features: no GST invoices or refunds for subscriptions; no automatic renewal; payment details are stored unencrypted; the Flutter app has no pay screen and does not show the new fields; the admin has no dedicated screen for reviewing dealer-added products or merging duplicates; dealer-added products are published to buyers immediately rather than after review.
+
 ### Fixed: backend
 
 - **Accepting an offer was not tied to what the buyer saw.** A dealer could revise warranty, delivery or extras at the same price between the buyer reading the offer and clicking accept. Offers now carry a `terms_token`; `POST /buyer/bids/{id}/accept` accepts it and answers 409 with a plain message when the terms changed. Clients that do not send it (the Flutter app today) behave as before.

@@ -95,3 +95,36 @@ export function standingFor(bid, allBids) {
     ? { kind: 'lead', lowest, gap: 0, count: others.length }
     : { kind: 'trail', lowest, gap: mine - lowest, count: others.length };
 }
+
+/* ------------------------------------------------------------------ */
+/* Errors                                                              */
+/* ------------------------------------------------------------------ */
+
+function fieldLabel(field) {
+  return text(field).replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+/** Turns an API error (status, JSON detail, validation list) into one sentence a person can act on. */
+export function friendlyErrorMessage(err) {
+  const message = String(err?.message || err || '');
+  const jsonStart = message.indexOf('{');
+  if (jsonStart >= 0) {
+    try {
+      const parsed = JSON.parse(message.slice(jsonStart));
+      const detail = parsed.detail;
+      if (Array.isArray(detail) && detail[0]) {
+        const field = detail[0].loc?.[detail[0].loc.length - 1] || 'field';
+        if (detail[0].type === 'greater_than') return `${fieldLabel(field)} must be greater than 0.`;
+        if (detail[0].type?.includes('missing')) return `${fieldLabel(field)} is required.`;
+        if (detail[0].type?.includes('float') || detail[0].type?.includes('int')) return `${fieldLabel(field)} must be a valid number.`;
+        // Rules written in the backend arrive as "Value error, <our sentence>"; show only our sentence.
+        return String(detail[0].msg || 'Please check the highlighted form fields.').replace(/^Value error,\s*/, '');
+      }
+      if (typeof detail === 'string') return detail;
+    } catch {
+      // Fall through to text matching.
+    }
+  }
+  if (message.includes('Duplicate entry') && message.includes('uq_buyer_location')) return 'This location is already saved. Update the existing saved location instead.';
+  return message.replace(/^API error \d+:\s*/, '') || 'Something went wrong. Please try again.';
+}

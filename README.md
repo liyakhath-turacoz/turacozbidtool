@@ -150,7 +150,7 @@ Request expiry is in minutes in the API (`expiry_minutes`), with absolute limits
 
 Saved location edits preserve locations used by existing requests. Account deletion removes access and closes active activity while retaining bidding and financial history. Schema upgrades run at the next backend startup; details are in [ISSUES.md](ISSUES.md).
 
-Dealer subscription activation is currently a demo flow; no payment provider is connected. Historical commission/payment records are retained for auditing and do not gate contacts or chat.
+Dealer subscriptions are paid through Razorpay (see "Subscription payments" below). Until payments are switched on the subscription button is a free demo activation. Historical commission/payment records are retained for auditing and do not gate contacts or chat.
 
 ## Location and live updates
 
@@ -161,6 +161,54 @@ Radius coverage measures the distance between the dealer's shop pin and the buye
 Web logins are stored per tab, so separate incognito tabs can use different accounts. Same-account tabs have separate WebSockets and all receive events. Personalized, versioned request snapshots update competing offers and open offer dialogs directly; private bid and support messages are pushed immediately. Reconnection reloads missed offers and open conversations while preserving message drafts. Requests are identified by product, quantity, area and countdown rather than raw IDs.
 
 Admin controls default, minimum and maximum bidding duration under **Platform Rules & Categories** on web and **Platform Rules & Settings** on Flutter. Buyers choose within these limits; setting all three durations equal enforces a fixed duration. Existing requests keep the deadline saved at creation. Dealers cannot extend it through revisions.
+
+## What buyers see on a bid
+
+Every bid a buyer receives shows the real shop: its name, owner, phone, email, address and GST number, plus the payment details the shop has saved (a UPI ID and, optionally, bank account details with copy buttons). Buyers can compare and contact shops before they accept. Shops still see each other only as "Dealer 1", "Dealer 2" and so on, and never see each other's contact or payment details. A shop adds its payment details under **My shop, How buyers pay you**; the bid form tells the shop what the buyer will see.
+
+Payment details are stored with the shop's profile and are not encrypted. Shops are told to prefer UPI, and bank details are optional.
+
+## Subscription payments
+
+Dealers pay their subscription through the platform. The price is fixed on the server (default ₹999 for 30 days) and the browser never sets the amount.
+
+| Mode | Set with | What it does |
+| --- | --- | --- |
+| `razorpay` | `TURACOZ_PAYMENT_MODE=razorpay` plus the Razorpay keys below | Real payments. UPI, cards and netbanking on Razorpay's own payment window; card and bank details never reach this server. |
+| `test` | `TURACOZ_PAYMENT_MODE=test` | A built-in fake gateway that follows the same order, payment and signature steps. No money moves. For development and automated checks. |
+| `demo` | `TURACOZ_PAYMENT_MODE=demo` | The old one-click free activation. This is the default when no mode is set and no Razorpay keys are present. **Set `razorpay` before going live**, or any dealer can subscribe for free. |
+
+To switch on real payments:
+
+1. Create a Razorpay account and, in the dashboard, generate API keys (use *test* keys first).
+2. Put `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET` and `TURACOZ_PAYMENT_MODE=razorpay` in `.env` (see [.env.example](.env.example)).
+3. In the Razorpay dashboard add a webhook that points to `https://<your-api-address>/payments/razorpay/webhook`, enable the `payment.captured` and `order.paid` events, and put its secret in `RAZORPAY_WEBHOOK_SECRET`. The webhook completes a payment even when the dealer closes the browser before returning.
+4. Restart the backend. Try a test payment with Razorpay's test card or UPI details before using live keys.
+
+How it works: the dealer chooses **Subscribe** or **Renew**, the server creates an order for the fixed amount, and Razorpay's window collects the payment. The server then checks Razorpay's signature (HMAC-SHA256 with your key secret) before it extends the subscription, and the webhook does the same check independently. Repeating a payment or webhook never adds days twice, a payment for the wrong amount is rejected, and one dealer cannot claim another dealer's payment. Renewing early keeps the days already paid for; paying after expiry starts a fresh period. When the period ends the shop stops receiving requests and is told so; the dealer app warns seven days before. Each payment is recorded in `subscription_payments` (shown to the dealer under **My shop, Subscription**) and counted in the admin dashboard revenue; admins can list payments at `GET /admin/subscription-payments`.
+
+Not included: GST invoices or receipts, refunds, and automatic renewal (a recurring mandate). The Flutter app still calls the free activation, which is refused once real payments are on; dealers pay in the web app.
+
+## Dealer product catalogue and the common product database
+
+Dealers tell the platform which products they sell, under **My products**:
+
+- **Add from the catalogue.** Search the common database and tick **I sell this**.
+- **Add a product that is not listed.** Type it in. The product is checked against the catalogue first, and only a genuinely new product is created.
+- **Upload your catalogue.** A CSV or Excel (.xlsx) file, up to 3,000 products and 5 MB, using the headings in the template (**Download template**). Everyday headings such as `Product Name`, `Make`, `Model No`, `EAN` and `MRP` are understood.
+
+There is one common product database and a product is never stored twice. Each product is recognised by independent signals: a valid barcode (GTIN/EAN/UPC), brand plus part number, brand plus model number, and brand plus the words of the name (case, punctuation, word order and spacing of units like "55 inch" and "55inch" are ignored; a "+" matters, so "Galaxy S24" and "Galaxy S24+" stay different). A match links the shop to the existing product. Products that are only *similar* are never merged automatically: the shop is asked "Is yours one of these?". The same name with a different model number is a different product. A database table (`product_identities`) lets each signal belong to exactly one product, so even two shops adding the same new product at the same moment create it once. Admin product creation and renaming use the same check and refuse a copy with a clear message.
+
+A product a shop lists always reaches that shop: it receives requests for it even outside the categories or companies it ticked, as long as the request is inside the shop's own service area. New products added by dealers appear in the buyer catalogue straight away (source `dealer`, status `dealer_added`); an admin can edit or archive them like any other product.
+
+Existing duplicates in an imported catalogue can be listed (read-only) with:
+
+```powershell
+python backend\scripts\audit_product_duplicates.py
+python backend\scripts\audit_product_duplicates.py --csv duplicates.csv
+```
+
+An admin then decides which copy to keep and archives the others. If the matching rules in `backend/product_identity.py` ever change, raise `KEY_VERSION` there and the stored keys are rebuilt on the next catalogue action.
 
 ## End-to-end checks
 

@@ -21,6 +21,7 @@ class PreferenceRoutingCursor:
             "dealer2": self.dealer(["electronics", "laptops"], ["LG"], 17.4375, 78.4483),
             "dealer3": self.dealer(["electronics"], ["Samsung"], 17.4375, 78.4483),
         }
+        self.listed: list[str] = []  # shops that listed this exact product in their catalogue
         self.one = None
         self.many = []
 
@@ -61,6 +62,8 @@ class PreferenceRoutingCursor:
                 row = dict(profile["row"])
                 row["id"] = dealer_id
                 self.many.append(row)
+        elif "FROM dealer_products" in sql:
+            self.many = [{"dealer_id": dealer_id} for dealer_id in self.listed]
         elif "FROM dealer_categories dc" in sql:
             for dealer_id, profile in self.dealers.items():
                 for category_id in profile["categories"]:
@@ -127,6 +130,26 @@ class DealerMatchingTests(unittest.TestCase):
         self.assertIn("dealer1", self.matches("Samsung", product_type="laptops"))
         self.assertNotIn("dealer1", self.matches("Samsung", product_type="phones"))
         self.assertNotIn("dealer1", self.matches("LG", product_type="laptops"))
+
+    def test_a_product_the_shop_lists_always_reaches_it(self):
+        # dealer2 only wants LG laptops, so an Asus laptop normally skips it ...
+        self.assertNotIn("dealer2", self.matches("Asus"))
+        # ... until the shop lists that exact product in its catalogue.
+        self.cursor.listed = ["dealer2"]
+        self.assertIn("dealer2", self.matches("Asus"))
+
+    def test_listing_a_product_beats_category_and_company_but_not_service_area(self):
+        self.cursor.dealers["dealer3"]["categories"] = ["electronics", "phones"]
+        self.assertNotIn("dealer3", self.matches("Asus", product_type="laptops"))
+        self.cursor.listed = ["dealer3"]
+        self.assertIn("dealer3", self.matches("Asus", product_type="laptops"))
+        # A listed product still has to be inside the shop's own service area.
+        self.cursor.dealers["dealer3"]["row"]["latitude"] = 18.4375
+        self.assertNotIn("dealer3", self.matches("Asus", product_type="laptops"))
+
+    def test_listing_one_product_does_not_open_other_products_to_the_shop(self):
+        self.cursor.listed = []
+        self.assertNotIn("dealer2", self.matches("Asus"))
 
     def test_radius_coverage_excludes_dealer_outside_its_service_circle(self):
         self.cursor.dealers["dealer2"]["row"]["latitude"] = 18.4375

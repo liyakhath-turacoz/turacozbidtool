@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import {
   formatDelivery,
+  friendlyErrorMessage,
   isLive,
   money,
   plural,
@@ -86,4 +87,17 @@ test('standingFor ranks a dealer against live competing offers', () => {
   // Offers that are withdrawn, lost, or on another request do not count.
   const ignored = [rival('c', 100, { status: 'withdrawn' }), rival('d', 100, { status: 'lost' }), rival('e', 100, { bid_request_id: 'r2' })];
   assert.equal(standingFor(mine, [mine, ...ignored]).kind, 'solo');
+});
+
+test('friendlyErrorMessage turns API errors into one plain sentence', () => {
+  const api = (status, body) => new Error(`API error ${status}: ${JSON.stringify(body)}`);
+  assert.equal(friendlyErrorMessage(api(409, { detail: 'Another product already matches this.' })), 'Another product already matches this.');
+  // Rules written in the backend arrive as "Value error, <sentence>"; only the sentence is shown.
+  assert.equal(
+    friendlyErrorMessage(api(422, { detail: [{ type: 'value_error', loc: ['body', 'payment'], msg: 'Value error, Enter a valid UPI ID such as shopname@bank' }] })),
+    'Enter a valid UPI ID such as shopname@bank',
+  );
+  assert.equal(friendlyErrorMessage(api(422, { detail: [{ type: 'missing', loc: ['body', 'full_name'], msg: 'Field required' }] })), 'Full Name is required.');
+  assert.equal(friendlyErrorMessage(new Error('Network down')), 'Network down');
+  assert.equal(friendlyErrorMessage(undefined), 'Something went wrong. Please try again.');
 });

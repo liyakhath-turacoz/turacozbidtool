@@ -9,6 +9,7 @@ import json
 import logging
 import math
 import os
+import re
 import secrets
 import shutil
 import threading
@@ -41,6 +42,9 @@ try:
     from .database_health import DatabaseHealthError, assert_tables_readable
     from . import product_reference
     from . import geocoding
+    from . import subscription_payments as payments
+    from . import dealer_catalogue
+    from . import product_identity
     from .logging_filters import install_token_filters
 except ImportError:
     import catalog_filters
@@ -52,6 +56,9 @@ except ImportError:
     from database_health import DatabaseHealthError, assert_tables_readable
     import product_reference
     import geocoding
+    import subscription_payments as payments
+    import dealer_catalogue
+    import product_identity
     from logging_filters import install_token_filters
 
 
@@ -412,6 +419,7 @@ def ensure_runtime_schema() -> None:
             for column_name, definition in (
                 ("subscribed", "BOOLEAN NOT NULL DEFAULT FALSE AFTER rating"),
                 ("subscribed_at", "DATETIME NULL AFTER subscribed"),
+                ("subscription_ends_at", "DATETIME NULL AFTER subscribed_at"),
             ):
                 cursor.execute(
                     """
@@ -423,6 +431,60 @@ def ensure_runtime_schema() -> None:
                 )
                 if cursor.fetchone()["count"] == 0:
                     cursor.execute(f"ALTER TABLE dealer_profiles ADD COLUMN {column_name} {definition}")
+            # ── Paid subscriptions: one row per payment attempt ──
+            cursor.execute(
+                """
+                CREATE TABLE IF NOT EXISTS subscription_payments (
+                  id CHAR(36) PRIMARY KEY,
+                  dealer_id CHAR(36) NOT NULL,
+                  gateway VARCHAR(20) NOT NULL,
+                  gateway_order_id VARCHAR(80) NOT NULL,
+                  gateway_payment_id VARCHAR(80) NULL,
+                  amount_paise INT NOT NULL,
+                  currency CHAR(3) NOT NULL DEFAULT 'INR',
+                  period_days INT NOT NULL,
+                  status ENUM('created','paid','failed') NOT NULL DEFAULT 'created',
+                  starts_at DATETIME NULL,
+                  ends_at DATETIME NULL,
+                  created_at DATETIME NOT NULL,
+                  paid_at DATETIME NULL,
+                  UNIQUE KEY uq_subscription_payment_order (gateway_order_id),
+                  UNIQUE KEY uq_subscription_payment_payment (gateway_payment_id),
+                  KEY idx_subscription_payment_dealer (dealer_id, created_at),
+                  CONSTRAINT fk_subscription_payment_dealer FOREIGN KEY (dealer_id) REFERENCES users(id) ON DELETE CASCADE
+                ) ENGINE=InnoDB
+                """
+            )
+            # ── One common product database: every way of recognising a product points at exactly one product ──
+            cursor.execute(
+                """
+                CREATE TABLE IF NOT EXISTS product_identities (
+                  identity_key VARCHAR(255) NOT NULL PRIMARY KEY,
+                  product_id CHAR(36) NOT NULL,
+                  kind VARCHAR(12) NOT NULL,
+                  created_at DATETIME NOT NULL,
+                  KEY idx_product_identities_product (product_id),
+                  CONSTRAINT fk_product_identities_product FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
+                ) ENGINE=InnoDB
+                """
+            )
+            cursor.execute(
+                """
+                CREATE TABLE IF NOT EXISTS dealer_products (
+                  dealer_id CHAR(36) NOT NULL,
+                  product_id CHAR(36) NOT NULL,
+                  source ENUM('catalogue','manual','upload') NOT NULL DEFAULT 'manual',
+                  dealer_sku VARCHAR(120) NULL,
+                  dealer_price DECIMAL(12,2) NULL,
+                  created_at DATETIME NOT NULL,
+                  updated_at DATETIME NOT NULL,
+                  PRIMARY KEY (dealer_id, product_id),
+                  KEY idx_dealer_products_product (product_id),
+                  CONSTRAINT fk_dealer_products_dealer FOREIGN KEY (dealer_id) REFERENCES users(id) ON DELETE CASCADE,
+                  CONSTRAINT fk_dealer_products_product FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
+                ) ENGINE=InnoDB
+                """
+            )
             # ── notifications.is_read convenience column (mirrors read_at IS NOT NULL) ──
             cursor.execute(
                 """
@@ -485,7 +547,31 @@ def ensure_runtime_schema() -> None:
             product_reference.ensure_schema(cursor)
 
 
+def expire_subscriptions(cursor) -> None:
+    """Switch off paid subscriptions whose period has ended. Free demo activations have no end date."""
+    cursor.execute(
+        "SELECT user_id FROM dealer_profiles WHERE subscribed=TRUE AND subscription_ends_at IS NOT NULL AND subscription_ends_at <= NOW() AND deleted_at IS NULL ORDER BY user_id"
+    )
+    due = [row["user_id"] for row in cursor.fetchall()]
+    if not due:
+        return
+    placeholders = ",".join(["%s"] * len(due))
+    cursor.execute(
+        f"UPDATE dealer_profiles SET subscribed=FALSE, updated_at=NOW() WHERE user_id IN ({placeholders}) AND subscription_ends_at <= NOW()",
+        due,
+    )
+    for dealer_id in due:
+        create_notification(
+            cursor,
+            dealer_id,
+            "Subscription ended",
+            "Your subscription has ended, so you will not receive new bid requests. Renew it from My shop to start receiving them again.",
+            "subscription_expired",
+        )
+
+
 def expire_due_bid_requests(cursor) -> None:
+    expire_subscriptions(cursor)
     # Find candidates without locking unrelated offers. A broad UPDATE JOIN
     # locked active bids even when nothing was due and deadlocked live readers.
     cursor.execute(
@@ -862,7 +948,11 @@ class CatalogRepository:
 
     def create_product(self, draft: "ProductIn", admin_id: str) -> str:
         product_id = new_id()
-        with db() as conn, conn.cursor() as cursor:
+        with db() as conn, conn.cursor() as cursor, dealer_catalogue.catalogue_lock(cursor):
+            dealer_catalogue.sync_identities(cursor)
+            existing = dealer_catalogue.find_exact(cursor, {"name": draft.name, "brand": draft.brand, "model": draft.model})
+            if existing:
+                raise HTTPException(status_code=409, detail=f"This product is already in the catalogue as {existing['name']}.")
             category_id, subcategory_id = resolve_category_ids(cursor, draft.category, draft.subcategory)
             cursor.execute("SELECT id FROM locations WHERE city = %s AND deleted_at IS NULL LIMIT 1", [draft.location])
             location = cursor.fetchone()
@@ -884,16 +974,25 @@ class CatalogRepository:
                     [new_id(), product_id, key, value, index],
                 )
             audit(cursor, admin_id, "product.created", "products", product_id, {"name": draft.name})
+            dealer_catalogue.register_identities(cursor, product_id, {"name": draft.name, "brand": draft.brand, "model": draft.model})
             cursor.execute('UPDATE products SET manual_specifications=%s WHERE id=%s',[json.dumps(draft.specifications),product_id])
             catalog_filters.index_product(cursor,{'id':product_id,'specifications':draft.specifications,'subcategory':draft.subcategory})
         return product_id
 
     def update_product(self, product_id: str, draft: "ProductIn", admin_id: str) -> None:
-        with db() as conn, conn.cursor() as cursor:
-            cursor.execute("SELECT name,brand,model,category_id,subcategory_id,source,highlights,manual_specifications FROM products WHERE id=%s AND deleted_at IS NULL FOR UPDATE", [product_id])
+        with db() as conn, conn.cursor() as cursor, dealer_catalogue.catalogue_lock(cursor):
+            cursor.execute("SELECT name,brand,model,mpn,gtin,category_id,subcategory_id,source,highlights,manual_specifications FROM products WHERE id=%s AND deleted_at IS NULL FOR UPDATE", [product_id])
             current = cursor.fetchone()
             if not current:
                 raise HTTPException(status_code=404, detail="Product not found")
+            if (current["name"], current["brand"] or "", current["model"] or "") != (draft.name, draft.brand or "", draft.model or ""):
+                # Renaming must not turn this product into a copy of another one.
+                dealer_catalogue.sync_identities(cursor)
+                clash = dealer_catalogue.find_exact(cursor, {"name": draft.name, "brand": draft.brand, "model": draft.model, "mpn": current["mpn"], "gtin": current["gtin"]})
+                if clash and clash["id"] != product_id:
+                    raise HTTPException(status_code=409, detail=f"Another product in the catalogue already matches this: {clash['name']}.")
+                cursor.execute("DELETE FROM product_identities WHERE product_id=%s", [product_id])
+                dealer_catalogue.register_identities(cursor, product_id, {"name": draft.name, "brand": draft.brand, "model": draft.model, "mpn": current["mpn"], "gtin": current["gtin"]})
             category_id, subcategory_id = resolve_category_ids(cursor, draft.category, draft.subcategory)
             cursor.execute("SELECT id FROM bid_requests WHERE product_id=%s LIMIT 1", [product_id])
             if cursor.fetchone() and (current["name"], current["brand"] or "", current["model"] or "", current["category_id"], current["subcategory_id"]) != (draft.name, draft.brand, draft.model, category_id, subcategory_id):
@@ -943,7 +1042,7 @@ class BidRepository:
             query = """
                 SELECT b.id, b.bid_request_id, b.dealer_id, br.product_id, br.location_id, br.quantity, br.radius_km, br.skip_flagged_dealers, p.name AS product, buyer.full_name AS buyer,
                        COALESCE(NULLIF(l.address_line, ''), bp.address) AS buyer_address, buyer.phone AS buyer_phone, buyer.email AS buyer_email,
-                       dp.business_name AS dealer, dp.owner_name,
+                       dp.business_name AS dealer, dp.owner_name, dp.dynamic_fields AS dealer_dynamic,
                        COALESCE(NULLIF(dl.address_line, ''), dp.business_address) AS business_address, dp.gst_number,
                        u.phone AS dealer_phone, u.email AS dealer_email,
                        b.amount, b.discount_amount, b.warranty_text, b.delivery_time, b.installation_included, b.free_gifts, b.extra_services, b.notes,
@@ -1007,6 +1106,14 @@ class BidRepository:
             for row in rows:
                 row["is_mine"] = role == "dealer" and row["dealer_id"] == user_id
                 row["terms_token"] = bid_terms_token(row)
+                # How the shop wants to be paid is shown to the buyer (and admin), never to competing shops.
+                dynamic = row.pop("dealer_dynamic", None)
+                try:
+                    parsed = json.loads(dynamic) if isinstance(dynamic, str) else (dynamic or {})
+                except json.JSONDecodeError:
+                    parsed = {}
+                payment = parsed.get("payment") if isinstance(parsed, dict) else None
+                row["dealer_payment"] = (payment or {}) if (role in {"buyer", "admin"} or row["dealer_id"] == user_id) else None
                 request = {**row, "id": row["bid_request_id"]}
                 is_live = row["status"] in {"active", "updated"} and row["request_status"] == "active"
                 row["selectable"] = False
@@ -1018,30 +1125,10 @@ class BidRepository:
                         eligible_cache[key] = invited.intersection(dealer_ops.matching_dealer_ids(cursor, row["product_id"], row["location_id"], float(row["radius_km"] or 0), bool(row["skip_flagged_dealers"])))
                     row["selectable"] = row["dealer_id"] in eligible_cache[key]
 
-            # Anonymise active bids (before a winner is chosen) — no commission gating
+            # A buyer sees the real shop, its contact and its payment details on every bid they receive, so the
+            # buyer can compare shops and decide. Competing shops only ever see each other as "Dealer N".
             if role == "buyer":
-                request_dealers: dict[str, set] = {}
-                for row in rows:
-                    req_id = row["bid_request_id"]
-                    d_id = row["dealer_id"]
-                    request_dealers.setdefault(req_id, set()).add(d_id)
-
-                dealer_maps = {
-                    req_id: {d_id: f"Dealer {i+1}" for i, d_id in enumerate(sorted(d_set))}
-                    for req_id, d_set in request_dealers.items()
-                }
-
-                for row in rows:
-                    if row["status"] != "won":
-                        req_id = row["bid_request_id"]
-                        d_id = row["dealer_id"]
-                        row["dealer"] = dealer_maps[req_id].get(d_id, "Dealer")
-                        row["owner_name"] = None
-                        row["business_address"] = None
-                        row["gst_number"] = None
-                        row["dealer_phone"] = None
-                        row["dealer_email"] = None
-                    # Won bids: contact always visible (no commission gate)
+                pass
             elif role == "dealer":
                 request_dealers: dict[str, set] = {}
                 for row in rows:
@@ -1365,8 +1452,8 @@ class DashboardRepository:
                 "products": one_row(cursor, "SELECT COUNT(*) AS value FROM products WHERE deleted_at IS NULL")["value"],
                 "completed_bids": one_row(cursor, "SELECT COUNT(*) AS value FROM bids WHERE status='won' AND deleted_at IS NULL")["value"],
                 "pending_reports": one_row(cursor, "SELECT COUNT(*) AS value FROM reports WHERE status IN ('open','investigating','escalated') AND deleted_at IS NULL")["value"],
-                "revenue": one_row(cursor, "SELECT COALESCE(SUM(amount),0) AS value FROM commissions WHERE payment_status='paid'")["value"],
-                "commission_due": one_row(cursor, "SELECT COALESCE(SUM(amount),0) AS value FROM commissions WHERE payment_status IN ('pending','failed')")["value"],
+                "revenue": one_row(cursor, "SELECT COALESCE(SUM(amount_paise),0)/100 AS value FROM subscription_payments WHERE status='paid'")["value"],
+                "subscribed_dealers": one_row(cursor, "SELECT COUNT(*) AS value FROM dealer_profiles WHERE subscribed=TRUE AND deleted_at IS NULL")["value"],
                 "banned_dealers": one_row(cursor, "SELECT COUNT(*) AS value FROM users u JOIN roles r ON r.id=u.role_id WHERE r.name='dealer' AND u.status='banned'")["value"],
                 "held_dealers": one_row(cursor, "SELECT COUNT(*) AS value FROM users u JOIN roles r ON r.id=u.role_id WHERE r.name='dealer' AND u.status IN ('held','flagged','suspended')")["value"],
             }
@@ -1383,11 +1470,11 @@ class DashboardRepository:
             # Chart 1: Revenue by Month
             cursor.execute(
                 """
-                SELECT DATE_FORMAT(COALESCE(c.paid_at,c.created_at), '%b %Y') AS label, COALESCE(SUM(c.amount), 0) AS value
-                FROM commissions c
-                WHERE c.payment_status = 'paid'
-                GROUP BY DATE_FORMAT(COALESCE(c.paid_at,c.created_at), '%b %Y'), YEAR(COALESCE(c.paid_at,c.created_at)), MONTH(COALESCE(c.paid_at,c.created_at))
-                ORDER BY YEAR(COALESCE(c.paid_at,c.created_at)) ASC, MONTH(COALESCE(c.paid_at,c.created_at)) ASC
+                SELECT DATE_FORMAT(c.paid_at, '%b %Y') AS label, COALESCE(SUM(c.amount_paise), 0)/100 AS value
+                FROM subscription_payments c
+                WHERE c.status = 'paid' AND c.paid_at IS NOT NULL
+                GROUP BY DATE_FORMAT(c.paid_at, '%b %Y'), YEAR(c.paid_at), MONTH(c.paid_at)
+                ORDER BY YEAR(c.paid_at) ASC, MONTH(c.paid_at) ASC
                 """
             )
             revenue_by_month = cursor.fetchall()
@@ -2064,7 +2151,7 @@ class DealerOpsRepository:
                 )
             ) dsl ON dsl.dealer_id=u.id
             LEFT JOIN locations l ON l.id=dsl.location_id AND l.deleted_at IS NULL
-            JOIN dealer_profiles dp ON dp.user_id=u.id AND dp.subscribed=TRUE AND dp.deleted_at IS NULL
+            JOIN dealer_profiles dp ON dp.user_id=u.id AND dp.subscribed=TRUE AND dp.deleted_at IS NULL AND (dp.subscription_ends_at IS NULL OR dp.subscription_ends_at > NOW())
             WHERE u.status IN ('active','verified') AND u.deleted_at IS NULL
               AND (%s = FALSE OR dp.verification_status='verified')
               AND dp.verification_status <> 'rejected' AND dp.rating >= %s
@@ -2094,6 +2181,15 @@ class DealerOpsRepository:
             for selection in cursor.fetchall():
                 category_preferences.setdefault(selection["dealer_id"], set()).add(selection["category_id"])
                 category_parents[selection["category_id"]] = selection.get("parent_id")
+        # A shop that has listed this exact product in its catalogue always receives requests for it,
+        # whatever categories or companies it ticked.
+        listed: set[str] = set()
+        if candidate_ids:
+            cursor.execute(
+                f"SELECT dealer_id FROM dealer_products WHERE product_id=%s AND dealer_id IN ({','.join(['%s'] * len(candidate_ids))})",
+                [product_id, *candidate_ids],
+            )
+            listed = {item["dealer_id"] for item in cursor.fetchall()}
         logger.debug(
             "matching_dealer_ids: product=%s origin=%s/%s — %d candidate dealer(s)",
             product_id, origin.get("city"), origin.get("state"), len(candidates),
@@ -2103,7 +2199,8 @@ class DealerOpsRepository:
         buyer_city = normalize_place(origin.get("city"))
         buyer_area = normalize_place(origin.get("area"))
         for row in candidates:
-            if not dealer_category_preference_matches(
+            lists_it = row["id"] in listed
+            if not lists_it and not dealer_category_preference_matches(
                 category_preferences.get(row["id"], set()),
                 product["category_id"],
                 product["subcategory_id"],
@@ -2117,7 +2214,7 @@ class DealerOpsRepository:
                 chosen_companies = dynamic.get("brands", []) if isinstance(dynamic, dict) else []
             except (json.JSONDecodeError, TypeError, AttributeError):
                 chosen_companies = []
-            if not company_preference_matches(chosen_companies, product.get("manufacturer"), product.get("brand")):
+            if not lists_it and not company_preference_matches(chosen_companies, product.get("manufacturer"), product.get("brand")):
                 continue
             if row.get("country") and normalize_place(row["country"]) != normalize_place(origin["country"]):
                 continue
@@ -2213,7 +2310,7 @@ class DealerOpsRepository:
                 JOIN categories c ON c.id=p.category_id
                 JOIN locations l ON l.id=br.location_id
                 JOIN users u ON u.id=brd.dealer_id
-                JOIN dealer_profiles dp ON dp.user_id=u.id AND dp.subscribed=TRUE
+                JOIN dealer_profiles dp ON dp.user_id=u.id AND dp.subscribed=TRUE AND (dp.subscription_ends_at IS NULL OR dp.subscription_ends_at > NOW())
                 WHERE brd.dealer_id=%s AND u.status IN ('active','verified')
                   AND u.deleted_at IS NULL AND br.status='active' AND br.expires_at > NOW()
                   AND br.deleted_at IS NULL AND dp.deleted_at IS NULL
@@ -2795,6 +2892,7 @@ class AuthService:
         subscribed = False
         if user["role"] == "dealer":
             with db() as conn, conn.cursor() as cursor:
+                expire_subscriptions(cursor)
                 cursor.execute("SELECT subscribed FROM dealer_profiles WHERE user_id=%s AND deleted_at IS NULL", [user["id"]])
                 profile = cursor.fetchone()
                 subscribed = bool(profile and profile["subscribed"])
@@ -3003,6 +3101,35 @@ class SettingIn(BaseModel):
     value: dict[str, Any]
 
 
+class PaymentDetailsIn(BaseModel):
+    """How a shop wants buyers to pay it. Shown to the buyer on each bid the shop submits."""
+
+    upi_id: str = Field(default="", max_length=80)
+    account_holder: str = Field(default="", max_length=120)
+    bank_name: str = Field(default="", max_length=120)
+    account_number: str = Field(default="", max_length=24)
+    ifsc: str = Field(default="", max_length=16)
+
+    @model_validator(mode="after")
+    def validate_details(self):
+        self.upi_id = self.upi_id.strip()
+        self.account_holder = " ".join(self.account_holder.split())
+        self.bank_name = " ".join(self.bank_name.split())
+        self.account_number = self.account_number.replace(" ", "").strip()
+        self.ifsc = self.ifsc.replace(" ", "").strip().upper()
+        if self.upi_id and not re.fullmatch(r"[A-Za-z0-9._-]{2,64}@[A-Za-z][A-Za-z0-9]{1,31}", self.upi_id):
+            raise ValueError("Enter a valid UPI ID such as shopname@bank")
+        bank = [self.account_holder, self.bank_name, self.account_number, self.ifsc]
+        if any(bank):
+            if not all(bank):
+                raise ValueError("Bank details need the account holder, bank name, account number and IFSC code together")
+            if not re.fullmatch(r"\d{6,20}", self.account_number):
+                raise ValueError("The account number should be 6 to 20 digits")
+            if not re.fullmatch(r"[A-Z]{4}0[A-Z0-9]{6}", self.ifsc):
+                raise ValueError("Enter a valid 11-character IFSC code such as HDFC0001234")
+        return self
+
+
 class ProfileUpdateIn(BaseModel):
     full_name: str = Field(min_length=2, max_length=160)
     phone: str = Field(default="", max_length=32)
@@ -3024,6 +3151,7 @@ class ProfileUpdateIn(BaseModel):
     service_cities: list[str] = Field(default_factory=list)
     service_districts: list[str] = Field(default_factory=list)
     categories: list[str] = Field(default_factory=list)
+    payment: PaymentDetailsIn | None = None
     latitude: float = Field(default=0.0, ge=-90, le=90)
     longitude: float = Field(default=0.0, ge=-180, le=180)
 
@@ -3469,7 +3597,7 @@ def get_profile(user: dict[str, Any] = Depends(current_user)) -> dict[str, Any]:
             cursor.execute(
                 """
                 SELECT dp.business_name, dp.business_address, dp.gst_number, dp.rating,
-                       dp.subscribed, dp.subscribed_at,
+                       dp.subscribed, dp.subscribed_at, UNIX_TIMESTAMP(dp.subscription_ends_at) AS subscription_ends_epoch,
                        dp.dynamic_fields, dp.service_preferences,
                        dsl.radius_km, l.address_line, l.country, l.state, l.city, l.area, l.pincode, l.latitude, l.longitude
                 FROM dealer_profiles dp
@@ -3508,6 +3636,7 @@ def get_profile(user: dict[str, Any] = Depends(current_user)) -> dict[str, Any]:
                     "rating": float(dp_row["rating"]),
                     "subscribed": bool(dp_row["subscribed"]),
                     "subscribed_at": dp_row["subscribed_at"].isoformat() if dp_row["subscribed_at"] else None,
+                    "subscription_ends_at": datetime.fromtimestamp(float(dp_row["subscription_ends_epoch"]), timezone.utc).isoformat() if dp_row.get("subscription_ends_epoch") else None,
                     "service_radius_km": float(dp_row["radius_km"] or service_preferences.get("radius_km") or 25.0),
                     "max_service_radius_km": float(SettingsRepository.read_setting(cursor, "location_rules")["max_radius_km"]),
                     "country": dp_row["country"] or service_preferences.get("country") or "India",
@@ -3520,6 +3649,8 @@ def get_profile(user: dict[str, Any] = Depends(current_user)) -> dict[str, Any]:
                     "description": dynamic_fields.get("description", ""),
                     "brands": dynamic_fields.get("brands", []),
                     "branches": dynamic_fields.get("branches", []),
+                    "payment": dynamic_fields.get("payment") or {},
+                    "listed_products": dealer_listed_count(cursor, user["sub"]),
                     "delivery_method": {
                         "states": "state",
                         "districts": "district",
@@ -3637,6 +3768,18 @@ def update_profile(payload: ProfileUpdateIn, background_tasks: BackgroundTasks, 
                 "brands": payload.brands,
                 "branches": payload.branches
             }
+            # Clients that do not send payment details (older apps) must not wipe what the shop saved.
+            if "payment" in payload.model_fields_set and payload.payment is not None:
+                dynamic_data["payment"] = payload.payment.model_dump()
+            else:
+                cursor.execute("SELECT dynamic_fields FROM dealer_profiles WHERE user_id=%s", [user["sub"]])
+                existing_row = cursor.fetchone()
+                try:
+                    existing_fields = json.loads(existing_row["dynamic_fields"]) if existing_row and isinstance(existing_row["dynamic_fields"], str) else ((existing_row or {}).get("dynamic_fields") or {})
+                except json.JSONDecodeError:
+                    existing_fields = {}
+                if isinstance(existing_fields, dict) and existing_fields.get("payment"):
+                    dynamic_data["payment"] = existing_fields["payment"]
             service_cities = (
                 payload.service_cities
                 if "service_cities" in payload.model_fields_set
@@ -3898,6 +4041,14 @@ def validate_category_parent(cursor, category_id: str, parent_id: str | None) ->
         raise HTTPException(status_code=400, detail="A category with items cannot become an item")
 
 
+def dealer_listed_count(cursor, dealer_id: str) -> int:
+    cursor.execute(
+        "SELECT COUNT(*) AS total FROM dealer_products dp JOIN products p ON p.id=dp.product_id WHERE dp.dealer_id=%s AND p.deleted_at IS NULL",
+        [dealer_id],
+    )
+    return int(cursor.fetchone()["total"])
+
+
 def category_tree(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     parent_map = {}
     for r in rows:
@@ -4145,8 +4296,232 @@ def mark_single_notification_read(notification_id: str, user: dict[str, Any] = D
     return {"status": "ok"}
 
 
+class SubscriptionVerifyIn(BaseModel):
+    order_id: str = Field(min_length=3, max_length=80)
+    payment_id: str = Field(min_length=3, max_length=80)
+    signature: str = Field(min_length=10, max_length=200)
+
+
+class SubscriptionTestPayIn(BaseModel):
+    order_id: str = Field(min_length=3, max_length=80)
+
+
+def _epoch_iso(value: Any) -> str | None:
+    return datetime.fromtimestamp(float(value), timezone.utc).isoformat() if value else None
+
+
+def subscription_overview(dealer_id: str) -> dict[str, Any]:
+    config = payments.payment_config()
+    with db() as conn, conn.cursor() as cursor:
+        expire_subscriptions(cursor)
+        cursor.execute(
+            "SELECT subscribed, UNIX_TIMESTAMP(subscription_ends_at) AS ends_epoch FROM dealer_profiles WHERE user_id=%s AND deleted_at IS NULL",
+            [dealer_id],
+        )
+        profile = cursor.fetchone()
+        if not profile:
+            raise HTTPException(status_code=404, detail="Complete your shop details first")
+        cursor.execute(
+            """
+            SELECT id, gateway, gateway_payment_id, amount_paise, currency, period_days,
+                   UNIX_TIMESTAMP(paid_at) AS paid_epoch, UNIX_TIMESTAMP(ends_at) AS ends_epoch
+            FROM subscription_payments WHERE dealer_id=%s AND status='paid' ORDER BY paid_at DESC LIMIT 24
+            """,
+            [dealer_id],
+        )
+        history = [
+            {
+                "id": row["id"], "gateway": row["gateway"], "reference": row["gateway_payment_id"],
+                "amount": row["amount_paise"] / 100, "currency": row["currency"], "period_days": row["period_days"],
+                "paid_at": _epoch_iso(row["paid_epoch"]), "valid_until": _epoch_iso(row["ends_epoch"]),
+            }
+            for row in cursor.fetchall()
+        ]
+    ends = _epoch_iso(profile["ends_epoch"])
+    days_left = None
+    if profile["ends_epoch"]:
+        # Round to a tenth of a day first so a one-hour daylight-saving shift cannot turn 30 days into 31.
+        days_left = max(0, math.ceil(round((float(profile["ends_epoch"]) - time.time()) / 86400, 1)))
+    return {
+        "mode": config["mode"],
+        "configured": config["configured"],
+        "price": config["price_rupees"],
+        "amount_paise": config["amount_paise"],
+        "currency": config["currency"],
+        "period_days": config["period_days"],
+        "subscribed": bool(profile["subscribed"]),
+        "valid_until": ends,
+        "days_left": days_left,
+        "history": history,
+    }
+
+
+def fulfil_subscription_payment(order_id: str, payment_id: str, paid_amount_paise: int | None = None, dealer_id: str | None = None) -> dict[str, Any]:
+    """Mark an order paid and extend the dealer's subscription. Safe to call twice for the same payment."""
+    with db() as conn, conn.cursor() as cursor:
+        cursor.execute("SELECT * FROM subscription_payments WHERE gateway_order_id=%s FOR UPDATE", [order_id])
+        row = cursor.fetchone()
+        if not row or (dealer_id and row["dealer_id"] != dealer_id):
+            raise HTTPException(status_code=404, detail="We could not find this payment")
+        if row["status"] == "paid":
+            return {"status": "already_paid", "dealer_id": row["dealer_id"], "order_id": order_id}
+        if paid_amount_paise is not None and int(paid_amount_paise) != int(row["amount_paise"]):
+            logger.error("Payment %s paid %s paise but the order was for %s", payment_id, paid_amount_paise, row["amount_paise"])
+            raise HTTPException(status_code=400, detail="The amount paid does not match this order")
+        cursor.execute("SELECT subscription_ends_at, NOW() AS now FROM dealer_profiles WHERE user_id=%s FOR UPDATE", [row["dealer_id"]])
+        profile = cursor.fetchone()
+        if not profile:
+            raise HTTPException(status_code=404, detail="Dealer profile not found")
+        starts_at, ends_at = payments.extend_subscription(profile["subscription_ends_at"], profile["now"], int(row["period_days"]))
+        try:
+            cursor.execute(
+                "UPDATE subscription_payments SET status='paid', gateway_payment_id=%s, starts_at=%s, ends_at=%s, paid_at=NOW() WHERE id=%s",
+                [payment_id, starts_at, ends_at, row["id"]],
+            )
+        except pymysql.err.IntegrityError as error:
+            raise HTTPException(status_code=409, detail="This payment was already used for another order") from error
+        cursor.execute(
+            "UPDATE dealer_profiles SET subscribed=TRUE, subscribed_at=COALESCE(subscribed_at, NOW()), subscription_ends_at=%s, updated_at=NOW() WHERE user_id=%s",
+            [ends_at, row["dealer_id"]],
+        )
+        create_notification(
+            cursor,
+            row["dealer_id"],
+            "Subscription active",
+            f"We received your payment of Rs. {row['amount_paise'] / 100:,.0f}. Your subscription is active until {ends_at:%d %b %Y}.",
+            "subscription_activated",
+        )
+        audit(cursor, row["dealer_id"], "dealer.subscription_paid", "subscription_payments", row["id"], {"order": order_id, "payment": payment_id, "amount_paise": row["amount_paise"]})
+        return {"status": "paid", "dealer_id": row["dealer_id"], "order_id": order_id, "valid_until": ends_at.isoformat()}
+
+
+@app.get("/dealer/subscription")
+async def dealer_subscription(user: dict[str, Any] = Depends(require_role("dealer"))) -> dict[str, Any]:
+    return await asyncio.to_thread(subscription_overview, user["sub"])
+
+
+def _start_subscription_order(user: dict[str, Any], config: dict[str, Any]) -> dict[str, Any]:
+    payment_ref = new_id()
+    with db() as conn, conn.cursor() as cursor:
+        cursor.execute(
+            "SELECT u.full_name, u.email, u.phone, dp.business_name FROM users u JOIN dealer_profiles dp ON dp.user_id=u.id WHERE u.id=%s AND dp.deleted_at IS NULL",
+            [user["sub"]],
+        )
+        dealer = cursor.fetchone()
+    if not dealer:
+        raise HTTPException(status_code=400, detail="Save your shop details under My shop before subscribing")
+    if config["mode"] == "razorpay":
+        # The amount comes from server settings, never from the browser.
+        order = payments.create_razorpay_order(config["amount_paise"], payment_ref, {"dealer_id": user["sub"], "ref": payment_ref})
+        order_id = order["id"]
+    else:
+        order_id = "order_test_" + secrets.token_hex(8)
+    with db() as conn, conn.cursor() as cursor:
+        cursor.execute(
+            """
+            INSERT INTO subscription_payments (id, dealer_id, gateway, gateway_order_id, amount_paise, currency, period_days, status, created_at)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, 'created', NOW())
+            """,
+            [payment_ref, user["sub"], config["mode"], order_id, config["amount_paise"], config["currency"], config["period_days"]],
+        )
+    return {
+        "mode": config["mode"],
+        "order_id": order_id,
+        "amount_paise": config["amount_paise"],
+        "currency": config["currency"],
+        "key_id": config["key_id"],
+        "name": "Turacoz Bid Tool",
+        "description": f"Shop subscription, {config['period_days']} days",
+        "prefill": {"name": dealer["full_name"] or "", "email": dealer["email"] or "", "contact": dealer["phone"] or ""},
+    }
+
+
+@app.post("/dealer/subscription/order")
+async def create_subscription_order(user: dict[str, Any] = Depends(require_role("dealer"))) -> dict[str, Any]:
+    config = payments.payment_config()
+    if config["mode"] == "demo":
+        raise HTTPException(status_code=409, detail="Online payments are switched off in this setup. Use the demo activation instead.")
+    if not config["configured"]:
+        raise HTTPException(status_code=503, detail="Online payments are not set up yet. Please contact support.")
+    try:
+        return await asyncio.to_thread(_start_subscription_order, user, config)
+    except payments.PaymentError as error:
+        raise HTTPException(status_code=error.status_code, detail=str(error)) from error
+
+
+@app.post("/dealer/subscription/test-pay")
+async def test_pay_subscription_order(payload: SubscriptionTestPayIn, user: dict[str, Any] = Depends(require_role("dealer"))) -> dict[str, str]:
+    """Stand-in for the checkout window when the built-in test gateway is on. Never available with real payments."""
+    config = payments.payment_config()
+    if config["mode"] != "test":
+        raise HTTPException(status_code=404, detail="Not found")
+
+    def lookup() -> None:
+        with db() as conn, conn.cursor() as cursor:
+            cursor.execute(
+                "SELECT status FROM subscription_payments WHERE gateway_order_id=%s AND dealer_id=%s AND gateway='test'",
+                [payload.order_id, user["sub"]],
+            )
+            row = cursor.fetchone()
+        if not row or row["status"] != "created":
+            raise HTTPException(status_code=404, detail="We could not find this payment")
+
+    await asyncio.to_thread(lookup)
+    payment_id = "pay_test_" + secrets.token_hex(8)
+    secret = payments.gateway_secrets("test")["checkout"]
+    return {"payment_id": payment_id, "signature": payments.checkout_signature(payload.order_id, payment_id, secret)}
+
+
+@app.post("/dealer/subscription/verify")
+async def verify_subscription_payment(payload: SubscriptionVerifyIn, user: dict[str, Any] = Depends(require_role("dealer"))) -> dict[str, Any]:
+    config = payments.payment_config()
+    if config["mode"] not in {"razorpay", "test"}:
+        raise HTTPException(status_code=409, detail="Online payments are switched off in this setup")
+    secret = payments.gateway_secrets(config["mode"])["checkout"]
+    if not payments.checkout_signature_valid(payload.order_id, payload.payment_id, payload.signature, secret):
+        logger.warning("Rejected a subscription payment with a bad signature for dealer %s", user["sub"])
+        raise HTTPException(
+            status_code=400,
+            detail="We could not confirm this payment. If money left your account it will be matched automatically within a few minutes; otherwise contact support.",
+        )
+    result = await asyncio.to_thread(fulfil_subscription_payment, payload.order_id, payload.payment_id, None, user["sub"])
+    await manager.send_personal_message({"type": "subscription_activated", "route": "profile"}, user["sub"])
+    return result
+
+
+@app.post("/payments/razorpay/webhook")
+async def razorpay_webhook(request: Request) -> dict[str, str]:
+    """Razorpay calls this when a payment is captured, even if the dealer closed the browser before returning."""
+    config = payments.payment_config()
+    if config["mode"] not in {"razorpay", "test"}:
+        raise HTTPException(status_code=404, detail="Not found")
+    secret = payments.gateway_secrets(config["mode"])["webhook"]
+    if not secret:
+        raise HTTPException(status_code=503, detail="Webhooks are not set up")
+    raw = await request.body()
+    if not payments.webhook_signature_valid(raw, request.headers.get("X-Razorpay-Signature", ""), secret):
+        logger.warning("Rejected a payment webhook with a bad signature")
+        raise HTTPException(status_code=400, detail="Invalid signature")
+    event = payments.parse_webhook_event(raw)
+    if not event:
+        return {"status": "ignored"}
+    try:
+        result = await asyncio.to_thread(fulfil_subscription_payment, event["order_id"], event["payment_id"], event["amount_paise"], None)
+    except HTTPException as error:
+        if error.status_code == 404:
+            logger.warning("Webhook for unknown order %s", event["order_id"])
+            return {"status": "unknown_order"}
+        raise
+    if result.get("status") == "paid":
+        await manager.send_personal_message({"type": "subscription_activated", "route": "profile"}, result["dealer_id"])
+    return {"status": result["status"]}
+
+
 @app.post("/dealer/subscription/activate")
 async def activate_dealer_subscription(user: dict[str, Any] = Depends(require_role("dealer"))) -> dict[str, Any]:
+    """Free activation for local demos only. With payments switched on, shops must pay."""
+    if payments.payment_mode() != "demo":
+        raise HTTPException(status_code=403, detail="Subscriptions are paid online. Use Pay and subscribe in the web app.")
     with db() as conn, conn.cursor() as cursor:
         cursor.execute(
             "SELECT subscribed FROM dealer_profiles WHERE user_id=%s",
@@ -4158,7 +4533,7 @@ async def activate_dealer_subscription(user: dict[str, Any] = Depends(require_ro
         if row["subscribed"]:
             return {"status": "already_subscribed", "subscribed": True}
         cursor.execute(
-            "UPDATE dealer_profiles SET subscribed=TRUE, subscribed_at=NOW(), updated_at=NOW() WHERE user_id=%s",
+            "UPDATE dealer_profiles SET subscribed=TRUE, subscribed_at=NOW(), subscription_ends_at=NULL, updated_at=NOW() WHERE user_id=%s",
             [user["sub"]],
         )
         create_notification(
@@ -4168,12 +4543,152 @@ async def activate_dealer_subscription(user: dict[str, Any] = Depends(require_ro
             "Your dealer subscription is now active. You will receive new bid request alerts matching your service area.",
             "subscription_activated",
         )
-        audit(cursor, user["sub"], "dealer.subscribed", "dealer_profiles", user["sub"], {})
+        audit(cursor, user["sub"], "dealer.subscribed", "dealer_profiles", user["sub"], {"demo": True})
     await manager.send_personal_message(
         {"type": "subscription_activated", "route": "profile"},
         user["sub"],
     )
     return {"status": "subscribed", "subscribed": True}
+
+
+class ProductResolutionIn(BaseModel):
+    action: Literal["link", "create"]
+    product_id: str | None = Field(default=None, max_length=40)
+
+
+class DealerProductIn(BaseModel):
+    name: str = Field(default="", max_length=300)
+    brand: str = Field(default="", max_length=250)
+    model: str = Field(default="", max_length=250)
+    mpn: str = Field(default="", max_length=250)
+    gtin: str = Field(default="", max_length=255)
+    category: str = Field(default="", max_length=150)
+    item: str = Field(default="", max_length=150)
+    description: str = Field(default="", max_length=6000)
+    sku: str = Field(default="", max_length=150)
+    price: str | float | None = None
+    resolution: ProductResolutionIn | None = None
+
+    model_config = ConfigDict(allow_inf_nan=False, protected_namespaces=())
+
+
+def _add_dealer_product(dealer_id: str, raw: dict[str, Any], source: str, resolution: dict[str, Any] | None) -> dict[str, Any]:
+    with db() as conn, conn.cursor() as cursor, dealer_catalogue.catalogue_lock(cursor):
+        dealer_catalogue.sync_identities(cursor)
+        return dealer_catalogue.add_product(cursor, dealer_id, raw, source, new_id, resolution)
+
+
+def _process_catalogue_rows(dealer_id: str, rows: list[dict[str, str]]) -> dict[str, Any]:
+    counts = {"created": 0, "linked": 0, "already_listed": 0, "review": 0, "error": 0}
+    problems: list[dict[str, Any]] = []
+    warned = 0
+    with db() as conn, conn.cursor() as cursor, dealer_catalogue.catalogue_lock(cursor):
+        dealer_catalogue.sync_identities(cursor)
+    for raw in rows:
+        try:
+            result = _add_dealer_product(dealer_id, raw, "upload", None)
+        except dealer_catalogue.CatalogueError as error:
+            result = {"row": raw.get("_row"), "status": "error", "message": str(error), "input": dealer_catalogue.row_summary(dealer_catalogue.clean_row(raw)[0])}
+        except Exception:  # one bad row must not stop the rest of the file
+            logger.exception("Catalogue row %s failed", raw.get("_row"))
+            result = {"row": raw.get("_row"), "status": "error", "message": "This product could not be saved. Check the values and try again.", "input": dealer_catalogue.row_summary(dealer_catalogue.clean_row(raw)[0])}
+        counts[result["status"]] += 1
+        if result.get("warnings"):
+            warned += 1
+        if result["status"] in {"error", "review"} and len(problems) < 300:
+            problems.append({k: result[k] for k in ("row", "status", "message", "input", "candidates", "warnings") if k in result})
+    return {"total": len(rows), **counts, "with_warnings": warned, "problems": problems, "problems_shown": len(problems), "problems_total": counts["review"] + counts["error"]}
+
+
+@app.get("/dealer/product-categories")
+def dealer_product_categories(user: dict[str, Any] = Depends(require_role("dealer"))) -> list[dict[str, Any]]:
+    """Every active category and item type, for choosing where a new product belongs."""
+    with db() as conn, conn.cursor() as cursor:
+        cursor.execute("SELECT id, name, parent_id FROM categories WHERE status='active' AND deleted_at IS NULL ORDER BY name")
+        return category_tree(cursor.fetchall())
+
+
+@app.get("/dealer/products")
+def list_dealer_products(q: str = Query(default="", max_length=100), limit: int = Query(default=50, ge=1, le=200), offset: int = Query(default=0, ge=0), user: dict[str, Any] = Depends(require_role("dealer"))) -> dict[str, Any]:
+    pattern = f"%{q.strip()}%"
+    with db() as conn, conn.cursor() as cursor:
+        where = "dp.dealer_id=%s AND p.deleted_at IS NULL AND (%s='' OR p.name LIKE %s OR p.brand LIKE %s OR p.model LIKE %s OR dp.dealer_sku LIKE %s)"
+        params = [user["sub"], q.strip(), pattern, pattern, pattern, pattern]
+        cursor.execute(f"SELECT COUNT(*) AS total FROM dealer_products dp JOIN products p ON p.id=dp.product_id WHERE {where}", params)
+        total = cursor.fetchone()["total"]
+        cursor.execute(
+            f"""
+            SELECT p.id, p.name, p.brand, p.model, p.mpn, p.gtin, p.source, p.status, p.catalog_visible, c.name AS category, sc.name AS item,
+                   dp.source AS added_via, dp.dealer_sku AS sku, dp.dealer_price AS price, dp.created_at
+            FROM dealer_products dp
+            JOIN products p ON p.id=dp.product_id
+            LEFT JOIN categories c ON c.id=p.category_id
+            LEFT JOIN categories sc ON sc.id=p.subcategory_id
+            WHERE {where}
+            ORDER BY dp.created_at DESC, p.name LIMIT %s OFFSET %s
+            """,
+            [*params, limit, offset],
+        )
+        return {"total": total, "items": cursor.fetchall()}
+
+
+@app.post("/dealer/products")
+async def add_dealer_product(payload: DealerProductIn, user: dict[str, Any] = Depends(require_role("dealer"))) -> dict[str, Any]:
+    """Add one product by hand, or link one from the catalogue (resolution.action = link). Never creates a duplicate."""
+    raw = payload.model_dump(exclude={"resolution"})
+    resolution = payload.resolution.model_dump() if payload.resolution else None
+    source = "catalogue" if resolution and resolution.get("action") == "link" and not payload.name else "manual"
+    try:
+        return await asyncio.to_thread(_add_dealer_product, user["sub"], raw, source, resolution)
+    except dealer_catalogue.CatalogueError as error:
+        raise HTTPException(status_code=409, detail=str(error)) from error
+
+
+@app.delete("/dealer/products/{product_id}")
+def remove_dealer_product(product_id: str, user: dict[str, Any] = Depends(require_role("dealer"))) -> dict[str, str]:
+    """Stop listing a product. The product stays in the common catalogue for everyone else."""
+    with db() as conn, conn.cursor() as cursor:
+        cursor.execute("DELETE FROM dealer_products WHERE dealer_id=%s AND product_id=%s", [user["sub"], product_id])
+        if cursor.rowcount == 0:
+            raise HTTPException(status_code=404, detail="This product is not in your list")
+    return {"status": "removed"}
+
+
+@app.get("/dealer/products/template.csv")
+def dealer_catalogue_template(user: dict[str, Any] = Depends(require_role("dealer"))) -> Response:
+    return Response(
+        content=dealer_catalogue.template_csv(),
+        media_type="text/csv",
+        headers={"Content-Disposition": 'attachment; filename="product-catalogue-template.csv"'},
+    )
+
+
+@app.post("/dealer/products/upload")
+async def upload_dealer_catalogue(file: UploadFile = File(...), user: dict[str, Any] = Depends(require_role("dealer"))) -> dict[str, Any]:
+    """Upload a CSV or Excel catalogue. Every row is matched against the common database before anything is created."""
+    content = await file.read(dealer_catalogue.MAX_FILE_BYTES + 1)
+    try:
+        rows = dealer_catalogue.parse_catalogue_file(file.filename or "", content)
+    except dealer_catalogue.CatalogueError as error:
+        raise HTTPException(status_code=400, detail=str(error)) from error
+    return await asyncio.to_thread(_process_catalogue_rows, user["sub"], rows)
+
+
+@app.get("/admin/subscription-payments")
+def admin_subscription_payments(user: dict[str, Any] = Depends(require_role("admin"))) -> list[dict[str, Any]]:
+    with db() as conn, conn.cursor() as cursor:
+        cursor.execute(
+            """
+            SELECT sp.id, dp.business_name AS shop, u.email AS dealer, sp.gateway, sp.gateway_order_id AS order_id,
+                   sp.gateway_payment_id AS payment_id, sp.amount_paise/100 AS amount, sp.period_days, sp.status,
+                   sp.paid_at, sp.ends_at AS valid_until, sp.created_at
+            FROM subscription_payments sp
+            JOIN users u ON u.id=sp.dealer_id
+            LEFT JOIN dealer_profiles dp ON dp.user_id=sp.dealer_id
+            ORDER BY sp.created_at DESC LIMIT 500
+            """
+        )
+        return cursor.fetchall()
 
 
 @app.get("/admin/dealers")

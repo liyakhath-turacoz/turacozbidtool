@@ -3306,3 +3306,197 @@ td {
   from { background-position: 200% 0; }
   to { background-position: -200% 0; }
 }
+
+/* ------------------------------------------------------------------ */
+/* Shop details on offers, subscription dialog                         */
+/* ------------------------------------------------------------------ */
+
+.shop-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 14px 22px;
+  margin: 0 16px 14px;
+  padding: 12px 14px;
+  border-radius: var(--r-control);
+  background: var(--paper);
+}
+
+.shop-details section {
+  min-width: 0;
+}
+
+.shop-details h4 {
+  margin: 0 0 6px;
+  font-family: var(--font-display);
+  font-size: 14px;
+}
+
+.shop-details dl {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+}
+
+.shop-details dt {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.shop-details dd {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.shop-details a {
+  color: var(--brand);
+  font-weight: 600;
+}
+
+.copy-button {
+  min-height: 26px;
+  padding: 1px 9px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.plan {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.perks {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.perks li {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+}
+
+.perks svg {
+  flex: none;
+  margin-top: 4px;
+  color: var(--go);
+}
+
+.page-note {
+  padding: 10px 12px;
+  border-radius: var(--r-control);
+  background: var(--brand-wash);
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+.subscribe-done {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.done-mark {
+  flex: none;
+  background: var(--go);
+  border-color: var(--go);
+}
+
+.subscription-state {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0 0 14px;
+}
+
+/* ------------------------------------------------------------------ */
+/* My products                                                         */
+/* ------------------------------------------------------------------ */
+
+.result-list {
+  display: grid;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.result-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.result-list li:last-child {
+  border-bottom: 0;
+}
+
+.result-list li > span:first-child {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.block {
+  display: block;
+}
+
+.review-card {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 14px 16px;
+  border-radius: var(--r-card);
+  background: var(--warn-wash);
+  border: 1px solid #efd3a4;
+}
+
+.review-card p {
+  margin: 0;
+}
+
+.candidate-list {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.candidate-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 10px;
+  border-radius: var(--r-control);
+  background: var(--surface);
+}
+
+.upload-report {
+  display: grid;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.upload-report p {
+  margin: 0;
+}
+
+.file-pick input {
+  min-height: var(--tap);
+  padding: 6px;
+}

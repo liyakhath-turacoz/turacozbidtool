@@ -26,6 +26,58 @@ export function BrandMark({ className = 'brand-mark' }) {
   );
 }
 
+function CopyButton({ value, label }) {
+  const [copied, setCopied] = useState(false);
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(value);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1800);
+    } catch {
+      // Clipboard access can be blocked; the value is still on screen to copy by hand.
+    }
+  };
+  return <button type="button" className="copy-button" aria-label={`Copy ${label}`} onClick={copy}>{copied ? 'Copied' : 'Copy'}</button>;
+}
+
+/** Everything a buyer needs to contact and pay a shop, shown on each of its bids. */
+function ShopDetails({ offer }) {
+  const payment = offer.dealer_payment || {};
+  const hasUpi = Boolean(payment.upi_id);
+  const hasBank = Boolean(payment.account_number);
+  const address = text(offer.business_address);
+  return (
+    <div className="shop-details">
+      <section aria-label="Contact">
+        <h4>Contact</h4>
+        <dl>
+          {offer.owner_name ? <div><dt>Owner</dt><dd>{offer.owner_name}</dd></div> : null}
+          {offer.dealer_phone ? <div><dt>Phone</dt><dd><a href={`tel:${offer.dealer_phone}`}>{offer.dealer_phone}</a></dd></div> : null}
+          {offer.dealer_email ? <div><dt>Email</dt><dd><a href={`mailto:${offer.dealer_email}`}>{offer.dealer_email}</a></dd></div> : null}
+          {address ? <div><dt>Address</dt><dd>{address}</dd></div> : null}
+          {offer.gst_number ? <div><dt>GST</dt><dd>{offer.gst_number}</dd></div> : null}
+        </dl>
+      </section>
+      <section aria-label="Payment details">
+        <h4>Payment details</h4>
+        {hasUpi || hasBank ? (
+          <dl>
+            {hasUpi ? <div><dt>UPI ID</dt><dd>{payment.upi_id} <CopyButton value={payment.upi_id} label="UPI ID" /></dd></div> : null}
+            {hasBank ? (
+              <>
+                <div><dt>Account holder</dt><dd>{payment.account_holder}</dd></div>
+                <div><dt>Bank</dt><dd>{payment.bank_name}</dd></div>
+                <div><dt>Account number</dt><dd>{payment.account_number} <CopyButton value={payment.account_number} label="account number" /></dd></div>
+                <div><dt>IFSC</dt><dd>{payment.ifsc} <CopyButton value={payment.ifsc} label="IFSC code" /></dd></div>
+              </>
+            ) : null}
+          </dl>
+        ) : <p className="muted-small">This shop has not added payment details. Ask them how they would like to be paid.</p>}
+      </section>
+    </div>
+  );
+}
+
 function QuickPicks({ options, value, onPick, label }) {
   return (
     <div className="quick-picks" role="group" aria-label={label}>
@@ -156,12 +208,13 @@ export function OfferSlip({ offer, quantity, isLowest, canAccept, onAccept }) {
         {services ? <div><dt>Extra services</dt><dd>{services}</dd></div> : null}
       </dl>
       {text(offer.notes) ? <p className="slip-note">“{text(offer.notes)}”</p> : null}
+      <ShopDetails offer={offer} />
       {live ? (
         <>
           <hr className="slip-tear" />
           <div className="slip-foot">
             <div className="slip-price">
-              {!offer.selectable ? <small>This dealer can no longer be selected</small> : <small>Dealer contact details unlock after you accept</small>}
+              {!offer.selectable ? <small>This shop can no longer be selected</small> : <small>You can contact this shop before you accept</small>}
             </div>
             <div className="slip-actions">
               <button type="button" className="primary" disabled={!canAccept || !offer.selectable} onClick={() => onAccept(offer)}>Accept offer</button>
@@ -329,6 +382,8 @@ export function BidSheet({ request, bid, allBids = [], subscribed = true, rules 
             {lowest !== null ? <span className="price price-sm">{money(lowest)}</span> : <span className="standing solo">You can set the pace</span>}
           </div>
         </div>
+
+        <p className="hint">The buyer sees your shop name, phone, email, address and payment details with this bid. You can change them under My shop.</p>
 
         {!subscribed ? <div className="notice" role="alert">Your subscription is not active, so you cannot submit bids yet. Close this window and subscribe from the banner at the top.</div> : null}
 
