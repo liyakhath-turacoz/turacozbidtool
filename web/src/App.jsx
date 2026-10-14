@@ -1194,7 +1194,7 @@ function AdminUsersPage({ title, role, rows, run, setDetails }) {
 }
 
 function ProductAdminPage({ user, data, run, onExport }) {
-  const empty = { name: '', category: '', subcategory: '', brand: '', model: '', price_min: '', price_max: '', location: '', status: 'active', specifications: 'Warranty: 1 year' };
+  const empty = { name: '', category: '', subcategory: '', brand: '', model: '', image_url: '', price_min: '', price_max: '', location: '', status: 'active', specifications: 'Warranty: 1 year' };
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [modal, setModal] = useState(null);
@@ -1237,6 +1237,7 @@ function ProductAdminPage({ user, data, run, onExport }) {
     subcategory: form.subcategory,
     brand: form.brand,
     model: form.model,
+    image_url: form.image_url,
     price_min: Number(form.price_min || 0),
     price_max: Number(form.price_max || 0),
     location: form.location,
@@ -1304,10 +1305,27 @@ function ProductAdminPage({ user, data, run, onExport }) {
           onClose={() => !saving && setModal(null)}
           saving={saving}
           error={editorError}
-          onSave={async () => {
+          onSave={async (imageFile) => {
             setSaving(true); setEditorError('');
             try {
-              const ok=await run(async token=>{try{return await (modal==='add'?api.createProduct(token,draft()):api.updateProduct(token,modal,draft()));}catch(error){setEditorError(friendlyErrorMessage(error));throw error;}},modal==='add'?'Product added successfully!':'Product updated.');
+              const ok=await run(async token=>{
+                let uploadedImageUrl = '';
+                const payload = draft();
+                try {
+                  if (imageFile) {
+                    const uploaded = await api.uploadProductImage(token, imageFile);
+                    uploadedImageUrl = uploaded.image_url;
+                    payload.image_url = uploadedImageUrl;
+                  }
+                  return await (modal==='add'?api.createProduct(token,payload):api.updateProduct(token,modal,payload));
+                } catch(error) {
+                  if (uploadedImageUrl) {
+                    try { await api.deleteUnlinkedProductImage(token, uploadedImageUrl); } catch {}
+                  }
+                  setEditorError(friendlyErrorMessage(error));
+                  throw error;
+                }
+              },modal==='add'?'Product added successfully!':'Product updated.');
               if(ok){if(modal==='add'){setSearch(form.name.trim());setAppliedSearch(form.name.trim());setFilters({category:'All',brand:'',sort:'Newest',product_type:'',years:[]});setPage(0);}setModal(null);setRefreshKey(value=>value+1);}
             } finally {setSaving(false);}
           }}
@@ -1658,6 +1676,7 @@ function ChipSummary({ title, items }) {
 }
 
 function ProductEditorModal({ title, form, categories, onUpdate, onClose, onSave, saving, error }) {
+  const [imageFile, setImageFile] = useState(null);
   const topCategories = categories.filter((item) => !item.parent_id);
   const selectedParent = topCategories.find((item) => item.name === form.category);
   const childCategories = selectedParent
@@ -1665,7 +1684,7 @@ function ProductEditorModal({ title, form, categories, onUpdate, onClose, onSave
     : topCategories.flatMap((item) => list(item.items)).concat(categories.filter((item) => item.parent_id));
   return (
     <Modal title={title} onClose={onClose}>
-      <form onSubmit={event=>{event.preventDefault();onSave();}}>
+      <form onSubmit={event=>{event.preventDefault();onSave(imageFile);}}>
       {form.has_bid_history ? <p>This product has bidding history. Name, category, item, brand and model are locked; prices, status and specifications can be edited.</p> : null}
       {error && <p role="alert">{error}</p>}
       <div className="form-grid">
@@ -1684,6 +1703,10 @@ function ProductEditorModal({ title, form, categories, onUpdate, onClose, onSave
         </label>
         <label>Brand Name (select or type new)<input required maxLength={190} disabled={!!form.has_bid_history} value={form.brand} onChange={(event) => onUpdate('brand', event.target.value)} /></label>
         <label>Model Name / Number<input maxLength={190} disabled={!!form.has_bid_history} value={form.model} onChange={(event) => onUpdate('model', event.target.value)} /></label>
+        {form.image_url ? <div className="wide product-image-upload-current"><ProductImage product={{name:form.name || 'Product image',image_url:form.image_url}} className="admin-product-image" iconSize={28}/><span>Current image is kept unless you upload a replacement.</span></div> : <p className="wide">No image is attached yet.</p>}
+        <label className="wide">Upload product image<input type="file" accept="image/jpeg,image/png,image/webp" onChange={(event) => setImageFile(event.target.files?.[0] || null)} /></label>
+        <p className="wide">Choose a JPEG, PNG, or WebP file. It will be stored in the site’s local product image folder; image URLs are not accepted.</p>
+        {imageFile ? <p className="wide">Selected image: {imageFile.name} (saved locally when you save the product)</p> : null}
         <label>Min Price (Rs.)<input type="number" min="0" step="0.01" value={form.price_min} onChange={(event) => onUpdate('price_min', event.target.value)} /></label>
         <label>Max Price (Rs.)<input type="number" min={Number(form.price_min)||0} step="0.01" value={form.price_max} onChange={(event) => onUpdate('price_max', event.target.value)} /></label>
         <label>Status<select aria-label="Status" value={form.status || 'active'} onChange={(event) => onUpdate('status', event.target.value)}><option value="active">Active</option><option value="inactive">Inactive</option><option value="archived">Archived</option></select></label>
@@ -2919,7 +2942,9 @@ function AdminAccountDetails({ details, role, onClose }) {
 
 function ProductImage({product,className='product-art',iconSize=42}) {
   const [loaded,setLoaded]=useState(false);const [failed,setFailed]=useState(false);
-  const imageSource = !product.image_url || failed ? '/catalog-placeholder.svg' : product.image_url;
+  const rawImageUrl = String(product.image_url || '');
+  const resolvedImageUrl = /^https?:\/\//i.test(rawImageUrl) ? rawImageUrl : `${apiBaseUrl}${rawImageUrl.startsWith('/') ? rawImageUrl : `/${rawImageUrl}`}`;
+  const imageSource = !rawImageUrl || failed ? '/catalog-placeholder.svg' : resolvedImageUrl;
   return <div className={className}>
     {!loaded&&failed&&<Package size={iconSize} aria-hidden="true"/>}
     <img src={imageSource} alt={product.name} loading={className==='product-detail-art'?'eager':'lazy'} className="catalog-product-photo" style={{opacity:loaded?1:0}} onLoad={()=>setLoaded(true)} onError={()=>{if (imageSource !== '/catalog-placeholder.svg') setFailed(true);}} />

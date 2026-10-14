@@ -9,6 +9,7 @@ import json
 import logging
 import math
 import os
+import re
 import secrets
 import shutil
 import time
@@ -28,7 +29,7 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
-from pydantic import AliasChoices, BaseModel, ConfigDict, Field, model_validator
+from pydantic import AliasChoices, BaseModel, ConfigDict, Field, field_validator, model_validator
 
 try:
     from . import catalog_filters
@@ -65,6 +66,9 @@ ROOT = Path(__file__).resolve().parent
 SQL_FILE = ROOT / "deployment.sql"
 WEB_BUILD = ROOT.parent / "web" / "dist"
 UPLOAD_ROOT = ROOT / "local_uploads"
+PRODUCT_IMAGE_ROOT = ROOT / "product_images"
+PRODUCT_IMAGE_MAX_BYTES = 10 * 1024 * 1024
+PRODUCT_IMAGE_NAME = re.compile(r"(?:[0-9a-f]{64}|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\.(?:jpe?g|png|webp)\Z", re.IGNORECASE)
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 logger = logging.getLogger("turacozbidtool")
@@ -157,6 +161,44 @@ def open_database_connection(database=True):
         write_timeout=30,
         init_command="SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED",
     )
+
+
+def local_product_image_path(image_url: str | None) -> Path | None:
+    """Resolve only app-generated product image paths inside the private image folder."""
+    if not image_url:
+        return None
+    parsed = urllib.parse.urlsplit(str(image_url).strip())
+    if parsed.scheme or parsed.netloc or parsed.query or parsed.fragment:
+        return None
+    prefix = "/product-images/"
+    if not parsed.path.startswith(prefix):
+        return None
+    filename = parsed.path[len(prefix):]
+    if not PRODUCT_IMAGE_NAME.fullmatch(filename) or Path(filename).name != filename:
+        return None
+    return PRODUCT_IMAGE_ROOT / filename
+
+
+def delete_product_image_if_unreferenced(image_url: str | None) -> None:
+    """Remove an app-owned image only after no product row points to it."""
+    target = local_product_image_path(image_url)
+    if target is None or not target.is_file():
+        return
+    try:
+        with db() as conn, conn.cursor() as cursor:
+            cursor.execute("SELECT COUNT(*) AS count FROM products WHERE image_url=%s", [image_url])
+            if int((cursor.fetchone() or {}).get("count", 0)) > 0:
+                return
+    except Exception:
+        # Product deletion/update has already committed. Keep the file if the
+        # reference check cannot be completed; deleting blindly could break a
+        # second product that shares this image.
+        logger.exception("Could not check product image references for %s", target.name)
+        return
+    try:
+        target.unlink(missing_ok=True)
+    except OSError:
+        logger.exception("Could not remove unreferenced product image %s", target.name)
 
 
 connection_cache = ConnectionCache(open_database_connection)
@@ -812,10 +854,10 @@ class CatalogRepository:
             cursor.execute(
                 """
                 INSERT INTO products
-                (id, category_id, subcategory_id, location_id, name, brand, model, price_min, price_max, status, created_by, highlights, created_at, updated_at)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, NOW(), NOW())
+                (id, category_id, subcategory_id, location_id, name, brand, model, image_url, price_min, price_max, status, created_by, highlights, created_at, updated_at)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, NOW(), NOW())
                 """,
-                [product_id, category_id, subcategory_id, location_id, draft.name, draft.brand, draft.model, draft.price_min, draft.price_max, draft.status or "active", admin_id, json.dumps(draft.specifications)],
+                [product_id, category_id, subcategory_id, location_id, draft.name, draft.brand, draft.model, draft.image_url, draft.price_min, draft.price_max, draft.status or "active", admin_id, json.dumps(draft.specifications)],
             )
             for index, (key, value) in enumerate(draft.specifications.items()):
                 cursor.execute(
@@ -831,11 +873,13 @@ class CatalogRepository:
         return product_id
 
     def update_product(self, product_id: str, draft: "ProductIn", admin_id: str) -> None:
+        previous_image_url = None
         with db() as conn, conn.cursor() as cursor:
-            cursor.execute("SELECT name,brand,model,category_id,subcategory_id,source,highlights,manual_specifications FROM products WHERE id=%s AND deleted_at IS NULL FOR UPDATE", [product_id])
+            cursor.execute("SELECT name,brand,model,category_id,subcategory_id,source,highlights,manual_specifications,image_url FROM products WHERE id=%s AND deleted_at IS NULL FOR UPDATE", [product_id])
             current = cursor.fetchone()
             if not current:
                 raise HTTPException(status_code=404, detail="Product not found")
+            previous_image_url = current.get("image_url")
             category_id, subcategory_id = resolve_category_ids(cursor, draft.category, draft.subcategory)
             cursor.execute("SELECT id FROM bid_requests WHERE product_id=%s LIMIT 1", [product_id])
             if cursor.fetchone() and (current["name"], current["brand"] or "", current["model"] or "", current["category_id"], current["subcategory_id"]) != (draft.name, draft.brand, draft.model, category_id, subcategory_id):
@@ -845,10 +889,10 @@ class CatalogRepository:
             cursor.execute(
                 """
                 UPDATE products
-                SET category_id=%s, subcategory_id=%s, location_id=%s, name=%s, brand=%s, model=%s, price_min=%s, price_max=%s, status=COALESCE(%s,status), highlights=%s, updated_at=NOW()
+                SET category_id=%s, subcategory_id=%s, location_id=%s, name=%s, brand=%s, model=%s, image_url=%s, price_min=%s, price_max=%s, status=COALESCE(%s,status), highlights=%s, updated_at=NOW()
                 WHERE id=%s AND deleted_at IS NULL
                 """,
-                [category_id, subcategory_id, location["id"] if location else None, draft.name, draft.brand, draft.model, draft.price_min, draft.price_max, draft.status, json.dumps(draft.specifications), product_id],
+                [category_id, subcategory_id, location["id"] if location else None, draft.name, draft.brand, draft.model, draft.image_url, draft.price_min, draft.price_max, draft.status, json.dumps(draft.specifications), product_id],
             )
             cursor.execute("DELETE FROM product_specifications WHERE product_id=%s", [product_id])
             for index, (key, value) in enumerate(draft.specifications.items()):
@@ -866,16 +910,23 @@ class CatalogRepository:
             cursor.execute('UPDATE products SET manual_specifications=%s WHERE id=%s',[json.dumps(overrides),product_id])
             cursor.execute('SELECT id,highlights,technical_specifications,software_specifications,manual_specifications FROM products WHERE id=%s',[product_id])
             catalog_filters.index_product(cursor,cursor.fetchone())
+        if previous_image_url != draft.image_url:
+            delete_product_image_if_unreferenced(previous_image_url)
 
     def soft_delete_product(self, product_id: str, admin_id: str) -> None:
+        image_url = None
         with db() as conn, conn.cursor() as cursor:
+            cursor.execute("SELECT image_url FROM products WHERE id=%s AND deleted_at IS NULL FOR UPDATE", [product_id])
+            existing = cursor.fetchone()
+            if not existing:
+                raise HTTPException(status_code=404, detail="Product not found")
+            image_url = existing.get("image_url")
             cursor.execute(
-                "UPDATE products SET status='deleted', deleted_at=NOW(), updated_at=NOW() WHERE id=%s AND deleted_at IS NULL",
+                "UPDATE products SET status='deleted', deleted_at=NOW(), image_url=NULL, updated_at=NOW() WHERE id=%s AND deleted_at IS NULL",
                 [product_id],
             )
-            if cursor.rowcount == 0:
-                raise HTTPException(status_code=404, detail="Product not found")
             audit(cursor, admin_id, "product.deleted", "products", product_id, {})
+        delete_product_image_if_unreferenced(image_url)
 
 
 class BidRepository:
@@ -2779,6 +2830,7 @@ class ProductIn(BaseModel):
     subcategory: str | None = Field(default=None, max_length=120)
     brand: str = Field(min_length=1, max_length=190)
     model: str = Field(default="", max_length=190)
+    image_url: str | None = Field(default=None, max_length=500)
     price_min: float = Field(default=0, ge=0, le=9999999999.99)
     price_max: float = Field(default=0, ge=0, le=9999999999.99)
     location: str = Field(default="Mumbai", max_length=120)
@@ -2786,6 +2838,21 @@ class ProductIn(BaseModel):
     status: Literal["active", "inactive", "archived"] | None = None
 
     model_config = ConfigDict(allow_inf_nan=False, str_strip_whitespace=True)
+
+    @field_validator("image_url")
+    @classmethod
+    def validate_image_url(cls, value: str | None) -> str | None:
+        value = (value or "").strip()
+        if not value:
+            return None
+        if value.startswith("/product-images/"):
+            if local_product_image_path(value) is None:
+                raise ValueError("Use an uploaded product image")
+            return value
+        parsed = urllib.parse.urlsplit(value)
+        if parsed.scheme not in {"http", "https"} or not parsed.netloc:
+            raise ValueError("Image URL must use http or https")
+        return value
 
     @model_validator(mode="after")
     def validate_price_range(self):
@@ -2965,6 +3032,33 @@ settings_repo = SettingsRepository()
 product_imports = ImportService(db)
 
 
+def make_asyncio_exception_handler(previous_handler=None, *, platform_name: str | None = None):
+    """Silence only Windows peer resets raised while asyncio closes a transport."""
+    current_platform = platform_name or os.name
+
+    def handle_exception(loop, context):
+        error = context.get("exception")
+        message = str(context.get("message", ""))
+        handle = context.get("handle")
+        callback = getattr(handle, "_callback", None) or context.get("callback")
+        callback_name = getattr(callback, "__qualname__", "") or getattr(callback, "__name__", "")
+        is_expected_peer_reset = (
+            current_platform == "nt"
+            and isinstance(error, ConnectionResetError)
+            and getattr(error, "winerror", None) == 10054
+            and "_call_connection_lost" in f"{message} {callback_name}"
+        )
+        if is_expected_peer_reset:
+            logger.debug("Ignoring Windows peer reset while asyncio closes a disconnected client transport")
+            return
+        if previous_handler is not None:
+            previous_handler(loop, context)
+        else:
+            loop.default_exception_handler(context)
+
+    return handle_exception
+
+
 @asynccontextmanager
 async def lifespan(app_instance: FastAPI):
     if not DB_PASSWORD or not JWT_SECRET or not ADMIN_PASSWORD:
@@ -2983,6 +3077,9 @@ async def lifespan(app_instance: FastAPI):
     import_scheduler = asyncio.create_task(product_imports.scheduler())
     if WEB_BUILD.exists():
         app_instance.mount("/assets", StaticFiles(directory=WEB_BUILD / "assets"), name="assets")
+    event_loop = asyncio.get_running_loop()
+    previous_exception_handler = event_loop.get_exception_handler()
+    event_loop.set_exception_handler(make_asyncio_exception_handler(previous_exception_handler))
     try:
         yield
     finally:
@@ -2994,6 +3091,7 @@ async def lifespan(app_instance: FastAPI):
             if not task.done():
                 task.cancel()
         connection_cache.close()
+        event_loop.set_exception_handler(previous_exception_handler)
 
 
 app = FastAPI(title="Turacoz Bid Tool API", version="1.0.0", lifespan=lifespan)
@@ -3982,14 +4080,123 @@ def product_detail(product_id: str, user: dict[str, Any] = Depends(current_user)
     return catalog_repo.product_detail(product_id, include_inactive=is_admin, include_sources=is_admin)
 
 
+def product_image_extension(content: bytes) -> str | None:
+    if content.startswith(b"\xff\xd8\xff"):
+        return ".jpg"
+    if content.startswith(b"\x89PNG\r\n\x1a\n"):
+        return ".png"
+    if len(content) >= 12 and content[:4] == b"RIFF" and content[8:12] == b"WEBP":
+        return ".webp"
+    return None
+
+
+def validate_product_image(content: bytes) -> str:
+    extension = product_image_extension(content)
+    if extension is None:
+        raise HTTPException(status_code=400, detail="Upload a valid JPEG, PNG, or WebP image")
+    try:
+        from PIL import Image
+
+        with Image.open(io.BytesIO(content)) as image:
+            if image.width < 32 or image.height < 32 or image.width * image.height > 40_000_000:
+                raise HTTPException(status_code=400, detail="Image dimensions must be between 32px and 40 megapixels")
+            image.verify()
+    except ImportError:
+        pass
+    except HTTPException:
+        raise
+    except Exception as exc:
+        raise HTTPException(status_code=400, detail="Image data is damaged or unreadable") from exc
+    return extension
+
+
+def require_stored_product_image(image_url: str | None) -> None:
+    """Ensure a newly attached admin image is an uploaded file owned by this app."""
+    if not image_url:
+        return
+    target = local_product_image_path(image_url)
+    if target is None:
+        raise HTTPException(status_code=422, detail="Product images must be uploaded from a local file; image URLs are not accepted")
+    if not target.is_file():
+        raise HTTPException(status_code=422, detail="The uploaded product image is missing. Upload it again before saving")
+    if target.stat().st_size > PRODUCT_IMAGE_MAX_BYTES:
+        raise HTTPException(status_code=422, detail="Product images must be 10 MB or smaller")
+    validate_product_image(target.read_bytes())
+
+
+@app.get("/product-images/{filename}")
+def get_product_image(filename: str) -> FileResponse:
+    image_url = f"/product-images/{filename}"
+    target = local_product_image_path(image_url)
+    if target is None or not target.is_file():
+        raise HTTPException(status_code=404, detail="Product image not found")
+    media_type = {".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png", ".webp": "image/webp"}[target.suffix.lower()]
+    return FileResponse(target, media_type=media_type, headers={"Cache-Control": "public, max-age=2592000"})
+
+
+@app.post("/admin/product-images")
+async def admin_upload_product_image(file: UploadFile = File(...), user: dict[str, Any] = Depends(require_role("admin"))) -> dict[str, str]:
+    content = await file.read(PRODUCT_IMAGE_MAX_BYTES + 1)
+    if len(content) > PRODUCT_IMAGE_MAX_BYTES:
+        raise HTTPException(status_code=413, detail="Product images must be 10 MB or smaller")
+    extension = validate_product_image(content)
+    filename = f"{new_id()}{extension}"
+    PRODUCT_IMAGE_ROOT.mkdir(parents=True, exist_ok=True)
+    target = PRODUCT_IMAGE_ROOT / filename
+    temporary = target.with_name(f"{filename}.tmp")
+    try:
+        temporary.write_bytes(content)
+        temporary.replace(target)
+        with db() as conn, conn.cursor() as cursor:
+            audit(cursor, user["sub"], "product_image.uploaded", "product_images", filename, {"bytes": len(content)})
+    except Exception:
+        temporary.unlink(missing_ok=True)
+        target.unlink(missing_ok=True)
+        raise
+    return {"image_url": f"/product-images/{filename}", "filename": filename}
+
+
+@app.delete("/admin/product-images/{filename}")
+def admin_delete_unlinked_product_image(filename: str, user: dict[str, Any] = Depends(require_role("admin"))) -> dict[str, str]:
+    image_url = f"/product-images/{filename}"
+    target = local_product_image_path(image_url)
+    if target is None:
+        raise HTTPException(status_code=404, detail="Product image not found")
+    with db() as conn, conn.cursor() as cursor:
+        cursor.execute("SELECT COUNT(*) AS count FROM products WHERE image_url=%s", [image_url])
+        if int((cursor.fetchone() or {}).get("count", 0)):
+            raise HTTPException(status_code=409, detail="This image is attached to a product")
+    if not target.is_file():
+        return {"status": "missing"}
+    target.unlink()
+    audit_entry = {"filename": filename}
+    with db() as conn, conn.cursor() as cursor:
+        audit(cursor, user["sub"], "product_image.deleted", "product_images", filename, audit_entry)
+    return {"status": "deleted"}
+
+
 @app.post("/products")
 def create_product(payload: ProductIn, user: dict[str, Any] = Depends(require_role("admin"))) -> dict[str, str]:
+    require_stored_product_image(payload.image_url)
     product_id = catalog_repo.create_product(payload, user["sub"])
     return {"id": product_id, "status": "created"}
 
 
 @app.put("/products/{product_id}")
 def update_product(product_id: str, payload: ProductIn, user: dict[str, Any] = Depends(require_role("admin"))) -> dict[str, str]:
+    if payload.image_url and local_product_image_path(payload.image_url) is None:
+        # Legacy catalogue products may still refer to a remote image. Permit
+        # keeping their current value while editing other fields, but never let
+        # the admin form attach or replace a product image with a URL.
+        with db() as conn, conn.cursor() as cursor:
+            cursor.execute("SELECT image_url FROM products WHERE id=%s AND deleted_at IS NULL", [product_id])
+            current = cursor.fetchone()
+        if not current:
+            raise HTTPException(status_code=404, detail="Product not found")
+        if current.get("image_url") != payload.image_url:
+            raise HTTPException(status_code=422, detail="Product images must be uploaded from a local file; image URLs are not accepted")
+    else:
+        require_stored_product_image(payload.image_url)
     catalog_repo.update_product(product_id, payload, user["sub"])
     return {"status": "updated"}
 

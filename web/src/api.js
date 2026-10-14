@@ -36,6 +36,22 @@ async function request(path, { token = '', method = 'GET', body, raw = false } =
   catch { throw new Error('The server returned invalid API data. Check the API address and restart the backend, then retry.'); }
 }
 
+async function uploadProductImage(token, file) {
+  const form = new FormData();
+  form.append('file', file, file.name || 'product-image');
+  const response = await fetch(`${API_BASE_URL}/admin/product-images`, {
+    method: 'POST',
+    headers: { Accept: 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+    body: form,
+  });
+  if (response.headers.get('content-type')?.toLowerCase().includes('text/html')) {
+    throw new Error('The server returned a webpage instead of the image upload API. Restart the backend to load the latest routes, then retry.');
+  }
+  if (!response.ok) throw new Error(`API error ${response.status}: ${await response.text()}`);
+  try { return await response.json(); }
+  catch { throw new Error('The image upload API returned invalid data. Check the API address and restart the backend, then retry.'); }
+}
+
 export const apiBaseUrl = API_BASE_URL;
 
 export const api = {
@@ -71,6 +87,11 @@ export const api = {
   createProduct: (token, payload) => request('/products', { token, method: 'POST', body: payload }),
   updateProduct: (token, id, payload) => request(`/products/${id}`, { token, method: 'PUT', body: payload }),
   deleteProduct: (token, id) => request(`/products/${id}`, { token, method: 'DELETE' }),
+  uploadProductImage,
+  deleteUnlinkedProductImage: (token, imageUrl) => {
+    const filename = String(imageUrl || '').split('/').pop();
+    return request(`/admin/product-images/${encodeURIComponent(filename)}`, { token, method: 'DELETE' });
+  },
   bids: (token) => request('/bids', { token }),
   notifications: (token) => request('/notifications', { token }),
   markNotificationsRead: (token) => request('/notifications/mark-read', { token, method: 'POST' }),

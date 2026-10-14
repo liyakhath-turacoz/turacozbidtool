@@ -739,6 +739,21 @@ tr:last-child td {
   grid-column: 1 / -1;
 }
 
+.product-image-upload-current {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--muted);
+}
+
+.product-image-upload-current .admin-product-image {
+  width: 96px;
+  height: 80px;
+  flex: 0 0 96px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
 .check {
   display: flex;
   flex-direction: row;

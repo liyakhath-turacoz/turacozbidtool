@@ -4,3 +4,5 @@ pymysql==1.1.1
 pydantic==2.10.4
 python-multipart==0.0.20
 tzdata>=2025.1
+Pillow>=10.0.0
+requests>=2.31.0
