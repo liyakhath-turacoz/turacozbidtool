@@ -132,6 +132,47 @@ class DealerMatchingTests(unittest.TestCase):
         self.cursor.dealers["dealer2"]["row"]["latitude"] = 18.4375
         self.assertNotIn("dealer2", self.matches("LG"))
 
+    def test_buyer_radius_is_an_additional_limit_on_dealer_coverage(self):
+        self.cursor.dealers["dealer1"]["row"]["latitude"] = 17.4875
+        self.assertIn("dealer1", self.matches("Asus"))
+        self.assertNotIn("dealer1", self.matches("Asus", buyer_radius=1))
+
+    def test_state_service_area_matches_only_the_selected_state(self):
+        dealer = self.cursor.dealers["dealer1"]["row"]
+        self.cursor.dealers["dealer1"]["categories"] = []
+        dealer["service_preferences"] = {
+            "country": "India", "method": "states", "states": ["Telangana"]
+        }
+        self.assertIn("dealer1", self.matches("Asus"))
+        self.cursor.origin["state"] = "Andhra Pradesh"
+        self.assertNotIn("dealer1", self.matches("Asus"))
+
+    def test_city_service_area_requires_city_and_configured_state(self):
+        dealer = self.cursor.dealers["dealer1"]["row"]
+        self.cursor.dealers["dealer1"]["categories"] = []
+        dealer["service_preferences"] = {
+            "country": "India", "method": "cities",
+            "cities": ["Ongole"], "states": ["Andhra Pradesh"],
+        }
+        self.cursor.origin.update(city="Ongole", state="Andhra Pradesh")
+        self.assertIn("dealer1", self.matches("Asus"))
+        self.cursor.origin["state"] = "Telangana"
+        self.assertNotIn("dealer1", self.matches("Asus"))
+        self.cursor.origin.update(city="Hyderabad", state="Telangana")
+        self.assertNotIn("dealer1", self.matches("Asus"))
+
+    def test_district_service_area_matches_city_or_area_within_state(self):
+        dealer = self.cursor.dealers["dealer1"]["row"]
+        self.cursor.dealers["dealer1"]["categories"] = []
+        dealer["service_preferences"] = {
+            "country": "India", "method": "districts",
+            "districts": ["RTC Bus Stand"], "states": ["Andhra Pradesh"],
+        }
+        self.cursor.origin.update(city="Ongole", area="RTC Bus Stand", state="Andhra Pradesh")
+        self.assertIn("dealer1", self.matches("Asus"))
+        self.cursor.origin["state"] = "Telangana"
+        self.assertNotIn("dealer1", self.matches("Asus"))
+
 
 if __name__ == "__main__":
     unittest.main()

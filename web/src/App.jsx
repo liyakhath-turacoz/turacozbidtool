@@ -1067,6 +1067,15 @@ function CartPage({ data, setBidProduct, setTab, run }) {
         <AdminList rows={items} empty="Cart is empty. Add products from catalog.">
           {(item) => {
             const product = data.products.find((candidate) => candidate.id === item.product_id) || data.products.find((candidate) => candidate.name === (item.product || item.name));
+            // Cart rows include the product ID and display fields already. Do not
+            // make bidding depend on whether the product happens to be in the
+            // currently loaded (and possibly searched/filtered) catalogue page.
+            const bidProduct = product || (item.product_id ? {
+              ...item,
+              id: item.product_id,
+              name: item.name || item.product || item.product_name,
+              bidQuantity: item.quantity || 1,
+            } : null);
             return (
               <AdminListItem
                 icon={<ShoppingCart size={18} />}
@@ -1075,9 +1084,9 @@ function CartPage({ data, setBidProduct, setTab, run }) {
                 trailing={(
                   <div className="admin-item-actions">
                     <button className="icon-button" title="Remove item" onClick={() => run((token) => api.removeCartItem(token, item.id), 'Removed from cart.')}><X size={16} /></button>
-                    <button className="icon-button" title="Quantity +" disabled={!product} onClick={() => product && run((token) => api.addCartItem(token, product.id, 1), 'Added to cart.')}><Plus size={16} /></button>
+                    <button className="icon-button" title="Quantity +" disabled={!item.product_id} onClick={() => item.product_id && run((token) => api.addCartItem(token, item.product_id, 1), 'Added to cart.')}><Plus size={16} /></button>
                     <button onClick={() => run((token) => api.removeCartItem(token, item.id), 'Removed from cart.')}>Remove</button>
-                    <button className="primary" disabled={!product} onClick={() => product && setBidProduct({ ...product, bidQuantity: item.quantity || 1 })}>Start Bid</button>
+                    <button className="primary" disabled={!bidProduct} onClick={() => bidProduct && setBidProduct({ ...bidProduct, bidQuantity: item.quantity || 1 })}>Start Bid</button>
                   </div>
                 )}
               />
