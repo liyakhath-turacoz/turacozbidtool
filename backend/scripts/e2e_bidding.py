@@ -90,7 +90,7 @@ def run(suite="bidding"):
             account.update({"username": username, "password": password})
             accounts[label] = account
             if role == "dealer":
-                profile = {"full_name": "E2E " + label, "business_name": "E2E " + label, "country": country, "state": "Karnataka", "city": "Bengaluru", "area": "Test area", "address": "Test shop", "latitude": latitude, "longitude": 77.5946, "service_radius_km": 5, "delivery_method": "radius", "categories": [item], "brands": ["An unrelated company"]}
+                profile = {"full_name": "E2E " + label, "business_name": "E2E " + label, "country": country, "state": "Karnataka", "city": "Bengaluru", "area": "Test area", "address": "Test shop", "latitude": latitude, "longitude": 77.5946, "service_radius_km": 5, "delivery_method": "radius", "categories": [item], "brands": []}
                 request("/profile", profile, account["access_token"], "PUT")
                 request(f"/admin/users/{account['id']}/status", {"status": "verified", "reason": "Temporary E2E fixture"}, admin["access_token"])
                 with db() as conn, conn.cursor() as cursor:

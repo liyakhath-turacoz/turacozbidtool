@@ -15,18 +15,21 @@ import {
   Inbox,
   IndianRupee,
   Layers,
+  LifeBuoy,
   LogOut,
+  Mail,
   MapPin,
   Menu,
+  MoreHorizontal,
   Package,
   Pencil,
+  Phone,
   Plus,
   ReceiptText,
   RefreshCw,
   Search,
   Send,
   Settings,
-  Shield,
   ShoppingCart,
   Store,
   Trash2,
@@ -39,6 +42,38 @@ import MapCoordinatePicker from './MapCoordinatePicker.jsx';
 import BidConversation, { mergeMessages } from './BidConversation.jsx';
 import CatalogFilters, {emptyCatalogFilters, catalogParams} from './CatalogFilters.jsx';
 import ProductSourcesPage from './ProductSourcesPage.jsx';
+import {
+  Countdown,
+  DialogErrorContext,
+  Empty,
+  KV,
+  Metric,
+  Modal,
+  Page,
+  Panel,
+  ProductImage,
+  Section,
+  SlipSkeletons,
+  Status,
+  dateTime,
+  money,
+  plural,
+  toTime,
+  useConfirm,
+} from './ui.jsx';
+import {
+  BidSetupModal,
+  BidSheet,
+  BrandMark,
+  BuyerRequestSlip,
+  CompareOffersModal,
+  MyBidSlip,
+  RequestSlip,
+  Standing,
+  formatDelivery,
+  isLive,
+  standingFor,
+} from './bidding.jsx';
 
 const sessionKey = 'turacoz_bid_tool_web_session';
 
@@ -86,61 +121,27 @@ const adminNav = [
 ];
 
 const buyerNav = [
-  ['Home', Home],
-  ['Bid Page', Bolt],
-  ['Orders / History', ClipboardList],
+  ['Browse products', Search],
+  ['My requests', Bolt],
+  ['Orders', ClipboardList],
   ['Cart', ShoppingCart],
-  ['Notifications', Bell],
-  ['Profile', User],
-  ['Reports / Support', FileText],
+  ['Alerts', Bell],
+  ['Account', User],
+  ['Help & reports', LifeBuoy],
 ];
 
 const dealerNav = [
-  ['Dealer Dashboard', Home],
-  ['Incoming Bid Requests', Inbox],
-  ['Active Bids', Pencil],
-  ['Bid History / Orders', ClipboardList],
-  ['Business Profile', Store],
-  ['Notifications', Bell],
-  ['Reports / Support', FileText],
+  ['Home', Home],
+  ['Open requests', Inbox],
+  ['My bids', Gavel],
+  ['Past bids', ClipboardList],
+  ['My shop', Store],
+  ['Alerts', Bell],
+  ['Help & reports', LifeBuoy],
 ];
-
-const statusOptions = ['active', 'held', 'suspended', 'banned', 'flagged'];
-const reportStatuses = ['open', 'in_review', 'resolved', 'cancelled'];
-
-function money(value) {
-  const amount = Number(value || 0);
-  return `Rs. ${amount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-}
-
-function dateTime(value) {
-  if (!value) return '';
-  const parsed = new Date(value);
-  return Number.isNaN(parsed.getTime()) ? String(value) : parsed.toLocaleString();
-}
 
 function list(value) {
   return Array.isArray(value) ? value : [];
-}
-
-function HubIcon({ size = 46 }) {
-  const nodes = [
-    [12, 3.5],
-    [20, 7.7],
-    [20, 16.3],
-    [12, 20.5],
-    [4, 16.3],
-    [4, 7.7],
-  ];
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true">
-      <g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.9">
-        {nodes.map(([x, y]) => <path key={`${x}-${y}`} d={`M12 12 L${x} ${y}`} />)}
-        <circle cx="12" cy="12" r="2.1" />
-        {nodes.map(([x, y]) => <circle key={`c-${x}-${y}`} cx={x} cy={y} r="2.05" />)}
-      </g>
-    </svg>
-  );
 }
 
 function metricEntries(dashboard) {
@@ -168,7 +169,7 @@ function metricEntries(dashboard) {
     .map(([key, value]) => ({
       key,
       label: labels[key] || key.replaceAll('_', ' ').replace(/\b\w/g, (c) => c.toUpperCase()),
-      value: key.includes('revenue') || key.includes('amount') ? money(value) : String(value),
+      value: key.includes('revenue') || key.includes('amount') || key.includes('commission') ? money(value) : String(value),
     }));
 }
 
@@ -208,10 +209,6 @@ function firstText(row, keys, fallback = '') {
   return fallback;
 }
 
-function distinct(rows, keys) {
-  return [...new Set(rows.map((row) => firstText(row, keys)).filter(Boolean))].sort();
-}
-
 function titleCase(value) {
   return text(value)
     .replaceAll('_', ' ')
@@ -244,6 +241,8 @@ function App() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [dismissSubscriptionBanner, setDismissSubscriptionBanner] = useState(false);
   const [toast, setToast] = useState('');
+  const [live, setLive] = useState('connecting');
+  const confirm = useConfirm();
   const [data, setData] = useState({
     dashboard: {},
     products: [],
@@ -306,7 +305,7 @@ function App() {
           if (bucket === 'payments') next.payments = await api.payments(token);
           if (bucket === 'logs') next.logs = await api.logs(token);
           if (bucket === 'reports') next.reports = await api.reports(token);
-          if (bucket === 'categories') next.categories = await api.categories(token);
+          if (bucket === 'categories') next.categories = activeUser.role === 'admin' ? await api.adminCategories(token) : await api.categories(token);
           if (bucket === 'settings') next.settings = await api.settings(token);
           if (bucket === 'cart') next.cart = await api.cart(token);
           if (bucket === 'buyerRequests') next.buyerRequests = await api.buyerRequests(token);
@@ -329,14 +328,14 @@ function App() {
         return versions[bucket] === bucketVersionsRef.current[bucket];
       }));
       setData((old) => ({ ...old, ...current }));
-      if (failures.length) throw failures.find((err) => String(err.message).includes('401')) || failures[0];
+      if (failures.length) throw failures.find((err) => err.status === 401) || failures[0];
       return true;
     } catch (err) {
       if (sessionTokenRef.current !== activeUser.access_token) return false;
-      if (String(err.message).includes('401')) {
+      if (err.status === 401) {
         sessionStorage.removeItem(sessionKey);
         setUser(null);
-        setError('Session expired. Please log in again.');
+        setError('Your session has ended. Sign in again to continue.');
       } else {
         setError(`Could not load live data: ${friendlyErrorMessage(err)}`);
       }
@@ -362,8 +361,8 @@ function App() {
     if (activeUser.role === 'dealer') {
       return [
         ['dashboard', 'bids', 'dealerRequests', 'profile', 'notifications', 'settings'],
-        ['dealerRequests', 'bids'],
-        ['bids', 'dealerRequests'],
+        ['dealerRequests', 'bids', 'profile', 'settings'],
+        ['bids', 'dealerRequests', 'profile', 'settings'],
         ['bids'],
         ['profile', 'categories', 'settings'],
         ['notifications'],
@@ -371,10 +370,10 @@ function App() {
       ][activeTab] || [];
     }
     return [
-      ['products', 'buyerLocations', 'notifications', 'settings'],
-      ['products', 'bids', 'buyerRequests', 'buyerLocations', 'settings'],
-      ['products', 'bids', 'buyerRequests'],
-      ['cart', 'products', 'buyerLocations', 'settings'],
+      ['buyerLocations', 'notifications', 'settings'],
+      ['bids', 'buyerRequests', 'buyerLocations', 'settings'],
+      ['bids', 'buyerRequests'],
+      ['cart', 'buyerLocations', 'settings'],
       ['notifications'],
       ['profile', 'buyerLocations', 'reports'],
       ['reports'],
@@ -449,6 +448,7 @@ function App() {
       const socket = new WebSocket(`${wsBase}/ws/${user.id}?token=${encodeURIComponent(user.access_token)}`);
       wsRef.current = socket;
       socket.onopen = () => {
+        setLive('live');
         if (reconnectAttempts) {
           queueRefresh([...bidBuckets(), 'profile', 'reports']);
           window.dispatchEvent(new Event('bid-chat-reconnected'));
@@ -506,6 +506,7 @@ function App() {
         window.clearInterval(heartbeat);
         if (wsRef.current === socket) wsRef.current = null;
         if (closedByEffect) return;
+        setLive('reconnecting');
         if (event.code === 4401 || event.code === 4403) {
           sessionStorage.removeItem(sessionKey);
           setUser(null);
@@ -588,8 +589,12 @@ function App() {
       setUser(loggedIn);
       setTab(0);
       setDismissSubscriptionBanner(false);
-    } catch {
-      setError('Login failed or backend is unavailable. Start FastAPI and MariaDB, then retry.');
+    } catch (err) {
+      if (err.status === 429) setError('Too many sign-in attempts. Wait a few minutes, then try again.');
+      else if (err.status === 401) setError('That username or password is not right. Check both and try again.');
+      else if (err.status === 403) setError('This account is blocked. Contact support to get access back.');
+      else if (err.status) setError(friendlyErrorMessage(err));
+      else setError('Could not reach the server. Check your connection and try again.');
     } finally {
       setLoading(false);
     }
@@ -643,6 +648,11 @@ function App() {
       }
       return true;
     } catch (err) {
+      if (err.status === 401) {
+        logout();
+        setError('Your session has ended. Sign in again to continue.');
+        return false;
+      }
       setError(friendlyErrorMessage(err));
       return false;
     } finally {
@@ -688,109 +698,137 @@ function App() {
         setDetails,
         refresh: () => loadPageData(user, tab),
         run,
+        confirm,
         onExport: handleExport,
         onDeleteAccount: () => run((token) => api.deleteOwnAccount(token)).then((ok) => ok && logout()),
       })
     : registering
-      ? <RegisterPage loading={loading} error={error} onRegister={handleRegister} onCancel={() => setRegistering(false)} />
-      : <LoginPage loading={loading} error={error} onLogin={handleLogin} onRegister={() => setRegistering(true)} />;
+      ? <RegisterPage loading={loading} error={error} onRegister={handleRegister} onCancel={() => { setError(''); setRegistering(false); }} />
+      : <LoginPage loading={loading} error={error} onLogin={handleLogin} onRegister={() => { setError(''); setRegistering(true); }} />;
 
   if (!user) return page;
 
-  const isBuyer = user.role === 'buyer';
+  const alertsIndex = user.role === 'buyer' ? 4 : user.role === 'dealer' ? 5 : -1;
+  const roleLabel = user.role === 'dealer' ? 'Shop account' : user.role === 'buyer' ? 'Buyer account' : 'Administrator';
+  const liveLabel = live === 'live' ? 'Live' : live === 'reconnecting' ? 'Reconnecting' : 'Connecting';
 
   return (
-    <div className={`app-shell ${isBuyer ? 'buyer-shell' : ''}`}>
-      <aside className={`side-nav ${isBuyer ? 'buyer-drawer' : ''} ${drawerOpen ? 'open' : ''}`}>
-        <div className="brand-block">
-          <div className="brand-icon"><Bolt size={22} /></div>
-          <div>
-            <strong>Turacoz</strong>
-            <span>Bidding Tool</span>
+    <DialogErrorContext.Provider value={{ error, clearError: () => setError('') }}>
+      <div className="app-shell">
+        <aside className={`side-nav ${drawerOpen ? 'open' : ''}`} aria-label="Sidebar">
+          <div className="brand-block">
+            <BrandMark />
+            <div>
+              <strong>Turacoz</strong>
+              <span>Bid Tool</span>
+            </div>
+            <button type="button" className="icon-button mobile-only" aria-label="Close menu" onClick={() => setDrawerOpen(false)}><X size={18} aria-hidden="true" /></button>
           </div>
-          <button className="icon-button mobile-only" onClick={() => setDrawerOpen(false)}><X size={18} /></button>
-        </div>
-        <nav>
-          {nav.map(([label, Icon], index) => (
-            <button
-              key={label}
-              className={`nav-item ${tab === index ? 'active' : ''}`}
-              onClick={() => {
-                setTab(index);
-                setDrawerOpen(false);
+          <nav aria-label="Primary">
+            {nav.map(([label, Icon], index) => (
+              <button
+                type="button"
+                key={label}
+                aria-current={tab === index ? 'page' : undefined}
+                className={`nav-item ${tab === index ? 'active' : ''}`}
+                onClick={() => {
+                  setTab(index);
+                  setDrawerOpen(false);
+                }}
+              >
+                <Icon size={18} aria-hidden="true" />
+                <span>{label}</span>
+                {index === alertsIndex && unread > 0 ? <b aria-label={`${unread} unread`}>{unread}</b> : null}
+              </button>
+            ))}
+          </nav>
+          <div className="rail-foot">
+            <div className="rail-user">
+              <strong>{user.name}</strong>
+              <span>{roleLabel}</span>
+            </div>
+            <button type="button" className="small" onClick={logout}><LogOut size={15} aria-hidden="true" /> Sign out</button>
+          </div>
+        </aside>
+        <div className="main-area">
+          <header className="top-bar">
+            <button type="button" className="icon-button mobile-only" onClick={() => setDrawerOpen(true)} aria-label="Menu" title="Menu"><Menu size={20} aria-hidden="true" /></button>
+            <span className="top-brand"><BrandMark />Bid Tool</span>
+            <div className="top-actions">
+              <span className={`live-pill ${live}`} aria-live="polite" title={live === 'live' ? 'New requests and offers appear here instantly.' : 'Trying to restore live updates.'}>{liveLabel}</span>
+              {alertsIndex >= 0 ? (
+                <button type="button" className="icon-button badge-wrap" onClick={() => setTab(alertsIndex)} aria-label={unread ? `Alerts, ${unread} unread` : 'Alerts'} title="Alerts">
+                  <Bell size={19} aria-hidden="true" />
+                  {unread > 0 ? <span className="badge" aria-hidden="true">{unread}</span> : null}
+                </button>
+              ) : null}
+              <button type="button" className="icon-button" onClick={() => loadPageData(user, tab)} aria-label="Refresh" title="Refresh"><RefreshCw size={19} aria-hidden="true" /></button>
+              <button type="button" className="icon-button mobile-only" onClick={logout} aria-label="Sign out" title="Sign out"><LogOut size={19} aria-hidden="true" /></button>
+            </div>
+          </header>
+          {error ? <div className={`notice page-notice ${error.includes('successful') ? 'success' : ''}`} role="alert">{error}</div> : null}
+          {toast ? <div className="toast-pop" role="status">{toast}</div> : null}
+          {loading ? <div className="loading-strip" aria-hidden="true" /> : null}
+          {user.role === 'dealer' && data.profile && !data.dealerSubscribed && !dismissSubscriptionBanner ? (
+            <SubscriptionBanner
+              onSubscribe={async () => {
+                const ok = await confirm({
+                  title: 'Activate your subscription?',
+                  body: <p>Your shop will receive matching buyer requests right away. The plan costs ₹999 a month.</p>,
+                  confirmLabel: 'Activate subscription',
+                  cancelLabel: 'Not now',
+                });
+                if (ok) run((token) => api.activateDealerSubscription(token), 'Subscription activated. Requests will start arriving.');
               }}
-            >
-              <Icon size={18} />
-              <span>{label}</span>
-              {label === 'Notifications' && unread > 0 ? <b>{unread}</b> : null}
+              onDismiss={() => setDismissSubscriptionBanner(true)}
+            />
+          ) : null}
+          <main>{page}</main>
+        </div>
+        <nav className="bottom-nav" aria-label="Quick navigation">
+          {nav.slice(0, 4).map(([label, Icon], index) => (
+            <button type="button" key={label} className={tab === index ? 'active' : ''} aria-current={tab === index ? 'page' : undefined} onClick={() => setTab(index)}>
+              <Icon size={20} aria-hidden="true" />
+              <span>{label.length > 14 ? label.replace(' products', '') : label}</span>
             </button>
           ))}
+          <button type="button" className={tab > 3 ? 'active' : ''} onClick={() => setDrawerOpen(true)}>
+            <span className="badge-wrap"><MoreHorizontal size={20} aria-hidden="true" />{unread > 0 && alertsIndex >= 0 ? <span className="badge" aria-hidden="true">{unread}</span> : null}</span>
+            <span>More</span>
+          </button>
         </nav>
-      </aside>
-      <div className="main-area">
-        <header className="top-bar">
-          {isBuyer ? (
-            <button className="icon-button" onClick={() => setDrawerOpen(true)} title="Menu"><Menu size={20} /></button>
-          ) : (
-            <button className="icon-button mobile-only" onClick={() => setDrawerOpen(true)} title="Menu"><Menu size={20} /></button>
-          )}
-          <div>
-            <h1>{isBuyer ? 'Turacoz Bid Tool Marketplace' : nav[tab]?.[0]}</h1>
-            <p>{user.name} | live API</p>
-          </div>
-          <div className="top-actions">
-            {isBuyer ? (
-              <>
-                <button className="icon-button" onClick={() => setTab(3)} title="Cart"><ShoppingCart size={19} /></button>
-                <button className="icon-button badge-wrap" onClick={() => setTab(4)} title="Notifications">
-                  <Bell size={19} />
-                  {unread > 0 ? <span className="badge">{unread}</span> : null}
-                </button>
-                <button className="icon-button" onClick={() => setTab(5)} title="Profile"><User size={19} /></button>
-              </>
-            ) : null}
-            <button className="icon-button" onClick={() => loadPageData(user, tab)} title="Refresh"><RefreshCw size={19} /></button>
-            <button className="icon-button" onClick={logout} title="Logout"><LogOut size={19} /></button>
-          </div>
-        </header>
-        {error ? <div className={`notice ${error.includes('successful') ? 'success' : ''}`}>{error}</div> : null}
-        {toast ? <div className="toast-pop">{toast}</div> : null}
-        {loading ? <div className="loading-strip" /> : null}
-        {user.role === 'dealer' && data.profile && !data.dealerSubscribed && !dismissSubscriptionBanner ? (
-          <SubscriptionBanner
-            onSubscribe={() => run((token) => api.activateDealerSubscription(token), 'Subscription activated.')}
-            onDismiss={() => setDismissSubscriptionBanner(true)}
+        {drawerOpen ? <button type="button" className="scrim" aria-label="Close menu" onClick={() => setDrawerOpen(false)} /> : null}
+        {bidProduct ? (
+          <BidSetupModal
+            product={bidProduct}
+            locations={data.buyerLocations}
+            rules={data.settings?.bid_rules}
+            onClose={() => setBidProduct(null)}
+            onAddLocation={() => { setBidProduct(null); setTab(5); }}
+            onStart={(payload) => run((token) => api.startBid(token, payload), 'Bid started. Nearby shops can now send offers.').then((ok) => { if (ok) { setBidProduct(null); setTab(1); } })}
           />
         ) : null}
-        <main>{page}</main>
+        {dealerOffer ? (
+          <BidSheet
+            request={dealerOffer.request}
+            bid={dealerOffer.bid}
+            allBids={data.bids}
+            subscribed={data.dealerSubscribed}
+            rules={data.settings?.bid_rules}
+            onClose={() => setDealerOffer(null)}
+            onSubmit={(payload) => run((token) => api.submitDealerBid(token, payload), dealerOffer.bid ? 'Bid updated.' : 'Bid submitted.').then((ok) => ok && setDealerOffer(null))}
+          />
+        ) : null}
+        {reportBid ? (
+          <ReportModal
+            bid={reportBid}
+            onClose={() => setReportBid(null)}
+            onSubmit={(payload) => run((token) => api.createReport(token, payload), 'Report sent. Our team will review it.').then((ok) => ok && setReportBid(null))}
+          />
+        ) : null}
+        {details ? <DetailsModal details={details} user={user} refresh={() => loadPageData(user, tab)} run={run} confirm={confirm} onClose={() => setDetails(null)} /> : null}
       </div>
-      {drawerOpen ? <button className="scrim" onClick={() => setDrawerOpen(false)} /> : null}
-      {bidProduct ? (
-        <BidSetupModal
-          product={bidProduct}
-          locations={data.buyerLocations}
-          rules={data.settings?.bid_rules}
-          onClose={() => setBidProduct(null)}
-          onStart={(payload) => run((token) => api.startBid(token, payload), 'Bid request started.').then((ok) => ok && setBidProduct(null))}
-        />
-      ) : null}
-      {dealerOffer ? (
-        <DealerOfferModal
-          request={dealerOffer.request}
-          bid={dealerOffer.bid}
-          onClose={() => setDealerOffer(null)}
-          onSubmit={(payload) => run((token) => api.submitDealerBid(token, payload), 'Bid submitted successfully.').then((ok) => ok && setDealerOffer(null))}
-        />
-      ) : null}
-      {reportBid ? (
-        <ReportModal
-          bid={reportBid}
-          onClose={() => setReportBid(null)}
-          onSubmit={(payload) => run((token) => api.createReport(token, payload), 'Dispute report submitted successfully.').then((ok) => ok && setReportBid(null))}
-        />
-      ) : null}
-      {details ? <DetailsModal details={details} user={user} refresh={() => loadPageData(user, tab)} run={run} onClose={() => setDetails(null)} /> : null}
-    </div>
+    </DialogErrorContext.Provider>
   );
 }
 
@@ -798,7 +836,7 @@ function renderPage(ctx) {
   const { user, tab } = ctx;
   if (user.role === 'admin') {
     return [
-      <DashboardPage title="Admin Dashboard" subtitle="Live control room for platform health, revenue, bids, and alerts." {...ctx} />,
+      <DashboardPage title="Admin Dashboard" subtitle="Platform health, bids, and alerts at a glance." {...ctx} />,
       <AdminUsersPage key="admin-dealers" title="Dealer Management" role="dealer" rows={ctx.data.dealers} {...ctx} />,
       <AdminUsersPage key="admin-buyers" title="Buyer Management" role="buyer" rows={ctx.data.buyers} {...ctx} />,
       <ProductAdminPage {...ctx} />,
@@ -810,9 +848,9 @@ function renderPage(ctx) {
   }
   if (user.role === 'dealer') {
     return [
-      <DashboardPage title="Dealer Dashboard" subtitle="Live overview of requests, bids, wins, subscription, and account status." extra={<DealerRequestsPanel {...ctx} />} {...ctx} />,
-      <IncomingRequestsPage {...ctx} />,
-      <DealerActiveBidsPage {...ctx} />,
+      <DealerHomePage {...ctx} />,
+      <DealerRequestsPage {...ctx} />,
+      <DealerBidsPage {...ctx} />,
       <DealerHistoryPage {...ctx} />,
       <BusinessProfilePage {...ctx} />,
       <NotificationsPage {...ctx} />,
@@ -821,7 +859,7 @@ function renderPage(ctx) {
   }
   return [
     <BuyerHomePage {...ctx} />,
-    <BuyerBidPage {...ctx} />,
+    <BuyerRequestsPage {...ctx} />,
     <OrdersHistoryPage {...ctx} />,
     <CartPage {...ctx} />,
     <NotificationsPage {...ctx} />,
@@ -836,14 +874,14 @@ function LoginPage({ loading, error, onLogin, onRegister }) {
   return (
     <AuthLayout>
       <form className="auth-card" onSubmit={(event) => { event.preventDefault(); onLogin(username, password); }}>
-        <div className="auth-icon"><HubIcon size={46} /></div>
-        <h1>Turacoz BiddingTool Login</h1>
-        <p>Find your own products.</p>
-        {error ? <div className={`notice ${error.includes('successful') ? 'success' : ''}`}>{error}</div> : null}
-        <label className="field-with-icon"><User size={21} /><input aria-label="Username" placeholder="Username" value={username} onChange={(event) => setUsername(event.target.value)} autoFocus /></label>
-        <label className="field-with-icon"><Shield size={21} /><input aria-label="Password" placeholder="Password" value={password} type="password" onChange={(event) => setPassword(event.target.value)} /></label>
-        <button className="primary sign-in" disabled={loading}><LogOut size={16} />{loading ? 'Signing in...' : 'Sign in'}</button>
-        <button className="link-button" type="button" onClick={onRegister}>Need an account? Register here</button>
+        <BrandMark />
+        <h1>Sign in</h1>
+        <p>Welcome back. Pick up where you left off.</p>
+        {error ? <div className={`notice ${error.includes('successful') ? 'success' : ''}`} role="alert">{error}</div> : null}
+        <label>Username<input aria-label="Username" value={username} onChange={(event) => setUsername(event.target.value)} autoComplete="username" autoCapitalize="none" spellCheck={false} autoFocus /></label>
+        <label>Password<input aria-label="Password" value={password} type="password" onChange={(event) => setPassword(event.target.value)} autoComplete="current-password" /></label>
+        <button type="submit" className="primary sign-in" disabled={loading}>{loading ? 'Signing in...' : 'Sign in'}</button>
+        <p className="auth-switch">New here? <button className="link-button" type="button" onClick={onRegister}>Create an account</button></p>
       </form>
     </AuthLayout>
   );
@@ -851,20 +889,35 @@ function LoginPage({ loading, error, onLogin, onRegister }) {
 
 function RegisterPage({ loading, error, onRegister, onCancel }) {
   const [form, setForm] = useState({ name: '', username: '', password: '', role: 'buyer' });
+  const [localError, setLocalError] = useState('');
   const update = (key, value) => setForm((old) => ({ ...old, [key]: value }));
+  const submit = (event) => {
+    event.preventDefault();
+    if (form.password.length < 8) {
+      setLocalError('Use a password with at least 8 characters.');
+      return;
+    }
+    setLocalError('');
+    onRegister(form);
+  };
+  const shown = localError || error;
   return (
     <AuthLayout>
-      <form className="auth-card" onSubmit={(event) => { event.preventDefault(); onRegister(form); }}>
-        <div className="auth-icon"><User size={28} /></div>
-        <h1>Create Account</h1>
-        <p>Register as a buyer or dealer. Admin accounts are managed from the backend seed process.</p>
-        {error ? <div className="notice">{error}</div> : null}
-        <label>Full name<input value={form.name} onChange={(event) => update('name', event.target.value)} /></label>
-        <label>Username / Email<input value={form.username} onChange={(event) => update('username', event.target.value)} /></label>
-        <label>Password<input type="password" value={form.password} onChange={(event) => update('password', event.target.value)} /></label>
-        <label>Role<select value={form.role} onChange={(event) => update('role', event.target.value)}><option value="buyer">Buyer</option><option value="dealer">Dealer</option></select></label>
-        <button className="primary" disabled={loading}>{loading ? 'Creating...' : 'Register'}</button>
-        <button className="link-button" type="button" onClick={onCancel}>Back to login</button>
+      <form className="auth-card" onSubmit={submit}>
+        <BrandMark />
+        <h1>Create your account</h1>
+        <p>Buyers ask for prices. Shops send bids. Pick the one that fits you.</p>
+        {shown ? <div className="notice" role="alert">{shown}</div> : null}
+        <fieldset className="role-choice">
+          <legend>I want to</legend>
+          <label className="role-option"><input type="radio" name="role" value="buyer" checked={form.role === 'buyer'} onChange={() => update('role', 'buyer')} /><strong>Buy products</strong><span>Compare offers from nearby shops</span></label>
+          <label className="role-option"><input type="radio" name="role" value="dealer" checked={form.role === 'dealer'} onChange={() => update('role', 'dealer')} /><strong>Sell as a shop</strong><span>Bid on requests near you</span></label>
+        </fieldset>
+        <label>Full name<input value={form.name} onChange={(event) => update('name', event.target.value)} autoComplete="name" required /></label>
+        <label>Username or email<input value={form.username} onChange={(event) => update('username', event.target.value)} autoComplete="username" autoCapitalize="none" spellCheck={false} required /></label>
+        <label>Password<input type="password" value={form.password} onChange={(event) => update('password', event.target.value)} autoComplete="new-password" minLength={8} required /><span className="hint">At least 8 characters.</span></label>
+        <button type="submit" className="primary sign-in" disabled={loading}>{loading ? 'Creating account...' : 'Create account'}</button>
+        <p className="auth-switch">Already have an account? <button className="link-button" type="button" onClick={onCancel}>Sign in</button></p>
       </form>
     </AuthLayout>
   );
@@ -873,14 +926,373 @@ function RegisterPage({ loading, error, onRegister, onCancel }) {
 function AuthLayout({ children }) {
   return (
     <div className="auth-page">
-      <div className="auth-art">
-        <div>
-          <span>Live dealer bidding</span>
-          <h2>One backend. Web portal. Flutter mobile app.</h2>
+      <BrandArt />
+      <main className="auth-main">{children}</main>
+    </div>
+  );
+}
+
+function shopSetupSteps(profile, subscribed) {
+  const p = profile || {};
+  const hasCoverage = p.delivery_method === 'radius'
+    ? Number(p.service_radius_km) > 0 && Boolean(p.latitude) && Boolean(p.longitude)
+    : [p.service_states, p.service_cities, p.service_districts].some((rows) => list(rows).length > 0);
+  return [
+    { key: 'subscription', done: Boolean(subscribed), title: 'Activate your subscription', hint: 'Needed to receive buyer requests and place bids.', action: 'subscribe' },
+    { key: 'business', done: Boolean(text(p.business_name) && text(p.address)), title: 'Add your shop details', hint: 'Shop name and address are shown to a buyer after they choose you.', action: 'shop' },
+    { key: 'area', done: hasCoverage, title: 'Set the area you serve', hint: 'Pin your shop on the map and choose how far you deliver.', action: 'shop' },
+    { key: 'products', done: list(p.category_ids).length > 0, title: 'Choose the products you sell', hint: 'You only receive requests for the categories you pick.', action: 'shop' },
+  ];
+}
+
+function DealerHomePage({ user, data, loading, setTab, setDealerOffer, run, confirm }) {
+  const profile = data.profile;
+  const subscribed = data.dealerSubscribed;
+  const steps = shopSetupSteps(profile, subscribed);
+  const pending = steps.filter((step) => !step.done);
+  const metrics = data.dashboard?.metrics || {};
+  const requests = [...list(data.dealerRequests)].sort((a, b) => toTime(a.expires_at) - toTime(b.expires_at));
+  const myLive = list(data.bids).filter((bid) => bid.is_mine && isLive(bid));
+  const leading = myLive.filter((bid) => standingFor(bid, data.bids).kind !== 'trail').length;
+  const won = Number(metrics.won_bids || 0);
+  const lost = Number(metrics.lost_bids || 0);
+  const decided = won + lost;
+  const subscribe = async () => {
+    const ok = await confirm({
+      title: 'Activate your subscription?',
+      body: <p>Your shop will receive matching buyer requests right away. The plan costs ₹999 a month.</p>,
+      confirmLabel: 'Activate subscription',
+      cancelLabel: 'Not now',
+    });
+    if (ok) run((token) => api.activateDealerSubscription(token), 'Subscription activated. Requests will start arriving.');
+  };
+  return (
+    <Page>
+      <Section title="Today at your shop" subtitle="New buyer requests, your live bids and how you are doing." />
+
+      {profile && pending.length ? (
+        <Panel title={`Finish setting up your shop (${steps.length - pending.length} of ${steps.length} done)`}>
+          <ol className="checklist">
+            {steps.map((step) => (
+              <li key={step.key} className={step.done ? 'done' : ''}>
+                <span className="check-mark" aria-hidden="true">{step.done ? <Check size={14} /> : null}</span>
+                <div>
+                  <strong>{step.title}</strong>
+                  <span>{step.hint}</span>
+                </div>
+                {step.done ? <span className="muted-small">Done</span> : (
+                  <button type="button" className="small primary" onClick={() => (step.action === 'subscribe' ? subscribe() : setTab(4))}>{step.action === 'subscribe' ? 'Subscribe' : 'Set up'}</button>
+                )}
+              </li>
+            ))}
+          </ol>
+        </Panel>
+      ) : null}
+
+      <dl className="stat-row">
+        <Metric label="Open requests" value={requests.length} />
+        <Metric label="Live bids" value={myLive.length} hint={myLive.length ? `Lowest on ${leading} of ${myLive.length}` : undefined} />
+        <Metric label="Bids won" value={won} tone={won ? 'good' : ''} />
+        <Metric label="Win rate" value={decided ? `${Math.round((won / decided) * 100)}%` : '—'} hint={decided ? `${won} won, ${lost} lost` : 'After your first result'} />
+        <Metric label="Total won" value={money(metrics.revenue)} />
+      </dl>
+
+      <section aria-labelledby="closing-soon">
+        <div className="panel-head">
+          <h2 id="closing-soon" className="block-title">Closing soonest</h2>
+          {requests.length > 3 ? <button type="button" className="link-button" onClick={() => setTab(1)}>See all {requests.length} requests</button> : null}
+        </div>
+        {loading && !requests.length ? <SlipSkeletons count={1} /> : requests.length ? (
+          <div className="slip-grid">
+            {requests.slice(0, 3).map((request) => (
+              <RequestSlip key={request.id} request={request} blocked={subscribed ? '' : 'Activate your subscription to bid.'} onBid={(row) => setDealerOffer({ request: row })} />
+            ))}
+          </div>
+        ) : (
+          <Empty
+            title="No open requests right now"
+            hint={subscribed ? 'New requests show up here the moment a nearby buyer posts one. Keep this page open, or check the alerts.' : 'Activate your subscription to start receiving requests from buyers near you.'}
+            action={subscribed ? <button type="button" onClick={() => setTab(4)}>Review what my shop sells</button> : <button type="button" className="primary" onClick={subscribe}>Activate subscription</button>}
+          />
+        )}
+      </section>
+
+      {myLive.length ? (
+        <Panel title="Your live bids" actions={<button type="button" className="small" onClick={() => setTab(2)}>Manage bids</button>}>
+          <AdminList rows={myLive}>
+            {(bid) => (
+              <AdminListItem
+                title={`${bid.product}, ${money(bid.amount)}`}
+                subtitle={<Standing standing={standingFor(bid, data.bids)} />}
+                trailing={<Countdown until={bid.ends_at} />}
+                onClick={() => setTab(2)}
+              />
+            )}
+          </AdminList>
+        </Panel>
+      ) : null}
+    </Page>
+  );
+}
+
+function DealerRequestsPage({ data, loading, setDealerOffer, setTab, run, confirm }) {
+  const [sort, setSort] = useState('soonest');
+  const subscribed = data.dealerSubscribed;
+  const rows = [...list(data.dealerRequests)].sort((a, b) => {
+    if (sort === 'offers') return Number(b.offers_count || 0) - Number(a.offers_count || 0);
+    if (sort === 'nearest') return (a.distance_km ?? 1e9) - (b.distance_km ?? 1e9);
+    return toTime(a.expires_at) - toTime(b.expires_at);
+  });
+  const subscribe = async () => {
+    const ok = await confirm({
+      title: 'Activate your subscription?',
+      body: <p>Your shop will receive matching buyer requests right away. The plan costs ₹999 a month.</p>,
+      confirmLabel: 'Activate subscription',
+      cancelLabel: 'Not now',
+    });
+    if (ok) run((token) => api.activateDealerSubscription(token), 'Subscription activated. Requests will start arriving.');
+  };
+  return (
+    <Page>
+      <Section
+        title="Open requests"
+        subtitle="Buyers near you who want a price. Send your best final price before the timer ends."
+        actions={rows.length > 1 ? (
+          <label className="inline-field">
+            <span>Sort by</span>
+            <select value={sort} onChange={(event) => setSort(event.target.value)}>
+              <option value="soonest">Closing soonest</option>
+              <option value="offers">Most bids</option>
+              <option value="nearest">Nearest</option>
+            </select>
+          </label>
+        ) : null}
+      />
+      {data.profile && !subscribed ? (
+        <div className="page-banner warn">
+          <div>
+            <strong>Your subscription is not active.</strong>
+            <p>Activate it to receive requests and place bids. Bidding stays locked until then.</p>
+          </div>
+          <button type="button" className="primary" onClick={subscribe}>Activate subscription</button>
+        </div>
+      ) : null}
+      {loading && !rows.length ? <SlipSkeletons /> : rows.length ? (
+        <div className="slip-grid">
+          {rows.map((request) => (
+            <RequestSlip key={request.id} request={request} blocked={subscribed ? '' : 'Activate your subscription to bid.'} onBid={(row) => setDealerOffer({ request: row })} />
+          ))}
+        </div>
+      ) : (
+        <Empty
+          title="No open requests right now"
+          hint="You are shown requests for products you sell, from buyers inside your service area. If nothing arrives for a while, check that your shop lists the right products and area."
+          action={<button type="button" onClick={() => setTab(4)}>Check my shop settings</button>}
+        />
+      )}
+    </Page>
+  );
+}
+
+function DealerBidsPage({ user, data, loading, setDealerOffer, setReportBid, setTab, run, confirm }) {
+  const [details, setDetails] = useState(null);
+  const mine = list(data.bids).filter((bid) => bid.is_mine);
+  const live = mine.filter(isLive).sort((a, b) => toTime(a.ends_at) - toTime(b.ends_at));
+  const won = mine.filter((bid) => bid.status === 'won');
+  const withdraw = async (bid) => {
+    const ok = await confirm({
+      title: 'Withdraw this bid?',
+      body: (
+        <>
+          <p>The buyer will no longer see your {money(bid.amount)} offer for {bid.product}. You can bid again while the request is still open.</p>
+          <p className="muted-small">Withdrawing more than 3 times can flag your shop and hide you from new requests.</p>
+        </>
+      ),
+      confirmLabel: 'Withdraw bid',
+      cancelLabel: 'Keep my bid',
+      tone: 'danger',
+    });
+    if (ok) run((token) => api.withdrawBid(token, bid.id), 'Bid withdrawn.');
+  };
+  const trailing = live.filter((bid) => standingFor(bid, data.bids).kind === 'trail').length;
+  return (
+    <Page>
+      <Section
+        title="My bids"
+        subtitle={live.length ? `${plural(live.length, 'live bid')}${trailing ? `, ${trailing} not the lowest` : ', all at the lowest price or unopposed'}. Revise any time before the timer ends.` : 'Bids you have placed that are still open.'}
+      />
+      {loading && !mine.length ? <SlipSkeletons count={1} /> : live.length ? (
+        <div className="slip-grid">
+          {live.map((bid) => (
+            <MyBidSlip
+              key={bid.id}
+              bid={bid}
+              standing={standingFor(bid, data.bids)}
+              onRevise={(row) => setDealerOffer({ request: { id: row.bid_request_id, product: row.product, quantity: row.quantity, expires_at: row.ends_at, buyer_area: [row.buyer_area, row.buyer_city].filter(Boolean).join(', ') }, bid: row })}
+              onWithdraw={withdraw}
+              onDetails={(row) => setDetails({ bid: row, mine: true })}
+            />
+          ))}
+        </div>
+      ) : (
+        <Empty
+          title="You have no live bids"
+          hint="Open requests are waiting for a price. Your bids appear here with a live view of where you stand."
+          action={<button type="button" className="primary" onClick={() => setTab(1)}>See open requests</button>}
+        />
+      )}
+      {won.length ? (
+        <Panel title="Won, buyer details unlocked">
+          <AdminList rows={won}>
+            {(bid) => (
+              <AdminListItem
+                title={`${bid.product}, ${money(bid.amount)}`}
+                subtitle={`${bid.buyer || 'Buyer'}${bid.buyer_phone ? `, ${bid.buyer_phone}` : ''}`}
+                onClick={() => setDetails({ bid, mine: true })}
+                trailing={<button type="button" onClick={(event) => { event.stopPropagation(); setDetails({ bid, mine: true }); }}>Buyer details</button>}
+              />
+            )}
+          </AdminList>
+        </Panel>
+      ) : null}
+      {details ? <DealerBidDetailModal user={user} data={data} onReport={setReportBid} bid={data.bids.find((bid) => bid.id === details.bid.id) || details.bid} mine={details.mine} onClose={() => setDetails(null)} /> : null}
+    </Page>
+  );
+}
+
+function BuyerRequestsPage({ user, data, loading, setReportBid, setTab, run, confirm }) {
+  const [openId, setOpenId] = useState(null);
+  const requests = list(data.buyerRequests);
+  const active = requests.filter((request) => request.status === 'active');
+  const awarded = requests.filter((request) => request.status === 'awarded');
+  const offersFor = (requestId) => list(data.bids).filter((bid) => bid.bid_request_id === requestId && bid.status !== 'withdrawn');
+  const opened = openId ? requests.find((request) => request.id === openId) : null;
+
+  const cancelRequest = async (request) => {
+    const ok = await confirm({
+      title: 'Cancel this request?',
+      body: <p>Shops will stop seeing your request for {request.product}{offersFor(request.id).length ? ', and the offers you have received will be closed' : ''}. This cannot be undone.</p>,
+      confirmLabel: 'Cancel request',
+      cancelLabel: 'Keep request',
+      tone: 'danger',
+    });
+    if (ok) run((token) => api.cancelBuyerRequest(token, request.id), 'Request cancelled.');
+  };
+
+  const acceptOffer = async (offer) => {
+    const units = Number(opened?.quantity || offer.quantity || 1);
+    const ok = await confirm({
+      title: `Accept ${money(offer.amount)} from ${offer.dealer || 'this shop'}?`,
+      body: (
+        <>
+          <ul className="confirm-list">
+            <li>{plural(units, 'unit')} of {opened?.product || offer.product}</li>
+            <li>Delivery: {formatDelivery(offer.delivery_time)}</li>
+            <li>Warranty: {text(offer.warranty_text) || 'None'}</li>
+            <li>Installation: {Number(offer.installation_included) ? 'Included' : 'Not included'}</li>
+          </ul>
+          <p>Bidding closes straight away and the other offers are declined. The shop gets your contact details, and you get theirs. You cannot undo this.</p>
+        </>
+      ),
+      confirmLabel: 'Accept offer',
+      cancelLabel: 'Keep comparing',
+    });
+    if (ok) await run((token) => api.acceptBid(token, offer.id, offer.terms_token), 'Offer accepted. The shop contact details are now unlocked.');
+  };
+
+  const winnerContact = (request) => {
+    const winner = offersFor(request.id).find((bid) => bid.status === 'won');
+    if (!winner) return null;
+    return (
+      <div className="contact-block">
+        <strong>You accepted {winner.dealer}. Contact them to arrange delivery.</strong>
+        {winner.owner_name ? <span><User size={14} aria-hidden="true" /> {winner.owner_name}</span> : null}
+        {winner.dealer_phone ? <span><PhoneIcon /> {winner.dealer_phone}</span> : null}
+        {winner.dealer_email ? <span><MailIcon /> {winner.dealer_email}</span> : null}
+        {winner.business_address ? <span><MapPin size={14} aria-hidden="true" /> {winner.business_address}</span> : null}
+        <div className="row-actions"><button type="button" className="small danger" onClick={() => setReportBid(winner)}>Report a problem with this shop</button></div>
+      </div>
+    );
+  };
+
+  return (
+    <Page>
+      <Section
+        title="My requests"
+        subtitle={active.length ? `${plural(active.length, 'request')} open. Offers appear here the moment shops send them.` : 'Products you have asked shops to price.'}
+        actions={<button type="button" className="primary" onClick={() => setTab(0)}><Plus size={16} aria-hidden="true" /> New request</button>}
+      />
+      {loading && !requests.length ? <SlipSkeletons count={1} /> : active.length ? (
+        <div className="slip-grid">
+          {active.map((request) => (
+            <BuyerRequestSlip key={request.id} request={request} offers={offersFor(request.id)} onCompare={(row) => setOpenId(row.id)} onCancel={cancelRequest} />
+          ))}
+        </div>
+      ) : (
+        <Empty
+          title="You have no open requests"
+          hint="Pick a product and start a bid. Nearby shops will send their best price within your deadline."
+          action={<button type="button" className="primary" onClick={() => setTab(0)}>Browse products</button>}
+        />
+      )}
+      {awarded.length ? (
+        <Panel title="Accepted offers">
+          <AdminList rows={awarded}>
+            {(request) => {
+              const winner = offersFor(request.id).find((bid) => bid.status === 'won');
+              return (
+                <AdminListItem
+                  title={`${request.product}${winner ? `, ${money(winner.amount)}` : ''}`}
+                  subtitle={winner ? `From ${winner.dealer}` : `${plural(Number(request.quantity || 1), 'unit')}`}
+                  onClick={() => setOpenId(request.id)}
+                  trailing={<button type="button" className="small" onClick={(event) => { event.stopPropagation(); setOpenId(request.id); }}>Shop contact details</button>}
+                />
+              );
+            }}
+          </AdminList>
+        </Panel>
+      ) : null}
+      {opened ? (
+        <CompareOffersModal
+          request={opened}
+          offers={offersFor(opened.id)}
+          winnerContact={winnerContact(opened)}
+          onClose={() => setOpenId(null)}
+          onAccept={acceptOffer}
+          onCancel={opened.status === 'active' ? () => cancelRequest(opened) : undefined}
+        />
+      ) : null}
+    </Page>
+  );
+}
+
+function BrandArt() {
+  return (
+    <aside className="auth-art" aria-hidden="true">
+      <BrandMark className="brand-mark art-mark" />
+      <h2>Ask once. Shops compete.</h2>
+      <p>Buyers post what they want. Nearby shops send their best final price before the timer ends. The buyer picks the winner.</p>
+      <div className="slip">
+        <div className="slip-top plain">
+          <div className="slip-title">
+            <small>Example request</small>
+            <h3>55-inch 4K television</h3>
+          </div>
+          <span className="countdown soon"><span className="countdown-dot" />2h 14m left</span>
+        </div>
+        <ul className="slip-meta">
+          <li>1 unit</li>
+          <li>Andheri West, Mumbai</li>
+        </ul>
+        <hr className="slip-tear" />
+        <div className="slip-foot">
+          <div className="slip-price">
+            <small>Lowest of 4 offers</small>
+            <span className="price"><span className="price-hl">₹38,990</span></span>
+          </div>
         </div>
       </div>
-      {children}
-    </div>
+    </aside>
   );
 }
 
@@ -891,13 +1303,11 @@ function DashboardPage({ title, subtitle, data, extra }) {
   return (
     <Page>
       <Section title={title} subtitle={subtitle} icon={Home} />
-      <div className="metric-grid">
-        {metrics.length ? metrics.map((item) => <Metric key={item.key} label={item.label} value={item.value} />) : <Empty title="No dashboard metrics yet" />}
-      </div>
+      {metrics.length ? <dl className="stat-row">{metrics.map((item) => <Metric key={item.key} label={item.label} value={item.value} />)}</dl> : <Empty title="No dashboard metrics yet" />}
       {hasCharts ? (
         <section className="analytics-stack">
           <h2>Platform Analytics Dashboard</h2>
-          {list(charts.revenue_by_month).length ? <BarPanel title="Revenue by Month (Commission Paid)" rows={charts.revenue_by_month} /> : null}
+          {list(charts.revenue_by_month).length ? <BarPanel title="Revenue by month" rows={charts.revenue_by_month} /> : null}
           <div className="grid-two">
             <ComparisonPanel title="Dealers by State" rows={charts.dealers_by_state} />
             <ComparisonPanel title="Dealers by Category" rows={charts.dealers_by_category} />
@@ -950,81 +1360,145 @@ function DashboardPage({ title, subtitle, data, extra }) {
   );
 }
 
-function BuyerHomePage({ data, setBidProduct, run, user }) {
-  const [products,setProducts]=useState([]);
-  const [query,setQuery]=useState('');const [appliedQuery,setAppliedQuery]=useState('');
-  const [filters,setFilters]=useState(emptyCatalogFilters);
-  const [facets,setFacets]=useState({});const [total,setTotal]=useState(0);
-  const [searchMode,setSearchMode]=useState('exact');
-  const [catalogLoading,setCatalogLoading]=useState(false);const [catalogError,setCatalogError]=useState('');
-  const [selected,setSelected]=useState(null);const requestVersion=useRef(0);
-  const [refreshKey,setRefreshKey]=useState(0);
-  const search=()=>setAppliedQuery(query.trim());
-  useEffect(()=>{
-    const next=query.trim();
-    if(next===appliedQuery)return;
-    const timer=setTimeout(()=>setAppliedQuery(next),250);
-    return()=>clearTimeout(timer);
-  },[query,appliedQuery]);
-  useEffect(()=>{
-    const version=++requestVersion.current;setCatalogLoading(true);setCatalogError('');setProducts([]);setTotal(0);setSearchMode('exact');
-    api.catalogSearch(user.access_token,catalogParams(filters,{q:appliedQuery,limit:50,offset:0}))
-      .then(result=>{if(version===requestVersion.current){setProducts(result.items);setFacets(result.facets);setTotal(result.total);setSearchMode(result.search_mode||'exact');}})
-      .catch(error=>{if(version===requestVersion.current)setCatalogError(friendlyErrorMessage(error));})
-      .finally(()=>{if(version===requestVersion.current)setCatalogLoading(false);});
-    return()=>{requestVersion.current++;};
-  },[user.access_token,appliedQuery,filters,refreshKey]);
-  const loadMore=async()=>{
-    const version=requestVersion.current;setCatalogLoading(true);
-    try {const result=await api.catalogSearch(user.access_token,catalogParams(filters,{q:appliedQuery,limit:50,offset:products.length,include_facets:false}));if(version===requestVersion.current)setProducts(old=>[...old,...result.items.filter(row=>!old.some(item=>item.id===row.id))]);}
-    catch(error){setCatalogError(friendlyErrorMessage(error));}
-    finally{if(version===requestVersion.current)setCatalogLoading(false);}
-  };
-  const openProduct=async product=>{setSelected(product);try{setSelected(await api.productDetail(user.access_token,product.id));}catch{setSelected(product);}};
-  return <Page>
-    <div className="toolbar buyer-search"><div className="search-box wide-search"><Search size={17}/><input type="search" value={query} onChange={event=>setQuery(event.target.value)} onKeyDown={event=>{if(event.key==='Enter')search();}} placeholder="Search products, brand, model or specifications..." aria-label="Search products"/></div><button className="primary" disabled={catalogLoading} onClick={search}>Search</button></div>
-    <div className="buyer-catalog-layout"><aside className="filter-panel"><div><strong>Filters</strong><button className="link-button" onClick={()=>setFilters(emptyCatalogFilters())}>Reset</button></div><CatalogFilters facets={facets} filters={filters} onChange={setFilters}/></aside>
-    <section className="catalog-results"><div className="catalog-summary"><strong>{total.toLocaleString()} matching products · {products.length} loaded</strong><label>Sort: <select value={filters.sort} onChange={event=>setFilters({...filters,sort:event.target.value})}>{['Newest','Year','A-Z','Lowest Price','Highest Price'].map(value=><option key={value}>{value}</option>)}</select></label></div>
-    {searchMode==='related'&&<p className="muted search-note">No exact match; showing close product and category matches.</p>}
-    {catalogError&&<div role="alert"><p>{catalogError}</p><button disabled={catalogLoading} onClick={()=>setRefreshKey(value=>value+1)}>Retry loading products</button></div>}{catalogLoading&&<p role="status">Loading products…</p>}
-    <div className="product-grid buyer-grid">{products.map(product=><ProductCard key={product.id} product={product} onSelect={()=>openProduct(product)} onCart={()=>run(token=>api.addCartItem(token,product.id,1),'Added to cart.')} onBid={()=>setBidProduct(product)}/>)}</div>
-    {!catalogLoading&&!catalogError&&!products.length&&<Empty title="No products match these filters."/>}
-    {products.length<total&&<button disabled={catalogLoading} onClick={loadMore}>Load more products</button>}</section></div>
-    {selected&&<ProductDetailsModal product={selected} onClose={()=>setSelected(null)} onCart={()=>run(token=>api.addCartItem(token,selected.id,1),'Added to cart.')} onBid={()=>{setSelected(null);setBidProduct(selected);}}/>}
-  </Page>;
-}
+function BuyerHomePage({ data, setBidProduct, setTab, run, user }) {
+  const [products, setProducts] = useState([]);
+  const [query, setQuery] = useState('');
+  const [appliedQuery, setAppliedQuery] = useState('');
+  const [filters, setFilters] = useState(emptyCatalogFilters);
+  const [facets, setFacets] = useState({});
+  const [total, setTotal] = useState(0);
+  const [searchMode, setSearchMode] = useState('exact');
+  const [catalogLoading, setCatalogLoading] = useState(false);
+  const [catalogError, setCatalogError] = useState('');
+  const [selected, setSelected] = useState(null);
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [howItWorks, setHowItWorks] = useState(() => {
+    try { return localStorage.getItem('bidtool_how_it_works_seen') !== '1'; } catch { return true; }
+  });
+  const requestVersion = useRef(0);
+  const detailVersion = useRef(0);
+  const [refreshKey, setRefreshKey] = useState(0);
+  const activeFilters = ['categories', 'product_types', 'brands', 'years'].reduce((sum, key) => sum + list(filters[key]).length, 0);
+  const search = () => setAppliedQuery(query.trim());
 
-function BuyerBidPage({ user, data, setBidProduct, run, setReportBid }) {
-  const [requestDetails, setRequestDetails] = useState(null);
-  const live = data.bids.filter((bid) => ['active', 'updated'].includes(bid.status) && bid.selectable);
-  const requests = data.buyerRequests.filter((request) => request.status === 'active');
+  useEffect(() => {
+    const next = query.trim();
+    if (next === appliedQuery) return undefined;
+    const timer = setTimeout(() => setAppliedQuery(next), 250);
+    return () => clearTimeout(timer);
+  }, [query, appliedQuery]);
+
+  useEffect(() => {
+    const version = ++requestVersion.current;
+    setCatalogLoading(true);
+    setCatalogError('');
+    api.catalogSearch(user.access_token, catalogParams(filters, { q: appliedQuery, limit: 50, offset: 0 }))
+      .then((result) => {
+        if (version !== requestVersion.current) return;
+        setProducts(result.items);
+        setFacets(result.facets);
+        setTotal(result.total);
+        setSearchMode(result.search_mode || 'exact');
+      })
+      .catch((error) => { if (version === requestVersion.current) setCatalogError(friendlyErrorMessage(error)); })
+      .finally(() => { if (version === requestVersion.current) setCatalogLoading(false); });
+    return () => { requestVersion.current++; };
+  }, [user.access_token, appliedQuery, filters, refreshKey]);
+
+  const loadMore = async () => {
+    const version = requestVersion.current;
+    setCatalogLoading(true);
+    try {
+      const result = await api.catalogSearch(user.access_token, catalogParams(filters, { q: appliedQuery, limit: 50, offset: products.length, include_facets: false }));
+      if (version === requestVersion.current) setProducts((old) => [...old, ...result.items.filter((row) => !old.some((item) => item.id === row.id))]);
+    } catch (error) {
+      setCatalogError(friendlyErrorMessage(error));
+    } finally {
+      if (version === requestVersion.current) setCatalogLoading(false);
+    }
+  };
+
+  const openProduct = async (product) => {
+    const version = ++detailVersion.current;
+    setSelected(product);
+    try {
+      const full = await api.productDetail(user.access_token, product.id);
+      if (version === detailVersion.current) setSelected(full);
+    } catch {
+      // The summary from the list is enough to show.
+    }
+  };
+  const closeProduct = () => { detailVersion.current++; setSelected(null); };
+  const dismissHowItWorks = () => {
+    setHowItWorks(false);
+    try { localStorage.setItem('bidtool_how_it_works_seen', '1'); } catch { /* private mode */ }
+  };
+  const addToCart = (product) => run((token) => api.addCartItem(token, product.id, 1), 'Added to your cart.');
+
   return (
     <Page>
-      <Section title="Active Bids & Live Offers" subtitle="Monitor your active bid requests and choose the winning dealer offer." icon={Bolt} />
-      <Panel title={`My Active Bid Requests (${requests.length})`}>
-        <AdminList rows={requests} empty="You have no active bid requests. Go to Home to request bids.">
-          {(req) => {
-            const offers = Number(req.offers_count || data.bids.filter((bid) => bid.bid_request_id === req.id).length || 0);
-            return (
-              <AdminListItem
-                icon={offers ? <ClockIcon /> : <AlertIcon />}
-                title={`${req.product || req.product_name} (Qty: ${req.quantity || 1})`}
-                subtitle={offers ? `Status: ${req.status} | Received Offers: ${offers} | Ends: ${req.expires_at || req.ends_at || ''}` : `Status: ${req.status} | No dealer offers received yet.`}
-                onClick={() => setRequestDetails(req)}
-                trailing={offers ? <ChevronRight size={16} /> : <button className="danger ghost" onClick={(event) => { event.stopPropagation(); run((token) => api.cancelBuyerRequest(token, req.id), 'Bid request cancelled successfully.'); }}>Change/Cancel</button>}
-              />
-            );
-          }}
-        </AdminList>
-      </Panel>
-      <Panel title={`Live Bid Offers (${live.length})`}>
-        <AdminList rows={live} empty="No active bids or dealer offers currently open.">
-          {(bid) => <AdminListItem icon={<Bolt size={18} />} title={`${bid.product} | ${money(bid.amount)}`} subtitle="Dealer identity is hidden until you accept this bid | Terms: Warranty & Delivery included" trailing={<button className="primary" onClick={() => run((token) => api.acceptBid(token, bid.id), 'Bid accepted.')}>Accept Offer</button>} />}
-        </AdminList>
-      </Panel>
-      {data.products[0] ? <button className="fab" onClick={() => setBidProduct(data.products[0])}><Plus size={18} /> Start Bid</button> : null}
-      <Panel title="Finalized winning offers"><AdminList rows={data.bids.filter((bid) => bid.status === 'won')} empty="No finalized offers yet.">{(bid) => <AdminListItem title={`${bid.product} | ${money(bid.amount)}`} subtitle={`Request ${bid.bid_request_id} | ${bid.dealer}`} trailing={<button onClick={() => setRequestDetails(data.buyerRequests.find((request) => request.id === bid.bid_request_id) || { id: bid.bid_request_id, product: bid.product, status: 'awarded' })}>Contact details</button>} />}</AdminList></Panel>
-      {requestDetails ? <BuyerRequestDetailsModal user={user} data={data} onReport={setReportBid} request={data.buyerRequests.find((row) => row.id === requestDetails.id) || requestDetails} bids={data.bids} onClose={() => setRequestDetails(null)} onAccept={(bid) => run((token) => api.acceptBid(token, bid.id), 'Bid accepted.')} onCancel={() => run((token) => api.cancelBuyerRequest(token, requestDetails.id), 'Request closed.')} /> : null}
+      <Section title="Browse products" subtitle="Choose what you want to buy. Nearby shops compete to give you their best price." />
+      {!data.buyerLocations.length ? (
+        <div className="page-banner warn">
+          <div>
+            <strong>Add a delivery location to start a bid.</strong>
+            <p>Shops are matched by distance, so we need a pin on the map first.</p>
+          </div>
+          <button type="button" className="primary" onClick={() => setTab(5)}>Add location</button>
+        </div>
+      ) : howItWorks ? (
+        <div className="page-banner">
+          <div>
+            <strong>How it works</strong>
+            <p>Start a bid on any product. Nearby shops send their best final price before your deadline. Compare delivery and warranty, then accept the offer you like.</p>
+          </div>
+          <button type="button" onClick={dismissHowItWorks}>Got it</button>
+        </div>
+      ) : null}
+      <div className="toolbar buyer-search">
+        <div className="search-box wide-search">
+          <Search size={17} aria-hidden="true" />
+          <input type="search" value={query} onChange={(event) => setQuery(event.target.value)} onKeyDown={(event) => { if (event.key === 'Enter') search(); }} placeholder="Search by product, brand, model or feature" aria-label="Search products" />
+        </div>
+        <button type="button" className="primary" disabled={catalogLoading} onClick={search}>Search</button>
+        <button type="button" className="filter-toggle" aria-expanded={filtersOpen} onClick={() => setFiltersOpen((open) => !open)}>Filters{activeFilters ? ` (${activeFilters})` : ''}</button>
+      </div>
+      <div className="buyer-catalog-layout">
+        <aside className={`filter-panel ${filtersOpen ? 'open' : ''}`} aria-label="Product filters">
+          <div>
+            <strong>Filters</strong>
+            <button type="button" className="link-button" onClick={() => setFilters(emptyCatalogFilters())}>Reset</button>
+          </div>
+          <CatalogFilters facets={facets} filters={filters} onChange={setFilters} />
+        </aside>
+        <section className="catalog-results" aria-busy={catalogLoading}>
+          <div className="catalog-summary">
+            <strong>{total.toLocaleString('en-IN')} {total === 1 ? 'product' : 'products'}</strong>
+            <label>
+              <span>Sort by</span>
+              <select value={filters.sort} onChange={(event) => setFilters({ ...filters, sort: event.target.value })}>
+                {['Newest', 'Year', 'A-Z', 'Lowest Price', 'Highest Price'].map((value) => <option key={value}>{value}</option>)}
+              </select>
+            </label>
+          </div>
+          {searchMode === 'related' && <p className="muted search-note">Nothing matched exactly, so these are the closest products and categories.</p>}
+          {catalogError ? (
+            <div className="notice" role="alert">
+              <p>{catalogError}</p>
+              <button type="button" disabled={catalogLoading} onClick={() => setRefreshKey((value) => value + 1)}>Retry loading products</button>
+            </div>
+          ) : null}
+          {catalogLoading && !products.length ? <p role="status" className="muted">Loading products…</p> : null}
+          <div className="product-grid buyer-grid">
+            {products.map((product) => (
+              <ProductCard key={product.id} product={product} onSelect={() => openProduct(product)} onCart={() => addToCart(product)} onBid={() => setBidProduct(product)} />
+            ))}
+          </div>
+          {!catalogLoading && !catalogError && !products.length ? <Empty title="No products match" hint="Try fewer filters or a shorter search." action={<button type="button" onClick={() => { setFilters(emptyCatalogFilters()); setQuery(''); }}>Clear search and filters</button>} /> : null}
+          {products.length < total ? <button type="button" disabled={catalogLoading} onClick={loadMore}>{catalogLoading ? 'Loading…' : 'Show more products'}</button> : null}
+        </section>
+      </div>
+      {selected ? <ProductDetailsModal product={selected} onClose={closeProduct} onCart={() => addToCart(selected)} onBid={() => { const product = selected; closeProduct(); setBidProduct(product); }} /> : null}
     </Page>
   );
 }
@@ -1037,20 +1511,28 @@ function OrdersHistoryPage({ user, data, setReportBid, setBidProduct, run }) {
     cancelled: data.bids.filter((bid) => bid.request_status === 'cancelled'),
     all: data.bids.filter((bid) => bid.status !== 'active' && bid.status !== 'updated'),
   };
+  const labels = [['won', 'Accepted'], ['expired', 'Expired'], ['cancelled', 'Cancelled'], ['all', 'Everything']];
   const rebid = (bid) => run(async (token) => {
     const product = data.products.find((item) => item.id === bid.product_id) || await api.productDetail(token, bid.product_id);
     setBidProduct({ ...product, bidQuantity: bid.quantity || 1 });
   });
+  const closedRequests = data.buyerRequests.filter((request) => request.status !== 'active' && (tab === 'all' || request.status === (tab === 'won' ? 'awarded' : tab)));
   return (
     <Page>
-      <Section title="Orders / History" subtitle="Orders, bid history, purchased products, expired bids, cancelled bids, and cart history." icon={ClipboardList} />
-      <Panel title="Order History Activity">
-        <div className="tab-row">{[['won', 'Accepted (Won)'], ['expired', 'Expired'], ['cancelled', 'Cancelled'], ['all', 'All History']].map(([key, label]) => <button key={key} className={tab === key ? 'active' : ''} onClick={() => setTab(key)}>{label}</button>)}</div>
-        <HistoryList user={user} data={data} bids={groups[tab]} onReport={setReportBid} onRebid={rebid} />
-      </Panel>
-      <Panel title="Request History">
-        <AdminList rows={data.buyerRequests.filter((request) => request.status !== 'active' && (tab === 'all' || request.status === (tab === 'won' ? 'awarded' : tab)))} empty="No closed requests in this tab.">
-          {(request) => <AdminListItem icon={<ClipboardList size={18} />} title={`${request.product} (Qty: ${request.quantity})`} subtitle={`Status: ${request.status} | Request: ${request.id}`} trailing={<Status text={request.status} />} />}
+      <Section title="Orders" subtitle="Offers you accepted, and requests that ended without one." />
+      <div className="tab-row" role="group" aria-label="Filter orders">
+        {labels.map(([key, label]) => <button type="button" key={key} className={tab === key ? 'active' : ''} aria-pressed={tab === key} onClick={() => setTab(key)}>{label}</button>)}
+      </div>
+      <HistoryList user={user} data={data} bids={groups[tab]} onReport={setReportBid} onRebid={rebid} />
+      <Panel title="Requests">
+        <AdminList rows={closedRequests} empty="No requests in this view">
+          {(request) => (
+            <AdminListItem
+              title={request.product}
+              subtitle={plural(Number(request.quantity || 1), 'unit')}
+              trailing={<Status text={request.status} />}
+            />
+          )}
         </AdminList>
       </Panel>
     </Page>
@@ -1059,37 +1541,48 @@ function OrdersHistoryPage({ user, data, setReportBid, setBidProduct, run }) {
 
 function CartPage({ data, setBidProduct, setTab, run }) {
   const items = list(data.cart?.items);
+  const startBid = (item) => run(async (token) => {
+    const product = await api.productDetail(token, item.product_id);
+    setBidProduct({ ...product, bidQuantity: item.quantity || 1 });
+  });
   return (
     <Page>
-      <Section title="Cart" subtitle="Products added by the buyer. Adjust quantity, remove items, or start bidding." icon={ShoppingCart} />
-      <button onClick={() => setTab(0)}>Continue Browsing</button>
-      <Panel title={`${items.length} cart items`}>
-        <AdminList rows={items} empty="Cart is empty. Add products from catalog.">
-          {(item) => {
-            const product = data.products.find((candidate) => candidate.id === item.product_id) || data.products.find((candidate) => candidate.name === (item.product || item.name));
-            return (
-              <AdminListItem
-                icon={<ShoppingCart size={18} />}
-                title={item.name || item.product || item.product_name}
-                subtitle={`Quantity ${item.quantity || 1} | ${item.brand || ''} ${item.model || ''}`}
-                trailing={(
-                  <div className="admin-item-actions">
-                    <button className="icon-button" title="Remove item" onClick={() => run((token) => api.removeCartItem(token, item.id), 'Removed from cart.')}><X size={16} /></button>
-                    <button className="icon-button" title="Quantity +" disabled={!product} onClick={() => product && run((token) => api.addCartItem(token, product.id, 1), 'Added to cart.')}><Plus size={16} /></button>
-                    <button onClick={() => run((token) => api.removeCartItem(token, item.id), 'Removed from cart.')}>Remove</button>
-                    <button className="primary" disabled={!product} onClick={() => product && setBidProduct({ ...product, bidQuantity: item.quantity || 1 })}>Start Bid</button>
-                  </div>
-                )}
-              />
-            );
-          }}
+      <Section
+        title="Cart"
+        subtitle="Products you saved to bid on later."
+        actions={<button type="button" onClick={() => setTab(0)}>Keep browsing</button>}
+      />
+      <Panel>
+        <AdminList rows={items} empty="Your cart is empty" hint="Save products here while you decide which to start bids on.">
+          {(item) => (
+            <AdminListItem
+              icon={<ShoppingCart size={18} aria-hidden="true" />}
+              title={item.name || item.product || item.product_name}
+              subtitle={`${item.brand || ''} ${item.model || ''}`.trim() || undefined}
+              trailing={(
+                <div className="admin-item-actions">
+                  <span className="qty-chip">{plural(Number(item.quantity || 1), 'unit')}</span>
+                  <button type="button" className="small" aria-label={`Add one more ${item.name || 'unit'}`} onClick={() => run((token) => api.addCartItem(token, item.product_id, 1), 'Quantity increased.')}><Plus size={14} aria-hidden="true" /></button>
+                  <button type="button" className="small" onClick={() => run((token) => api.removeCartItem(token, item.id), 'Removed from your cart.')}>Remove</button>
+                  <button type="button" className="small primary" onClick={() => startBid(item)}>Start bid</button>
+                </div>
+              )}
+            />
+          )}
         </AdminList>
       </Panel>
     </Page>
   );
 }
 
-function AdminUsersPage({ title, role, rows, run, setDetails }) {
+/** "A, B, C, D, E" becomes "A, B, C and 2 more" so long lists stay readable. */
+function summarizeList(value, shown = 3) {
+  const items = String(value || '').split(',').map((item) => item.trim()).filter(Boolean);
+  if (!items.length) return 'nothing selected yet';
+  return items.length <= shown ? items.join(', ') : `${items.slice(0, shown).join(', ')} and ${items.length - shown} more`;
+}
+
+function AdminUsersPage({ title, role, rows, run, setDetails, confirm }) {
   const [showFilters, setShowFilters] = useState(false);
   const [search, setSearch] = useState('');
   const [filters, setFilters] = useState({ status: '', state: '', city: '', category: '' });
@@ -1113,6 +1606,29 @@ function AdminUsersPage({ title, role, rows, run, setDetails }) {
     return true;
   });
   const hasAnalytics = search || Object.values(filters).some(Boolean);
+  const changeStatus = async (row, name, select) => {
+    const status = select.value;
+    const consequences = {
+      deleted: 'Their access is removed and they are signed out. Their bids, orders and reports stay on record.',
+      banned: 'They are signed out at once and cannot use the marketplace. Open requests and bids are closed.',
+      suspended: 'They are signed out and cannot bid or post requests until you restore them.',
+      held: 'They cannot bid or post requests until you release the hold.',
+    };
+    if (consequences[status]) {
+      const ok = await confirm({
+        title: `${titleCase(status)} ${name}?`,
+        body: <p>{consequences[status]}</p>,
+        confirmLabel: titleCase(status),
+        cancelLabel: 'Cancel',
+        tone: 'danger',
+      });
+      if (!ok) {
+        select.value = row.status || 'active';
+        return;
+      }
+    }
+    run((token) => api.setUserStatus(token, row.id, status), 'Status updated.');
+  };
   async function openDetails(token, id) {
     const details = role === 'dealer' ? await api.dealerDetails(token, id) : await api.buyerDetails(token, id);
     setDetails({ ...details, _kind: role });
@@ -1134,7 +1650,7 @@ function AdminUsersPage({ title, role, rows, run, setDetails }) {
         <button onClick={() => setShowFilters((value) => !value)}><Filter size={16} /> Filters</button>
       </div>
       {showFilters ? (
-        <Panel title="Filter Drawer">
+        <Panel title="Filters">
           <div className="filter-row">
             <select value={filters.status} onChange={(event) => setFilters((old) => ({ ...old, status: event.target.value }))}>
               <option value="">Status</option>
@@ -1157,7 +1673,7 @@ function AdminUsersPage({ title, role, rows, run, setDetails }) {
               ? firstText(row, ['business_name', 'name', 'full_name', 'email'], 'Dealer Profile')
               : firstText(row, ['full_name', 'name', 'email'], 'Buyer Profile');
             const subtitle = role === 'dealer'
-              ? `${row.email || ''} | ${row.city || ''}, ${row.state || ''} | categories: ${row.categories || row.category || ''}`
+              ? `${row.email || ''}, ${[row.city, row.state].filter(Boolean).join(', ')}. Sells: ${summarizeList(row.categories || row.category)}`
               : `${row.email || ''} | Bids: ${row.bid_count || 0} | Purchases: ${row.purchase_count || 0}`;
             return (
               <AdminListItem
@@ -1169,8 +1685,8 @@ function AdminUsersPage({ title, role, rows, run, setDetails }) {
                 trailing={(
                   <div className="admin-item-actions" onClick={(event) => event.stopPropagation()}>
                     <Status text={row.status || 'active'} />
-                    <select value={row.status || 'active'} title="Moderate Status" aria-label={`Status for ${name}`} onChange={(event) => {const status=event.target.value;if(status==='deleted'&&!window.confirm(`Delete ${name}? Account access will be removed and history retained.`)){event.target.value=row.status;return;}run((token) => api.setUserStatus(token, id, status), 'User status updated.');}}>
-                      {['pending', 'verified', 'active', 'held', 'suspended', 'flagged', 'banned', 'deleted'].map((status) => <option key={status} value={status}>{status.toUpperCase()}</option>)}
+                    <select value={row.status || 'active'} title="Change status" aria-label={`Status for ${name}`} onChange={(event) => changeStatus(row, name, event.target)}>
+                      {['pending', 'verified', 'active', 'held', 'suspended', 'flagged', 'banned', 'deleted'].map((status) => <option key={status} value={status}>{titleCase(status)}</option>)}
                     </select>
                     <ChevronRight size={16} />
                   </div>
@@ -1184,7 +1700,7 @@ function AdminUsersPage({ title, role, rows, run, setDetails }) {
   );
 }
 
-function ProductAdminPage({ user, data, run, onExport }) {
+function ProductAdminPage({ user, data, run, confirm, onExport }) {
   const empty = { name: '', category: '', subcategory: '', brand: '', model: '', price_min: '', price_max: '', location: '', status: 'active', specifications: 'Warranty: 1 year' };
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [search, setSearch] = useState('');
@@ -1280,7 +1796,7 @@ function ProductAdminPage({ user, data, run, onExport }) {
             </div>
             <div className="product-actions">
               <button onClick={() => openEdit(product)}><Pencil size={14} /> Edit</button>
-              <button className="danger ghost" onClick={() => window.confirm(`Delete ${product.name}? Bidding history will be retained.`) && run((token) => api.deleteProduct(token, product.id), 'Product deleted.')}><Trash2 size={14} /> Delete</button>
+              <button className="danger ghost" onClick={async () => { if (await confirm({ title: `Delete ${product.name}?`, body: <p>Buyers will no longer find it. Past requests and bids that used it stay on record.</p>, confirmLabel: 'Delete product', cancelLabel: 'Keep it', tone: 'danger' })) run((token) => api.deleteProduct(token, product.id), 'Product deleted.'); }}><Trash2 size={14} /> Delete</button>
             </div>
           </article>
         )) : <Empty title="No products match the filters." />}
@@ -1384,7 +1900,7 @@ function BidHistoryPage({ data, run, setReportBid, admin, onExport }) {
   );
 }
 
-function ReportsPage({ user, data, run, onExport }) {
+function ReportsPage({ user, data, run, confirm, onExport }) {
   const [selected, setSelected] = useState(null);
   const [message, setMessage] = useState('');
   const [recipient, setRecipient] = useState(user.role === 'admin' ? 'both' : 'admin');
@@ -1421,26 +1937,38 @@ function ReportsPage({ user, data, run, onExport }) {
       await loadReport(token, selected.id);
     }, 'Report status updated.');
   };
-  const requestClosure = () => {
+  const requestClosure = async () => {
     if (!selected) return;
-    const reason = window.prompt('Cancellation reason', 'User requested closure') || '';
-    if (reason.trim().length < 3) return;
+    const reason = await confirm({
+      title: 'Close this report?',
+      body: <p>Tell us why you want to close it. Our team can still see the history.</p>,
+      input: { label: 'Reason', placeholder: 'For example: the shop fixed the problem', required: true, minLength: 3 },
+      confirmLabel: 'Close report',
+      cancelLabel: 'Keep it open',
+    });
+    if (!reason) return;
     run(async (token) => {
-      await api.requestReportClosure(token, selected.id, reason.trim());
+      await api.requestReportClosure(token, selected.id, reason);
       await loadReport(token, selected.id);
     }, 'Closure requested.');
   };
-  const decideClosure = (status) => {
+  const decideClosure = async (status) => {
     if (!selected) return;
-    const reason = window.prompt(`${status === 'approved' ? 'Approve' : 'Reject'} closure note`, '') || '';
+    const note = await confirm({
+      title: status === 'approved' ? 'Approve closing this report?' : 'Reject closing this report?',
+      input: { label: 'Note (optional)', placeholder: 'Add context for the people involved' },
+      confirmLabel: status === 'approved' ? 'Approve closure' : 'Reject closure',
+      cancelLabel: 'Cancel',
+    });
+    if (note === false) return;
     run(async (token) => {
-      await api.closureDecision(token, selected.id, status, reason.trim());
+      await api.closureDecision(token, selected.id, status, note);
       await loadReport(token, selected.id);
     }, `Closure ${status}.`);
   };
   return (
     <Page>
-      <Section title={user.role === 'admin' ? 'Reports & Dispute Center' : 'Reports / Support'} subtitle={user.role === 'admin' ? 'Moderate dispute logs, selective broadcast message threads, and resolve client complaints.' : 'View your reports and their review status.'} icon={FileText} />
+      <Section title={user.role === 'admin' ? 'Reports & Dispute Center' : 'Help & reports'} subtitle={user.role === 'admin' ? 'Moderate dispute logs, selective broadcast message threads, and resolve client complaints.' : 'View your reports and their review status.'} icon={FileText} />
       <div className="toolbar">
         <button className="button" onClick={() => onExport('reports')}><Download size={16} /> Export CSV</button>
       </div>
@@ -1543,7 +2071,7 @@ function ReportDetailsPanel({ user, details, message, setMessage, recipient, set
   );
 }
 
-function SettingsPage({ data, run }) {
+function SettingsPage({ data, run, confirm }) {
   const [rules, setRules] = useState(data.settings.bid_rules || {});
   const [limits, setLimits] = useState(data.settings.location_rules || {});
   const [eligibility, setEligibility] = useState(data.settings.dealer_rules || {});
@@ -1579,30 +2107,38 @@ function SettingsPage({ data, run }) {
       <Panel title="Location limits"><form onSubmit={(event) => save(event, 'location_rules', limits)}><div className="form-grid">{numberField('Maximum service radius (km)', 'max_radius_km', limits, setLimits, 0.1, 5000)}</div><button className="button" type="submit">Save location rules</button></form></Panel>
       <Panel title="Dealer eligibility"><form onSubmit={(event) => save(event, 'dealer_rules', eligibility)}><div className="form-grid">{numberField('Minimum dealer rating', 'min_rating_threshold', eligibility, setEligibility, 0, 5)}<label>Verification required<input type="checkbox" checked={eligibility.verification_required !== false} onChange={(event) => { setDirty(true); setEligibility({ ...eligibility, verification_required: event.target.checked }); }} /></label></div><button className="button" type="submit">Save dealer rules</button></form></Panel>
       <Panel title="Hierarchical Category Tree">
-        <CategoryManager categories={data.categories} run={run} />
+        <CategoryManager categories={data.categories} run={run} confirm={confirm} />
       </Panel>
     </Page>
   );
 }
 
-function AdminList({ rows = [], empty, children }) {
-  if (!rows.length) return <Empty title={empty || 'No records found.'} />;
+function AdminList({ rows = [], empty, hint, children }) {
+  if (!rows.length) return <Empty title={empty || 'Nothing here yet.'} hint={hint} />;
   return <div className="admin-list">{rows.map((row, index) => <React.Fragment key={row.id || index}>{children(row, index)}</React.Fragment>)}</div>;
 }
 
 function AdminListItem({ icon, title, subtitle, trailing, onClick }) {
+  const activate = (event) => {
+    // Only react to keys pressed on the row itself, not on buttons or selects inside it.
+    if (event.target !== event.currentTarget) return;
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      onClick(event);
+    }
+  };
   return (
     <div
       className={`admin-list-item ${onClick ? 'clickable' : ''}`}
       role={onClick ? 'button' : undefined}
       tabIndex={onClick ? 0 : undefined}
       onClick={onClick}
-      onKeyDown={onClick ? (event) => { if (event.key === 'Enter' || event.key === ' ') onClick(event); } : undefined}
+      onKeyDown={onClick ? activate : undefined}
     >
-      <div className="avatar-icon">{icon}</div>
+      {icon ? <div className="avatar-icon">{icon}</div> : <span />}
       <div className="admin-list-main">
         <strong>{title}</strong>
-        <span>{subtitle}</span>
+        {subtitle ? <span>{subtitle}</span> : null}
       </div>
       <div className="admin-list-trailing">{trailing}</div>
     </div>
@@ -1726,7 +2262,7 @@ function BidDetailsModal({ bid, payments, onClose, onReport, user, liveMessages 
   );
 }
 
-function CategoryManager({ categories, run }) {
+function CategoryManager({ categories, run, confirm }) {
   const emptyDraft = { mode: 'add-parent', id: '', parent_id: '', name: '' };
   const [draft, setDraft] = useState(emptyDraft);
   const parents = categories.filter((item) => !item.parent_id);
@@ -1793,7 +2329,7 @@ function CategoryManager({ categories, run }) {
               <div className="row-actions">
                 <button onClick={() => startChild(parent)}><Plus size={14} /> Add Subcategory</button>
                 <button onClick={() => editParent(parent)}><Pencil size={14} /> Edit</button>
-                <button className="danger ghost" onClick={() => window.confirm(`Delete ${parent.name} and its child items?`) && run((token) => api.deleteCategory(token, parent.id), 'Category deleted.')}><Trash2 size={14} /> Delete</button>
+                <button className="danger ghost" onClick={async () => { if (await confirm({ title: `Delete ${parent.name}?`, body: <p>Its {plural(childrenFor(parent).length, 'subcategory', 'subcategories')} will be deleted too. Categories used by products or dealers cannot be deleted.</p>, confirmLabel: 'Delete category', cancelLabel: 'Keep it', tone: 'danger' })) run((token) => api.deleteCategory(token, parent.id), 'Category deleted.'); }}><Trash2 size={14} /> Delete</button>
               </div>
             </header>
             <div className="category-child-list">
@@ -1802,7 +2338,7 @@ function CategoryManager({ categories, run }) {
                   <span><ChevronRight size={14} /> {child.name}</span>
                   <div className="row-actions">
                     <button className="icon-button" title="Edit subcategory" onClick={() => editChild(child, parent)}><Pencil size={14} /></button>
-                    <button className="icon-button danger" title="Delete subcategory" onClick={() => window.confirm(`Delete ${child.name}?`) && run((token) => api.deleteCategory(token, child.id), 'Category deleted.')}><X size={14} /></button>
+                    <button className="icon-button danger" title="Delete subcategory" onClick={async () => { if (await confirm({ title: `Delete ${child.name}?`, confirmLabel: 'Delete', cancelLabel: 'Keep it', tone: 'danger' })) run((token) => api.deleteCategory(token, child.id), 'Category deleted.'); }}><X size={14} /></button>
                   </div>
                 </div>
               )) : <span className="muted-small">No items/subcategories yet.</span>}
@@ -1844,28 +2380,6 @@ function ComparisonPanel({ title, rows = [] }) {
       ) : <Empty title="No chart data." />}
     </Panel>
   );
-}
-
-function FilterChecks({ title, values, selected, onToggle }) {
-  return (
-    <div className="filter-checks">
-      <strong>{title}</strong>
-      {values.map((value) => (
-        <label className="check" key={value}>
-          <input type="checkbox" checked={selected.includes(value)} onChange={() => onToggle(value)} />
-          {value}
-        </label>
-      ))}
-    </div>
-  );
-}
-
-function AlertIcon() {
-  return <span className="status-icon warning"><Flag size={18} /></span>;
-}
-
-function ClockIcon() {
-  return <span className="status-icon info"><Bolt size={18} /></span>;
 }
 
 function ProductDetailsModal({ product, onClose, onCart, onBid }) {
@@ -1920,44 +2434,6 @@ function SpecificationGroups({ title, groups }) {
   );
 }
 
-function BuyerRequestDetailsModal({ user, data, onReport, request, bids, onClose, onAccept, onCancel }) {
-  const offers = bids.filter((bid) => bid.bid_request_id === request.id && bid.status !== 'withdrawn');
-  const winner = offers.find((bid) => bid.status === 'won');
-  return (
-    <Modal title={`Bid Request: ${request.product || request.product_name}`} onClose={onClose} wide>
-      <div className="info-badge-row">
-        <span><Package size={14} /> Quantity: {request.quantity || 1}</span>
-        <span><InfoIcon /> Status: {request.status || request.request_status || 'active'}</span>
-        {request.status === 'active' && onCancel ? <button className="danger ghost" onClick={onCancel}>Cancel Request</button> : null}
-      </div>
-      <Panel title={`Dealer Offers (${offers.length})`}>
-        <AdminList rows={offers} empty="No dealer offers received yet.">
-          {(bid) => (
-            <AdminListItem
-              icon={<Bolt size={18} />}
-              title={bid.dealer || 'Dealer'}
-              subtitle={[
-                bid.discount_amount || bid.discountAmount ? `Includes Discount: -${money(bid.discount_amount || bid.discountAmount)}` : '',
-                `Delivery Time: ${bid.delivery_time || bid.deliveryTime || ''}`,
-                `Warranty: ${bid.warranty_text || bid.warrantyText || 'None'}`,
-                bid.free_gifts || bid.freeGifts ? `Free Gifts: ${bid.free_gifts || bid.freeGifts}` : '',
-                bid.extra_services || bid.extraServices ? `Extra Services: ${bid.extra_services || bid.extraServices}` : '',
-                bid.notes ? `Notes: ${bid.notes}` : '',
-              ].filter(Boolean).join(' | ')}
-              trailing={<div className="admin-item-actions"><strong className="green-text">{money(bid.amount)}</strong><Status text={bid.status} />{request.status === 'active' && <button className="primary" disabled={!bid.selectable} onClick={() => onAccept(bid)}>{bid.selectable ? 'Accept Offer' : 'Dealer unavailable'}</button>}</div>}
-            />
-          )}
-        </AdminList>
-      </Panel>
-      {winner && <Panel title="Winning dealer contact"><p>{winner.dealer} | {winner.owner_name} | {winner.dealer_phone} | {winner.dealer_email}</p><p>{winner.business_address}</p><button onClick={() => onReport(winner)}>Report dealer</button></Panel>}
-    </Modal>
-  );
-}
-
-function InfoIcon() {
-  return <span aria-hidden="true" className="mini-icon">i</span>;
-}
-
 function HistoryList({ user, data, bids, onReport, onRebid }) {
   const [details, setDetails] = useState(null);
   if (!bids.length) return <Empty title="No records in this tab." />;
@@ -1984,7 +2460,7 @@ function HistoryList({ user, data, bids, onReport, onRebid }) {
             <div className="row-actions">
               <button onClick={() => setDetails(bid)}><Eye size={14} /> Details</button>
               {bid.status !== 'lost' ? <button className="danger ghost" onClick={() => onReport(bid)}><Flag size={14} /> Report</button> : null}
-              <button className="primary" onClick={() => onRebid(bid)}>Rebid</button>
+              <button type="button" className="primary" onClick={() => onRebid(bid)}>Bid again</button>
             </div>
           </article>
         ))}
@@ -1995,17 +2471,16 @@ function HistoryList({ user, data, bids, onReport, onRebid }) {
 }
 
 function PhoneIcon() {
-  return <span aria-hidden="true" className="mini-icon">p</span>;
+  return <Phone size={14} aria-hidden="true" />;
 }
 
 function MailIcon() {
-  return <span aria-hidden="true" className="mini-icon">@</span>;
+  return <Mail size={14} aria-hidden="true" />;
 }
 
 function DealerBidDetailModal({ user, data, onReport, bid, mine, onClose }) {
   const status = String(bid.status || '').toLowerCase();
   const won = ['won', 'completed'].includes(status);
-  const commissionStatus = String(bid.commission_payment_status || bid.commissionPaymentStatus || '').toLowerCase();
   const buyerDetailsUnlocked = won && mine;
   const buyerAddress = [
     bid.buyer_address || bid.buyerAddress,
@@ -2065,123 +2540,40 @@ function DealerBidDetailModal({ user, data, onReport, bid, mine, onClose }) {
   );
 }
 
-function ChipSelector({ title, options, values, onChange }) {
-  const choices = options.map((option) => typeof option === 'string' ? { id: option, name: option } : option);
-  const choiceIds = new Set(choices.map((option) => option.id));
-  const selected = values.filter((value) => choiceIds.has(value));
-  const change = (next) => onChange([...values.filter((value) => !choiceIds.has(value)), ...next]);
-  return (
-    <div className="chip-summary">
-      <strong>{title}</strong>
-      <div className="chip-row">
-        {selected.map((value) => <span className="chip" key={value}>{choices.find((option) => option.id === value)?.name || value}<button type="button" aria-label={`Remove ${choices.find((option) => option.id === value)?.name || value}`} onClick={() => change(selected.filter((item) => item !== value))}><X size={12} /></button></span>)}
-        <select aria-label={title} value="" onChange={(event) => event.target.value && !selected.includes(event.target.value) && change([...selected, event.target.value])}>
-          <option value="">{title.includes('Items') ? 'Add Item' : 'Add Category'}</option>
-          {choices.filter((option) => !selected.includes(option.id)).map((option) => <option key={option.id} value={option.id}>{option.name}</option>)}
-        </select>
-      </div>
-    </div>
-  );
-}
-
-function IncomingRequestsPage(ctx) {
-  return <Page><DealerRequestsPanel {...ctx} /></Page>;
-}
-
-function DealerRequestsPanel({ data, setDealerOffer }) {
-  return (
-    <Panel title="Incoming Bid Requests">
-      <AdminList rows={data.dealerRequests} empty="No eligible requests at this moment.">
-        {(row) => (
-          <AdminListItem
-            icon={<Status text={row.status || 'active'} />}
-            title={row.product || row.product_name || ''}
-            subtitle={`Request ${row.id} | ${row.buyer_area || row.location || row.area || ''} | Qty ${row.quantity || 1} | Ends ${dateTime(row.expires_at || row.ends_at)}`}
-            trailing={<button className="primary" onClick={() => setDealerOffer({ request: row })}>Submit Bid</button>}
-          />
-        )}
-      </AdminList>
-    </Panel>
-  );
-}
-
-function DealerActiveBidsPage({ user, data, setDealerOffer, setReportBid }) {
-  const [details, setDetails] = useState(null);
-  const active = data.bids.filter((bid) => bid.status === 'active' || bid.status === 'updated');
-  const myBids = active.filter((bid) => bid.dealer === 'My Shop' || bid.is_mine || bid.mine);
-  const otherBids = active.filter((bid) => !myBids.includes(bid));
-  return (
-    <Page>
-      <Section title="Active Bids" subtitle="Submit, preview, edit, withdraw, and monitor current bid offers before expiry." icon={Pencil} />
-      <DealerRequestsPanel data={data} setDealerOffer={setDealerOffer} />
-      <Panel title="My active submitted bids">
-        <AdminList rows={myBids} empty="No submitted bids yet.">
-          {(bid) => (
-            <AdminListItem
-              icon={<Check size={18} />}
-              title={bid.product}
-              subtitle={`Request ${bid.bid_request_id} | My Offer: ${money(bid.amount)} | Warranty: ${bid.warranty_text || bid.warrantyText || 'None'} | Delivery: ${bid.delivery_time || bid.deliveryTime || ''} | Ends ${dateTime(bid.ends_at)}`}
-              onClick={() => setDetails({ bid, mine: true })}
-              trailing={<div className="admin-item-actions"><button onClick={(event) => { event.stopPropagation(); setDealerOffer({ request: { id: bid.bid_request_id, product: bid.product }, bid }); }}><Pencil size={14} /> Edit</button><Status text={bid.status} /></div>}
-            />
-          )}
-        </AdminList>
-      </Panel>
-      <Panel title="Other dealers' bids (Live marketplace)">
-        <AdminList rows={otherBids} empty="No other bids submitted by competitors yet.">
-          {(bid) => (
-            <AdminListItem
-              icon={<Users size={18} />}
-              title={`${bid.product} (${bid.dealer || 'Competitor'})`}
-              subtitle={`Request ${bid.bid_request_id} | Offer: ${money(bid.amount)} | Warranty: ${bid.warranty_text || bid.warrantyText || 'None'} | Delivery: ${bid.delivery_time || bid.deliveryTime || ''} | Ends ${dateTime(bid.ends_at)}`}
-              onClick={() => setDetails({ bid, mine: false })}
-              trailing={<Status text={bid.status} />}
-            />
-          )}
-        </AdminList>
-      </Panel>
-      <Panel title="Finalized requests"><AdminList rows={data.bids.filter((bid) => bid.status === 'won')} empty="No finalized requests yet.">{(bid) => <AdminListItem title={`${bid.product} | Winning offer ${money(bid.amount)}`} subtitle={`Request ${bid.bid_request_id} | ${bid.warranty_text || ''} | ${bid.delivery_time || ''}`} trailing={<button onClick={() => setDetails({ bid, mine: bid.is_mine })}>{bid.is_mine ? 'Contact details' : 'Final offer details'}</button>} />}</AdminList></Panel>
-      {details ? <DealerBidDetailModal user={user} data={data} onReport={setReportBid} bid={data.bids.find((bid) => bid.id === details.bid.id) || details.bid} mine={details.mine} onClose={() => setDetails(null)} /> : null}
-    </Page>
-  );
-}
-
-function DealerHistoryPage({ user, data, run, setReportBid, onExport }) {
+function DealerHistoryPage({ user, data, setReportBid, onExport }) {
   const [tab, setTab] = useState('won');
   const [details, setDetails] = useState(null);
-  const ownBids = data.bids.filter((bid) => bid.is_mine);
+  const ownBids = list(data.bids).filter((bid) => bid.is_mine);
   const groups = {
     won: ownBids.filter((bid) => bid.status === 'won'),
     lost: ownBids.filter((bid) => bid.status === 'lost'),
-    pending: ownBids.filter((bid) => bid.status === 'active' || bid.status === 'updated'),
-    completed: ownBids.filter((bid) => !['active', 'updated'].includes(bid.status)),
+    closed: ownBids.filter((bid) => !isLive(bid) && !['won', 'lost'].includes(bid.status)),
   };
+  const labels = [['won', 'Won'], ['lost', 'Lost'], ['closed', 'Expired or withdrawn']];
   return (
     <Page>
-      <Section title="Dealer Bid History" subtitle="Overview of all your bid activity, outcomes, and earnings breakdown." icon={ClipboardList} />
-      <button className="button" onClick={() => onExport('bids')}><Download size={16} /> Export History</button>
-      <Panel title="Bid Summary">
-        <div className="tab-row">{[['won', 'Won Bids'], ['lost', 'Lost Bids'], ['pending', 'Pending Bids'], ['completed', 'Closed Bids']].map(([key, label]) => <button key={key} className={tab === key ? 'active' : ''} onClick={() => setTab(key)}>{label}</button>)}</div>
-        <AdminList rows={groups[tab]} empty="No records in this tab.">
+      <Section
+        title="Past bids"
+        subtitle="Every bid that has finished, and how it ended."
+        actions={<button type="button" onClick={() => onExport('bids')}><Download size={16} aria-hidden="true" /> Export as CSV</button>}
+      />
+      <div className="tab-row" role="group" aria-label="Filter past bids">
+        {labels.map(([key, label]) => (
+          <button type="button" key={key} className={tab === key ? 'active' : ''} aria-pressed={tab === key} onClick={() => setTab(key)}>{label} ({groups[key].length})</button>
+        ))}
+      </div>
+      <Panel>
+        <AdminList rows={groups[tab]} empty={tab === 'won' ? 'No wins yet' : 'Nothing here'} hint={tab === 'won' ? 'When a buyer picks your bid it shows up here with their contact details.' : undefined}>
           {(bid) => (
             <AdminListItem
-              icon={<Gavel size={18} />}
-              title={bid.product}
-              subtitle={`${bid.buyer || 'Buyer details hidden'} | ${money(bid.amount)}`}
+              title={`${bid.product}, ${money(bid.amount)}`}
+              subtitle={`${plural(Number(bid.quantity || 1), 'unit')}${bid.buyer ? `, ${bid.buyer}` : ''}`}
               onClick={() => setDetails(bid)}
               trailing={(
                 <div className="admin-item-actions">
                   <Status text={bid.status} />
-                  <button onClick={(event) => { event.stopPropagation(); setDetails(bid); }}><Eye size={14} /> Details</button>
-                  {bid.status !== 'lost' ? <button className="danger ghost" onClick={(event) => { event.stopPropagation(); setReportBid(bid); }}><Flag size={14} /> Report</button> : null}
-                  {['active', 'updated'].includes(bid.status) ? (
-                    <button className="danger ghost" onClick={(event) => {
-                      event.stopPropagation();
-                      if (window.confirm('Are you sure you want to withdraw this bid? If you exceed 3 withdrawals, your profile may be flagged.')) {
-                        run((token) => api.withdrawBid(token, bid.id), 'Bid withdrawn.');
-                      }
-                    }}>Withdraw Bid</button>
-                  ) : null}
+                  <button type="button" className="small" onClick={(event) => { event.stopPropagation(); setDetails(bid); }}><Eye size={14} aria-hidden="true" /> Details</button>
+                  {bid.status === 'won' ? <button type="button" className="small danger" onClick={(event) => { event.stopPropagation(); setReportBid(bid); }}><Flag size={14} aria-hidden="true" /> Report</button> : null}
                 </div>
               )}
             />
@@ -2193,7 +2585,7 @@ function DealerHistoryPage({ user, data, run, setReportBid, onExport }) {
   );
 }
 
-function BusinessProfilePage({ user, data, run, onDeleteAccount }) {
+function BusinessProfilePage({ user, data, run, confirm, onDeleteAccount }) {
   const profile = data.profile || {};
   const [form, setForm] = useState({});
   const [pinConfirmed, setPinConfirmed] = useState(false);
@@ -2312,7 +2704,7 @@ function BusinessProfilePage({ user, data, run, onDeleteAccount }) {
   };
   // Wait for the saved profile to populate the form before accepting edits.
   // Otherwise an early keystroke marks the empty form dirty and drops hydration.
-  if (!data.profile || !form.delivery_method) return <Page><Section title="Business Profile & Configurations" icon={Store} /><Panel><p role="status">Loading your saved business profile…</p></Panel></Page>;
+  if (!data.profile || !form.delivery_method) return <Page><Section title="My shop" /><Panel><p role="status">Loading your saved business profile…</p></Panel></Page>;
   const setCategoryCoverage = (parent, all, toggledItem) => {
     const children = list(parent.items);
     const selected = new Set(selectedCategoryNames);
@@ -2351,7 +2743,7 @@ function BusinessProfilePage({ user, data, run, onDeleteAccount }) {
     : [];
   return (
     <Page>
-      <Section title="Business Profile & Configurations" subtitle="Manage owner name, shop details, GST numbers, item types, and service coverage rules." icon={Store} />
+      <Section title="My shop" subtitle="What you sell, where you deliver and how buyers see you. Buyers only see your shop name until they accept your bid." />
       {data.dealerSubscribed ? <span className="subscription-chip"><Check size={16} /> Subscribed</span> : null}
       <Panel title="Store & Verification Info">
         <div className="form-grid">
@@ -2434,40 +2826,92 @@ function BusinessProfilePage({ user, data, run, onDeleteAccount }) {
       </Panel>
       <div className="row-actions">
         <button className="primary" disabled={saving || !data.profile || (form.delivery_method === 'radius' && !pinConfirmed)} onClick={save}><Check size={16} /> {saving ? 'Saving…' : 'Save Business Profile'}</button>
-        <button className="danger ghost" onClick={onDeleteAccount}>Delete Account</button>
-        {!data.dealerSubscribed ? <button onClick={() => run((token) => api.activateDealerSubscription(token), 'Subscription activated.')}>Subscribe Now</button> : null}
+        <button type="button" className="danger" onClick={async () => {
+          const ok = await confirm({
+            title: 'Delete your shop account?',
+            body: (
+              <>
+                <p>You will be signed out, your live bids are withdrawn and you stop receiving requests.</p>
+                <p>Bids you already won stay on record so any dispute can still be resolved.</p>
+              </>
+            ),
+            confirmLabel: 'Delete my account',
+            cancelLabel: 'Keep my account',
+            tone: 'danger',
+          });
+          if (ok) onDeleteAccount();
+        }}>Delete account</button>
+        {!data.dealerSubscribed ? <button type="button" onClick={async () => {
+          const ok = await confirm({
+            title: 'Activate your subscription?',
+            body: <p>Your shop will receive matching buyer requests right away. The plan costs ₹999 a month.</p>,
+            confirmLabel: 'Activate subscription',
+            cancelLabel: 'Not now',
+          });
+          if (ok) run((token) => api.activateDealerSubscription(token), 'Subscription activated. Requests will start arriving.');
+        }}>Subscribe</button> : null}
       </div>
     </Page>
   );
 }
 
 function NotificationsPage({ data, run }) {
+  const rows = list(data.notifications);
+  const unread = rows.filter((item) => !item.is_read && !item.isRead).length;
   return (
     <Page>
-      <div className="section-action-row">
-        <Section title="Notifications" subtitle="Live platform updates for bids, reports, payments, and account changes." icon={Bell} />
-        <button className="small-action" onClick={() => run((token) => api.markNotificationsRead(token), 'Notifications marked read.')}>Mark all read</button>
-      </div>
-      <div className="list-stack">
-        {data.notifications.map((item) => (
-          <button className={`notification ${item.is_read ? '' : 'unread'}`} key={item.id} onClick={() => run((token) => api.markNotificationRead(token, item.id))}>
-            <div><strong>{item.title}</strong><p>{item.message || item.body}</p></div>
-            <span>{dateTime(item.created_at)}</span>
-          </button>
-        ))}
-      </div>
+      <Section
+        title="Alerts"
+        subtitle="New requests, offers and account updates from the last 7 days."
+        actions={<button type="button" disabled={!unread} onClick={() => run((token) => api.markNotificationsRead(token), 'All alerts marked as read.')}>Mark all as read</button>}
+      />
+      {rows.length ? (
+        <div className="list-stack">
+          {rows.map((item) => {
+            const isUnread = !item.is_read && !item.isRead;
+            return (
+              <button type="button" className={`notification ${isUnread ? 'unread' : ''}`} key={item.id} onClick={() => isUnread && run((token) => api.markNotificationRead(token, item.id))}>
+                <strong>{isUnread ? <span className="sr-only">Unread: </span> : null}{item.title}</strong>
+                <p>{item.message || item.body}</p>
+                <span>{dateTime(item.created_at)}</span>
+              </button>
+            );
+          })}
+        </div>
+      ) : (
+        <Empty title="You are all caught up" hint="New requests, offers and account updates will show up here." />
+      )}
     </Page>
   );
 }
 
-function ProfilePage({ user, data, run, onDeleteAccount }) {
+function ProfilePage({ user, data, run, confirm, onDeleteAccount }) {
   const [profile, setProfile] = useState({});
+  const [dirty, setDirty] = useState(false);
   const [pinConfirmed, setPinConfirmed] = useState(false);
   const emptyLocation = { label: '', address: '', country: 'India', state: '', city: '', area: '', pincode: '', latitude: 0, longitude: 0, is_default: false };
   const [location, setLocation] = useState(emptyLocation);
   const [editingLocationId, setEditingLocationId] = useState('');
+  const [locationError, setLocationError] = useState('');
+  const [detailsError, setDetailsError] = useState('');
   const initialLocationLoaded = useRef(false);
+  const locations = list(data.buyerLocations);
+  const toForm = (row) => ({
+    label: row.label || '',
+    address: row.address || row.address_line || '',
+    country: row.country || 'India',
+    state: row.state || '',
+    city: row.city || '',
+    area: row.area || '',
+    pincode: row.pincode || '',
+    latitude: row.latitude || 0,
+    longitude: row.longitude || 0,
+    is_default: row.is_default === true || row.is_default === 1,
+  });
+
+  // Refreshes must not wipe what the person is typing, so only sync a clean form.
   useEffect(() => {
+    if (dirty) return;
     const next = data.profile || user || {};
     setProfile({
       ...next,
@@ -2475,125 +2919,157 @@ function ProfilePage({ user, data, run, onDeleteAccount }) {
       latitude: next.latitude || 0,
       longitude: next.longitude || 0,
     });
-    const first = list(data.buyerLocations)[0];
+  }, [data.profile, user, dirty]);
+
+  useEffect(() => {
+    const first = locations[0];
     if (first && !initialLocationLoaded.current) {
       initialLocationLoaded.current = true;
-      setLocation({
-        label: first.label || '',
-        address: first.address || first.address_line || '',
-        country: first.country || 'India',
-        state: first.state || '',
-        city: first.city || '',
-        area: first.area || '',
-        pincode: first.pincode || '',
-        latitude: first.latitude || 0,
-        longitude: first.longitude || 0,
-        is_default: first.is_default === true || first.is_default === 1,
-      });
+      setLocation(toForm(first));
       setEditingLocationId(first.id || '');
     }
-  }, [data.profile, data.buyerLocations, user]);
-  const update = (key, value) => setProfile((old) => ({ ...old, [key]: value }));
-  const updateLocation = (key, value) => setLocation((old) => ({ ...old, [key]: value }));
-  const loadLocation = (row) => {
-    setEditingLocationId(row.id || '');
-    setLocation({
-      label: row.label || '',
-      address: row.address || row.address_line || '',
-      country: row.country || 'India',
-      state: row.state || '',
-      city: row.city || '',
-      area: row.area || '',
-      pincode: row.pincode || '',
-      latitude: row.latitude || 0,
-      longitude: row.longitude || 0,
-      is_default: row.is_default === true || row.is_default === 1,
-    });
-  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data.buyerLocations]);
+
+  const update = (key, value) => { setDirty(true); setProfile((old) => ({ ...old, [key]: value })); };
+  const updateLocation = (key, value) => { setLocationError(''); setLocation((old) => ({ ...old, [key]: value })); };
+  const loadLocation = (row) => { setLocationError(''); setEditingLocationId(row.id || ''); setLocation(toForm(row)); };
   const newLocation = () => {
     initialLocationLoaded.current = true;
+    setLocationError('');
     setEditingLocationId('');
-    setLocation({ ...emptyLocation, is_default: !list(data.buyerLocations).length });
+    setLocation({ ...emptyLocation, is_default: !locations.length });
   };
-  const saveProfile = () => run((token) => api.updateProfile(token, {
-    full_name: profile.full_name || profile.name || user.name,
-    phone: profile.phone || '',
-    address: location.address || profile.address || '',
-    country: location.country || profile.country || 'India',
-    state: location.state || profile.state || '',
-    city: location.city || profile.city || '',
-    area: location.area || profile.area || '',
-    pincode: location.pincode || profile.pincode || '',
-    preferred_radius: Number(profile.preferred_radius || 15),
-    latitude: Number(location.latitude || profile.latitude || 0),
-    longitude: Number(location.longitude || profile.longitude || 0),
-  }), 'Profile saved successfully!');
+
+  // Details only change the person's own fields. Address and pin stay as stored, so editing
+  // another saved location here can never silently move the default address.
+  const saveProfile = async () => {
+    const radius = Number(profile.preferred_radius);
+    if (!Number.isFinite(radius) || radius <= 0 || radius > 5000) {
+      setDetailsError('Enter a matching radius between 1 and 5000 km.');
+      return;
+    }
+    setDetailsError('');
+    const stored = data.profile || {};
+    const ok = await run((token) => api.updateProfile(token, {
+      full_name: profile.full_name || profile.name || user.name,
+      phone: profile.phone || '',
+      address: stored.address || '',
+      country: stored.country || 'India',
+      state: stored.state || '',
+      city: stored.city || '',
+      area: stored.area || '',
+      pincode: stored.pincode || '',
+      preferred_radius: radius,
+      latitude: Number(stored.latitude || 0),
+      longitude: Number(stored.longitude || 0),
+    }), 'Details saved.');
+    if (ok) setDirty(false);
+  };
+
   const saveLocation = () => {
-    if (!pinConfirmed) return;
+    if (!pinConfirmed) return Promise.resolve();
     if (Number(location.latitude || 0) === 0 && Number(location.longitude || 0) === 0) {
-      window.alert('Set a map pin before saving location.');
+      setLocationError('Drop a pin on the map first.');
       return Promise.resolve();
     }
     if (!location.state?.trim() || !location.city?.trim()) {
-      window.alert('Search and confirm the map pin so city and state are filled before saving.');
+      setLocationError('Confirm the pin on the map so the city and state fill in.');
       return Promise.resolve();
     }
     if (!location.address?.trim() && !location.area?.trim()) {
-      window.alert('Add a street address or area before saving this location.');
+      setLocationError('Add a street address or an area for this location.');
       return Promise.resolve();
     }
+    setLocationError('');
     return run((token) => api.saveBuyerLocation(token, {
       ...location,
       label: location.label || location.address || 'Saved location',
       country: location.country || 'India',
       latitude: Number(location.latitude || 0),
       longitude: Number(location.longitude || 0),
-      is_default: Boolean(location.is_default || !list(data.buyerLocations).length),
-    }, editingLocationId || undefined), editingLocationId ? 'Saved location updated.' : 'Location saved.').then((ok) => ok && newLocation());
+      is_default: Boolean(location.is_default || !locations.length),
+    }, editingLocationId || undefined), editingLocationId ? 'Location updated.' : 'Location saved.').then((ok) => ok && newLocation());
   };
+
+  const removeLocation = async (row) => {
+    const ok = await confirm({
+      title: `Delete "${row.label || 'this location'}"?`,
+      body: <p>Open requests that already use it are not affected. You can add it again later.</p>,
+      confirmLabel: 'Delete location',
+      cancelLabel: 'Keep it',
+      tone: 'danger',
+    });
+    if (ok) run((token) => api.deleteBuyerLocation(token, row.id), 'Location deleted.');
+  };
+
+  const removeAccount = async () => {
+    const ok = await confirm({
+      title: 'Delete your account?',
+      body: (
+        <>
+          <p>You will be signed out and lose access straight away. Your open requests are closed.</p>
+          <p>Orders you already accepted stay on record so the shops and our team can still resolve any dispute.</p>
+        </>
+      ),
+      confirmLabel: 'Delete my account',
+      cancelLabel: 'Keep my account',
+      tone: 'danger',
+    });
+    if (ok) onDeleteAccount();
+  };
+
   return (
     <Page>
-      <Section title="Profile & Default Location Settings" subtitle="Configure personal information, default shipping addresses, pincode matching radius, and raising dispute support." icon={User} />
-      <Panel title="Account & Location Details">
+      <Section title="Account" subtitle="Your details and the places you want things delivered." />
+      <Panel title="Your details" actions={<span className="muted-small">{user.email}</span>}>
         <div className="form-grid">
-          <label>Full name<input value={profile.full_name || profile.name || ''} onChange={(event) => update('full_name', event.target.value)} /></label>
-          <label>Email<input value={profile.email || ''} onChange={(event) => update('email', event.target.value)} /></label>
-          <label>Phone<input value={profile.phone || ''} onChange={(event) => update('phone', event.target.value)} /></label>
-          <label>Buyer matching radius (km)<input value={profile.preferred_radius || ''} onChange={(event) => update('preferred_radius', event.target.value)} /></label>
+          <div className="field">
+            <label htmlFor="acct-name">Full name</label>
+            <input id="acct-name" value={profile.full_name || profile.name || ''} autoComplete="name" onChange={(event) => update('full_name', event.target.value)} />
+          </div>
+          <div className="field">
+            <label htmlFor="acct-phone">Phone</label>
+            <input id="acct-phone" type="tel" value={profile.phone || ''} autoComplete="tel" onChange={(event) => update('phone', event.target.value)} />
+          </div>
+          <div className="field">
+            <label htmlFor="acct-radius">Search for shops within (km)</label>
+            <input id="acct-radius" type="number" min="1" max="5000" inputMode="numeric" value={profile.preferred_radius || ''} aria-invalid={Boolean(detailsError)} onChange={(event) => update('preferred_radius', event.target.value)} />
+            <p className="hint">Only shops inside this distance can bid on your requests.</p>
+            {detailsError ? <p className="field-error" role="alert">{detailsError}</p> : null}
+          </div>
         </div>
-        {list(data.buyerLocations).length ? (
-          <>
-            <h4>Saved Locations</h4>
-            <AdminList rows={data.buyerLocations} empty="No saved locations.">
-              {(row) => (
-                <AdminListItem
-                  icon={<MapPin size={18} />}
-                  title={row.label || 'Saved location'}
-                  subtitle={`${row.area || ''}, ${row.city || ''}, ${row.state || ''} | ${row.latitude || ''}, ${row.longitude || ''}`}
-                  trailing={(
-                    <div className="admin-item-actions" onClick={(event) => event.stopPropagation()}>
-                      {row.is_default ? <Status text="default" /> : null}
-                      <button onClick={() => loadLocation(row)}><Pencil size={14} /> Edit</button>
-                      <button disabled={row.is_default === true || row.is_default === 1} onClick={() => run((token) => api.setDefaultBuyerLocation(token, row.id), 'Default location updated.')}>Set default</button>
-                      <button className="danger ghost" onClick={() => run((token) => api.deleteBuyerLocation(token, row.id), 'Location deleted.')}>Delete</button>
-                    </div>
-                  )}
-                />
-              )}
-            </AdminList>
-          </>
-        ) : null}
-        <div className="form-grid">
-          <label>Location name<input value={location.label} onChange={(event) => updateLocation('label', event.target.value)} placeholder="Home, Office, Clinic..." /></label>
-          <label className="wide">Street Address<input value={location.address} onChange={(event) => updateLocation('address', event.target.value)} /></label>
-          <label>Area / Neighborhood<input value={location.area} onChange={(event) => updateLocation('area', event.target.value)} /></label>
-          <label>City<input value={location.city} onChange={(event) => updateLocation('city', event.target.value)} /></label>
-          <label>State<input value={location.state} onChange={(event) => updateLocation('state', event.target.value)} /></label>
-          <label>Country<input value={location.country} onChange={(event) => updateLocation('country', event.target.value)} /></label>
-          <label>Pincode<input value={location.pincode} onChange={(event) => updateLocation('pincode', event.target.value)} /></label>
-          <label className="check"><input type="checkbox" checked={Boolean(location.is_default)} onChange={(event) => updateLocation('is_default', event.target.checked)} /> Default location</label>
+        <div className="row-actions">
+          <button type="button" className="primary" disabled={!dirty} onClick={saveProfile}><Check size={16} aria-hidden="true" /> Save details</button>
         </div>
-        <h4>Drag/Tap Map to set shipping coordinates & address details</h4>
+      </Panel>
+
+      <Panel title={`Delivery locations (${locations.length} of 3)`} actions={<button type="button" className="small" onClick={newLocation}><Plus size={14} aria-hidden="true" /> Add location</button>}>
+        {locations.length ? (
+          <AdminList rows={locations}>
+            {(row) => (
+              <AdminListItem
+                icon={<MapPin size={18} aria-hidden="true" />}
+                title={row.label || 'Saved location'}
+                subtitle={[row.area, row.city, row.state].filter(Boolean).join(', ')}
+                trailing={(
+                  <div className="admin-item-actions">
+                    {row.is_default ? <Status text="default" /> : null}
+                    <button type="button" className="small" onClick={() => loadLocation(row)}><Pencil size={14} aria-hidden="true" /> Edit</button>
+                    <button type="button" className="small" disabled={row.is_default === true || row.is_default === 1} onClick={() => run((token) => api.setDefaultBuyerLocation(token, row.id), 'Default location updated.')}>Make default</button>
+                    <button type="button" className="small danger" onClick={() => removeLocation(row)}>Delete</button>
+                  </div>
+                )}
+              />
+            )}
+          </AdminList>
+        ) : (
+          <Empty title="No delivery location yet" hint="Add one below. You need it to start a bid, because nearby shops are matched by distance." />
+        )}
+      </Panel>
+
+      <Panel title={editingLocationId ? 'Edit location' : 'Add a location'}>
+        <p className="muted-small">Search for the address or tap the map, then confirm the pin. The fields below fill in automatically and you can adjust them.</p>
         <MapCoordinatePicker
           token={user.access_token}
           key={editingLocationId || 'new-location'}
@@ -2612,144 +3088,32 @@ function ProfilePage({ user, data, run, onDeleteAccount }) {
             label: old.label || [details.area, details.city].filter(Boolean).join(', '),
           }))}
         />
-        <div className="info-badge-row">
-          <span>Email: {user.email}</span>
-          <span>Status: {user.status}</span>
-          <span>Saved: {list(data.buyerLocations).length}/3</span>
+        <div className="form-grid">
+          <label>Location name<input value={location.label} onChange={(event) => updateLocation('label', event.target.value)} placeholder="Home, Office, Clinic..." /></label>
+          <label>Pincode<input value={location.pincode} inputMode="numeric" onChange={(event) => updateLocation('pincode', event.target.value)} /></label>
+          <label className="wide">Street address<input value={location.address} onChange={(event) => updateLocation('address', event.target.value)} /></label>
+          <label>Area or neighbourhood<input value={location.area} onChange={(event) => updateLocation('area', event.target.value)} /></label>
+          <label>City<input value={location.city} onChange={(event) => updateLocation('city', event.target.value)} /></label>
+          <label>State<input value={location.state} onChange={(event) => updateLocation('state', event.target.value)} /></label>
+          <label>Country<input value={location.country} onChange={(event) => updateLocation('country', event.target.value)} /></label>
+          <label className="check"><input type="checkbox" checked={Boolean(location.is_default)} onChange={(event) => updateLocation('is_default', event.target.checked)} /> Use as my default location</label>
         </div>
+        {locationError ? <div className="notice" role="alert">{locationError}</div> : null}
         <div className="row-actions">
-          <button onClick={newLocation}><MapPin size={14} /> New Location</button>
-          <button disabled={!pinConfirmed} onClick={saveLocation}><MapPin size={14} /> {editingLocationId ? 'Update Location' : 'Save Location'}</button>
-          <button className="danger ghost" onClick={onDeleteAccount}>Delete Account</button>
-          <button className="primary" disabled={!pinConfirmed && (Number(location.latitude) !== 0 || Number(location.longitude) !== 0)} onClick={saveProfile}><Check size={16} /> Save Profile</button>
+          <button type="button" className="primary" disabled={!pinConfirmed} onClick={saveLocation}><MapPin size={14} aria-hidden="true" /> {editingLocationId ? 'Update location' : 'Save location'}</button>
+          {!pinConfirmed ? <span className="muted-small">Confirm the pin on the map to save.</span> : null}
         </div>
       </Panel>
-      <Panel title="Reports & Dispute History">
-        <SimpleList rows={data.reports} primary={(row) => row.reason || row.id} secondary={(row) => `Status: ${row.status || 'open'} | ${dateTime(row.created_at)}`} />
+
+      <Panel title="Your reports">
+        <SimpleList rows={data.reports} primary={(row) => row.reason || 'Report'} secondary={(row) => `${titleCase(row.status || 'open')}, ${dateTime(row.created_at)}`} />
+      </Panel>
+
+      <Panel title="Delete account" className="danger-zone">
+        <p className="muted-small">This signs you out and closes your open requests. It cannot be undone.</p>
+        <div className="row-actions"><button type="button" className="danger" onClick={removeAccount}><Trash2 size={14} aria-hidden="true" /> Delete my account</button></div>
       </Panel>
     </Page>
-  );
-}
-
-function BidSetupModal({ product, locations, rules = {}, onClose, onStart }) {
-  const defaultLocation = locations.find((loc) => loc.is_default === true || loc.is_default === 1) || locations[0];
-  const defaultMinutes = Math.round(Number(rules.expiry_hours ?? 24) * 60);
-  const [form, setForm] = useState({ quantity: product.bidQuantity || 1, expiry_minutes: defaultMinutes, notes: '', location_id: defaultLocation ? String(defaultLocation.location_id || defaultLocation.id) : '', skip_flagged_dealers: true });
-  const [localError, setLocalError] = useState('');
-  const expiryOptions = [
-    [1, '1 Minute (Testing)'],
-    [30, '30 Minutes'],
-    [60, '1 Hour'],
-    [120, '2 Hours'],
-    [180, '3 Hours'],
-    [240, '4 Hours'],
-    [720, '12 Hours'],
-    [1440, '24 Hours'],
-    [2880, '48 Hours'],
-    [4320, '72 Hours'],
-    ...(![1, 30, 60, 120, 180, 240, 720, 1440, 2880, 4320].includes(defaultMinutes) ? [[defaultMinutes, `${defaultMinutes} Minutes (Default)`]] : []),
-  ].filter(([minutes]) => minutes >= Number(rules.min_time_hours ?? (1 / 60)) * 60 - 1e-9 && minutes <= Number(rules.max_time_hours ?? 72) * 60 + 1e-9).sort((a, b) => a[0] - b[0]);
-  const update = (key, value) => setForm((old) => ({ ...old, [key]: value }));
-  const submit = () => {
-    const quantity = Number(form.quantity);
-    if (!locations.length) {
-      setLocalError('Add and save a map-pinned profile location before starting a bid.');
-      return;
-    }
-    if (!form.location_id) {
-      setLocalError('Select a saved location for this bid.');
-      return;
-    }
-    if (!Number.isInteger(quantity) || quantity <= 0 || quantity > 100000) {
-      setLocalError('Quantity must be a whole number from 1 to 100000.');
-      return;
-    }
-    setLocalError('');
-    onStart({
-      product_id: product.id,
-      quantity,
-      location_id: form.location_id,
-      skip_flagged_dealers: form.skip_flagged_dealers,
-      expiry_minutes: Number(form.expiry_minutes || 1440),
-      fields: {
-        ...(form.notes.trim() ? { Notes: form.notes.trim() } : {}),
-        Source: 'Buyer bid setup popup',
-      },
-    });
-  };
-  return (
-    <Modal title={`Start bid for ${product.name}`} onClose={onClose}>
-      <div className="details-grid">
-        <KV label="Product" value={product.name} />
-        <KV label="Brand" value={product.brand} />
-        <KV label="Price Range" value={`${money(product.price_min)} - ${money(product.price_max)}`} />
-      </div>
-      <div className="form-grid">
-        <label>Quantity<input type="number" min="1" value={form.quantity} onChange={(event) => update('quantity', event.target.value)} /></label>
-        <label>Select Saved Location<select value={form.location_id} onChange={(event) => update('location_id', event.target.value)}><option value="">{locations.length ? 'Select saved location' : 'No saved locations'}</option>{locations.map((loc) => <option key={loc.id} value={loc.location_id || loc.id}>{loc.label || loc.city}</option>)}</select></label>
-        <label>Bid Expiry Duration<select value={form.expiry_minutes} onChange={(event) => update('expiry_minutes', Number(event.target.value))}>{expiryOptions.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
-        <label className="check"><input type="checkbox" checked={form.skip_flagged_dealers} onChange={(event) => update('skip_flagged_dealers', event.target.checked)} /> Skip flagged dealers</label>
-        <label className="wide">Optional notes<textarea value={form.notes} onChange={(event) => update('notes', event.target.value)} /></label>
-      </div>
-      {localError ? <div className="notice">{localError}</div> : null}
-      <button className="primary" onClick={submit}><Bolt size={16} /> Start Bid</button>
-    </Modal>
-  );
-}
-
-function DealerOfferModal({ request, bid, onClose, onSubmit }) {
-  const [form, setForm] = useState({
-    amount: bid?.amount || '',
-    discount_amount: bid?.discount_amount || '',
-    warranty_text: bid?.warranty_text || '',
-    delivery_time: bid?.delivery_time || '',
-    installation_included: bid?.installation_included || false,
-    free_gifts: bid?.free_gifts || '',
-    extra_services: bid?.extra_services || '',
-    notes: bid?.notes || '',
-  });
-  const [localError, setLocalError] = useState('');
-  const update = (key, value) => setForm((old) => ({ ...old, [key]: value }));
-  const submit = () => {
-    const amount = Number(form.amount);
-    const discount = form.discount_amount === '' ? 0 : Number(form.discount_amount);
-    if (!Number.isFinite(amount) || amount <= 0) {
-      setLocalError('Bid amount must be a valid number greater than 0.');
-      return;
-    }
-    if (!Number.isFinite(discount) || discount < 0) {
-      setLocalError('Discount amount must be a valid number. Use 0 if there is no discount.');
-      return;
-    }
-    setLocalError('');
-    onSubmit({
-      bid_request_id: request.id,
-      amount,
-      discount_amount: discount,
-      warranty_text: form.warranty_text,
-      delivery_time: String(form.delivery_time),
-      installation_included: form.installation_included,
-      free_gifts: form.free_gifts,
-      extra_services: form.extra_services,
-      notes: form.notes,
-    });
-  };
-  return (
-    <Modal title={bid ? 'Edit Bid Offer' : 'Submit Customized Bid'} onClose={onClose}>
-      <p>Quote the final total for all {request.quantity || bid?.quantity || 1} requested units, including any discount. The discount field records savings already included in that total.</p>
-      <div className="form-grid">
-        <label>Final Total (Rs.)<input inputMode="decimal" value={form.amount} onChange={(event) => update('amount', event.target.value)} /></label>
-        <label>Included Savings (Rs.)<input inputMode="decimal" value={form.discount_amount} onChange={(event) => update('discount_amount', event.target.value)} /></label>
-        <label>Warranty Text<input value={form.warranty_text} onChange={(event) => update('warranty_text', event.target.value)} /></label>
-        <label>Delivery Time<input value={form.delivery_time} onChange={(event) => update('delivery_time', event.target.value)} /></label>
-        <label>Free Gifts<input value={form.free_gifts} onChange={(event) => update('free_gifts', event.target.value)} /></label>
-        <label>Extra Services<input value={form.extra_services} onChange={(event) => update('extra_services', event.target.value)} /></label>
-        <label className="check"><input type="checkbox" checked={form.installation_included} onChange={(event) => update('installation_included', event.target.checked)} /> Installation included</label>
-        <label className="wide">Dealer Notes<textarea value={form.notes} onChange={(event) => update('notes', event.target.value)} /></label>
-      </div>
-      {localError ? <div className="notice">{localError}</div> : null}
-      <button className="primary" onClick={submit}>Submit Bid</button>
-    </Modal>
   );
 }
 
@@ -2908,26 +3272,18 @@ function AdminAccountDetails({ details, role, onClose }) {
   );
 }
 
-function ProductImage({product,className='product-art',iconSize=42}) {
-  const [loaded,setLoaded]=useState(false);const [failed,setFailed]=useState(false);
-  const imageSource = !product.image_url || failed ? '/catalog-placeholder.svg' : product.image_url;
-  return <div className={className}>
-    {!loaded&&failed&&<Package size={iconSize} aria-hidden="true"/>}
-    <img src={imageSource} alt={product.name} loading={className==='product-detail-art'?'eager':'lazy'} className="catalog-product-photo" style={{opacity:loaded?1:0}} onLoad={()=>setLoaded(true)} onError={()=>{if (imageSource !== '/catalog-placeholder.svg') setFailed(true);}} />
-  </div>;
-}
-
 function ProductCard({ product, onCart, onBid, onSelect }) {
+  const specs = productSpecs(product);
   return (
     <article className="product-card" onClick={onSelect}>
-      <ProductImage key={product.image_url||'none'} product={product}/>
-      <span>{product.brand}</span>
-      <h3 title={product.name}>{product.name}</h3>
-      <p title={productSpecs(product)}>{productSpecs(product) || 'Standard Edition'}</p>
-      <strong>{product.release_year ? `${product.release_date_basis === 'legacy_reported_year' ? 'Reported year' : 'Release year'}: ${product.release_year}` : 'Release year unknown'} · Bid for price</strong>
+      <ProductImage product={product} />
+      {product.brand ? <span className="product-brand">{product.brand}</span> : null}
+      <h3 title={product.name}><button type="button" onClick={(event) => { event.stopPropagation(); onSelect(); }}>{product.name}</button></h3>
+      <p title={specs}>{specs || 'Standard edition'}</p>
+      {product.release_year ? <span className="product-year">{product.release_date_basis === 'legacy_reported_year' ? 'Reported ' : 'Released '}{product.release_year}</span> : null}
       <div className="product-actions">
-        <button className="success" onClick={(event) => { event.stopPropagation(); onCart(); }}><ShoppingCart size={15} /> Add</button>
-        <button onClick={(event) => { event.stopPropagation(); onBid(); }}><Bolt size={15} /> Bid</button>
+        <button type="button" className="primary" onClick={(event) => { event.stopPropagation(); onBid(); }}>Start bid</button>
+        <button type="button" className="icon-outline" aria-label={`Add ${product.name} to cart`} title="Add to cart" onClick={(event) => { event.stopPropagation(); onCart(); }}><ShoppingCart size={17} aria-hidden="true" /></button>
       </div>
     </article>
   );
@@ -2935,74 +3291,21 @@ function ProductCard({ product, onCart, onBid, onSelect }) {
 
 function SubscriptionBanner({ onSubscribe, onDismiss }) {
   return (
-    <div className="subscription-banner">
-      <Bolt size={20} />
-      <div><strong>Subscription Required</strong><span>Subscribe to receive bid requests in your service area - Rs. 999/month</span></div>
-      <button onClick={onSubscribe}>Subscribe Now</button>
-      <button className="icon-button" onClick={onDismiss} title="Dismiss subscription banner"><X size={18} /></button>
+    <div className="subscription-banner" role="region" aria-label="Subscription">
+      <Bolt size={20} aria-hidden="true" />
+      <div>
+        <strong>Subscribe to start receiving requests</strong>
+        <span>Buyers near you are asking for prices. Plan: ₹999 a month.</span>
+      </div>
+      <button type="button" onClick={onSubscribe}>Subscribe now</button>
+      <button type="button" className="icon-button" onClick={onDismiss} aria-label="Dismiss" title="Dismiss"><X size={18} aria-hidden="true" /></button>
     </div>
   );
-}
-
-function Page({ children }) {
-  return <div className="page">{children}</div>;
-}
-
-function Section({ title, subtitle, icon: Icon }) {
-  return (
-    <div className="section-header">
-      <div><Icon size={24} /></div>
-      <section><h2>{title}</h2><p>{subtitle}</p></section>
-    </div>
-  );
-}
-
-function Panel({ title, children }) {
-  return <section className="panel"><h3>{title}</h3>{children}</section>;
-}
-
-function Metric({ label, value }) {
-  return <div className="metric"><Layers size={20} /><strong>{value}</strong><span>{label}</span></div>;
-}
-
-function Status({ text = 'active' }) {
-  return <span className={`status ${String(text).toLowerCase()}`}>{text || 'active'}</span>;
-}
-
-function Empty({ title }) {
-  return <div className="empty">{title}</div>;
 }
 
 function SimpleList({ rows = [], primary, secondary, action }) {
   if (!rows?.length) return <Empty title="No records found" />;
   return <div className="simple-list">{rows.slice(0, 8).map((row, index) => <div key={row.id || index}><div><strong>{primary(row)}</strong><span>{secondary?.(row)}</span></div>{action?.(row) || <ChevronRight size={16} />}</div>)}</div>;
-}
-
-function ResponsiveTable({ rows = [], columns }) {
-  if (!rows?.length) return <Empty title="No records found" />;
-  return (
-    <div className="table-wrap">
-      <table>
-        <thead><tr>{columns.map(([label]) => <th key={label}>{label}</th>)}</tr></thead>
-        <tbody>{rows.map((row, index) => <tr key={row.id || index}>{columns.map(([label, render]) => <td key={label} data-label={label}>{render(row)}</td>)}</tr>)}</tbody>
-      </table>
-    </div>
-  );
-}
-
-function Modal({ title, children, onClose, wide }) {
-  return (
-    <div className="modal-layer" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
-      <section className={`modal ${wide ? 'wide' : ''}`} onMouseDown={(event) => event.stopPropagation()}>
-        <header><h2>{title}</h2><button className="icon-button" aria-label="Close" title="Close" onClick={onClose}><X size={18} /></button></header>
-        <div className="modal-body">{children}</div>
-      </section>
-    </div>
-  );
-}
-
-function KV({ label, value }) {
-  return <div className="kv"><span>{label}</span><strong>{String(value ?? '')}</strong></div>;
 }
 
 export default App;

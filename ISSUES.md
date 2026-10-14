@@ -2,6 +2,59 @@
 
 This report covers the FastAPI backend, React web app, Flutter app, and local seed scripts. The initial review was static; subsequent startup/database repair and browser/API end-to-end checks are described below. Native Android execution remains unverified.
 
+## Review and redesign pass (14 October 2026)
+
+A full review of the backend, the React app and the bidding flow, followed by a redesign of the web interface. The Flutter app was not run or changed in this pass (Flutter is not installed on the review machine); it keeps working because every API change is backward compatible.
+
+### Fixed: backend
+
+- **Accepting an offer was not tied to what the buyer saw.** A dealer could revise warranty, delivery or extras at the same price between the buyer reading the offer and clicking accept. Offers now carry a `terms_token`; `POST /buyer/bids/{id}/accept` accepts it and answers 409 with a plain message when the terms changed. Clients that do not send it (the Flutter app today) behave as before.
+- **No limit on password guessing.** Eight failed sign-ins for a username within ten minutes now return 429. Unknown usernames take the same time as known ones, so response time no longer reveals which accounts exist. Registration passwords must be at least 8 characters.
+- **`reports.csv` exposed real names.** The export skipped the anonymising step the JSON endpoint applies, so a buyer or dealer could download the counterpart's real name for a bid that was not awarded. It now uses the same masking.
+- **CSV formula injection.** Cells starting with `=`, `+`, `-`, `@`, tab or carriage return are prefixed so spreadsheets do not run them.
+- **Buyers and dealers could read commission and moderation rules** through `GET /settings`. They now receive only the rules their forms need.
+- **Admins could not see categories they had just created.** The public category list only returns categories with visible products, and the admin screens reused it, so an empty category vanished from the category manager and the product form. Admins now use `GET /admin/categories`.
+- **Unbounded report text** caused database errors that surfaced as HTTP 500. Reason, description, closure and message fields now have length limits.
+- **`/health` ran a full table scan on every anonymous call.** The check is now cached for 30 seconds.
+- **Dealers could not see what they were bidding on.** `GET /dealer/requests` now includes brand, model, image, the buyer's note, number of bids, the lowest bid so far, and an approximate distance (the buyer's exact pin is never sent). Buyer requests include brand and image.
+
+### Fixed: web app
+
+- **Server errors were invisible.** A rejected bid, an expired request or an unsubscribed dealer showed its message in a banner hidden behind the dialog. Errors now appear inside the dialog.
+- **"Start Bid" on the requests page started a bid on an arbitrary first product.** Removed; bids start from a product or the cart.
+- **Irreversible actions had no confirmation** (accept an offer, cancel a request, delete an account or location, ban or suspend a user, delete a product or category). They now explain the consequence first.
+- **No countdown anywhere.** Requests and bids show a live countdown that turns amber and then red.
+- **Buyers could pick a "1 Minute (Testing)" duration.** It is now shown only in development builds.
+- **The offer form hid the product, buyer area, deadline and competing bids.** The bid sheet now shows them, previews the total and unit price, says where the bid would rank, and validates inline.
+- **Offers were not sorted or compared.** Buyers see offers from the lowest price, with the lowest highlighted and the real delivery, warranty, installation and gifts side by side.
+- **Cart "Start Bid" and "+" stopped working beyond 250 products.** The cart now loads the product it needs.
+- **Account page** overwrote unsaved edits on refresh, showed an email field that did not save, used `window.alert`, and could silently move the default address. Reworked.
+- **Modals** had no dialog semantics, focus handling or Escape key; stacked dialogs closed together. Fixed.
+- **Keyboard**: pressing Enter on a button inside a list row also triggered the row. Fixed. Missing icon imports that a bundler cannot detect were found with a static check and restored.
+- Plain language throughout: raw request IDs, "live API", "Skip flagged dealers", "Bid for price" and similar jargon removed; money shows as `₹1,50,000`.
+
+### Fixed: tests and tooling
+
+- The seed now needs to run after the catalogue import (documented); the end-to-end fixture dealers no longer ask for a company that matches nothing.
+- The `bidding`, `profile` and `admin` browser suites were ported to the new interface and pass. Several steps were already stale before this pass (a field that no longer exists, a status filter that was removed, the buyer and dealer chat that was hidden on purpose) and were updated to match current behaviour.
+- New unit tests: `backend/tests/test_security_fixes.py` and `web/tests/format.test.mjs`.
+
+### Still open (recommended next)
+
+These were found but are product or architecture decisions, or need more than a small, safe change.
+
+1. **Bidding window equals the decision window.** The buyer cannot accept after the request expires, so a best offer placed in the last seconds dies unawarded. Consider a short selection period after bidding closes, or extending the deadline when a bid arrives near the end.
+2. **Report closure bypass.** A reporter can close their own report immediately, even while it is under investigation, and the admin approval path is never reached. Require admin approval before a report closes.
+3. **Blocking database calls inside `async` handlers** (withdraw, cancel request, chat and report messages) can stall every WebSocket while a row lock waits. Run them in a thread like `accept_bid` already does.
+4. **WebSocket handler** does a database check for every received frame and has no per-user connection cap.
+5. **Geocoding** holds one global lock for up to ten seconds per call, so many parallel searches can starve other requests. Add a per-user rate limit and round reverse-lookup coordinates for caching.
+6. **Dealer matching uses only the dealer's latest service location**, so a shop with several branches is matched through one of them.
+7. **Lifetime counters flag users with no time window** (a fourth cancellation or withdrawal ever). Count a recent window instead.
+8. **`GET /reports/{id}` and the reports export read only the newest 200 reports.**
+9. **Competing dealers' raw `dealer_id` values** are returned to buyers and dealers, which lets someone correlate an "anonymous" shop across requests.
+10. **Mobile app**: not reviewed. It should send `terms_token` on accept, and its wording should follow the web changes.
+11. **Login throttling is per username** and held in memory. It resets on restart and does not span several server processes. Put it in the database or a cache if you run more than one worker.
+
 ## Fixed in this pass
 
 ### Bidding and dealer matching

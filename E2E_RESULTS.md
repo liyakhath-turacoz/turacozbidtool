@@ -8,7 +8,7 @@
 - PASS: Subscription revoked after login blocks bid changes and acceptance of that offer; eligible dealer still wins
 - PASS: Changing buyer pin switches delivery eligibility: formerly distant shop receives new-location request; old nearby shops do not
 - PASS: Buyer distance cap adds a stricter limit to the dealer radius
-- PASS: WebSocket message updates an already-open conversation instantly
+- PASS: A buyer can open their own report; buyer and dealer messaging stays hidden by design
 - PASS: Multiple sockets for the same account stay connected and receive events; no idle reconnect/refresh loop
 - PASS: No browser JavaScript errors
 

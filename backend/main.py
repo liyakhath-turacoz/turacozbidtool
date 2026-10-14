@@ -11,6 +11,7 @@ import math
 import os
 import secrets
 import shutil
+import threading
 import time
 import uuid
 import urllib.parse
@@ -104,6 +105,63 @@ def verify_password(password: str, stored: str) -> bool:
         return hmac.compare_digest(encoded, expected)
     except ValueError:
         return False
+
+
+def bid_terms_token(row: dict[str, Any]) -> str:
+    """Fingerprint of the commercial terms of an offer, so an accept click can be tied to what the buyer saw."""
+    parts = [
+        f"{Decimal(str(row.get('amount') or 0)):.2f}",
+        f"{Decimal(str(row.get('discount_amount') or 0)):.2f}",
+        str(row.get("warranty_text") or "").strip(),
+        str(row.get("delivery_time") or "").strip(),
+        "1" if row.get("installation_included") else "0",
+        str(row.get("free_gifts") or "").strip(),
+        str(row.get("extra_services") or "").strip(),
+        str(row.get("notes") or "").strip(),
+    ]
+    return hashlib.sha256("".join(parts).encode("utf-8")).hexdigest()[:24]
+
+
+DUMMY_PASSWORD_HASH = hash_password("not-a-real-password", "0" * 32)
+
+
+class LoginThrottle:
+    """Slow down password guessing: too many recent failures for a username returns HTTP 429."""
+
+    def __init__(self, max_failures: int = 8, window_seconds: int = 600):
+        self.max_failures = max_failures
+        self.window_seconds = window_seconds
+        self._failures: dict[str, list[float]] = {}
+        self._lock = threading.Lock()
+
+    def _recent(self, key: str) -> list[float]:
+        cutoff = time.monotonic() - self.window_seconds
+        recent = [stamp for stamp in self._failures.get(key, []) if stamp > cutoff]
+        if recent:
+            self._failures[key] = recent
+        else:
+            self._failures.pop(key, None)
+        return recent
+
+    def check(self, key: str) -> None:
+        with self._lock:
+            if len(self._recent(key)) >= self.max_failures:
+                raise HTTPException(status_code=429, detail="Too many failed sign-in attempts. Wait a few minutes and try again.")
+
+    def record_failure(self, key: str) -> None:
+        with self._lock:
+            self._recent(key)
+            self._failures.setdefault(key, []).append(time.monotonic())
+            if len(self._failures) > 5000:
+                for stale in list(self._failures)[:1000]:
+                    self._failures.pop(stale, None)
+
+    def reset(self, key: str) -> None:
+        with self._lock:
+            self._failures.pop(key, None)
+
+
+login_throttle = LoginThrottle()
 
 
 def account_status_blocks_access(status: str) -> bool:
@@ -948,6 +1006,7 @@ class BidRepository:
             eligible_cache: dict[str, set[str]] = {}
             for row in rows:
                 row["is_mine"] = role == "dealer" and row["dealer_id"] == user_id
+                row["terms_token"] = bid_terms_token(row)
                 request = {**row, "id": row["bid_request_id"]}
                 is_live = row["status"] in {"active", "updated"} and row["request_status"] == "active"
                 row["selectable"] = False
@@ -1207,13 +1266,20 @@ def delete_user_account(cursor, user_id: str, actor_id: str) -> None:
     audit(cursor, actor_id, "user.deleted", "users", user_id, {"history_retained": True})
 
 
+def csv_safe_cell(value: Any) -> Any:
+    """Stop spreadsheet apps from running user-entered text as a formula."""
+    if isinstance(value, str) and value[:1] in ("=", "+", "-", "@", "\t", "\r"):
+        return "'" + value
+    return value
+
+
 def csv_response(filename: str, rows: list[dict[str, Any]]) -> Response:
     output = io.StringIO()
     fieldnames = sorted({key for row in rows for key in row.keys()}) if rows else ["status"]
     writer = csv.DictWriter(output, fieldnames=fieldnames)
     writer.writeheader()
     if rows:
-        writer.writerows(rows)
+        writer.writerows({key: csv_safe_cell(value) for key, value in row.items()} for row in rows)
     else:
         writer.writerow({"status": "No data"})
     return Response(
@@ -1804,7 +1870,7 @@ class CartRepository:
             audit(cursor, buyer_id, "bid_request.created", "bid_requests", request_id, {"dealers_matched": len(eligible), "dealers_notified": notified_count})
         return request_id
 
-    def accept_bid(self, buyer_id: str, bid_id: str) -> dict[str, Any]:
+    def accept_bid(self, buyer_id: str, bid_id: str, terms_token: str | None = None) -> dict[str, Any]:
         with db() as conn, conn.cursor() as cursor:
             expire_due_bid_requests(cursor)
             cursor.execute(
@@ -1834,7 +1900,8 @@ class CartRepository:
                 raise HTTPException(status_code=400, detail="Bid not found, expired, or no longer selectable")
             cursor.execute(
                 """
-                SELECT b.bid_request_id, b.amount, b.dealer_id, p.name AS product, c.name AS category, c.id AS category_id
+                SELECT b.bid_request_id, b.amount, b.discount_amount, b.warranty_text, b.delivery_time, b.installation_included,
+                       b.free_gifts, b.extra_services, b.notes, b.dealer_id, p.name AS product, c.name AS category, c.id AS category_id
                 FROM bids b JOIN product_reference_catalog p ON p.id=%s
                 JOIN categories c ON c.id=p.category_id
                 WHERE b.id=%s AND b.bid_request_id=%s AND b.status IN ('active','updated')
@@ -1846,6 +1913,8 @@ class CartRepository:
             bid = cursor.fetchone()
             if not bid:
                 raise HTTPException(status_code=400, detail="Bid not found, expired, or no longer selectable")
+            if terms_token and terms_token != bid_terms_token(bid):
+                raise HTTPException(status_code=409, detail="The dealer changed this offer while you were viewing it. Review the updated terms, then accept again.")
             if not dealer_ops.request_dealer_is_eligible(cursor, request, bid["dealer_id"], lock=True):
                 raise HTTPException(status_code=400, detail="This dealer is no longer eligible for this request")
             cursor.execute(
@@ -2133,9 +2202,14 @@ class DealerOpsRepository:
             expire_due_bid_requests(cursor)
             cursor.execute(
                 """
-                SELECT br.id, br.product_id, br.location_id, br.skip_flagged_dealers, p.name AS product, c.name AS category, br.quantity, br.radius_km, br.status, br.expires_at,
+                SELECT br.id, br.product_id, br.location_id, br.skip_flagged_dealers, p.name AS product, p.brand, p.model, p.image_url,
+                       c.name AS category, br.quantity, br.radius_km, br.status, br.expires_at,
                        UNIX_TIMESTAMP(br.expires_at) AS expires_at_epoch,
-                       CONCAT(l.area, ', ', l.city) AS buyer_area
+                       CONCAT(l.area, ', ', l.city) AS buyer_area,
+                       l.latitude AS buyer_latitude, l.longitude AS buyer_longitude,
+                       (SELECT f.field_value FROM bid_request_fields f WHERE f.bid_request_id=br.id AND f.field_name='Notes' LIMIT 1) AS buyer_notes,
+                       (SELECT COUNT(*) FROM bids ob WHERE ob.bid_request_id=br.id AND ob.deleted_at IS NULL AND ob.status IN ('active','updated')) AS offers_count,
+                       (SELECT MIN(ob.amount) FROM bids ob WHERE ob.bid_request_id=br.id AND ob.deleted_at IS NULL AND ob.status IN ('active','updated')) AS best_amount
                 FROM bid_request_dealers brd
                 JOIN bid_requests br ON br.id=brd.bid_request_id
                 JOIN product_reference_catalog p ON p.id=br.product_id
@@ -2158,10 +2232,25 @@ class DealerOpsRepository:
                 [dealer_id],
             )
             rows = cursor.fetchall()
+            cursor.execute(
+                """
+                SELECT loc.latitude, loc.longitude
+                FROM dealer_service_locations dsl JOIN locations loc ON loc.id=dsl.location_id
+                WHERE dsl.dealer_id=%s AND loc.latitude IS NOT NULL AND loc.longitude IS NOT NULL
+                ORDER BY dsl.created_at DESC LIMIT 1
+                """,
+                [dealer_id],
+            )
+            shop = cursor.fetchone()
             result = []
             for row in rows:
                 if self.request_dealer_is_eligible(cursor, row, dealer_id):
                     row["expires_at"] = datetime.fromtimestamp(float(row.pop("expires_at_epoch")), timezone.utc).isoformat()
+                    # Share an approximate distance only; the buyer's exact pin stays private.
+                    lat, lng = row.pop("buyer_latitude"), row.pop("buyer_longitude")
+                    row["distance_km"] = None
+                    if shop and lat is not None and lng is not None:
+                        row["distance_km"] = round(haversine_km(float(shop["latitude"]), float(shop["longitude"]), float(lat), float(lng)), 1)
                     result.append(row)
             return result
 
@@ -2683,11 +2772,18 @@ class AuthService:
         self.repo = repo
 
     def login(self, username: str, password: str) -> dict[str, Any]:
+        throttle_key = (username or "").strip().lower()
+        login_throttle.check(throttle_key)
         user = self.repo.find_user_by_email(username)
+        if not user:
+            # Hash anyway so the response time does not reveal which usernames exist.
+            verify_password(password, DUMMY_PASSWORD_HASH)
         if not user or not verify_password(password, user["password_hash"]):
+            login_throttle.record_failure(throttle_key)
             if user:
                 self.repo.write_login(user["id"], False, "bad_password")
             raise HTTPException(status_code=401, detail="Invalid username or password")
+        login_throttle.reset(throttle_key)
         if account_status_blocks_access(user["status"]):
             self.repo.write_login(user["id"], False, user["status"])
             raise HTTPException(status_code=403, detail="Account is blocked")
@@ -2762,7 +2858,7 @@ class LoginIn(BaseModel):
 class RegisterIn(BaseModel):
     name: str = Field(min_length=2, max_length=160)
     username: str = Field(min_length=2, max_length=190)
-    password: str = Field(min_length=6, max_length=1024)
+    password: str = Field(min_length=8, max_length=1024)
     role: str
 
     @model_validator(mode="after")
@@ -2803,7 +2899,7 @@ class CategoryIn(BaseModel):
 
 class StatusIn(BaseModel):
     status: str
-    reason: str = ""
+    reason: str = Field(default="", max_length=1000)
 
 
 class CartItemIn(BaseModel):
@@ -2880,25 +2976,29 @@ class BidIn(BaseModel):
             raise ValueError("Offer text is too long")
         return self
 
+class AcceptBidIn(BaseModel):
+    terms_token: str | None = Field(default=None, max_length=64)
+
+
 class ReportIn(BaseModel):
     reported_user_id: str | None = None
     bid_id: str | None = None
-    reason: str
-    description: str = ""
+    reason: str = Field(min_length=1, max_length=190)
+    description: str = Field(default="", max_length=5000)
 
 
 class ReportUpdateIn(BaseModel):
     status: str
-    note: str = ""
+    note: str = Field(default="", max_length=2000)
 
 
 class ReportClosureRequestIn(BaseModel):
-    reason: str = Field(min_length=3)
+    reason: str = Field(min_length=3, max_length=1000)
 
 
 class ReportMessageIn(BaseModel):
     recipient_group: str
-    message: str
+    message: str = Field(min_length=1, max_length=4000)
 
 
 
@@ -3072,7 +3172,7 @@ _bid_publication_lock = asyncio.Lock()
 def request_snapshot(request_id: str, recipient: dict) -> dict:
     with db() as conn, conn.cursor() as cursor:
         cursor.execute("""SELECT br.id,br.product_id,br.quantity,br.status,br.winning_bid_id,
-            UNIX_TIMESTAMP(br.expires_at) AS expires_at_epoch,p.name AS product,
+            UNIX_TIMESTAMP(br.expires_at) AS expires_at_epoch,p.name AS product,p.brand,p.model,p.image_url,
             l.area AS buyer_area,l.city AS buyer_city,l.state AS buyer_state
             FROM bid_requests br JOIN product_reference_catalog p ON p.id=br.product_id
             JOIN locations l ON l.id=br.location_id WHERE br.id=%s AND br.deleted_at IS NULL""", [request_id])
@@ -3223,9 +3323,16 @@ async def send_bid_message(bid_id: str, payload: BidMessageIn, user: dict = Depe
     return sent
 
 
+_health_checked_at = 0.0
+
+
 @app.get("/health")
 def health() -> dict[str, str]:
-    check_database_storage()
+    global _health_checked_at
+    # Reading every table on each call would let anonymous traffic hammer the database.
+    if time.monotonic() - _health_checked_at > 30:
+        check_database_storage()
+        _health_checked_at = time.monotonic()
     return {"status": "ok", "database": DB_NAME}
 
 
@@ -3794,19 +3901,7 @@ def validate_category_parent(cursor, category_id: str, parent_id: str | None) ->
         raise HTTPException(status_code=400, detail="A category with items cannot become an item")
 
 
-@app.get("/categories")
-def get_categories() -> list[dict[str, Any]]:
-    with db() as conn, conn.cursor() as cursor:
-        cursor.execute("""
-            SELECT c.id,c.name,c.parent_id,c.status FROM categories c
-            WHERE c.deleted_at IS NULL AND (
-              EXISTS (SELECT 1 FROM products p WHERE p.catalog_visible=TRUE AND p.deleted_at IS NULL AND (p.category_id=c.id OR p.subcategory_id=c.id))
-              OR EXISTS (SELECT 1 FROM categories child WHERE child.parent_id=c.id AND child.deleted_at IS NULL
-                AND EXISTS (SELECT 1 FROM products p WHERE p.catalog_visible=TRUE AND p.deleted_at IS NULL AND p.subcategory_id=child.id))
-            ) ORDER BY c.name
-        """)
-        rows = cursor.fetchall()
-
+def category_tree(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     parent_map = {}
     for r in rows:
         if r["parent_id"] is None:
@@ -3820,6 +3915,29 @@ def get_categories() -> list[dict[str, Any]]:
                 parent["items"].append(r)
 
     return list(parent_map.values())
+
+
+@app.get("/categories")
+def get_categories() -> list[dict[str, Any]]:
+    """Public list for browsing: only categories that currently have visible products."""
+    with db() as conn, conn.cursor() as cursor:
+        cursor.execute("""
+            SELECT c.id,c.name,c.parent_id,c.status FROM categories c
+            WHERE c.deleted_at IS NULL AND (
+              EXISTS (SELECT 1 FROM products p WHERE p.catalog_visible=TRUE AND p.deleted_at IS NULL AND (p.category_id=c.id OR p.subcategory_id=c.id))
+              OR EXISTS (SELECT 1 FROM categories child WHERE child.parent_id=c.id AND child.deleted_at IS NULL
+                AND EXISTS (SELECT 1 FROM products p WHERE p.catalog_visible=TRUE AND p.deleted_at IS NULL AND p.subcategory_id=child.id))
+            ) ORDER BY c.name
+        """)
+        return category_tree(cursor.fetchall())
+
+
+@app.get("/admin/categories")
+def get_all_categories(user: dict[str, Any] = Depends(require_role("admin"))) -> list[dict[str, Any]]:
+    """Every category, including empty ones, so admins can fill a category they just created."""
+    with db() as conn, conn.cursor() as cursor:
+        cursor.execute("SELECT c.id,c.name,c.parent_id,c.status FROM categories c WHERE c.deleted_at IS NULL ORDER BY c.name")
+        return category_tree(cursor.fetchall())
 
 
 @app.post("/admin/categories")
@@ -4542,7 +4660,11 @@ async def decide_report_closure(report_id: str, payload: StatusIn, user: dict[st
 
 @app.get("/settings")
 def settings(user: dict[str, Any] = Depends(current_user)) -> dict[str, Any]:
-    return settings_repo.list_settings()
+    values = settings_repo.list_settings()
+    if user["role"] == "admin":
+        return values
+    # Buyers and dealers only need the rules that shape their forms; commission and moderation rules stay private.
+    return {key: value for key, value in values.items() if key in {"bid_rules", "location_rules", "dealer_rules", "categories"}}
 
 
 @app.post("/settings/{key}")
@@ -4608,8 +4730,8 @@ async def buyer_start_bid(payload: StartBidIn, user: dict[str, Any] = Depends(re
 
 
 @app.post("/buyer/bids/{bid_id}/accept")
-async def buyer_accept_bid(bid_id: str, user: dict[str, Any] = Depends(require_role("buyer"))) -> dict[str, str]:
-    result = await asyncio.to_thread(cart_repo.accept_bid, user["sub"], bid_id)
+async def buyer_accept_bid(bid_id: str, payload: AcceptBidIn | None = None, user: dict[str, Any] = Depends(require_role("buyer"))) -> dict[str, str]:
+    result = await asyncio.to_thread(cart_repo.accept_bid, user["sub"], bid_id, payload.terms_token if payload else None)
     await publish_bid_snapshot(result["request_id"])
     await manager.send_personal_message(
         {"type": "bid_accepted", "bid_id": bid_id, "request_id": result["request_id"], "route": "bid_history"},
@@ -4689,7 +4811,7 @@ def buyer_requests(include_closed: bool = False, user: dict[str, Any] = Depends(
         expire_due_bid_requests(cursor)
         cursor.execute(
             """
-            SELECT br.id, br.product_id, p.name AS product, br.quantity, br.expires_at, br.status,
+            SELECT br.id, br.product_id, p.name AS product, p.brand, p.model, p.image_url, br.quantity, br.expires_at, br.status,
                    UNIX_TIMESTAMP(br.expires_at) AS expires_at_epoch,
                    l.address_line AS buyer_address, l.city AS buyer_city, l.area AS buyer_area,
                    l.state AS buyer_state, l.pincode AS buyer_pincode,
@@ -4901,7 +5023,7 @@ def export_csv(kind: str, user: dict[str, Any] = Depends(current_user)) -> Respo
     if kind == "logs" and user["role"] == "admin":
         return csv_response("logs.csv", admin_repo.list_logs())
     if kind == "reports":
-        rows = report_repo.list_reports()
+        rows = report_repo.list_reports(user["sub"], user["role"])
         if user["role"] != "admin":
             rows = [
                 row

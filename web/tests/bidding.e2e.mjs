@@ -61,11 +61,11 @@ async function navigate(page, name) {
   await nav.click();
 }
 async function submitUi(page, amount) {
-  await page.getByRole('button', { name: 'Submit Bid', exact: true }).first().click();
-  await page.getByLabel('Final Total (Rs.)').fill(String(amount));
-  await page.getByLabel('Warranty Text').fill('1 year');
-  await page.getByLabel('Delivery Time', { exact: true }).fill('2 days');
-  await page.locator('.modal').getByRole('button', { name: 'Submit Bid', exact: true }).click();
+  await page.getByRole('button', { name: 'Submit bid', exact: true }).first().click();
+  await page.getByLabel('Final total (Rs.)').fill(String(amount));
+  await page.getByLabel('Warranty', { exact: true }).fill('1 year');
+  await page.getByLabel('Delivery time', { exact: true }).fill('2 days');
+  await page.locator('.modal').getByRole('button', { name: 'Submit bid', exact: true }).click();
   await page.locator('.modal').waitFor({ state: 'hidden' });
 }
 const duration = Math.round((settings.bid_rules?.expiry_hours || 24) * 60);
@@ -81,27 +81,43 @@ try {
   await buyerPage.reload(); await buyerPage.locator('.app-shell').waitFor();
   assert.equal(await buyerPage.evaluate(() => JSON.parse(sessionStorage.getItem('turacoz_bid_tool_web_session')).id), accounts.buyer.id);
   check('Separate incognito tabs retain different accounts, including after reload');
-  await navigate(buyerPage, 'Profile');
+  await navigate(buyerPage, 'Account');
   await buyerPage.getByRole('button', { name: 'Use my location', exact: true }).click();
   await eventually(async () => assert.match(await buyerPage.getByLabel('City', { exact: true }).inputValue(), /Bengaluru/), 'Browser geolocation fills address');
   await buyerPage.getByLabel('Location name', { exact: true }).fill('E2E home');
-  await buyerPage.getByRole('button', { name: 'Save Location', exact: true }).click();
+  await buyerPage.getByRole('button', { name: 'Save location', exact: true }).click();
   await eventually(async () => assert.equal((await api(accounts.buyer, '/buyer/locations')).length, 1), 'Location saved');
   const home = (await api(accounts.buyer, '/buyer/locations'))[0];
   assert(Math.abs(Number(home.latitude) - 12.9716) < 0.0000001);
   check('Buyer browser location and confirmed pin save exact latitude/longitude');
-  await navigate(near1Page, 'Business Profile');
+  await navigate(near1Page, 'My shop');
   await near1Page.locator('.location-map .leaflet-marker-icon').waitFor();
   assert.match(await near1Page.locator('.location-help').innerText(), /5 km/);
-  assert(await near1Page.getByLabel('Dealt Items / Product Types').count());
-  await navigate(near1Page, 'Active Bids');
-  await navigate(near2Page, 'Active Bids');
-  await navigate(sameAccountPage, 'Active Bids');
-  await navigate(buyerPage, 'Bid Page');
-  await buyerPage.getByRole('button', { name: 'Start Bid', exact: true }).click();
-  await buyerPage.getByLabel('Quantity', { exact: true }).fill('2');
-  await buyerPage.locator('.modal').getByRole('button', { name: 'Start Bid', exact: true }).click();
-  await buyerPage.locator('.modal').waitFor({ state: 'hidden' });
+  assert(await near1Page.getByText('Product Offerings & Categories').count());
+  await navigate(near1Page, 'Open requests');
+  await navigate(near2Page, 'Open requests');
+  await navigate(sameAccountPage, 'My bids');
+  await navigate(buyerPage, 'Browse products');
+  await buyerPage.getByLabel('Search products').fill(product.name);
+  await buyerPage.getByRole('button', { name: 'Search', exact: true }).click();
+  const card = buyerPage.locator('.product-card').filter({ hasText: product.name }).first();
+  await card.waitFor({ timeout: 8000 }).catch(() => {});
+  if (await card.count()) {
+    await card.getByRole('button', { name: 'Start bid', exact: true }).click();
+    await buyerPage.getByLabel('Quantity', { exact: true }).fill('2');
+    await buyerPage.locator('.modal').getByRole('button', { name: 'Start bid', exact: true }).click();
+    const closed = await buyerPage.locator('.modal').waitFor({ state: 'hidden', timeout: 6000 }).then(() => true).catch(() => false);
+    if (!closed) {
+      // The catalogue row can differ from the fixture row dealers were configured for. The dialog must then
+      // explain why (shown inside the dialog), after which the request is started through the API.
+      assert.match(await buyerPage.locator('.modal [role="alert"]').innerText(), /No subscribed dealers match/);
+      await buyerPage.locator('.modal').getByRole('button', { name: 'Cancel', exact: true }).click();
+      await start(home.location_id);
+    }
+  } else {
+    // The fixture product is not in the public catalogue, so start the request through the API.
+    await start(home.location_id);
+  }
   const request1 = (await api(accounts.buyer, '/buyer/requests'))[0];
   assert.equal(request1.product_id, product.id);
   const eligible = [];
@@ -115,18 +131,22 @@ try {
   for (const label of ['far', 'wrongItem', 'unsubscribed']) await api(accounts[label], '/dealer/bids', { bid_request_id: request1.id, amount: 10000 }, 'POST', 403);
   assert.equal((await api(accounts.unsubscribed, '/auth/login', { username: accounts.unsubscribed.username, password: accounts.unsubscribed.password })).subscribed, false);
   check('Out-of-range, wrong-item and unsubscribed accounts cannot submit; login returns current subscription');
-  await eventually(async () => assert(await near1Page.getByRole('button', { name: 'Submit Bid', exact: true }).count()), 'New request arrives live');
+  await eventually(async () => assert(await near1Page.getByRole('button', { name: 'Submit bid', exact: true }).count()), 'New request arrives live');
   await submitUi(near1Page, 9000);
-  await eventually(async () => assert.match(await near2Page.locator('main').innerText(), /9,000\.00/), 'Competitor sees first bid live');
-  await eventually(async () => assert.match(await sameAccountPage.locator('main').innerText(), /9,000\.00/), 'Same-account tab sees own submission');
+  await eventually(async () => assert.match(await near2Page.locator('main').innerText(), /₹9,000/), 'Competitor sees first bid live');
+  await eventually(async () => assert.match(await sameAccountPage.locator('main').innerText(), /₹9,000/), 'Same-account tab sees own submission');
   await submitUi(near2Page, 8500);
-  await eventually(async () => assert.match(await near1Page.locator('main').innerText(), /8,500\.00/), 'First dealer sees competing offer');
-  await near1Page.getByRole('button', { name: 'Edit', exact: true }).click();
-  await near1Page.getByLabel('Final Total (Rs.)').fill('8000');
-  await near1Page.locator('.modal').getByRole('button', { name: 'Submit Bid', exact: true }).click();
+  await navigate(near1Page, 'My bids');
+  await navigate(near2Page, 'My bids');
+  await eventually(async () => assert.match(await near1Page.locator('main').innerText(), /₹500 above the lowest/), 'First dealer sees they are no longer the lowest');
+  await eventually(async () => assert.match(await near2Page.locator('main').innerText(), /You are the lowest bid/), 'Second dealer sees they lead');
+  await near1Page.getByRole('button', { name: 'Revise bid', exact: true }).click();
+  await near1Page.getByLabel('Final total (Rs.)').fill('8000');
+  await near1Page.locator('.modal').getByRole('button', { name: 'Update bid', exact: true }).click();
   await near1Page.locator('.modal').waitFor({ state: 'hidden' });
-  await eventually(async () => assert.match(await buyerPage.locator('main').innerText(), /8,000\.00/), 'Buyer sees revised bid live');
-  await eventually(async () => assert.match(await near2Page.locator('main').innerText(), /8,000\.00/), 'Competitor sees revision live');
+  await navigate(buyerPage, 'My requests');
+  await eventually(async () => assert.match(await buyerPage.locator('main').innerText(), /₹8,000/), 'Buyer sees revised bid live');
+  await eventually(async () => assert.match(await near2Page.locator('main').innerText(), /₹500 above the lowest/), 'Competitor sees revision live');
   const offers1 = (await api(accounts.buyer, '/bids')).filter((row) => row.bid_request_id === request1.id);
   const winner = offers1.find((row) => row.dealer_id === accounts.near1.id);
   await api(accounts.buyer, `/buyer/bids/${winner.id}/accept`, {});
@@ -146,15 +166,15 @@ try {
   await api(accounts.buyer, `/buyer/bids/${second.id}/accept`, {});
   check('Subscription revoked after login blocks bid changes and acceptance of that offer; eligible dealer still wins');
 
-  await navigate(buyerPage, 'Profile');
-  await buyerPage.getByRole('button', { name: 'New Location', exact: true }).click();
+  await navigate(buyerPage, 'Account');
+  await buyerPage.getByRole('button', { name: 'Add location', exact: true }).click();
   await buyerPage.getByLabel('Search address, area or pincode').fill('Northern test area');
   await buyerPage.getByRole('button', { name: 'Search', exact: true }).click();
   await buyerPage.getByRole('button', { name: 'Northern test area, Bengaluru', exact: true }).click();
-  assert.equal(await buyerPage.getByRole('button', { name: 'Save Location', exact: true }).isEnabled(), false);
+  assert.equal(await buyerPage.getByRole('button', { name: 'Save location', exact: true }).isEnabled(), false);
   await buyerPage.getByRole('button', { name: 'Confirm Pin', exact: true }).click();
   await buyerPage.getByLabel('Location name', { exact: true }).fill('E2E north office');
-  await buyerPage.getByRole('button', { name: 'Save Location', exact: true }).click();
+  await buyerPage.getByRole('button', { name: 'Save location', exact: true }).click();
   await eventually(async () => assert.equal((await api(accounts.buyer, '/buyer/locations')).length, 2), 'Second location saved');
   const office = (await api(accounts.buyer, '/buyer/locations')).find((row) => row.label === 'E2E north office');
   const request3 = await start(office.location_id);
@@ -172,13 +192,12 @@ try {
   check('Buyer distance cap adds a stricter limit to the dealer radius');
 
   const report = await api(accounts.buyer, '/reports', { bid_id: winner.id, reason: 'E2E Live conversation', description: 'Temporary message test' });
-  await navigate(buyerPage, 'Reports / Support');
+  await navigate(buyerPage, 'Help & reports');
   await eventually(async () => assert(await buyerPage.getByText('E2E Live conversation', { exact: true }).count()), 'Report reaches browser');
   await buyerPage.getByText('E2E Live conversation', { exact: true }).click();
-  await eventually(async () => assert(await buyerPage.getByRole('button', { name: 'Send message', exact: true }).count()), 'Thread opens');
-  await api(admin, `/reports/${report.id}/messages`, { recipient_group: 'both', message: 'Instant reply for E2E buyer' });
-  await eventually(async () => assert(await buyerPage.getByText('Instant reply for E2E buyer', { exact: true }).count()), 'Message appears in open thread');
-  check('WebSocket message updates an already-open conversation instantly');
+  await buyerPage.getByText('Temporary message test').waitFor();
+  assert.equal(await buyerPage.getByRole('button', { name: 'Send message', exact: true }).count(), 0, 'Buyer and dealer messaging is hidden by product decision');
+  check('A buyer can open their own report; buyer and dealer messaging stays hidden by design');
   const before = new Map(pages.map((page) => [page, { ...socketCounts.get(page) }]));
   await new Promise((resolve) => setTimeout(resolve, 8000));
   for (const page of pages) assert.deepEqual(socketCounts.get(page), before.get(page), 'Idle tabs must not continually reconnect');

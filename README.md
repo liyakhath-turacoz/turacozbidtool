@@ -32,6 +32,8 @@ The script securely prompts for the MariaDB/MySQL root password. `--reset` drops
 python backend\scripts\seed_test_accounts.py
 ```
 
+Import the product catalogue **before** seeding (or run the seed again afterwards). The seed links the demo dealers to the categories that exist when it runs, so dealers seeded before the import do not match any imported product and buyers see "No subscribed dealers match this product". The seed is repeatable, so re-running it after an import is safe.
+
 The seed creates 20 buyers, 20 subscribed dealers, saved demo locations, coverage areas, and one sample request with offers if there are no active requests. Demo product records are added only when there are no usable active products linked to active categories. The seed is repeatable and does not truncate product catalogs, categories, or bidding history.
 
 Demo sign-ins:
@@ -138,10 +140,10 @@ See [PRODUCT_CATALOG_REPORT.md](PRODUCT_CATALOG_REPORT.md) for category/year/bra
 ## Bidding flow
 
 1. A buyer saves a map pinned location, picks a product, and starts a request.
-2. The backend matches subscribed dealers by account/verification rules, product category/item type, and each dealer's configured radius, city, district, or state coverage. Manufacturer/brand does not restrict matching. The configured broadcast cap is applied after sorting eligible matches by distance where pins are available.
+2. The backend matches subscribed dealers by account/verification rules, product category/item type, and each dealer's configured radius, city, district, or state coverage. A dealer who ticks specific companies under **My shop** only receives requests for those companies; with none ticked, every company matches. The configured broadcast cap is applied after sorting eligible matches by distance where pins are available.
 3. Eligible dealers receive the request and can submit, update, or withdraw offers before expiry. A withdrawn offer can be submitted again while the request is open and the dealer remains eligible.
 4. Each offer is a **final total for all requested units, after discount**. The discount field records savings already included in that total. It is not subtracted again, and the total is not multiplied by quantity.
-5. The buyer selects one currently eligible offer; the request becomes awarded and competing active offers become lost. This records offer selection; fulfillment tracking is not implemented.
+5. The buyer selects one currently eligible offer. The accept call carries a fingerprint of the terms the buyer was shown, so if the dealer revised price, warranty, delivery or extras a moment earlier, the server answers 409 and the buyer reviews the new terms instead of being awarded different ones; the request becomes awarded and competing active offers become lost. This records offer selection; fulfillment tracking is not implemented.
 6. The buyer and winning dealer immediately see each other's contact details and can use a private conversation attached to that winning bid. Either can report the other; admin receives the complaint and can inspect the bid conversation. Subscription covers participation: selecting a winner creates no commission or commission invoice. Other participating dealers see the winning price, terms and final statuses, with private contact fields hidden.
 
 Request expiry is in minutes in the API (`expiry_minutes`), with absolute limits of 1 minute to 72 hours and additional configured duration bounds. Omitting the duration uses the configured default. Positive `radius_km` adds a buyer distance limit; zero uses dealer coverage alone. An optional minimum price decrease applies to revisions; it defaults to zero (disabled), and terms may change at the same total.
@@ -156,7 +158,7 @@ Search an address, area or pincode and choose a result, or select **Use my locat
 
 Radius coverage measures the distance between the dealer's shop pin and the buyer's delivery pin using latitude/longitude. The displayed circle uses the effective radius, capped by the admin setting. Product choices identify categories and item types, across manufacturers. Current subscription and eligibility are rechecked when listing incoming requests, bidding and selecting a winner; login also returns the current subscription state.
 
-Web logins are stored per tab, so separate incognito tabs can use different accounts. Same-account tabs have separate WebSockets and all receive events. Personalized, versioned request snapshots update competing offers and open offer dialogs directly; private bid and support messages are pushed immediately. Reconnection reloads missed offers and open conversations while preserving message drafts. Requests display their IDs to distinguish separate auctions for the same product.
+Web logins are stored per tab, so separate incognito tabs can use different accounts. Same-account tabs have separate WebSockets and all receive events. Personalized, versioned request snapshots update competing offers and open offer dialogs directly; private bid and support messages are pushed immediately. Reconnection reloads missed offers and open conversations while preserving message drafts. Requests are identified by product, quantity, area and countdown rather than raw IDs.
 
 Admin controls default, minimum and maximum bidding duration under **Platform Rules & Categories** on web and **Platform Rules & Settings** on Flutter. Buyers choose within these limits; setting all three durations equal enforces a fixed duration. Existing requests keep the deadline saved at creation. Dealers cannot extend it through revisions.
 
@@ -173,7 +175,7 @@ python backend\scripts\e2e_bidding.py --suite admin
 
 Install web dependencies first (`npm install` in `web`). The checks use installed Microsoft Edge in headless mode; `E2E_BROWSER` can select another installed Playwright channel. `E2E_API_URL` and `E2E_WEB_URL` override local defaults. Temporary fixture accounts use the existing product catalog and are cleaned up afterward. The browser address responses are mocked for repeatability; login, saved pins, subscriptions, matching, offers and messages use the real API/database. Successful runs write [E2E_RESULTS.md](E2E_RESULTS.md) and [LIVE_E2E_RESULTS.md](LIVE_E2E_RESULTS.md).
 
-The profile suite also checks subscription and deletion buttons using only its temporary account. See [BUSINESS_PROFILE_E2E_RESULTS.md](BUSINESS_PROFILE_E2E_RESULTS.md). Connection reuse and transaction failure checks run with `python -m unittest backend.tests.test_connection_cache`.
+The profile suite also checks subscription and deletion buttons using only its temporary account. See [BUSINESS_PROFILE_E2E_RESULTS.md](BUSINESS_PROFILE_E2E_RESULTS.md). Backend unit tests run with `python -m unittest discover -s backend/tests -p "test_*.py"` from the project root, and the web helper tests with `npm test` in `web`. The `live` and `mobile` browser suites target features that were removed earlier (buyer and dealer chat, the old dealer item fields) and need rewriting before they can pass again; the `bidding`, `profile` and `admin` suites match the current interface.
 
 The admin suite creates temporary categories/products/accounts, checks the real admin forms and protected API operations, and removes its fixtures afterward. See [ADMIN_E2E_RESULTS.md](ADMIN_E2E_RESULTS.md).
 

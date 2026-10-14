@@ -7,9 +7,12 @@
     "start": "vite --host 0.0.0.0 --port 5173",
     "dev": "vite --host 0.0.0.0 --port 5173",
     "build": "vite build",
-    "preview": "vite preview --host 0.0.0.0 --port 4173"
+    "preview": "vite preview --host 0.0.0.0 --port 4173",
+    "test": "node --test tests/format.test.mjs"
   },
   "dependencies": {
+    "@fontsource-variable/bricolage-grotesque": "^5.3.0",
+    "@fontsource/ibm-plex-sans": "^5.3.0",
     "@vitejs/plugin-react": "^4.3.4",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.468.0",

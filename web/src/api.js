@@ -27,7 +27,9 @@ async function request(path, { token = '', method = 'GET', body, raw = false } =
   }
   if (!response.ok) {
     const text = await response.text();
-    throw new Error(`API error ${response.status}: ${text}`);
+    const error = new Error(`API error ${response.status}: ${text}`);
+    error.status = response.status;
+    throw error;
   }
   if (raw) return response;
   const text = await response.text();
@@ -86,6 +88,7 @@ export const api = {
   settings: (token) => request('/settings', { token }),
   saveSetting: (token, key, value) => request(`/settings/${key}`, { token, method: 'POST', body: { value } }),
   categories: (token) => request('/categories', { token }),
+  adminCategories: (token) => request('/admin/categories', { token }),
   createCategory: (token, name, parentId) => request('/admin/categories', { token, method: 'POST', body: { name, parent_id: parentId || null } }),
   updateCategory: (token, id, name, parentId) => request(`/admin/categories/${id}`, { token, method: 'PUT', body: { name, parent_id: parentId || null } }),
   deleteCategory: (token, id) => request(`/admin/categories/${id}`, { token, method: 'DELETE' }),
@@ -113,11 +116,11 @@ export const api = {
   startBid: (token, payload) => request('/buyer/bids', { token, method: 'POST', body: payload }),
   buyerRequests: (token) => request('/buyer/requests?include_closed=true', { token }),
   cancelBuyerRequest: (token, id) => request(`/buyer/requests/${id}`, { token, method: 'DELETE' }),
-  acceptBid: (token, id) => request(`/buyer/bids/${id}/accept`, { token, method: 'POST' }),
+  acceptBid: (token, id, termsToken) =>
+    request(`/buyer/bids/${id}/accept`, { token, method: 'POST', body: termsToken ? { terms_token: termsToken } : undefined }),
   dealerRequests: (token) => request('/dealer/requests', { token }),
   submitDealerBid: (token, payload) => request('/dealer/bids', { token, method: 'POST', body: payload }),
   withdrawBid: (token, id) => request(`/dealer/bids/${id}/withdraw`, { token, method: 'POST' }),
-  payBid: (token, id) => request(`/dealer/bids/${id}/pay`, { token, method: 'POST' }),
   activateDealerSubscription: (token) => request('/dealer/subscription/activate', { token, method: 'POST' }),
   exportCsv: async (token, kind) => {
     const response = await request(`/export/${encodeURIComponent(kind)}.csv`, { token, raw: true });
