@@ -9570,6 +9570,9 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
   List<Map<String, dynamic>> _categoryTree = [];
   final List<String> _selectedBrands = [];
   final _brandInputController = TextEditingController();
+  List<String> _companyOptions = [];
+  bool _companyOptionsLoading = false;
+  int _companyScopeVersion = 0;
 
   double? _latitude;
   double? _longitude;
@@ -9600,58 +9603,6 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
         .toList();
   }
 
-  static const List<String> _stateOptions = ['Andhra Pradesh'];
-  static const List<String> _cityOptions = [
-    'Visakhapatnam',
-    'Vijayawada',
-    'Guntur',
-    'Nellore',
-    'Kurnool',
-    'Tirupati',
-    'Rajahmundry',
-    'Kakinada',
-  ];
-  static const List<String> _districtOptions = [
-    'Visakhapatnam',
-    'NTR',
-    'Guntur',
-    'Sri Potti Sriramulu Nellore',
-    'Kurnool',
-    'Tirupati',
-    'East Godavari',
-    'Kakinada',
-  ];
-
-  void _addCsvValue(TextEditingController controller, String value) {
-    final values = _parseList(controller.text);
-    if (!values.contains(value)) {
-      values.add(value);
-      controller.text = values.join(', ');
-    }
-  }
-
-  Widget _selectionChips(TextEditingController controller) {
-    final values = _parseList(controller.text);
-    if (values.isEmpty) return const SizedBox.shrink();
-    return Wrap(
-      spacing: 8,
-      runSpacing: 8,
-      children: values
-          .map(
-            (value) => Chip(
-              label: Text(value),
-              onDeleted: () {
-                setState(() {
-                  final updated = _parseList(controller.text)..remove(value);
-                  controller.text = updated.join(', ');
-                });
-              },
-            ),
-          )
-          .toList(),
-    );
-  }
-
   Future<void> _loadProfile() async {
     try {
       final data = await ApiClient().fetchProfile(widget.user.accessToken);
@@ -9661,6 +9612,7 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
       if (mounted) {
         setState(() {
           _categoryTree = categories;
+          _companyOptions = [];
           _shopName.text = data['business_name']?.toString() ?? '';
           _ownerName.text = data['full_name']?.toString() ?? '';
           _gst.text = data['gst_number']?.toString() ?? '';
@@ -9727,6 +9679,7 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
           _loading = false;
           _profileLoaded = true;
         });
+        _refreshCompanyOptions();
       }
     } catch (e) {
       if (mounted) {
@@ -9756,6 +9709,139 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
           .toList();
     }
     return [];
+  }
+
+  List<Map<String, dynamic>> _dealerCompanyScopes() {
+    final scopes = <Map<String, dynamic>>[];
+    for (final parent in _categoryTree) {
+      final parentId = parent['id']?.toString() ?? '';
+      final children = List<Map<String, dynamic>>.from(parent['items'] ?? const []);
+      final selectedChildren = children.where((item) =>
+        _selectedItems.contains(item['id']?.toString() ?? ''),
+      ).toList();
+      if (!_selectedCategories.contains(parentId) && selectedChildren.isEmpty) {
+        continue;
+      }
+      scopes.add({
+        'categories': [parent['name']?.toString() ?? ''],
+        'product_types': selectedChildren
+            .map((item) => item['name']?.toString() ?? '')
+            .where((name) => name.isNotEmpty)
+            .toList(),
+      });
+    }
+    return scopes;
+  }
+
+  Future<void> _refreshCompanyOptions() async {
+    final version = ++_companyScopeVersion;
+    final scopes = _dealerCompanyScopes();
+    if (!mounted) return;
+    if (scopes.isEmpty) {
+      setState(() {
+        _companyOptions = [];
+        _companyOptionsLoading = false;
+      });
+      return;
+    }
+    setState(() {
+      _companyOptions = [];
+      _companyOptionsLoading = true;
+    });
+    try {
+      final allProductTypesSelected = scopes.every((scope) =>
+        (scope['product_types'] as List).isEmpty,
+      );
+      final allProductTypesRestricted = scopes.every((scope) =>
+        (scope['product_types'] as List).isNotEmpty,
+      );
+      final catalogScopes = allProductTypesSelected || allProductTypesRestricted
+          ? <Map<String, dynamic>>[
+              {
+                'categories': scopes.expand((scope) => scope['categories'] as List).toSet().toList(),
+                'product_types': allProductTypesRestricted
+                    ? scopes.expand((scope) => scope['product_types'] as List).toSet().toList()
+                    : <String>[],
+              },
+            ]
+          : scopes;
+      // Keep mixed full-category and product-type scopes separate so their
+      // results combine as an OR, not one overly narrow global filter.
+      final results = await Future.wait(catalogScopes.map((scope) =>
+        ApiClient().catalogSearch(widget.user.accessToken, {
+          ...scope,
+          'limit': 1,
+          'offset': 0,
+          'include_facets': true,
+        }),
+      ));
+      if (!mounted || version != _companyScopeVersion) return;
+      final byKey = <String, String>{};
+      for (final result in results) {
+        final facets = Map<String, dynamic>.from(result['facets'] ?? {});
+        for (final row in facets['brands'] as List? ?? const []) {
+          final value = Map<String, dynamic>.from(row as Map)['value']?.toString().trim() ?? '';
+          if (value.isNotEmpty) byKey.putIfAbsent(value.toLowerCase(), () => value);
+        }
+      }
+      final companies = byKey.values.toList()
+        ..sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
+      final inScope = companies.map((value) => value.toLowerCase()).toSet();
+      setState(() {
+        _companyOptions = companies;
+        _selectedBrands.removeWhere((brand) => !inScope.contains(brand.toLowerCase()));
+        _companyOptionsLoading = false;
+      });
+    } catch (_) {
+      if (mounted && version == _companyScopeVersion) {
+        setState(() {
+          _companyOptions = [];
+          _companyOptionsLoading = false;
+        });
+      }
+    }
+  }
+
+  void _setCategoryAll(String category, bool selected) {
+    setState(() {
+      final children = _dynamicItemsFor(category);
+      if (selected) {
+        _selectedCategories.add(category);
+        _selectedItems.removeAll(children);
+      } else {
+        _selectedCategories.remove(category);
+        _selectedItems.removeAll(children);
+      }
+    });
+    _refreshCompanyOptions();
+  }
+
+  void _toggleCategoryItem(String category, String item, bool checked) {
+    setState(() {
+      final children = _dynamicItemsFor(category);
+      final current = children.where(_selectedItems.contains).toSet();
+      final isAll = _selectedCategories.contains(category) && (current.isEmpty || current.length == children.length);
+      final next = isAll ? children.toSet() : current;
+      if (checked) {
+        next.add(item);
+      } else if (isAll) {
+        next.remove(item);
+      } else {
+        next.remove(item);
+      }
+      if (next.isEmpty) {
+        _selectedCategories.remove(category);
+        _selectedItems.removeAll(children);
+      } else if (next.length == children.length) {
+        _selectedCategories.add(category);
+        _selectedItems.removeAll(children);
+      } else {
+        _selectedCategories.add(category);
+        _selectedItems.removeAll(children);
+        _selectedItems.addAll(next);
+      }
+    });
+    _refreshCompanyOptions();
   }
 
   String _categoryLabel(String id) {
@@ -9862,6 +9948,11 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
         ),
       );
     }
+    final companyScopes = _dealerCompanyScopes();
+    final availableCompanies = _companyOptions.map((value) => value.toLowerCase()).toSet();
+    final selectedCompaniesOutsideScope = _selectedBrands
+        .where((value) => !availableCompanies.contains(value.toLowerCase()))
+        .toList();
     return PageScaffold(
       child: _loading
           ? const Center(child: CircularProgressIndicator())
@@ -10057,134 +10148,78 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
                 DataPanel(
                   title: 'Product Offerings & Categories',
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Dealt Categories (Parent Group)',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF3B0764),
-                          ),
+                    const Text('Choose whole categories or specific product types. Manufacturer choices are limited to the selected categories and product types.'),
+                    ..._categoryTree.map((parent) {
+                      final category = parent['id'].toString();
+                      final children = _dynamicItemsFor(category);
+                      final selectedChildren = children.where(_selectedItems.contains).toList();
+                      final all = _selectedCategories.contains(category) && (selectedChildren.isEmpty || selectedChildren.length == children.length);
+                      return ExpansionTile(
+                        tilePadding: EdgeInsets.zero,
+                        title: CheckboxListTile(
+                          contentPadding: EdgeInsets.zero,
+                          controlAffinity: ListTileControlAffinity.leading,
+                          title: Text(parent['name']?.toString() ?? ''),
+                          subtitle: Text(all ? 'All product types' : selectedChildren.isEmpty ? 'None selected' : '${selectedChildren.length} selected'),
+                          value: all,
+                          onChanged: (value) => _setCategoryAll(category, value ?? false),
                         ),
-                        const SizedBox(height: 6),
-                        Wrap(
-                          spacing: 8,
-                          runSpacing: 8,
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          children: [
-                            ..._selectedCategories.map(
-                              (c) => Chip(
-                                label: Text(_categoryLabel(c)),
-                                deleteIcon: const Icon(Icons.cancel, size: 16),
-                                onDeleted: () {
-                                  setState(() {
-                                    _selectedCategories.remove(c);
-                                    if (_dynamicCategoryNames.contains(c)) {
-                                      for (final child in _dynamicItemsFor(c)) {
-                                        _selectedItems.remove(child);
-                                      }
-                                    }
-                                  });
-                                },
+                        children: children.map((item) {
+                          return CheckboxListTile(
+                            dense: true,
+                            contentPadding: const EdgeInsets.only(left: 20),
+                            controlAffinity: ListTileControlAffinity.leading,
+                            title: Text(_categoryLabel(item)),
+                            value: all || _selectedItems.contains(item),
+                            onChanged: (value) => _toggleCategoryItem(category, item, value ?? false),
+                          );
+                        }).toList(),
+                      );
+                    }),
+                    const SizedBox(height: 12),
+                    if (companyScopes.isNotEmpty) ...[
+                      TextField(
+                        controller: _brandInputController,
+                        decoration: const InputDecoration(labelText: 'Search companies in selected categories'),
+                        onChanged: (_) => setState(() {}),
+                      ),
+                      const Text('Leave companies unchecked to accept every manufacturer within the selected product scope. Changing the scope removes companies that are unavailable in it.'),
+                      if (_companyOptionsLoading) const LinearProgressIndicator(),
+                      SizedBox(
+                        height: 220,
+                        child: _companyOptionsLoading
+                            ? const Center(child: CircularProgressIndicator())
+                            : ListView(
+                                children: _companyOptions
+                                    .where((company) => company.toLowerCase().contains(_brandInputController.text.toLowerCase()))
+                                    .map((company) => CheckboxListTile(
+                                      dense: true,
+                                      contentPadding: EdgeInsets.zero,
+                                      controlAffinity: ListTileControlAffinity.leading,
+                                      title: Text(company),
+                                      value: _selectedBrands.any((value) => value.toLowerCase() == company.toLowerCase()),
+                                      onChanged: (checked) => setState(() {
+                                        _selectedBrands.removeWhere((value) => value.toLowerCase() == company.toLowerCase());
+                                        if (checked == true) _selectedBrands.add(company);
+                                      }),
+                                    )).toList(),
                               ),
-                            ),
-                            if (_dynamicCategoryNames.any(
-                              (c) => !_selectedCategories.contains(c),
-                            ))
-                              DropdownButton<String>(
-                                value: null,
-                                hint: const Text('Add Category'),
-                                items: _dynamicCategoryNames
-                                    .where(
-                                      (c) => !_selectedCategories.contains(c),
-                                    )
-                                    .map(
-                                      (c) => DropdownMenuItem<String>(
-                                        value: c,
-                                        child: Text(_categoryLabel(c)),
-                                      ),
-                                    )
-                                    .toList(),
-                                onChanged: (val) {
-                                  if (val != null) {
-                                    setState(() {
-                                      _selectedCategories.add(val);
-                                    });
-                                  }
-                                },
-                              ),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-                        const Text(
-                          'Dealt Items / Subcategories',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF3B0764),
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        _selectedCategories.isEmpty
-                            ? const Text(
-                                'Select parent categories first to configure items.',
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 13,
-                                ),
-                              )
-                            : Wrap(
-                                spacing: 8,
-                                runSpacing: 8,
-                                crossAxisAlignment: WrapCrossAlignment.center,
-                                children: [
-                                  ..._selectedItems.map(
-                                    (item) => Chip(
-                                      label: Text(_categoryLabel(item)),
-                                      deleteIcon: const Icon(
-                                        Icons.cancel,
-                                        size: 16,
-                                      ),
-                                      onDeleted: () {
-                                        setState(() {
-                                          _selectedItems.remove(item);
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                  DropdownButton<String>(
-                                    value: null,
-                                    hint: const Text('Add Item'),
-                                    items: _dynamicCategoryNames
-                                        .where(
-                                          (c) =>
-                                              _selectedCategories.contains(c),
-                                        )
-                                        .expand((c) => _dynamicItemsFor(c))
-                                        .where(
-                                          (item) =>
-                                              !_selectedItems.contains(item),
-                                        )
-                                        .toSet()
-                                        .map(
-                                          (item) => DropdownMenuItem<String>(
-                                            value: item,
-                                            child: Text(_categoryLabel(item)),
-                                          ),
-                                        )
-                                        .toList(),
-                                    onChanged: (val) {
-                                      if (val != null) {
-                                        setState(() {
-                                          _selectedItems.add(val);
-                                        });
-                                      }
-                                    },
-                                  ),
-                                ],
-                              ),
-                      ],
-                    ),
+                      ),
+                      if (!_companyOptionsLoading && _companyOptions.isEmpty)
+                        const Text('No manufacturers were found for this selection.'),
+                    ] else ...[
+                      const Text('Select a category or product type to see only the manufacturers available within it.'),
+                    ],
+                    if (!_companyOptionsLoading && selectedCompaniesOutsideScope.isNotEmpty) ...[
+                      const Text('Saved company restrictions outside the current selection:'),
+                      Wrap(
+                        spacing: 8,
+                        children: selectedCompaniesOutsideScope.map((company) => InputChip(
+                          label: Text(company),
+                          onDeleted: () => setState(() => _selectedBrands.removeWhere((value) => value.toLowerCase() == company.toLowerCase())),
+                        )).toList(),
+                      ),
+                    ],
                   ],
                 ),
                 const SizedBox(height: 12),

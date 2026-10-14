@@ -291,13 +291,13 @@ def upsert_product(cursor, record: dict[str, Any], electronics_id: str, subcateg
           source, source_product_id, mpn, gtin, release_year, source_updated_at,
           icecat_quality, description, summary_description, highlights,
           technical_specifications, software_specifications, gallery, multimedia,
-          price_min, price_max, image_url, status, created_by, created_at, updated_at, deleted_at
+          price_min, price_max, image_url, status, created_by, created_at, updated_at, deleted_at, catalog_visible
         ) VALUES (
           %s,%s,%s,NULL,%s,%s,%s,
           'icecat',%s,%s,%s,%s,%s,
           %s,%s,%s,%s,
           %s,%s,%s,%s,
-          0,0,%s,'active',NULL,NOW(),NOW(),NULL
+          0,0,%s,'active',NULL,NOW(),NOW(),NULL,FALSE
         )
         ON DUPLICATE KEY UPDATE
           category_id=VALUES(category_id), subcategory_id=VALUES(subcategory_id),
@@ -307,7 +307,7 @@ def upsert_product(cursor, record: dict[str, Any], electronics_id: str, subcateg
           description=VALUES(description), summary_description=VALUES(summary_description),
           highlights=VALUES(highlights), technical_specifications=VALUES(technical_specifications),
           software_specifications=VALUES(software_specifications), gallery=VALUES(gallery),
-          multimedia=VALUES(multimedia), image_url=VALUES(image_url), status='active',
+          multimedia=VALUES(multimedia), image_url=VALUES(image_url), status='active', catalog_visible=FALSE,
           updated_at=NOW()
         """,
         (

@@ -32,20 +32,24 @@ from pydantic import AliasChoices, BaseModel, ConfigDict, Field, model_validator
 
 try:
     from . import catalog_filters
+    from .catalog_preferences import company_preference_matches, dealer_category_preference_matches
     from .product_sources import ImportService,cutoff as product_import_cutoff
     from .configuration import load_local_environment
     from .catalog_importer import import_bundle_if_needed
     from .connection_cache import ConnectionCache
     from .database_health import DatabaseHealthError, assert_tables_readable
+    from . import product_reference
     from . import geocoding
     from .logging_filters import install_token_filters
 except ImportError:
     import catalog_filters
+    from catalog_preferences import company_preference_matches, dealer_category_preference_matches
     from product_sources import ImportService,cutoff as product_import_cutoff
     from configuration import load_local_environment
     from catalog_importer import import_bundle_if_needed
     from connection_cache import ConnectionCache
     from database_health import DatabaseHealthError, assert_tables_readable
+    import product_reference
     import geocoding
     from logging_filters import install_token_filters
 
@@ -234,6 +238,28 @@ def execute_sql_file() -> None:
 def ensure_runtime_schema() -> None:
     with db(database=True) as conn:
         with conn.cursor() as cursor:
+            for column_name, definition in (
+                ("manufacturer", "VARCHAR(190) NULL"),
+                ("catalog_visible", "BOOLEAN NOT NULL DEFAULT TRUE"),
+                ("official_price", "DECIMAL(14,2) NULL"),
+                ("price_currency", "VARCHAR(8) NULL"),
+                ("price_type", "VARCHAR(80) NULL"),
+                ("price_market", "VARCHAR(80) NULL"),
+                ("price_source_url", "VARCHAR(1000) NULL"),
+                ("product_url", "VARCHAR(1000) NULL"),
+                ("verification_status", "VARCHAR(255) NULL"),
+                ("catalog_notes", "TEXT NULL"),
+            ):
+                cursor.execute(
+                    "SELECT COUNT(*) AS count FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=%s AND TABLE_NAME='products' AND COLUMN_NAME=%s",
+                    [DB_NAME, column_name],
+                )
+                if cursor.fetchone()["count"] == 0:
+                    cursor.execute(f"ALTER TABLE products ADD COLUMN {column_name} {definition}")
+            cursor.execute("SELECT CHARACTER_MAXIMUM_LENGTH AS size FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=%s AND TABLE_NAME='products' AND COLUMN_NAME='name'", [DB_NAME])
+            name_column = cursor.fetchone()
+            if name_column and (name_column["size"] or 0) < 255:
+                cursor.execute("ALTER TABLE products MODIFY COLUMN name VARCHAR(255) NOT NULL")
             cursor.execute(
                 "SELECT COUNT(*) AS count FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=%s AND TABLE_NAME='bid_requests' AND COLUMN_NAME='skip_flagged_dealers'",
                 [DB_NAME],
@@ -389,6 +415,16 @@ def ensure_runtime_schema() -> None:
                 cursor.execute(
                     "ALTER TABLE report_messages MODIFY recipient_group ENUM('admin','buyer','dealer','both') NOT NULL"
                 )
+            # Archived product snapshots are visible only to bid/cart history queries.
+            cursor.execute("CREATE TABLE IF NOT EXISTS product_reference_snapshots LIKE products")
+            cursor.execute("""CREATE OR REPLACE VIEW product_reference_catalog AS
+                SELECT p.* FROM products p WHERE (p.catalog_visible=TRUE AND p.deleted_at IS NULL)
+                  OR EXISTS (SELECT 1 FROM bid_requests br WHERE br.product_id=p.id)
+                  OR EXISTS (SELECT 1 FROM cart_items ci WHERE ci.product_id=p.id)
+                UNION ALL
+                SELECT s.* FROM product_reference_snapshots s
+                WHERE NOT EXISTS (SELECT 1 FROM products p WHERE p.id=s.id)""")
+            product_reference.ensure_schema(cursor)
 
 
 def expire_due_bid_requests(cursor) -> None:
@@ -594,7 +630,7 @@ def resolve_category_ids(cursor, cat_val: str, subcat_val: str | None) -> tuple[
 
 class CatalogRepository:
     def admin_catalog(self, q="", category="", brand="", status="", minimum=None, maximum=None, sort="Newest", limit=50, offset=0):
-        where = """p.deleted_at IS NULL
+        where = """p.deleted_at IS NULL AND p.catalog_visible=TRUE
           AND (%s='' OR p.id LIKE %s OR p.name LIKE %s OR p.brand LIKE %s OR p.model LIKE %s OR c.name LIKE %s OR sc.name LIKE %s OR p.highlights LIKE %s OR p.source_product_id LIKE %s OR p.mpn LIKE %s OR p.gtin LIKE %s)
           AND (%s='' OR c.name=%s OR sc.name=%s) AND (%s='' OR p.brand=%s)
           AND (%s='' OR p.status=%s) AND (%s IS NULL OR p.price_min >= %s) AND (%s IS NULL OR p.price_max <= %s)"""
@@ -618,9 +654,9 @@ class CatalogRepository:
                 if not isinstance(row['specifications'], dict):
                     row['specifications'] = {}
             self._merge_manual_specifications(cursor, rows)
-            cursor.execute("SELECT COUNT(*) AS total FROM products WHERE deleted_at IS NULL")
+            cursor.execute("SELECT COUNT(*) AS total FROM products WHERE deleted_at IS NULL AND catalog_visible=TRUE")
             catalog_total = cursor.fetchone()['total']
-            cursor.execute("SELECT DISTINCT brand FROM products WHERE deleted_at IS NULL ORDER BY brand")
+            cursor.execute("SELECT DISTINCT COALESCE(NULLIF(manufacturer,''),brand) AS brand FROM products WHERE deleted_at IS NULL AND catalog_visible=TRUE ORDER BY brand")
             brands = [row['brand'] for row in cursor.fetchall() if row['brand']]
             return {'items':rows,'total':total,'catalog_total':catalog_total,'brands':brands}
 
@@ -646,7 +682,7 @@ class CatalogRepository:
                 JOIN categories c ON c.id = p.category_id
                 LEFT JOIN categories sc ON sc.id = p.subcategory_id
                 LEFT JOIN locations l ON l.id = p.location_id
-                WHERE p.deleted_at IS NULL
+                WHERE p.deleted_at IS NULL AND p.catalog_visible=TRUE
                   AND (%s = '' OR p.name LIKE %s OR p.brand LIKE %s OR p.model LIKE %s OR c.name LIKE %s OR sc.name LIKE %s)
                   AND (%s = '' OR c.name = %s OR sc.name = %s)
                   AND (%s = '' OR p.brand = %s)
@@ -683,7 +719,13 @@ class CatalogRepository:
                         row["specifications"] = {}
                 elif not isinstance(raw_specs, dict):
                     row["specifications"] = {}
+                if not include_inactive:
+                    for field in ("source", "source_product_id", "mpn", "gtin"):
+                        row.pop(field, None)
             self._merge_manual_specifications(cursor, rows)
+            if not include_inactive:
+                for row in rows:
+                    row["specifications"] = catalog_filters.public_catalog_data(row.get("specifications"))
             return rows
 
     @staticmethod
@@ -702,7 +744,7 @@ class CatalogRepository:
         for row in rows:
             row["specifications"] = {**(row.get("specifications") or {}), **by_product.get(row["id"], {})}
 
-    def product_detail(self, product_id: str, include_inactive: bool = False) -> dict[str, Any]:
+    def product_detail(self, product_id: str, include_inactive: bool = False, include_sources: bool = False) -> dict[str, Any]:
         with db() as conn, conn.cursor() as cursor:
             cursor.execute(
                 """
@@ -713,6 +755,7 @@ class CatalogRepository:
                 LEFT JOIN categories sc ON sc.id=p.subcategory_id
                 LEFT JOIN locations l ON l.id=p.location_id
                 WHERE p.id=%s AND p.deleted_at IS NULL
+                  AND p.catalog_visible=TRUE
                   AND (%s=TRUE OR p.status='active')
                   AND (%s=TRUE OR (c.status='active' AND c.deleted_at IS NULL AND (p.subcategory_id IS NULL OR (sc.status='active' AND sc.deleted_at IS NULL))))
                 """,
@@ -752,6 +795,11 @@ class CatalogRepository:
                 [product_id],
             )
             row["assets"] = cursor.fetchall()
+            if not include_sources:
+                for field in ("source", "source_product_id", "source_url", "product_url", "price_source_url", "source_attribution", "verification_status", "catalog_notes", "mpn", "gtin", "catalog_added_at", "release_date_basis", "release_date_precision"):
+                    row.pop(field, None)
+                for field in ("specifications", "technical_specifications", "software_specifications"):
+                    row[field] = catalog_filters.public_catalog_data(row.get(field))
             return row
 
     def create_product(self, draft: "ProductIn", admin_id: str) -> str:
@@ -854,7 +902,7 @@ class BidRepository:
                        END AS price_difference
                 FROM bids b
                 JOIN bid_requests br ON br.id = b.bid_request_id
-                JOIN products p ON p.id = br.product_id
+                JOIN product_reference_catalog p ON p.id = br.product_id
                 JOIN users buyer ON buyer.id = br.buyer_id
                 LEFT JOIN buyer_profiles bp ON bp.user_id = buyer.id
                 JOIN users u ON u.id = b.dealer_id
@@ -1079,7 +1127,7 @@ def create_contact_reveal_notifications(cursor, bid_id: str) -> list[str]:
         SELECT b.dealer_id, br.buyer_id, p.name AS product
         FROM bids b
         JOIN bid_requests br ON br.id=b.bid_request_id
-        JOIN products p ON p.id=br.product_id
+        JOIN product_reference_catalog p ON p.id=br.product_id
         WHERE b.id=%s AND b.deleted_at IS NULL
         """,
         [bid_id],
@@ -1540,7 +1588,7 @@ class AdminRepository:
                 JOIN bids b ON b.id=c.bid_id
                 JOIN dealer_profiles dp ON dp.user_id=b.dealer_id
                 JOIN bid_requests br ON br.id=b.bid_request_id
-                JOIN products p ON p.id=br.product_id
+                JOIN product_reference_catalog p ON p.id=br.product_id
                 ORDER BY c.created_at DESC
                 """
             )
@@ -1597,7 +1645,7 @@ class CartRepository:
             cursor.execute(
                 """
                 SELECT ci.id, ci.product_id, ci.quantity, p.name, p.brand, p.model, p.price_min, p.price_max
-                FROM cart_items ci JOIN products p ON p.id=ci.product_id
+                FROM cart_items ci JOIN product_reference_catalog p ON p.id=ci.product_id
                 WHERE ci.cart_id=%s AND p.status='active' AND p.deleted_at IS NULL
                 ORDER BY ci.created_at DESC
                 """,
@@ -1608,12 +1656,13 @@ class CartRepository:
     def add_item(self, buyer_id: str, product_id: str, quantity: int) -> None:
         with db() as conn, conn.cursor() as cursor:
             cursor.execute(
-                "SELECT id FROM products WHERE id=%s AND status='active' AND deleted_at IS NULL",
+                "SELECT id FROM products WHERE id=%s AND status='active' AND deleted_at IS NULL AND catalog_visible=TRUE",
                 [product_id],
             )
             if not cursor.fetchone():
                 raise HTTPException(status_code=404, detail="Active product not found")
             cart_id = self._active_cart(cursor, buyer_id)
+            product_reference.register_product(cursor, product_id)
             cursor.execute(
                 """
                 INSERT INTO cart_items (id, cart_id, product_id, quantity, created_at, updated_at)
@@ -1649,7 +1698,7 @@ class CartRepository:
             expiry_minutes = int(expiry_minutes if expiry_minutes is not None else round(float(rules["expiry_hours"]) * 60))
             if not float(rules["min_time_hours"]) * 60 - 1e-9 <= expiry_minutes <= float(rules["max_time_hours"]) * 60 + 1e-9:
                 raise HTTPException(status_code=400, detail="Request duration is outside the configured bidding limits")
-            cursor.execute("SELECT p.id FROM products p JOIN categories c ON c.id=p.category_id LEFT JOIN categories sc ON sc.id=p.subcategory_id WHERE p.id=%s AND p.status='active' AND p.deleted_at IS NULL AND c.status='active' AND c.deleted_at IS NULL AND (p.subcategory_id IS NULL OR (sc.status='active' AND sc.deleted_at IS NULL)) FOR UPDATE", [product_id])
+            cursor.execute("SELECT p.id FROM products p JOIN categories c ON c.id=p.category_id LEFT JOIN categories sc ON sc.id=p.subcategory_id WHERE p.id=%s AND p.status='active' AND p.deleted_at IS NULL AND p.catalog_visible=TRUE AND c.status='active' AND c.deleted_at IS NULL AND (p.subcategory_id IS NULL OR (sc.status='active' AND sc.deleted_at IS NULL)) FOR UPDATE", [product_id])
             if not cursor.fetchone():
                 raise HTTPException(status_code=404, detail="Active product not found")
             if not location_id:
@@ -1696,8 +1745,12 @@ class CartRepository:
             if maximum_dealers > 0:
                 eligible = eligible[:maximum_dealers]
             if not eligible:
-                raise HTTPException(status_code=400, detail="No subscribed dealers match this saved location and product category/item")
+                raise HTTPException(
+                    status_code=400,
+                    detail="No subscribed dealers match this product's brand/category and your saved location. Check dealer company, product-type, and service-area preferences, or choose another product or saved location.",
+                )
 
+            product_reference.register_product(cursor, product_id)
             cursor.execute(
                 """
                 INSERT INTO bid_requests (id, buyer_id, product_id, location_id, quantity, radius_km, skip_flagged_dealers, status, expires_at, created_at, updated_at)
@@ -1782,7 +1835,7 @@ class CartRepository:
             cursor.execute(
                 """
                 SELECT b.bid_request_id, b.amount, b.dealer_id, p.name AS product, c.name AS category, c.id AS category_id
-                FROM bids b JOIN products p ON p.id=%s
+                FROM bids b JOIN product_reference_catalog p ON p.id=%s
                 JOIN categories c ON c.id=p.category_id
                 WHERE b.id=%s AND b.bid_request_id=%s AND b.status IN ('active','updated')
                   AND b.deleted_at IS NULL AND b.created_at <= %s
@@ -1900,7 +1953,7 @@ class DealerOpsRepository:
         location_rules = SettingsRepository.read_setting(cursor, "location_rules")
         cursor.execute(
             """
-            SELECT p.category_id, p.subcategory_id, p.brand FROM products p
+            SELECT p.category_id, p.subcategory_id, p.brand, p.manufacturer FROM product_reference_catalog p
             JOIN categories c ON c.id=p.category_id AND c.status='active' AND c.deleted_at IS NULL
             LEFT JOIN categories sc ON sc.id=p.subcategory_id
             WHERE p.id=%s AND p.status='active' AND p.deleted_at IS NULL
@@ -1926,8 +1979,6 @@ class DealerOpsRepository:
                    dp.service_preferences, dp.dynamic_fields
             FROM users u
             JOIN roles r ON r.id=u.role_id AND r.name='dealer'
-            JOIN dealer_categories dc_parent ON dc_parent.dealer_id=u.id AND dc_parent.category_id=%s
-            LEFT JOIN dealer_categories dc_item ON dc_item.dealer_id=u.id AND dc_item.category_id=%s
             LEFT JOIN (
                 SELECT dealer_id,
                        location_id,
@@ -1949,31 +2000,34 @@ class DealerOpsRepository:
               AND (%s = FALSE OR dp.verification_status='verified')
               AND dp.verification_status <> 'rejected' AND dp.rating >= %s
               AND (%s IS NULL OR u.id=%s)
-              AND (
-                  %s IS NULL OR dc_item.category_id IS NOT NULL OR NOT EXISTS (
-                      SELECT 1
-                      FROM dealer_categories dc_config
-                      JOIN categories configured_item ON configured_item.id=dc_config.category_id
-                      WHERE dc_config.dealer_id=u.id
-                        AND configured_item.parent_id=%s
-                        AND configured_item.deleted_at IS NULL
-                  )
-              )
               AND (%s = FALSE OR u.status <> 'flagged')
             """,
             [
-                product["category_id"],
-                product["subcategory_id"],
                 bool(rules["verification_required"]),
                 bool(rules["verification_required"]),
                 float(rules["min_rating_threshold"]),
                 dealer_id, dealer_id,
-                product["subcategory_id"],
-                product["category_id"],
                 skip_flagged_dealers,
             ],
         )
         candidates = cursor.fetchall()
+        category_preferences: dict[str, set[str]] = {}
+        category_parents: dict[str, str | None] = {}
+        candidate_ids = [row["id"] for row in candidates]
+        if candidate_ids:
+            placeholders = ",".join(["%s"] * len(candidate_ids))
+            cursor.execute(
+                f"""
+                SELECT dc.dealer_id, dc.category_id, c.parent_id
+                FROM dealer_categories dc
+                LEFT JOIN categories c ON c.id=dc.category_id
+                WHERE dc.dealer_id IN ({placeholders})
+                """,
+                candidate_ids,
+            )
+            for selection in cursor.fetchall():
+                category_preferences.setdefault(selection["dealer_id"], set()).add(selection["category_id"])
+                category_parents[selection["category_id"]] = selection.get("parent_id")
         logger.debug(
             "matching_dealer_ids: product=%s origin=%s/%s — %d candidate dealer(s)",
             product_id, origin.get("city"), origin.get("state"), len(candidates),
@@ -1983,6 +2037,22 @@ class DealerOpsRepository:
         buyer_city = normalize_place(origin.get("city"))
         buyer_area = normalize_place(origin.get("area"))
         for row in candidates:
+            if not dealer_category_preference_matches(
+                category_preferences.get(row["id"], set()),
+                product["category_id"],
+                product["subcategory_id"],
+                category_parents,
+            ):
+                continue
+            try:
+                dynamic = row.get("dynamic_fields") or {}
+                if isinstance(dynamic, str):
+                    dynamic = json.loads(dynamic)
+                chosen_companies = dynamic.get("brands", []) if isinstance(dynamic, dict) else []
+            except (json.JSONDecodeError, TypeError, AttributeError):
+                chosen_companies = []
+            if not company_preference_matches(chosen_companies, product.get("manufacturer"), product.get("brand")):
+                continue
             if row.get("country") and normalize_place(row["country"]) != normalize_place(origin["country"]):
                 continue
 
@@ -2068,7 +2138,7 @@ class DealerOpsRepository:
                        CONCAT(l.area, ', ', l.city) AS buyer_area
                 FROM bid_request_dealers brd
                 JOIN bid_requests br ON br.id=brd.bid_request_id
-                JOIN products p ON p.id=br.product_id
+                JOIN product_reference_catalog p ON p.id=br.product_id
                 JOIN categories c ON c.id=p.category_id
                 JOIN locations l ON l.id=br.location_id
                 JOIN users u ON u.id=brd.dealer_id
@@ -2207,7 +2277,7 @@ class ReportRepository:
                 JOIN users tu ON tu.id=r.reported_user_id
                 JOIN bids b ON b.id=r.bid_id
                 JOIN bid_requests br ON br.id=b.bid_request_id
-                JOIN products p ON p.id=br.product_id
+                JOIN product_reference_catalog p ON p.id=br.product_id
                 LEFT JOIN users cu ON cu.id=r.closure_requested_by
                 LEFT JOIN commissions c ON c.bid_id=b.id
                 WHERE r.deleted_at IS NULL
@@ -2349,7 +2419,7 @@ class ReportRepository:
                 SELECT b.id, b.dealer_id, br.id AS request_id, br.buyer_id, p.name AS product
                 FROM bids b
                 JOIN bid_requests br ON br.id = b.bid_request_id
-                JOIN products p ON p.id = br.product_id
+                JOIN product_reference_catalog p ON p.id = br.product_id
                 WHERE b.id = %s AND b.deleted_at IS NULL
                 """,
                 [payload.bid_id],
@@ -3004,7 +3074,7 @@ def request_snapshot(request_id: str, recipient: dict) -> dict:
         cursor.execute("""SELECT br.id,br.product_id,br.quantity,br.status,br.winning_bid_id,
             UNIX_TIMESTAMP(br.expires_at) AS expires_at_epoch,p.name AS product,
             l.area AS buyer_area,l.city AS buyer_city,l.state AS buyer_state
-            FROM bid_requests br JOIN products p ON p.id=br.product_id
+            FROM bid_requests br JOIN product_reference_catalog p ON p.id=br.product_id
             JOIN locations l ON l.id=br.location_id WHERE br.id=%s AND br.deleted_at IS NULL""", [request_id])
         request = cursor.fetchone()
     if not request:
@@ -3727,7 +3797,14 @@ def validate_category_parent(cursor, category_id: str, parent_id: str | None) ->
 @app.get("/categories")
 def get_categories() -> list[dict[str, Any]]:
     with db() as conn, conn.cursor() as cursor:
-        cursor.execute("SELECT id, name, parent_id, status FROM categories WHERE deleted_at IS NULL ORDER BY name")
+        cursor.execute("""
+            SELECT c.id,c.name,c.parent_id,c.status FROM categories c
+            WHERE c.deleted_at IS NULL AND (
+              EXISTS (SELECT 1 FROM products p WHERE p.catalog_visible=TRUE AND p.deleted_at IS NULL AND (p.category_id=c.id OR p.subcategory_id=c.id))
+              OR EXISTS (SELECT 1 FROM categories child WHERE child.parent_id=c.id AND child.deleted_at IS NULL
+                AND EXISTS (SELECT 1 FROM products p WHERE p.catalog_visible=TRUE AND p.deleted_at IS NULL AND p.subcategory_id=child.id))
+            ) ORDER BY c.name
+        """)
         rows = cursor.fetchall()
 
     parent_map = {}
@@ -3841,6 +3918,7 @@ def parse_catalog_specs(value):
 
 @app.get('/catalog/search')
 def catalog_search(q:str='',category:str='',product_type:str='',categories:list[str]=Query(default=[]),product_types:list[str]=Query(default=[]),brands:list[str]=Query(default=[]),years:list[str]=Query(default=[]),specs:str='{}',status:str='',minimum:float|None=Query(default=None,ge=0),maximum:float|None=Query(default=None,ge=0),sort:str='Newest',limit:int=Query(default=50,ge=1,le=250),offset:int=Query(default=0,ge=0),include_facets:bool=True,user:dict=Depends(current_user)):
+    if len(q)>160:raise HTTPException(status_code=400,detail='Search text must be 160 characters or fewer')
     if minimum is not None and maximum is not None and minimum>maximum:raise HTTPException(status_code=400,detail='Minimum price must not exceed maximum price')
     if any(year!='unknown' and (not year.isdigit() or not 1900<=int(year)<=2200) for year in years):raise HTTPException(status_code=400,detail='Invalid release year')
     return catalog_filters.search(db,{'q':q,'category':category,'product_type':product_type,'categories':categories,'product_types':product_types,'brands':brands,'years':years,'specs':parse_catalog_specs(specs),'status':status,'minimum':minimum,'maximum':maximum,'sort':sort,'limit':limit,'offset':offset},admin=user['role']=='admin',include_facets=include_facets)
@@ -3900,7 +3978,8 @@ def products(
 
 @app.get("/products/{product_id}")
 def product_detail(product_id: str, user: dict[str, Any] = Depends(current_user)) -> dict[str, Any]:
-    return catalog_repo.product_detail(product_id, include_inactive=user["role"] == "admin")
+    is_admin=user["role"] == "admin"
+    return catalog_repo.product_detail(product_id, include_inactive=is_admin, include_sources=is_admin)
 
 
 @app.post("/products")
@@ -4058,7 +4137,7 @@ def admin_dealer_details(dealer_id: str, user: dict[str, Any] = Depends(require_
             SELECT b.id, p.name AS product, b.amount, b.status, b.created_at
             FROM bids b
             JOIN bid_requests br ON br.id = b.bid_request_id
-            JOIN products p ON p.id = br.product_id
+            JOIN product_reference_catalog p ON p.id = br.product_id
             WHERE b.dealer_id = %s AND b.deleted_at IS NULL
             ORDER BY b.created_at DESC
             """,
@@ -4072,7 +4151,7 @@ def admin_dealer_details(dealer_id: str, user: dict[str, Any] = Depends(require_
             FROM commissions c
             JOIN bids b ON b.id = c.bid_id
             JOIN bid_requests br ON br.id = b.bid_request_id
-            JOIN products p ON p.id = br.product_id
+            JOIN product_reference_catalog p ON p.id = br.product_id
             WHERE b.dealer_id = %s
             ORDER BY c.created_at DESC
             """,
@@ -4157,7 +4236,7 @@ def admin_buyer_details(buyer_id: str, user: dict[str, Any] = Depends(require_ro
             SELECT br.id, p.name AS product, br.quantity, br.status, br.expires_at, br.created_at,
                    b.amount AS winning_amount, dp.business_name AS dealer
             FROM bid_requests br
-            JOIN products p ON p.id = br.product_id
+            JOIN product_reference_catalog p ON p.id = br.product_id
             LEFT JOIN bids b ON b.id = br.winning_bid_id
             LEFT JOIN dealer_profiles dp ON dp.user_id = b.dealer_id
             WHERE br.buyer_id = %s AND br.deleted_at IS NULL
@@ -4616,7 +4695,7 @@ def buyer_requests(include_closed: bool = False, user: dict[str, Any] = Depends(
                    l.state AS buyer_state, l.pincode AS buyer_pincode,
                    (SELECT COUNT(*) FROM bids b WHERE b.bid_request_id = br.id AND b.deleted_at IS NULL AND b.status IN ('active','updated','won','lost','expired')) AS offers_count
             FROM bid_requests br
-            JOIN products p ON p.id = br.product_id
+            JOIN product_reference_catalog p ON p.id = br.product_id
             LEFT JOIN locations l ON l.id = br.location_id
             WHERE br.buyer_id = %s AND br.deleted_at IS NULL
               AND (%s=TRUE OR (br.status='active' AND br.expires_at > NOW()))

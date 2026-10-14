@@ -1,0 +1,56 @@
+﻿category_code,department,release_year,products_count
+A,Mobile Phones & Tablets,2023,1
+A,Mobile Phones & Tablets,2024,72
+A,Mobile Phones & Tablets,2025,84
+A,Mobile Phones & Tablets,2026,29
+B,"Computers, Laptops & IT Equipment",2023,1
+B,"Computers, Laptops & IT Equipment",2024,44
+B,"Computers, Laptops & IT Equipment",2025,111
+B,"Computers, Laptops & IT Equipment",2026,33
+C,"TVs, Video & Home Entertainment",2024,9
+C,"TVs, Video & Home Entertainment",2025,40
+C,"TVs, Video & Home Entertainment",2026,9
+D,"Audio, Headphones & Speakers",2023,1
+D,"Audio, Headphones & Speakers",2024,25
+D,"Audio, Headphones & Speakers",2025,37
+D,"Audio, Headphones & Speakers",2026,8
+E,Large Home Appliances,2024,12
+E,Large Home Appliances,2025,23
+E,Large Home Appliances,2026,26
+F,Kitchen Appliances,2024,5
+F,Kitchen Appliances,2025,14
+G,"Cleaning, Laundry & Floor Care",2024,2
+G,"Cleaning, Laundry & Floor Care",2025,15
+G,"Cleaning, Laundry & Floor Care",2026,13
+H,"Air Conditioning, Cooling & Air Quality",2024,8
+H,"Air Conditioning, Cooling & Air Quality",2025,9
+H,"Air Conditioning, Cooling & Air Quality",2026,26
+I,Personal Care & Grooming Appliances,2024,13
+I,Personal Care & Grooming Appliances,2025,9
+J,"Cameras, Photography & Imaging",2023,2
+J,"Cameras, Photography & Imaging",2024,6
+J,"Cameras, Photography & Imaging",2025,15
+J,"Cameras, Photography & Imaging",2026,3
+K,Gaming & Virtual Reality,2023,8
+K,Gaming & Virtual Reality,2024,22
+K,Gaming & Virtual Reality,2025,30
+K,Gaming & Virtual Reality,2026,5
+L,Wearables & Smart Devices,2023,5
+L,Wearables & Smart Devices,2024,16
+L,Wearables & Smart Devices,2025,41
+L,Wearables & Smart Devices,2026,12
+M,"Smart Home, Security & Surveillance",2023,5
+M,"Smart Home, Security & Surveillance",2024,20
+M,"Smart Home, Security & Surveillance",2025,38
+M,"Smart Home, Security & Surveillance",2026,12
+N,"Networking, GPS & Communication",2023,12
+N,"Networking, GPS & Communication",2024,25
+N,"Networking, GPS & Communication",2025,32
+N,"Networking, GPS & Communication",2026,4
+O,"Printers, Scanners & Office Electronics",2023,15
+O,"Printers, Scanners & Office Electronics",2024,26
+O,"Printers, Scanners & Office Electronics",2025,15
+O,"Printers, Scanners & Office Electronics",2026,15
+P,"Power Backup, Batteries & Electrical Equipment",2024,7
+P,"Power Backup, Batteries & Electrical Equipment",2025,5
+P,"Power Backup, Batteries & Electrical Equipment",2026,1

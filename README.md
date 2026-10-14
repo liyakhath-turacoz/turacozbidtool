@@ -42,6 +42,16 @@ Demo sign-ins:
 
 Set `TURACOZ_ADMIN_PASSWORD` before the first seed. Startup seeding preserves an existing admin password. Database credentials and the signing secret have no built-in defaults; keep the configured values private. Changing the signing secret invalidates existing login sessions.
 
+### Visible product catalogue
+
+The current visible catalogue contains 2,083 products across 16 departments and 314 manufacturer/company names. Its source rows are in `product_catalog/all_products.csv`; category totals and provenance notes are in `product_catalog/README.md`. The import script is resumable and preserves old product IDs while hiding old rows from browsing:
+
+```powershell
+python backend\catalogue_app_import.py --apply
+```
+
+The importer saves previous product visibility values in `product_catalog/app_catalog_visibility_backup.csv`. It does not delete products referenced by bids or carts. Older Icecat bundle imports stay hidden from buyer/dealer catalog search.
+
 ## Start the backend
 
 Start the MariaDB/MySQL service, then run from the project root:
@@ -105,7 +115,7 @@ flutter build apk --release --dart-define=API_BASE_URL=http://10.0.2.2:8000
 
 ## Product catalog
 
-The current local database contains **22,042 available products** audited on 13 October 2026: **21,676 electronics and 366 household appliances**. Fourteen confirmed pre-2017 variants were retired with bidding history retained. New source imports require release evidence within three years; many original electronics catalog years remain unverified. The local database, downloaded catalog shards, account data and private settings are excluded from Git, so a fresh clone does not include this local catalog.
+The current local database contains **21,720 available products, all active**, audited on 12 October 2026. Fourteen confirmed pre-2017 variants were retired with bidding history retained; verified recent source imports were added. Legacy release years still need verification. The database, downloaded catalog shards, account data and private settings are excluded from the Git repository. A fresh clone can seed demo products or import an independently supplied catalog bundle.
 
 When `products/manifest.json` and all referenced compressed catalog shards are present, backend startup imports that catalog once per version by default. Set `TURACOZ_IMPORT_PRODUCTS_ON_STARTUP=false` to disable startup imports and import manually:
 
@@ -115,7 +125,7 @@ python backend\scripts\import_product_catalog.py --products-root products
 
 The `add_dummy_data.py` seed does not clear catalog data. See [products/README.md](products/README.md) for the bundle format and the explicit `--replace-existing` option.
 
-See [PRODUCT_CATALOG_REPORT.md](PRODUCT_CATALOG_REPORT.md) for category/year/brand totals, [HOUSEHOLD_PRODUCTS_REPORT.md](HOUSEHOLD_PRODUCTS_REPORT.md) for appliance counts and provenance, and [PRODUCT_SOURCES_GUIDE.md](PRODUCT_SOURCES_GUIDE.md) for manufacturer adapters, EPREL, TechAPI, Icecat and source configuration. Seven household types have at least 50 records; microwave ovens have 16 recent verified records. Buyer and admin product filters include only category, product type, manufacturer and release year, with full-database pagination and no review-rating filters. Appliances have their own parent category.
+See [PRODUCT_CATALOG_REPORT.md](PRODUCT_CATALOG_REPORT.md) for category/year/brand totals and [PRODUCT_SOURCES_GUIDE.md](PRODUCT_SOURCES_GUIDE.md) for the 12 manufacturer adapters, TechAPI, Icecat downloads and source configuration. Buyer and admin product filters include only category, product type, manufacturer and release year, with full-database pagination and no review-rating filters. Appliances have their own parent category.
 
 ## Admin panel
 

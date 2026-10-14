@@ -1901,6 +1901,12 @@ tr:last-child td {
 /* Shared full-catalog facets and product import controls. */
 .catalog-facet { border-bottom: 1px solid #e5e7eb; padding: 10px 0; }
 .catalog-product-photo { position: absolute; inset: 0; }
+.catalog-product-photo { width: 100%; height: 100%; object-fit: contain; padding: 12px; }
+.dealer-category-checks { border: 1px solid var(--line, #e5e7eb); border-radius: 12px; padding: 12px 14px; min-width: 0; }
+.dealer-category-checks legend { padding: 0 6px; }
+.dealer-category-checks legend .check { display: flex; align-items: center; gap: 8px; font-weight: 650; }
+.dealer-product-checks,.dealer-company-checks { display: grid; grid-template-columns: repeat(auto-fill,minmax(190px,1fr)); gap: 8px 14px; max-height: 240px; overflow: auto; padding: 8px 2px; }
+.dealer-company-filter { display: grid; gap: 8px; }
 .catalog-facet summary { cursor: pointer; font-weight: 600; }
 .catalog-facet-values { max-height: 240px; overflow: auto; margin-top: 8px; }
 .catalog-facet .check { display: flex; align-items: center; gap: 8px; margin: 7px 0; }

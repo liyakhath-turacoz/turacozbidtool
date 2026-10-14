@@ -1,0 +1,39 @@
+{
+  "department_code": "A",
+  "department": "Mobile Phones & Tablets",
+  "status": "in_progress",
+  "active_product_type": "Smartphones",
+  "completed_product_types": [],
+  "queued_departments": [
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+    "M",
+    "N",
+    "O"
+  ],
+  "resume_rule": "Resume smartphones from this staging folder using its source tracker and dedup keys. Keep all product rows separate from the old database. Do not begin Feature Phones until the smartphone catalogue is complete and validated; do not begin department B until every product type in A is complete.",
+  "age_cutoff": "2023-10-13",
+  "as_of_date": "2026-10-13",
+  "last_updated_local": "2026-10-13",
+  "products_exported": 11,
+  "needs_release_date_review": 201,
+  "application_code_changed": false,
+  "errors": [
+    "Smartphone category remains in progress: current official manufacturer line-ups were not all date-validated or specification-enriched.",
+    "Apple iPhone Duo official release date is 2026-10-23, after the 2026-10-13 as-of date; held in needs_review.csv.",
+    "TECNO official catalogue page returned template placeholders; no products extracted.",
+    "Infinix scrape was rate-limited; retry in a later session.",
+    "OnePlus collection scrape returned navigation only; manufacturer product detail pages need a targeted pass."
+  ],
+  "old_database_modified": false,
+  "new_catalogue_is_separate": true
+}

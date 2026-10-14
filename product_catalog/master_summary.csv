@@ -1,0 +1,129 @@
+﻿category_code,department,subcategory,products_count,processing_status,csv_file
+A,Mobile Phones & Tablets,ALL,202,COMPLETE,A-mobile-phones-tablets.csv
+B,"Computers, Laptops & IT Equipment",ALL,209,COMPLETE,B-computers-laptops-it-equipment.csv
+C,"TVs, Video & Home Entertainment",ALL,68,COMPLETE,C-tvs-video-home-entertainment.csv
+D,"Audio, Headphones & Speakers",ALL,73,COMPLETE,D-audio-headphones-speakers.csv
+E,Large Home Appliances,ALL,109,COMPLETE,E-large-home-appliances.csv
+F,Kitchen Appliances,ALL,111,COMPLETE,F-kitchen-appliances.csv
+G,"Cleaning, Laundry & Floor Care",ALL,90,COMPLETE,G-cleaning-laundry-floor-care.csv
+H,"Air Conditioning, Cooling & Air Quality",ALL,343,COMPLETE,H-air-conditioning-cooling-air-quality.csv
+I,Personal Care & Grooming Appliances,ALL,141,COMPLETE,I-personal-care-grooming-appliances.csv
+J,"Cameras, Photography & Imaging",ALL,78,COMPLETE,J-cameras-photography-imaging.csv
+K,Gaming & Virtual Reality,ALL,90,COMPLETE,K-gaming-virtual-reality.csv
+L,Wearables & Smart Devices,ALL,85,COMPLETE,L-wearables-smart-devices.csv
+M,"Smart Home, Security & Surveillance",ALL,77,COMPLETE,M-smart-home-security-surveillance.csv
+N,"Networking, GPS & Communication",ALL,104,COMPLETE,N-networking-gps-communication.csv
+O,"Printers, Scanners & Office Electronics",ALL,124,COMPLETE,O-printers-scanners-office-electronics.csv
+P,"Power Backup, Batteries & Electrical Equipment",ALL,179,COMPLETE,P-power-backup-batteries-electrical-equipment.csv
+A,Mobile Phones & Tablets,E-readers,15,COMPLETE,A-mobile-phones-tablets.csv
+A,Mobile Phones & Tablets,Feature Phones,19,COMPLETE,A-mobile-phones-tablets.csv
+A,Mobile Phones & Tablets,Mobile Accessories,23,COMPLETE,A-mobile-phones-tablets.csv
+A,Mobile Phones & Tablets,Smartphones,100,COMPLETE,A-mobile-phones-tablets.csv
+A,Mobile Phones & Tablets,Tablets,39,COMPLETE,A-mobile-phones-tablets.csv
+A,Mobile Phones & Tablets,Telephone Devices,6,COMPLETE,A-mobile-phones-tablets.csv
+B,"Computers, Laptops & IT Equipment",Computer Components,51,COMPLETE,B-computers-laptops-it-equipment.csv
+B,"Computers, Laptops & IT Equipment",Computer Peripherals,31,COMPLETE,B-computers-laptops-it-equipment.csv
+B,"Computers, Laptops & IT Equipment",Desktop Computers,13,COMPLETE,B-computers-laptops-it-equipment.csv
+B,"Computers, Laptops & IT Equipment",Laptop Accessories,10,COMPLETE,B-computers-laptops-it-equipment.csv
+B,"Computers, Laptops & IT Equipment",Laptops,66,COMPLETE,B-computers-laptops-it-equipment.csv
+B,"Computers, Laptops & IT Equipment",Monitors & Displays,20,COMPLETE,B-computers-laptops-it-equipment.csv
+B,"Computers, Laptops & IT Equipment",Storage Devices,18,COMPLETE,B-computers-laptops-it-equipment.csv
+C,"TVs, Video & Home Entertainment",Home Theatre Systems,2,COMPLETE,C-tvs-video-home-entertainment.csv
+C,"TVs, Video & Home Entertainment",Projectors,18,COMPLETE,C-tvs-video-home-entertainment.csv
+C,"TVs, Video & Home Entertainment",Set-Top Boxes,2,COMPLETE,C-tvs-video-home-entertainment.csv
+C,"TVs, Video & Home Entertainment",Streaming Devices,4,COMPLETE,C-tvs-video-home-entertainment.csv
+C,"TVs, Video & Home Entertainment",TV Accessories,6,COMPLETE,C-tvs-video-home-entertainment.csv
+C,"TVs, Video & Home Entertainment",Televisions,34,COMPLETE,C-tvs-video-home-entertainment.csv
+C,"TVs, Video & Home Entertainment",Video Equipment,2,COMPLETE,C-tvs-video-home-entertainment.csv
+D,"Audio, Headphones & Speakers",Audio Accessories,3,COMPLETE,D-audio-headphones-speakers.csv
+D,"Audio, Headphones & Speakers",Earphones & Earbuds,20,COMPLETE,D-audio-headphones-speakers.csv
+D,"Audio, Headphones & Speakers",Headphones,7,COMPLETE,D-audio-headphones-speakers.csv
+D,"Audio, Headphones & Speakers",Hi-Fi & Stereo Equipment,3,COMPLETE,D-audio-headphones-speakers.csv
+D,"Audio, Headphones & Speakers",Professional Audio,7,COMPLETE,D-audio-headphones-speakers.csv
+D,"Audio, Headphones & Speakers",Soundbars,19,COMPLETE,D-audio-headphones-speakers.csv
+D,"Audio, Headphones & Speakers",Speakers,14,COMPLETE,D-audio-headphones-speakers.csv
+E,Large Home Appliances,Built-in Appliances,7,COMPLETE,E-large-home-appliances.csv
+E,Large Home Appliances,Clothes Dryers,5,COMPLETE,E-large-home-appliances.csv
+E,Large Home Appliances,Dishwashers,13,COMPLETE,E-large-home-appliances.csv
+E,Large Home Appliances,Freezers,10,COMPLETE,E-large-home-appliances.csv
+E,Large Home Appliances,Refrigerators,29,COMPLETE,E-large-home-appliances.csv
+E,Large Home Appliances,Washer-Dryers,5,COMPLETE,E-large-home-appliances.csv
+E,Large Home Appliances,Washing Machines,24,COMPLETE,E-large-home-appliances.csv
+E,Large Home Appliances,Water Heaters,6,COMPLETE,E-large-home-appliances.csv
+E,Large Home Appliances,Water Purifiers,10,COMPLETE,E-large-home-appliances.csv
+F,Kitchen Appliances,Beverage Appliances,16,COMPLETE,F-kitchen-appliances.csv
+F,Kitchen Appliances,Breakfast Appliances,5,COMPLETE,F-kitchen-appliances.csv
+F,Kitchen Appliances,Cooking Appliances,30,COMPLETE,F-kitchen-appliances.csv
+F,Kitchen Appliances,Cooktops & Stoves,9,COMPLETE,F-kitchen-appliances.csv
+F,Kitchen Appliances,Food Preparation,27,COMPLETE,F-kitchen-appliances.csv
+F,Kitchen Appliances,Kitchen Accessories,8,COMPLETE,F-kitchen-appliances.csv
+F,Kitchen Appliances,Kitchen Ventilation,11,COMPLETE,F-kitchen-appliances.csv
+F,Kitchen Appliances,Specialty Cooking,5,COMPLETE,F-kitchen-appliances.csv
+G,"Cleaning, Laundry & Floor Care",Cleaning Accessories,4,COMPLETE,G-cleaning-laundry-floor-care.csv
+G,"Cleaning, Laundry & Floor Care",Floor Cleaning,11,COMPLETE,G-cleaning-laundry-floor-care.csv
+G,"Cleaning, Laundry & Floor Care",Laundry Care,10,COMPLETE,G-cleaning-laundry-floor-care.csv
+G,"Cleaning, Laundry & Floor Care",Robot Cleaners,34,COMPLETE,G-cleaning-laundry-floor-care.csv
+G,"Cleaning, Laundry & Floor Care",Sewing Equipment,15,COMPLETE,G-cleaning-laundry-floor-care.csv
+G,"Cleaning, Laundry & Floor Care",Vacuum Cleaners,16,COMPLETE,G-cleaning-laundry-floor-care.csv
+H,"Air Conditioning, Cooling & Air Quality",Air Conditioners,187,COMPLETE,H-air-conditioning-cooling-air-quality.csv
+H,"Air Conditioning, Cooling & Air Quality",Air Coolers,88,COMPLETE,H-air-conditioning-cooling-air-quality.csv
+H,"Air Conditioning, Cooling & Air Quality",Air Purifiers,20,COMPLETE,H-air-conditioning-cooling-air-quality.csv
+H,"Air Conditioning, Cooling & Air Quality",Fans,24,COMPLETE,H-air-conditioning-cooling-air-quality.csv
+H,"Air Conditioning, Cooling & Air Quality",Heating Appliances,10,COMPLETE,H-air-conditioning-cooling-air-quality.csv
+H,"Air Conditioning, Cooling & Air Quality",Humidifiers & Dehumidifiers,2,COMPLETE,H-air-conditioning-cooling-air-quality.csv
+H,"Air Conditioning, Cooling & Air Quality",Ventilation Equipment,12,COMPLETE,H-air-conditioning-cooling-air-quality.csv
+I,Personal Care & Grooming Appliances,Hair Care,35,COMPLETE,I-personal-care-grooming-appliances.csv
+I,Personal Care & Grooming Appliances,Oral Care,11,COMPLETE,I-personal-care-grooming-appliances.csv
+I,Personal Care & Grooming Appliances,Personal Care Accessories,4,COMPLETE,I-personal-care-grooming-appliances.csv
+I,Personal Care & Grooming Appliances,Personal Measurement Devices,19,COMPLETE,I-personal-care-grooming-appliances.csv
+I,Personal Care & Grooming Appliances,Personal Wellness Devices,20,COMPLETE,I-personal-care-grooming-appliances.csv
+I,Personal Care & Grooming Appliances,Shaving & Grooming,52,COMPLETE,I-personal-care-grooming-appliances.csv
+J,"Cameras, Photography & Imaging",Action Cameras,10,COMPLETE,J-cameras-photography-imaging.csv
+J,"Cameras, Photography & Imaging",Capture Devices,4,COMPLETE,J-cameras-photography-imaging.csv
+J,"Cameras, Photography & Imaging",Digital Cameras,24,COMPLETE,J-cameras-photography-imaging.csv
+J,"Cameras, Photography & Imaging",Lenses & Optics,20,COMPLETE,J-cameras-photography-imaging.csv
+J,"Cameras, Photography & Imaging",Lighting & Studio Equipment,8,COMPLETE,J-cameras-photography-imaging.csv
+J,"Cameras, Photography & Imaging",Photography Accessories,9,COMPLETE,J-cameras-photography-imaging.csv
+J,"Cameras, Photography & Imaging",Video Equipment,3,COMPLETE,J-cameras-photography-imaging.csv
+K,Gaming & Virtual Reality,Gaming Accessories,18,COMPLETE,K-gaming-virtual-reality.csv
+K,Gaming & Virtual Reality,Gaming Consoles,5,COMPLETE,K-gaming-virtual-reality.csv
+K,Gaming & Virtual Reality,Gaming Furniture & Equipment,7,COMPLETE,K-gaming-virtual-reality.csv
+K,Gaming & Virtual Reality,Gaming Peripherals,18,COMPLETE,K-gaming-virtual-reality.csv
+K,Gaming & Virtual Reality,Handheld Gaming,11,COMPLETE,K-gaming-virtual-reality.csv
+K,Gaming & Virtual Reality,Physical Games & Software,24,COMPLETE,K-gaming-virtual-reality.csv
+K,Gaming & Virtual Reality,VR & AR Devices,7,COMPLETE,K-gaming-virtual-reality.csv
+L,Wearables & Smart Devices,Fitness Bands,9,COMPLETE,L-wearables-smart-devices.csv
+L,Wearables & Smart Devices,Smart Glasses,11,COMPLETE,L-wearables-smart-devices.csv
+L,Wearables & Smart Devices,Smart Rings,6,COMPLETE,L-wearables-smart-devices.csv
+L,Wearables & Smart Devices,Smartwatches,37,COMPLETE,L-wearables-smart-devices.csv
+L,Wearables & Smart Devices,Tracking Devices,10,COMPLETE,L-wearables-smart-devices.csv
+L,Wearables & Smart Devices,Wearable Accessories,12,COMPLETE,L-wearables-smart-devices.csv
+M,"Smart Home, Security & Surveillance",Alarm Systems,6,COMPLETE,M-smart-home-security-surveillance.csv
+M,"Smart Home, Security & Surveillance",Security Cameras,21,COMPLETE,M-smart-home-security-surveillance.csv
+M,"Smart Home, Security & Surveillance",Smart Home Control,7,COMPLETE,M-smart-home-security-surveillance.csv
+M,"Smart Home, Security & Surveillance",Smart Lighting,13,COMPLETE,M-smart-home-security-surveillance.csv
+M,"Smart Home, Security & Surveillance",Smart Locks,6,COMPLETE,M-smart-home-security-surveillance.csv
+M,"Smart Home, Security & Surveillance",Smart Speakers,6,COMPLETE,M-smart-home-security-surveillance.csv
+M,"Smart Home, Security & Surveillance",Smart Switches & Plugs,5,COMPLETE,M-smart-home-security-surveillance.csv
+M,"Smart Home, Security & Surveillance",Surveillance Systems,5,COMPLETE,M-smart-home-security-surveillance.csv
+M,"Smart Home, Security & Surveillance",Video Doorbells,8,COMPLETE,M-smart-home-security-surveillance.csv
+N,"Networking, GPS & Communication",Communication Equipment,14,COMPLETE,N-networking-gps-communication.csv
+N,"Networking, GPS & Communication",Connectivity Accessories,8,COMPLETE,N-networking-gps-communication.csv
+N,"Networking, GPS & Communication",GPS & Navigation,14,COMPLETE,N-networking-gps-communication.csv
+N,"Networking, GPS & Communication",Network Infrastructure,27,COMPLETE,N-networking-gps-communication.csv
+N,"Networking, GPS & Communication",Networking Equipment,28,COMPLETE,N-networking-gps-communication.csv
+N,"Networking, GPS & Communication",Telecom Equipment,13,COMPLETE,N-networking-gps-communication.csv
+O,"Printers, Scanners & Office Electronics",Business Printing,16,COMPLETE,O-printers-scanners-office-electronics.csv
+O,"Printers, Scanners & Office Electronics",Meeting Room Equipment,11,COMPLETE,O-printers-scanners-office-electronics.csv
+O,"Printers, Scanners & Office Electronics",Office Document Equipment,12,COMPLETE,O-printers-scanners-office-electronics.csv
+O,"Printers, Scanners & Office Electronics",Point-of-Sale Equipment,15,COMPLETE,O-printers-scanners-office-electronics.csv
+O,"Printers, Scanners & Office Electronics",Printers,40,COMPLETE,O-printers-scanners-office-electronics.csv
+O,"Printers, Scanners & Office Electronics",Printing Accessories,16,COMPLETE,O-printers-scanners-office-electronics.csv
+O,"Printers, Scanners & Office Electronics",Scanners,14,COMPLETE,O-printers-scanners-office-electronics.csv
+P,"Power Backup, Batteries & Electrical Equipment",Batteries,14,COMPLETE,P-power-backup-batteries-electrical-equipment.csv
+P,"Power Backup, Batteries & Electrical Equipment",Charging Equipment,21,COMPLETE,P-power-backup-batteries-electrical-equipment.csv
+P,"Power Backup, Batteries & Electrical Equipment",Electrical Test Equipment,25,COMPLETE,P-power-backup-batteries-electrical-equipment.csv
+P,"Power Backup, Batteries & Electrical Equipment",Portable Power,30,COMPLETE,P-power-backup-batteries-electrical-equipment.csv
+P,"Power Backup, Batteries & Electrical Equipment",Power Accessories,20,COMPLETE,P-power-backup-batteries-electrical-equipment.csv
+P,"Power Backup, Batteries & Electrical Equipment",Power Backup,55,COMPLETE,P-power-backup-batteries-electrical-equipment.csv
+P,"Power Backup, Batteries & Electrical Equipment",Voltage Protection,14,COMPLETE,P-power-backup-batteries-electrical-equipment.csv

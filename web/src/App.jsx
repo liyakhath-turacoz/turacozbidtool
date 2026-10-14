@@ -955,14 +955,21 @@ function BuyerHomePage({ data, setBidProduct, run, user }) {
   const [query,setQuery]=useState('');const [appliedQuery,setAppliedQuery]=useState('');
   const [filters,setFilters]=useState(emptyCatalogFilters);
   const [facets,setFacets]=useState({});const [total,setTotal]=useState(0);
+  const [searchMode,setSearchMode]=useState('exact');
   const [catalogLoading,setCatalogLoading]=useState(false);const [catalogError,setCatalogError]=useState('');
   const [selected,setSelected]=useState(null);const requestVersion=useRef(0);
   const [refreshKey,setRefreshKey]=useState(0);
-  const search=()=>{setAppliedQuery(query.trim());setRefreshKey(value=>value+1);};
+  const search=()=>setAppliedQuery(query.trim());
   useEffect(()=>{
-    const version=++requestVersion.current;setCatalogLoading(true);setCatalogError('');setProducts([]);setTotal(0);
+    const next=query.trim();
+    if(next===appliedQuery)return;
+    const timer=setTimeout(()=>setAppliedQuery(next),250);
+    return()=>clearTimeout(timer);
+  },[query,appliedQuery]);
+  useEffect(()=>{
+    const version=++requestVersion.current;setCatalogLoading(true);setCatalogError('');setProducts([]);setTotal(0);setSearchMode('exact');
     api.catalogSearch(user.access_token,catalogParams(filters,{q:appliedQuery,limit:50,offset:0}))
-      .then(result=>{if(version===requestVersion.current){setProducts(result.items);setFacets(result.facets);setTotal(result.total);}})
+      .then(result=>{if(version===requestVersion.current){setProducts(result.items);setFacets(result.facets);setTotal(result.total);setSearchMode(result.search_mode||'exact');}})
       .catch(error=>{if(version===requestVersion.current)setCatalogError(friendlyErrorMessage(error));})
       .finally(()=>{if(version===requestVersion.current)setCatalogLoading(false);});
     return()=>{requestVersion.current++;};
@@ -975,9 +982,10 @@ function BuyerHomePage({ data, setBidProduct, run, user }) {
   };
   const openProduct=async product=>{setSelected(product);try{setSelected(await api.productDetail(user.access_token,product.id));}catch{setSelected(product);}};
   return <Page>
-    <div className="toolbar buyer-search"><div className="search-box wide-search"><Search size={17}/><input value={query} onChange={event=>setQuery(event.target.value)} onKeyDown={event=>{if(event.key==='Enter')search();}} placeholder="Search brand, model, specifications..."/></div><button className="primary" disabled={catalogLoading} onClick={search}>Search</button></div>
+    <div className="toolbar buyer-search"><div className="search-box wide-search"><Search size={17}/><input type="search" value={query} onChange={event=>setQuery(event.target.value)} onKeyDown={event=>{if(event.key==='Enter')search();}} placeholder="Search products, brand, model or specifications..." aria-label="Search products"/></div><button className="primary" disabled={catalogLoading} onClick={search}>Search</button></div>
     <div className="buyer-catalog-layout"><aside className="filter-panel"><div><strong>Filters</strong><button className="link-button" onClick={()=>setFilters(emptyCatalogFilters())}>Reset</button></div><CatalogFilters facets={facets} filters={filters} onChange={setFilters}/></aside>
     <section className="catalog-results"><div className="catalog-summary"><strong>{total.toLocaleString()} matching products · {products.length} loaded</strong><label>Sort: <select value={filters.sort} onChange={event=>setFilters({...filters,sort:event.target.value})}>{['Newest','Year','A-Z','Lowest Price','Highest Price'].map(value=><option key={value}>{value}</option>)}</select></label></div>
+    {searchMode==='related'&&<p className="muted search-note">No exact match; showing close product and category matches.</p>}
     {catalogError&&<div role="alert"><p>{catalogError}</p><button disabled={catalogLoading} onClick={()=>setRefreshKey(value=>value+1)}>Retry loading products</button></div>}{catalogLoading&&<p role="status">Loading products…</p>}
     <div className="product-grid buyer-grid">{products.map(product=><ProductCard key={product.id} product={product} onSelect={()=>openProduct(product)} onCart={()=>run(token=>api.addCartItem(token,product.id,1),'Added to cart.')} onBid={()=>setBidProduct(product)}/>)}</div>
     {!catalogLoading&&!catalogError&&!products.length&&<Empty title="No products match these filters."/>}
@@ -1877,9 +1885,6 @@ function ProductDetailsModal({ product, onClose, onCart, onBid }) {
             <KV label="Brand" value={product.brand} />
             <KV label="Model" value={product.model} />
             <KV label="Release year" value={product.release_year} />
-            <KV label="MPN" value={product.mpn} />
-            <KV label="GTIN" value={product.gtin} />
-            <KV label="Product ID" value={product.id} />
           </div>
           {product.description || product.summary_description ? <p>{product.description || product.summary_description}</p> : null}
         </div>
@@ -1889,7 +1894,6 @@ function ProductDetailsModal({ product, onClose, onCart, onBid }) {
       </Panel>
       <SpecificationGroups title="Technical specifications" groups={technicalGroups} />
       <SpecificationGroups title="Software specifications" groups={softwareGroups} />
-      {product.source === 'icecat' ? <p className="icecat-attribution">Specs <a href="https://icecat.biz/" target="_blank" rel="noreferrer">Icecat</a>. Product data is supplied AS IS.</p> : null}
       <div className="row-actions">
         <button className="success" onClick={onCart}><ShoppingCart size={15} /> Add to Cart</button>
         <button className="primary" onClick={onBid}><Bolt size={15} /> Start Bid</button>
@@ -2194,6 +2198,9 @@ function BusinessProfilePage({ user, data, run, onDeleteAccount }) {
   const [form, setForm] = useState({});
   const [pinConfirmed, setPinConfirmed] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [companyChoices, setCompanyChoices] = useState([]);
+  const [companyChoicesLoading, setCompanyChoicesLoading] = useState(false);
+  const [companySearch, setCompanySearch] = useState('');
   const dirty = useRef(false);
   useEffect(() => {
     if (dirty.current) return;
@@ -2223,6 +2230,70 @@ function BusinessProfilePage({ user, data, run, onDeleteAccount }) {
       brands: Array.isArray(profile.brands) ? profile.brands : text(profile.brands).split(',').map((item) => item.trim()).filter(Boolean),
     });
   }, [data.profile, user]);
+  const parentCategories = list(data.categories).filter((item) => !item.parent_id);
+  const selectedCategoryNames = list(form.categories);
+  const companyScopes = React.useMemo(() => {
+    const selected = new Set(selectedCategoryNames);
+    return parentCategories
+      .filter(parent => selected.has(parent.id) || list(parent.items).some(item => selected.has(item.id)))
+      .map(parent => {
+        const selectedChildren = list(parent.items).filter(item => selected.has(item.id));
+        return {
+          categories: [parent.name],
+          product_types: selectedChildren.map(item => item.name),
+        };
+      });
+  }, [data.categories, form.categories]);
+  const companyScopeKey = JSON.stringify(companyScopes);
+  useEffect(() => {
+    let cancelled = false;
+    setCompanyChoices([]);
+    setCompanyChoicesLoading(companyScopes.length > 0);
+    if (!companyScopes.length) return () => { cancelled = true; };
+
+    const allProductTypesSelected = companyScopes.every(scope => scope.product_types.length === 0);
+    const allProductTypesRestricted = companyScopes.every(scope => scope.product_types.length > 0);
+    const companyQueries = allProductTypesSelected || allProductTypesRestricted
+      ? [{
+          categories: companyScopes.flatMap(scope => scope.categories),
+          product_types: allProductTypesRestricted
+            ? [...new Set(companyScopes.flatMap(scope => scope.product_types))]
+            : [],
+        }]
+      : companyScopes;
+
+    // Group compatible scopes, but keep mixed full-category/product-type
+    // selections separate so the category scopes remain an OR.
+    Promise.all(companyQueries.map(scope => api.catalogSearch(user.access_token, {
+      ...scope,
+      limit: 1,
+      offset: 0,
+      include_facets: true,
+    })))
+      .then(results => {
+        if (cancelled) return;
+        const choices = [...new Set(results.flatMap(result =>
+          (result.facets?.brands || []).map(row => row.value).filter(Boolean),
+        ))].sort((a, b) => a.localeCompare(b));
+        setCompanyChoices(choices);
+        const available = new Set(choices.map(value => value.toLocaleLowerCase()));
+        setForm(current => {
+          if (JSON.stringify(current.categories || []) !== JSON.stringify(selectedCategoryNames)) return current;
+          const brands = list(current.brands);
+          const inScope = brands.filter(value => available.has(value.toLocaleLowerCase()));
+          if (inScope.length === brands.length) return current;
+          dirty.current = true;
+          return { ...current, brands: inScope };
+        });
+      })
+      .catch(() => {
+        if (!cancelled) setCompanyChoices([]);
+      })
+      .finally(() => {
+        if (!cancelled) setCompanyChoicesLoading(false);
+      });
+    return () => { cancelled = true; };
+  }, [user.access_token, companyScopeKey]);
   const update = (key, value) => { dirty.current = true; setForm((old) => ({ ...old, [key]: value })); };
   const save = async () => {
     setSaving(true);
@@ -2242,16 +2313,42 @@ function BusinessProfilePage({ user, data, run, onDeleteAccount }) {
   // Wait for the saved profile to populate the form before accepting edits.
   // Otherwise an early keystroke marks the empty form dirty and drops hydration.
   if (!data.profile || !form.delivery_method) return <Page><Section title="Business Profile & Configurations" icon={Store} /><Panel><p role="status">Loading your saved business profile…</p></Panel></Page>;
-  const parentCategories = data.categories.filter((item) => !item.parent_id);
-  const selectedCategoryNames = list(form.categories);
-  const childCategories = parentCategories
-    .filter((parent) => !selectedCategoryNames.some((id) => parentCategories.some((row) => row.id === id)) || selectedCategoryNames.includes(parent.id))
-    .flatMap((parent) => list(parent.items).map((item) => ({ ...item, name: `${parent.name} / ${item.name}` })));
-  const changeParents = (values) => {
-    const removed = parentCategories.filter((parent) => selectedCategoryNames.includes(parent.id) && !values.includes(parent.id));
-    const removedChildren = new Set(removed.flatMap((parent) => list(parent.items).map((item) => item.id)));
-    update('categories', values.filter((id) => !removedChildren.has(id)));
+  const setCategoryCoverage = (parent, all, toggledItem) => {
+    const children = list(parent.items);
+    const selected = new Set(selectedCategoryNames);
+    const currentItems = children.filter(item => selected.has(item.id));
+    const full = selected.has(parent.id) && (currentItems.length === 0 || currentItems.length === children.length);
+    let nextItems;
+    if (toggledItem) {
+      if (full) nextItems = children.filter(item => item.id !== toggledItem.id);
+      else nextItems = currentItems.some(item => item.id === toggledItem.id)
+        ? currentItems.filter(item => item.id !== toggledItem.id)
+        : [...currentItems, toggledItem];
+      if (nextItems.length === children.length) {
+        selected.add(parent.id);
+        children.forEach(item => selected.delete(item.id));
+      } else if (nextItems.length) {
+        selected.add(parent.id);
+        children.forEach(item => selected.delete(item.id));
+        nextItems.forEach(item => selected.add(item.id));
+      } else {
+        selected.delete(parent.id);
+        children.forEach(item => selected.delete(item.id));
+      }
+    } else if (all) {
+      selected.add(parent.id);
+      children.forEach(item => selected.delete(item.id));
+    } else {
+      selected.delete(parent.id);
+      children.forEach(item => selected.delete(item.id));
+    }
+    update('categories', [...selected]);
   };
+  const companyOptions = companyChoices
+    .filter(value => value.toLowerCase().includes(companySearch.toLowerCase()));
+  const selectedCompaniesOutsideScope = !companyChoicesLoading
+    ? list(form.brands).filter(value => !companyChoices.some(choice => choice.toLocaleLowerCase() === value.toLocaleLowerCase()))
+    : [];
   return (
     <Page>
       <Section title="Business Profile & Configurations" subtitle="Manage owner name, shop details, GST numbers, item types, and service coverage rules." icon={Store} />
@@ -2277,9 +2374,33 @@ function BusinessProfilePage({ user, data, run, onDeleteAccount }) {
         <p>{form.delivery_method === 'radius' ? 'Radius uses your shop pin. City/state coverage lists do not limit this circle.' : 'List the places you serve, separated by commas. For cities/districts, service states limit matches; otherwise your shop state is used.'}</p>
       </Panel>
       <Panel title="Product Offerings & Categories">
-        <p>Select the item types you sell, such as phones, laptops or televisions. Matching uses item type across all brands. Selecting only a parent group covers every item in that group.</p>
-        <ChipSelector title="Dealt Categories (Parent Group)" options={parentCategories} values={list(form.categories)} onChange={changeParents} />
-        <ChipSelector title="Dealt Items / Product Types" options={childCategories} values={list(form.categories)} onChange={(values) => update('categories', values)} />
+        <p>Select a whole category or specific product types. Leave every category unchecked to include all categories. Manufacturer choices are loaded only from the selected categories and product types.</p>
+        <div className="form-grid">
+          {parentCategories.map(parent => {
+            const children = list(parent.items);
+            const selected = new Set(selectedCategoryNames);
+            const chosenChildren = children.filter(item => selected.has(item.id));
+            const all = selected.has(parent.id) && (chosenChildren.length === 0 || chosenChildren.length === children.length);
+            const partial = chosenChildren.length > 0 && chosenChildren.length < children.length;
+            return <fieldset className="wide dealer-category-checks" key={parent.id}>
+              <legend><label className="check"><input type="checkbox" checked={all} ref={node => { if (node) node.indeterminate = partial; }} onChange={event => setCategoryCoverage(parent, event.target.checked)} />{parent.name} <small>{all ? 'All products' : partial ? `${chosenChildren.length} selected` : selected.size === 0 ? 'No category restriction' : 'Not selected'}</small></label></legend>
+              <div className="dealer-product-checks">{children.map(item => <label className="check" key={item.id}><input type="checkbox" checked={all || selected.has(item.id)} onChange={() => setCategoryCoverage(parent, false, item)} />{item.name}</label>)}</div>
+            </fieldset>;
+          })}
+        </div>
+        <label className="wide dealer-company-filter">Companies / manufacturers you deal with
+          {companyScopes.length ? <>
+            <input value={companySearch} onChange={event => setCompanySearch(event.target.value)} placeholder="Search companies in selected categories" />
+            <span className="muted">Leave companies unchecked to accept every manufacturer available in the selected categories and product types. Changing the selection removes companies that do not sell within the new scope.</span>
+            {companyChoicesLoading ? <span className="muted" role="status">Loading manufacturers for your selection…</span> : null}
+            <div className="dealer-company-checks">{companyOptions.map(company => <label className="check" key={company}><input type="checkbox" checked={list(form.brands).some(value => value.toLocaleLowerCase() === company.toLocaleLowerCase())} onChange={() => update('brands', list(form.brands).some(value => value.toLocaleLowerCase() === company.toLocaleLowerCase()) ? list(form.brands).filter(value => value.toLocaleLowerCase() !== company.toLocaleLowerCase()) : [...list(form.brands), company])} />{company}</label>)}</div>
+            {!companyChoicesLoading && !companyOptions.length ? <span className="muted">No manufacturers were found for this selection.</span> : null}
+          </> : <span className="muted">Select a category or product type to see only the manufacturers available in that selection.</span>}
+          {selectedCompaniesOutsideScope.length ? <div className="dealer-company-checks" aria-label="Saved companies outside the current selection">
+            <span className="muted">Saved company restrictions outside this selection:</span>
+            {selectedCompaniesOutsideScope.map(company => <button type="button" className="link-button" key={company} onClick={() => update('brands', list(form.brands).filter(value => value.toLocaleLowerCase() !== company.toLocaleLowerCase()))}>Remove {company}</button>)}
+          </div> : null}
+        </label>
       </Panel>
       <Panel title="Physical Address">
         <div className="form-grid">
@@ -2789,9 +2910,10 @@ function AdminAccountDetails({ details, role, onClose }) {
 
 function ProductImage({product,className='product-art',iconSize=42}) {
   const [loaded,setLoaded]=useState(false);const [failed,setFailed]=useState(false);
+  const imageSource = !product.image_url || failed ? '/catalog-placeholder.svg' : product.image_url;
   return <div className={className}>
-    {!loaded&&<Package size={iconSize} aria-hidden="true"/>}
-    {product.image_url&&!failed&&<img src={product.image_url} alt={product.name} loading={className==='product-detail-art'?'eager':'lazy'} className="catalog-product-photo" style={{opacity:loaded?1:0}} onLoad={()=>setLoaded(true)} onError={()=>setFailed(true)}/>}
+    {!loaded&&failed&&<Package size={iconSize} aria-hidden="true"/>}
+    <img src={imageSource} alt={product.name} loading={className==='product-detail-art'?'eager':'lazy'} className="catalog-product-photo" style={{opacity:loaded?1:0}} onLoad={()=>setLoaded(true)} onError={()=>{if (imageSource !== '/catalog-placeholder.svg') setFailed(true);}} />
   </div>;
 }
 
