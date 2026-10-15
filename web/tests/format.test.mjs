@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import {
+  budgetComparison,
+  expectationPhrases,
   formatDelivery,
   friendlyErrorMessage,
   isLive,
@@ -100,4 +102,20 @@ test('friendlyErrorMessage turns API errors into one plain sentence', () => {
   assert.equal(friendlyErrorMessage(api(422, { detail: [{ type: 'missing', loc: ['body', 'full_name'], msg: 'Field required' }] })), 'Full Name is required.');
   assert.equal(friendlyErrorMessage(new Error('Network down')), 'Network down');
   assert.equal(friendlyErrorMessage(undefined), 'Something went wrong. Please try again.');
+});
+
+test('expectationPhrases lists only what the buyer asked for', () => {
+  assert.deepEqual(expectationPhrases({}), []);
+  assert.deepEqual(expectationPhrases({ budget_amount: null, want_warranty: '', want_installation: 0 }), []);
+  const phrases = expectationPhrases({ budget_amount: '80000.00', want_warranty: '2 years', want_delivery: 'Within 3 days', want_installation: 1 }, 2);
+  assert.deepEqual(phrases.map((item) => item.text), ['Budget ₹80,000 (₹40,000 each)', 'Warranty: 2 years', 'Delivery: Within 3 days', 'Installation needed']);
+  assert.equal(expectationPhrases({ budget_amount: '5000' }, 1)[0].text, 'Budget ₹5,000');
+});
+
+test('budgetComparison says whether a price fits the budget', () => {
+  assert.deepEqual(budgetComparison('80000', 70000), { within: true, gap: 10000 });
+  assert.deepEqual(budgetComparison('80000', 80000), { within: true, gap: 0 });
+  assert.deepEqual(budgetComparison('80000', '85500'), { within: false, gap: 5500 });
+  assert.equal(budgetComparison(null, 70000), null);
+  assert.equal(budgetComparison('80000', ''), null);
 });

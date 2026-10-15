@@ -233,6 +233,7 @@ const STATUS_TONE = {
   won: 'good', completed: 'good', paid: 'good', resolved: 'good', verified: 'good', approved: 'good', subscribed: 'good', delivered: 'good',
   lost: 'quiet', expired: 'quiet', withdrawn: 'quiet', closed: 'quiet', cancelled: 'quiet', inactive: 'quiet', archived: 'quiet', deleted: 'quiet', not_due: 'quiet',
   pending: 'warn', held: 'warn', flagged: 'warn', in_review: 'warn', investigating: 'warn', escalated: 'warn', unpaid: 'warn', requested: 'warn',
+  live: 'live', scheduled: 'warn', ended: 'quiet', paused: 'warn',
   banned: 'bad', suspended: 'bad', failed: 'bad', rejected: 'bad', refunded: 'bad',
 };
 
@@ -295,4 +296,18 @@ export function SlipSkeletons({ count = 2 }) {
       <span className="sr-only">Loading</span>
     </div>
   );
+}
+
+export function CopyButton({ value, label }) {
+  const [copied, setCopied] = useState(false);
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(value);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1800);
+    } catch {
+      // Clipboard access can be blocked; the value is still on screen to copy by hand.
+    }
+  };
+  return <button type="button" className="copy-button" aria-label={`Copy ${label}`} onClick={copy}>{copied ? 'Copied' : 'Copy'}</button>;
 }

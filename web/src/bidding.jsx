@@ -1,7 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import { Gift, MapPin, Navigation, Package, ShieldCheck, Truck, Wrench } from 'lucide-react';
-import { Countdown, Modal, ProductImage, Status } from './ui.jsx';
-import { dateTime, formatDelivery, isLive, money, plural, standingFor, text } from './format.js';
+import { Countdown, CopyButton, Modal, ProductImage, Status } from './ui.jsx';
+import { budgetComparison, dateTime, expectationPhrases, formatDelivery, isLive, money, plural, standingFor, text } from './format.js';
+import { ProductDeals } from './offers.jsx';
 
 /* ------------------------------------------------------------------ */
 /* Shared helpers                                                      */
@@ -24,20 +25,6 @@ export function BrandMark({ className = 'brand-mark' }) {
       <path d="M12 27h8" />
     </svg>
   );
-}
-
-function CopyButton({ value, label }) {
-  const [copied, setCopied] = useState(false);
-  const copy = async () => {
-    try {
-      await navigator.clipboard.writeText(value);
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 1800);
-    } catch {
-      // Clipboard access can be blocked; the value is still on screen to copy by hand.
-    }
-  };
-  return <button type="button" className="copy-button" aria-label={`Copy ${label}`} onClick={copy}>{copied ? 'Copied' : 'Copy'}</button>;
 }
 
 /** Everything a buyer needs to contact and pay a shop, shown on each of its bids. */
@@ -78,6 +65,21 @@ function ShopDetails({ offer }) {
   );
 }
 
+/** What the buyer asked for (budget, warranty, delivery, installation), as small tags. */
+export function ExpectationChips({ request, units = 1, label = 'What the buyer asked for' }) {
+  const phrases = expectationPhrases(request, units);
+  if (!phrases.length) return null;
+  return (
+    <ul className="expect-chips" aria-label={label}>
+      {phrases.map((phrase) => <li key={phrase.key} className={`expect ${phrase.key}`}>{phrase.text}</li>)}
+    </ul>
+  );
+}
+
+function liveBudgetFit(budget, offer) {
+  return isLive(offer) ? budgetComparison(budget, offer.amount) : null;
+}
+
 function QuickPicks({ options, value, onPick, label }) {
   return (
     <div className="quick-picks" role="group" aria-label={label}>
@@ -111,6 +113,7 @@ export function RequestSlip({ request, onBid, blocked }) {
         {request.buyer_area ? <li><MapPin size={14} aria-hidden="true" />{request.buyer_area}</li> : null}
         {distance !== null && distance !== undefined ? <li><Navigation size={14} aria-hidden="true" />{Number(distance) < 1 ? 'Under 1 km away' : `${distance} km away`}</li> : null}
       </ul>
+      <ExpectationChips request={request} units={Number(request.quantity || 1)} />
       {request.buyer_notes ? <p className="slip-note">“{request.buyer_notes}”</p> : null}
       <hr className="slip-tear" />
       <div className="slip-foot">
@@ -156,6 +159,7 @@ export function MyBidSlip({ bid, standing, onRevise, onWithdraw, onDetails }) {
         <div><dt>Warranty</dt><dd>{text(bid.warranty_text) || 'None'}</dd></div>
         {Number(bid.installation_included) ? <div><dt>Installation</dt><dd>Included</dd></div> : null}
       </dl>
+      <ExpectationChips request={bid} units={Number(bid.quantity || 1)} />
       <hr className="slip-tear" />
       <div className="slip-foot">
         <div className="slip-price">
@@ -177,7 +181,8 @@ export function MyBidSlip({ bid, standing, onRevise, onWithdraw, onDetails }) {
 /* Buyer: one dealer's offer                                           */
 /* ------------------------------------------------------------------ */
 
-export function OfferSlip({ offer, quantity, isLowest, canAccept, onAccept }) {
+export function OfferSlip({ offer, quantity, budget, isLowest, canAccept, onAccept }) {
+  const fit = liveBudgetFit(budget, offer);
   const savings = Number(offer.discount_amount || 0);
   const units = Number(quantity || offer.quantity || 1);
   const live = isLive(offer);
@@ -199,6 +204,7 @@ export function OfferSlip({ offer, quantity, isLowest, canAccept, onAccept }) {
           {units > 1 ? `, ${money(Number(offer.amount) / units)} each` : ''}
           {savings > 0 ? `, includes ${money(savings)} savings` : ''}
         </small>
+        {fit ? <span className={`budget-flag ${fit.within ? 'within' : 'over'}`}>{fit.within ? 'Within your budget' : `${money(fit.gap)} over your budget`}</span> : null}
       </div>
       <dl className="terms">
         <div><dt><Truck size={13} aria-hidden="true" /> Delivery</dt><dd>{formatDelivery(offer.delivery_time)}</dd></div>
@@ -248,6 +254,7 @@ export function BuyerRequestSlip({ request, offers, onCompare, onCancel }) {
         <li><Package size={14} aria-hidden="true" />{plural(Number(request.quantity || 1), 'unit')}</li>
         {where ? <li><MapPin size={14} aria-hidden="true" />{where}</li> : null}
       </ul>
+      <ExpectationChips request={request} units={Number(request.quantity || 1)} label="Your requirements" />
       <hr className="slip-tear" />
       <div className="slip-foot">
         <div className="slip-price">
@@ -350,6 +357,7 @@ export function BidSheet({ request, bid, allBids = [], subscribed = true, rules 
     }
   };
 
+  const budgetFit = amountValid ? budgetComparison(request.budget_amount, amount) : null;
   let comparison = null;
   if (amountValid && lowest !== null) {
     comparison = amount < lowest
@@ -376,6 +384,7 @@ export function BidSheet({ request, bid, allBids = [], subscribed = true, rules 
             {request.distance_km !== null && request.distance_km !== undefined ? <span><Navigation size={14} aria-hidden="true" />{Number(request.distance_km) < 1 ? 'Under 1 km away' : `${request.distance_km} km away`}</span> : null}
             {closes ? <Countdown until={closes} /> : null}
           </div>
+          <ExpectationChips request={request} units={quantity} />
           {request.buyer_notes ? <p className="slip-note sheet-note">“{request.buyer_notes}”</p> : null}
           <div className="beat-line">
             <small>{lowest !== null ? `Lowest of ${plural(competing.length || Number(request.offers_count) || 1, 'other bid')}` : 'No other bids yet'}</small>
@@ -409,6 +418,7 @@ export function BidSheet({ request, bid, allBids = [], subscribed = true, rules 
               {quantity > 1 ? <> for {plural(quantity, 'unit')}, or <strong>{money(amount / quantity)}</strong> each</> : null}.
             </span>
             {comparison ? <span className={`standing ${comparison.tone}`}>{comparison.text}</span> : null}
+            {budgetFit ? <span className={`standing ${budgetFit.within ? 'lead' : 'trail'}`}>{budgetFit.within ? (budgetFit.gap ? `${money(budgetFit.gap)} under the buyer's budget.` : 'Exactly the buyer\'s budget.') : `${money(budgetFit.gap)} over the buyer's budget. A better warranty or delivery can still win them.`}</span> : null}
           </div>
         ) : null}
         {editing && step > 0 ? <p className="hint">Platform rule: a revised price must be at least {money(step)} lower than your current bid.</p> : null}
@@ -460,6 +470,9 @@ export function BidSheet({ request, bid, allBids = [], subscribed = true, rules 
 /* Buyer: start a bid                                                  */
 /* ------------------------------------------------------------------ */
 
+const WARRANTY_WISHES = ['At least 1 year', 'At least 2 years', 'At least 3 years', 'Manufacturer warranty'];
+const DELIVERY_WISHES = ['Same day', 'Within 2 days', 'Within a week', 'No hurry'];
+
 const EXPIRY_PRESETS = [
   [30, '30 minutes'],
   [60, '1 hour'],
@@ -471,13 +484,17 @@ const EXPIRY_PRESETS = [
   [4320, '3 days'],
 ];
 
-export function BidSetupModal({ product, locations, rules = {}, onClose, onStart, onAddLocation }) {
+export function BidSetupModal({ product, locations, rules = {}, token, onClose, onStart, onAddLocation }) {
   const defaultLocation = locations.find((loc) => loc.is_default === true || loc.is_default === 1) || locations[0];
   const defaultMinutes = Math.round(Number(rules.expiry_hours ?? 24) * 60);
   const [form, setForm] = useState({
     quantity: String(product.bidQuantity || 1),
     expiry_minutes: defaultMinutes,
     notes: '',
+    budget: '',
+    warranty: '',
+    delivery: '',
+    installation: false,
     location_id: defaultLocation ? String(defaultLocation.location_id || defaultLocation.id) : '',
   });
   const [errors, setErrors] = useState({});
@@ -502,6 +519,8 @@ export function BidSetupModal({ product, locations, rules = {}, onClose, onStart
     const found = {};
     if (!form.location_id) found.location_id = 'Choose where this should be delivered.';
     if (!Number.isInteger(quantity) || quantity <= 0 || quantity > 100000) found.quantity = 'Enter a whole number from 1 to 100000.';
+    const budget = form.budget.trim() === '' ? null : Number(form.budget.replace(/,/g, ''));
+    if (budget !== null && (!Number.isFinite(budget) || budget <= 0)) found.budget = 'Enter your budget as a number greater than 0, or leave it empty.';
     setErrors(found);
     if (Object.keys(found).length) {
       document.getElementById(`setup-${Object.keys(found)[0]}`)?.focus();
@@ -515,6 +534,10 @@ export function BidSetupModal({ product, locations, rules = {}, onClose, onStart
         location_id: form.location_id,
         expiry_minutes: Number(form.expiry_minutes || 1440),
         fields: form.notes.trim() ? { Notes: form.notes.trim() } : {},
+        ...(form.budget.trim() !== '' ? { budget: Number(form.budget.replace(/,/g, '')) } : {}),
+        warranty: form.warranty.trim(),
+        delivery: form.delivery.trim(),
+        installation: form.installation,
       });
     } finally {
       setSubmitting(false);
@@ -534,6 +557,8 @@ export function BidSetupModal({ product, locations, rules = {}, onClose, onStart
           </div>
           <p className="muted-small">Every active shop that sells this product and delivers to your location will see this request and can send its best final price. You choose the offer you like.</p>
         </div>
+
+        {token ? <ProductDeals token={token} productId={product.id} compact /> : null}
 
         {!locations.length ? (
           <div className="page-banner warn">
@@ -566,6 +591,32 @@ export function BidSetupModal({ product, locations, rules = {}, onClose, onStart
             </select>
             <p className="hint">Shops can bid until then. Longer windows usually bring more offers.</p>
           </div>
+          <fieldset className="field wide expectations">
+            <legend>What you expect (optional)</legend>
+            <p className="hint">Shops see this with your request, so they can quote what you actually want.</p>
+            <div className="form-grid">
+              <div className="field">
+                <label htmlFor="setup-budget">Budget (Rs.)</label>
+                <input id="setup-budget" inputMode="decimal" autoComplete="off" value={form.budget} aria-invalid={Boolean(errors.budget)} onChange={(event) => update('budget', event.target.value)} />
+                <p className="hint">{Number(form.quantity) > 1 && Number(form.budget) > 0 ? `Your total for all ${form.quantity} units, about ${money(Number(form.budget) / Number(form.quantity))} each.` : 'The most you want to spend in total.'}</p>
+                {errors.budget ? <p className="field-error" role="alert">{errors.budget}</p> : null}
+              </div>
+              <div className="field">
+                <label htmlFor="setup-warranty">Warranty you want</label>
+                <input id="setup-warranty" autoComplete="off" value={form.warranty} onChange={(event) => update('warranty', event.target.value)} />
+                <QuickPicks label="Common warranty wishes" options={WARRANTY_WISHES} value={form.warranty} onPick={(value) => update('warranty', value)} />
+              </div>
+              <div className="field">
+                <label htmlFor="setup-delivery">Delivery you need</label>
+                <input id="setup-delivery" autoComplete="off" value={form.delivery} onChange={(event) => update('delivery', event.target.value)} />
+                <QuickPicks label="Common delivery wishes" options={DELIVERY_WISHES} value={form.delivery} onPick={(value) => update('delivery', value)} />
+              </div>
+              <label className="check field-aligned">
+                <input type="checkbox" checked={form.installation} onChange={(event) => update('installation', event.target.checked)} />
+                <span>I need installation</span>
+              </label>
+            </div>
+          </fieldset>
           <div className="field wide">
             <label htmlFor="setup-notes">Anything shops should know? (optional)</label>
             <textarea id="setup-notes" value={form.notes} onChange={(event) => update('notes', event.target.value)} placeholder="Preferred colour, delivery floor, exchange of an old unit..." />
@@ -599,13 +650,14 @@ export function CompareOffersModal({ request, offers, onClose, onAccept, onCance
         {open ? <Countdown until={request.expires_at} /> : null}
         {open && onCancel ? <button type="button" className="danger small" onClick={onCancel}>Cancel request</button> : null}
       </div>
+      <ExpectationChips request={request} units={Number(request.quantity || 1)} label="Your requirements" />
       {winnerContact}
       {sorted.length ? (
         <>
           {open && liveOffers.length > 1 ? <p className="muted-small">Offers are listed from the lowest price. Compare delivery and warranty before you accept.</p> : null}
           <div className="slip-grid">
             {sorted.map((offer) => (
-              <OfferSlip key={offer.id} offer={offer} quantity={request.quantity} isLowest={lowest !== null && Number(offer.amount) === lowest} canAccept={open} onAccept={onAccept} />
+              <OfferSlip key={offer.id} offer={offer} quantity={request.quantity} budget={request.budget_amount} isLowest={lowest !== null && Number(offer.amount) === lowest} canAccept={open} onAccept={onAccept} />
             ))}
           </div>
         </>

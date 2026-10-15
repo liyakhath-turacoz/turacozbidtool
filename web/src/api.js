@@ -138,6 +138,13 @@ export const api = {
     }
     return response.json();
   },
+  dealerPromotions: (token) => request('/dealer/promotions', { token }),
+  createPromotion: (token, payload) => request('/dealer/promotions', { token, method: 'POST', body: payload }),
+  updatePromotion: (token, id, payload) => request(`/dealer/promotions/${id}`, { token, method: 'PUT', body: payload }),
+  setPromotionStatus: (token, id, status) => request(`/dealer/promotions/${id}/status`, { token, method: 'POST', body: { status } }),
+  deletePromotion: (token, id) => request(`/dealer/promotions/${id}`, { token, method: 'DELETE' }),
+  buyerPromotions: (token, query = {}) => request(`/buyer/promotions?${queryString(query)}`, { token }),
+  promotionSummary: (token, productIds) => request('/buyer/promotions/summary', { token, method: 'POST', body: { product_ids: productIds } }),
   activateDealerSubscription: (token) => request('/dealer/subscription/activate', { token, method: 'POST' }),
   subscription: (token) => request('/dealer/subscription', { token }),
   subscriptionOrder: (token) => request('/dealer/subscription/order', { token, method: 'POST' }),

@@ -128,3 +128,29 @@ export function friendlyErrorMessage(err) {
   if (message.includes('Duplicate entry') && message.includes('uq_buyer_location')) return 'This location is already saved. Update the existing saved location instead.';
   return message.replace(/^API error \d+:\s*/, '') || 'Something went wrong. Please try again.';
 }
+
+/* ------------------------------------------------------------------ */
+/* What the buyer asked for                                            */
+/* ------------------------------------------------------------------ */
+
+/** The buyer's budget, warranty, delivery and installation wishes as short phrases. */
+export function expectationPhrases(request, units = 1) {
+  const phrases = [];
+  const budget = Number(request?.budget_amount);
+  if (Number.isFinite(budget) && budget > 0) {
+    const each = Number(units) > 1 ? ` (${money(budget / Number(units))} each)` : '';
+    phrases.push({ key: 'budget', text: `Budget ${money(budget)}${each}` });
+  }
+  if (text(request?.want_warranty)) phrases.push({ key: 'warranty', text: `Warranty: ${text(request.want_warranty)}` });
+  if (text(request?.want_delivery)) phrases.push({ key: 'delivery', text: `Delivery: ${text(request.want_delivery)}` });
+  if (Number(request?.want_installation)) phrases.push({ key: 'installation', text: 'Installation needed' });
+  return phrases;
+}
+
+/** Whether a price is inside the buyer's budget. Returns null when the buyer set no budget. */
+export function budgetComparison(budget, amount) {
+  const limit = Number(budget);
+  const price = Number(amount);
+  if (!Number.isFinite(limit) || limit <= 0 || !Number.isFinite(price) || price <= 0) return null;
+  return price <= limit ? { within: true, gap: limit - price } : { within: false, gap: price - limit };
+}

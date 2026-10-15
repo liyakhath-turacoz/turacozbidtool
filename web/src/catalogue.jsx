@@ -322,7 +322,7 @@ export function DealerProductsPage({ user, data, setTab }) {
           <Empty
             title={filter ? 'No products match' : 'You have not listed any products yet'}
             hint={filter ? 'Try a shorter search.' : 'Search the catalogue above, type a product in, or upload your catalogue. You can also tick whole categories under My shop.'}
-            action={!filter ? <button type="button" onClick={() => setTab(5)}>Choose categories in My shop</button> : null}
+            action={!filter ? <button type="button" onClick={() => setTab(6)}>Choose categories in My shop</button> : null}
           />
         )}
         {list.total > list.items.length ? <p className="muted-small">Showing the newest {list.items.length} of {list.total}. Use the filter to find the rest.</p> : null}

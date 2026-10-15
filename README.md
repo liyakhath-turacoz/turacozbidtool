@@ -210,6 +210,18 @@ python backend\scripts\audit_product_duplicates.py --csv duplicates.csv
 
 An admin then decides which copy to keep and archives the others. If the matching rules in `backend/product_identity.py` ever change, raise `KEY_VERSION` there and the stored keys are rebuilt on the next catalogue action.
 
+## What buyers ask for, and dealers' promotional offers
+
+**Buyer requirements.** When a buyer starts a bid they can add, all optional, a **budget** (the most they want to spend in total), the **warranty** they want, the **delivery** they need and whether they need **installation**. Every shop that receives the request sees these as tags on the request, and the bid form compares the price being typed with the budget ("₹3,500 under the buyer's budget", "₹12,000 over the buyer's budget"). The buyer sees the same tags on their own request and a "Within your budget" or "over your budget" note on each offer. The budget is never an obligation: shops can bid above it, and the buyer decides.
+
+**Promotional offers.** Under **My offers** a shop publishes a deal on products it has listed under My products: a percentage off, an amount off, a special price, a free gift or another offer described in words, with a start and end date (up to 180 days), an optional promo code and terms. Offers can be edited, paused, resumed and deleted. Buyers see an offer when it is live, its shop is active and subscribed, and the shop's own service area covers the buyer's location, which are the same rules that decide who receives a request. Where buyers see them:
+
+- a **Deals** badge on products in the catalogue, and the offers on a product's details and in the Start bid dialog;
+- the **Deals** page, either "On my products" (products in the cart or in an open request) or "All near me";
+- a note in the cart for products with an offer.
+
+Each offer shows the shop's name, address and phone number so the buyer can claim it. Offers are only advertised; the platform does not apply discounts to bids.
+
 ## End-to-end checks
 
 With the backend and React development server running, execute from the project root:

@@ -44,6 +44,7 @@ try:
     from . import geocoding
     from . import subscription_payments as payments
     from . import dealer_catalogue
+    from . import promotions
     from . import product_identity
     from .logging_filters import install_token_filters
 except ImportError:
@@ -58,6 +59,7 @@ except ImportError:
     import geocoding
     import subscription_payments as payments
     import dealer_catalogue
+    import promotions
     import product_identity
     from logging_filters import install_token_filters
 
@@ -431,6 +433,54 @@ def ensure_runtime_schema() -> None:
                 )
                 if cursor.fetchone()["count"] == 0:
                     cursor.execute(f"ALTER TABLE dealer_profiles ADD COLUMN {column_name} {definition}")
+            # ── What the buyer expects, shown to dealers with the request ──
+            for column_name, definition in (
+                ("budget_amount", "DECIMAL(12,2) NULL"),
+                ("want_warranty", "VARCHAR(120) NULL"),
+                ("want_delivery", "VARCHAR(120) NULL"),
+                ("want_installation", "BOOLEAN NOT NULL DEFAULT FALSE"),
+            ):
+                cursor.execute(
+                    "SELECT COUNT(*) AS count FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=%s AND TABLE_NAME='bid_requests' AND COLUMN_NAME=%s",
+                    [DB_NAME, column_name],
+                )
+                if cursor.fetchone()["count"] == 0:
+                    cursor.execute(f"ALTER TABLE bid_requests ADD COLUMN {column_name} {definition}")
+            # ── Promotional offers published by dealers ──
+            cursor.execute(
+                """
+                CREATE TABLE IF NOT EXISTS dealer_promotions (
+                  id CHAR(36) PRIMARY KEY,
+                  dealer_id CHAR(36) NOT NULL,
+                  title VARCHAR(120) NOT NULL,
+                  offer_type ENUM('percent','amount','special_price','gift','other') NOT NULL,
+                  offer_value DECIMAL(12,2) NULL,
+                  gift_text VARCHAR(200) NULL,
+                  details TEXT NULL,
+                  promo_code VARCHAR(40) NULL,
+                  starts_at DATETIME NOT NULL,
+                  ends_at DATETIME NOT NULL,
+                  status ENUM('active','paused','deleted') NOT NULL DEFAULT 'active',
+                  created_at DATETIME NOT NULL,
+                  updated_at DATETIME NOT NULL,
+                  KEY idx_promotions_dealer (dealer_id, status, ends_at),
+                  KEY idx_promotions_live (status, starts_at, ends_at),
+                  CONSTRAINT fk_promotions_dealer FOREIGN KEY (dealer_id) REFERENCES users(id) ON DELETE CASCADE
+                ) ENGINE=InnoDB
+                """
+            )
+            cursor.execute(
+                """
+                CREATE TABLE IF NOT EXISTS promotion_products (
+                  promotion_id CHAR(36) NOT NULL,
+                  product_id CHAR(36) NOT NULL,
+                  PRIMARY KEY (promotion_id, product_id),
+                  KEY idx_promotion_products_product (product_id),
+                  CONSTRAINT fk_promotion_products_promotion FOREIGN KEY (promotion_id) REFERENCES dealer_promotions(id) ON DELETE CASCADE,
+                  CONSTRAINT fk_promotion_products_product FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
+                ) ENGINE=InnoDB
+                """
+            )
             # ── Paid subscriptions: one row per payment attempt ──
             cursor.execute(
                 """
@@ -1040,7 +1090,7 @@ class BidRepository:
         with db() as conn, conn.cursor() as cursor:
             expire_due_bid_requests(cursor)
             query = """
-                SELECT b.id, b.bid_request_id, b.dealer_id, br.product_id, br.location_id, br.quantity, br.radius_km, br.skip_flagged_dealers, p.name AS product, buyer.full_name AS buyer,
+                SELECT b.id, b.bid_request_id, b.dealer_id, br.product_id, br.location_id, br.quantity, br.budget_amount, br.want_warranty, br.want_delivery, br.want_installation, br.radius_km, br.skip_flagged_dealers, p.name AS product, buyer.full_name AS buyer,
                        COALESCE(NULLIF(l.address_line, ''), bp.address) AS buyer_address, buyer.phone AS buyer_phone, buyer.email AS buyer_email,
                        dp.business_name AS dealer, dp.owner_name, dp.dynamic_fields AS dealer_dynamic,
                        COALESCE(NULLIF(dl.address_line, ''), dp.business_address) AS business_address, dp.gst_number,
@@ -1832,7 +1882,7 @@ class CartRepository:
             cursor.execute("DELETE FROM cart_items WHERE id=%s AND cart_id=%s", [item_id, cart_id])
             audit(cursor, buyer_id, "cart.item_removed", "cart_items", item_id, {})
 
-    def start_bid(self, buyer_id: str, product_id: str, location_id: str | None, radius_km: float, quantity: int, fields: dict[str, str], skip_flagged_dealers: bool = True, expiry_minutes: int | None = None) -> str:
+    def start_bid(self, buyer_id: str, product_id: str, location_id: str | None, radius_km: float, quantity: int, fields: dict[str, str], skip_flagged_dealers: bool = True, expiry_minutes: int | None = None, budget: Decimal | None = None, want_warranty: str = "", want_delivery: str = "", want_installation: bool = False) -> str:
         request_id = new_id()
         with db() as conn, conn.cursor() as cursor:
             cursor.execute("SELECT id FROM users WHERE id=%s AND deleted_at IS NULL FOR UPDATE", [buyer_id])
@@ -1901,10 +1951,12 @@ class CartRepository:
             product_reference.register_product(cursor, product_id)
             cursor.execute(
                 """
-                INSERT INTO bid_requests (id, buyer_id, product_id, location_id, quantity, radius_km, skip_flagged_dealers, status, expires_at, created_at, updated_at)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, 'active', DATE_ADD(NOW(), INTERVAL %s MINUTE), NOW(), NOW())
+                INSERT INTO bid_requests (id, buyer_id, product_id, location_id, quantity, radius_km, skip_flagged_dealers, status, expires_at,
+                                          budget_amount, want_warranty, want_delivery, want_installation, created_at, updated_at)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, 'active', DATE_ADD(NOW(), INTERVAL %s MINUTE), %s, NULLIF(%s,''), NULLIF(%s,''), %s, NOW(), NOW())
                 """,
-                [request_id, buyer_id, product_id, location_id, max(1, quantity), buyer_radius_km, skip_flagged_dealers, expiry_minutes],
+                [request_id, buyer_id, product_id, location_id, max(1, quantity), buyer_radius_km, skip_flagged_dealers, expiry_minutes,
+                 budget, want_warranty.strip(), want_delivery.strip(), bool(want_installation)],
             )
             for key, value in fields.items():
                 cursor.execute(
@@ -2298,6 +2350,7 @@ class DealerOpsRepository:
                 """
                 SELECT br.id, br.product_id, br.location_id, br.skip_flagged_dealers, p.name AS product, p.brand, p.model, p.image_url,
                        c.name AS category, br.quantity, br.radius_km, br.status, br.expires_at,
+                       br.budget_amount, br.want_warranty, br.want_delivery, br.want_installation,
                        UNIX_TIMESTAMP(br.expires_at) AS expires_at_epoch,
                        CONCAT(l.area, ', ', l.city) AS buyer_area,
                        l.latitude AS buyer_latitude, l.longitude AS buyer_longitude,
@@ -3017,6 +3070,11 @@ class StartBidIn(BaseModel):
     )
     notes: str = ""
     fields: dict[str, str] = Field(default_factory=dict)
+    # What the buyer expects. Dealers see these with the request.
+    budget: Decimal | None = Field(default=None, gt=0, le=Decimal("9999999999.99"), max_digits=12, decimal_places=2, description="Total budget for all requested units")
+    warranty: str = Field(default="", max_length=120)
+    delivery: str = Field(default="", max_length=120)
+    installation: bool = False
 
     model_config = ConfigDict(allow_inf_nan=False)
 
@@ -3296,7 +3354,7 @@ _bid_publication_lock = asyncio.Lock()
 
 def request_snapshot(request_id: str, recipient: dict) -> dict:
     with db() as conn, conn.cursor() as cursor:
-        cursor.execute("""SELECT br.id,br.product_id,br.quantity,br.status,br.winning_bid_id,
+        cursor.execute("""SELECT br.id,br.product_id,br.quantity,br.budget_amount,br.want_warranty,br.want_delivery,br.want_installation,br.status,br.winning_bid_id,
             UNIX_TIMESTAMP(br.expires_at) AS expires_at_epoch,p.name AS product,p.brand,p.model,p.image_url,
             l.area AS buyer_area,l.city AS buyer_city,l.state AS buyer_state
             FROM bid_requests br JOIN product_reference_catalog p ON p.id=br.product_id
@@ -4674,6 +4732,238 @@ async def upload_dealer_catalogue(file: UploadFile = File(...), user: dict[str, 
     return await asyncio.to_thread(_process_catalogue_rows, user["sub"], rows)
 
 
+class PromotionIn(BaseModel):
+    title: str = Field(default="", max_length=200)
+    offer_type: Literal["percent", "amount", "special_price", "gift", "other"]
+    offer_value: Decimal | None = Field(default=None, ge=0, le=Decimal("999999999"), max_digits=14, decimal_places=2)
+    gift_text: str = Field(default="", max_length=300)
+    details: str = Field(default="", max_length=3000)
+    promo_code: str = Field(default="", max_length=60)
+    starts_at: datetime | None = None
+    ends_at: datetime
+    product_ids: list[str] = Field(default_factory=list, max_length=300)
+
+    model_config = ConfigDict(allow_inf_nan=False)
+
+
+class PromotionStatusIn(BaseModel):
+    status: Literal["active", "paused"]
+
+
+class PromotionSummaryIn(BaseModel):
+    product_ids: list[str] = Field(default_factory=list, max_length=60)
+
+
+def _save_promotion(dealer_id: str, payload: PromotionIn, promotion_id: str | None) -> str:
+    try:
+        offer = promotions.validate_offer(payload.model_dump(), datetime.now(timezone.utc))
+    except promotions.OfferProblem as error:
+        raise HTTPException(status_code=400, detail=str(error)) from error
+    with db() as conn, conn.cursor() as cursor:
+        marks = ",".join(["%s"] * len(offer["product_ids"]))
+        cursor.execute(f"SELECT product_id FROM dealer_products WHERE dealer_id=%s AND product_id IN ({marks})", [dealer_id, *offer["product_ids"]])
+        if len(cursor.fetchall()) != len(offer["product_ids"]):
+            raise HTTPException(status_code=400, detail="You can only run offers on products on your My products list. Add the product there first.")
+        if promotion_id:
+            cursor.execute("SELECT id FROM dealer_promotions WHERE id=%s AND dealer_id=%s AND status<>'deleted' FOR UPDATE", [promotion_id, dealer_id])
+            if not cursor.fetchone():
+                raise HTTPException(status_code=404, detail="Offer not found")
+        else:
+            cursor.execute("SELECT COUNT(*) AS total FROM dealer_promotions WHERE dealer_id=%s AND status<>'deleted' AND ends_at>NOW()", [dealer_id])
+            if cursor.fetchone()["total"] >= promotions.MAX_LIVE_OFFERS:
+                raise HTTPException(status_code=409, detail=f"You can have at most {promotions.MAX_LIVE_OFFERS} offers running or scheduled. End one first.")
+            promotion_id = new_id()
+        values = [offer["title"], offer["offer_type"], offer["offer_value"], offer["gift_text"] or None, offer["details"] or None,
+                  offer["promo_code"] or None, int(offer["starts_at"].timestamp()), int(offer["ends_at"].timestamp())]
+        cursor.execute(
+            """
+            INSERT INTO dealer_promotions (id, dealer_id, title, offer_type, offer_value, gift_text, details, promo_code, starts_at, ends_at, status, created_at, updated_at)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, FROM_UNIXTIME(%s), FROM_UNIXTIME(%s), 'active', NOW(), NOW())
+            ON DUPLICATE KEY UPDATE title=VALUES(title), offer_type=VALUES(offer_type), offer_value=VALUES(offer_value), gift_text=VALUES(gift_text),
+                details=VALUES(details), promo_code=VALUES(promo_code), starts_at=VALUES(starts_at), ends_at=VALUES(ends_at), updated_at=NOW()
+            """,
+            [promotion_id, dealer_id, *values],
+        )
+        cursor.execute("DELETE FROM promotion_products WHERE promotion_id=%s", [promotion_id])
+        for product_id in offer["product_ids"]:
+            cursor.execute("INSERT INTO promotion_products (promotion_id, product_id) VALUES (%s, %s)", [promotion_id, product_id])
+        audit(cursor, dealer_id, "promotion.saved", "dealer_promotions", promotion_id, {"title": offer["title"], "products": len(offer["product_ids"])})
+    return promotion_id
+
+
+def _dealer_promotion_rows(dealer_id: str, promotion_id: str | None = None) -> list[dict[str, Any]]:
+    with db() as conn, conn.cursor() as cursor:
+        query = """
+            SELECT id, title, offer_type, offer_value, gift_text, details, promo_code, status,
+                   UNIX_TIMESTAMP(starts_at) AS starts_epoch, UNIX_TIMESTAMP(ends_at) AS ends_epoch, UNIX_TIMESTAMP(NOW()) AS now_epoch
+            FROM dealer_promotions WHERE dealer_id=%s AND status<>'deleted'
+        """
+        params: list[Any] = [dealer_id]
+        if promotion_id:
+            query += " AND id=%s"
+            params.append(promotion_id)
+        cursor.execute(query + " ORDER BY ends_at DESC LIMIT 200", params)
+        rows = cursor.fetchall()
+        for row in rows:
+            cursor.execute(
+                "SELECT p.id, p.name, p.brand, p.model FROM promotion_products pp JOIN products p ON p.id=pp.product_id WHERE pp.promotion_id=%s ORDER BY p.name",
+                [row["id"]],
+            )
+            products = cursor.fetchall()
+            row["product_ids"] = [item["id"] for item in products]
+            row["product_count"] = len(products)
+            row["products"] = products[:6]
+            row["phase"] = promotions.phase(row["status"], float(row["starts_epoch"]), float(row["ends_epoch"]), float(row["now_epoch"]))
+            row["headline"] = promotions.headline(row)
+            row["starts_at"] = _epoch_iso(row.pop("starts_epoch"))
+            row["ends_at"] = _epoch_iso(row.pop("ends_epoch"))
+            row.pop("now_epoch")
+        return rows
+
+
+@app.get("/dealer/promotions")
+async def list_dealer_promotions(user: dict[str, Any] = Depends(require_role("dealer"))) -> list[dict[str, Any]]:
+    return await asyncio.to_thread(_dealer_promotion_rows, user["sub"])
+
+
+@app.post("/dealer/promotions")
+async def create_dealer_promotion(payload: PromotionIn, user: dict[str, Any] = Depends(require_role("dealer"))) -> dict[str, Any]:
+    promotion_id = await asyncio.to_thread(_save_promotion, user["sub"], payload, None)
+    return (await asyncio.to_thread(_dealer_promotion_rows, user["sub"], promotion_id))[0]
+
+
+@app.put("/dealer/promotions/{promotion_id}")
+async def update_dealer_promotion(promotion_id: str, payload: PromotionIn, user: dict[str, Any] = Depends(require_role("dealer"))) -> dict[str, Any]:
+    await asyncio.to_thread(_save_promotion, user["sub"], payload, promotion_id)
+    return (await asyncio.to_thread(_dealer_promotion_rows, user["sub"], promotion_id))[0]
+
+
+@app.post("/dealer/promotions/{promotion_id}/status")
+def set_dealer_promotion_status(promotion_id: str, payload: PromotionStatusIn, user: dict[str, Any] = Depends(require_role("dealer"))) -> dict[str, str]:
+    with db() as conn, conn.cursor() as cursor:
+        cursor.execute("UPDATE dealer_promotions SET status=%s, updated_at=NOW() WHERE id=%s AND dealer_id=%s AND status<>'deleted'", [payload.status, promotion_id, user["sub"]])
+        if cursor.rowcount == 0:
+            raise HTTPException(status_code=404, detail="Offer not found")
+    return {"status": payload.status}
+
+
+@app.delete("/dealer/promotions/{promotion_id}")
+def delete_dealer_promotion(promotion_id: str, user: dict[str, Any] = Depends(require_role("dealer"))) -> dict[str, str]:
+    with db() as conn, conn.cursor() as cursor:
+        cursor.execute("UPDATE dealer_promotions SET status='deleted', updated_at=NOW() WHERE id=%s AND dealer_id=%s AND status<>'deleted'", [promotion_id, user["sub"]])
+        if cursor.rowcount == 0:
+            raise HTTPException(status_code=404, detail="Offer not found")
+    return {"status": "deleted"}
+
+
+def buyer_location_for_offers(cursor, buyer_id: str, requested: str | None = None) -> str | None:
+    if requested:
+        cursor.execute("SELECT location_id FROM buyer_locations WHERE buyer_id=%s AND location_id=%s AND deleted_at IS NULL", [buyer_id, requested])
+    else:
+        cursor.execute("SELECT location_id FROM buyer_locations WHERE buyer_id=%s AND deleted_at IS NULL ORDER BY is_default DESC, updated_at DESC LIMIT 1", [buyer_id])
+    row = cursor.fetchone()
+    return row["location_id"] if row else None
+
+
+def visible_promotions(buyer_id: str, product_ids: list[str] | None, location_id: str | None = None, product_limit: int = 60) -> dict[str, Any]:
+    """Live offers a buyer can actually use: the shop must be active, subscribed and cover the buyer's location,
+    exactly as for requests, and the offer must apply to a product the buyer is looking at."""
+    with db() as conn, conn.cursor() as cursor:
+        location = buyer_location_for_offers(cursor, buyer_id, location_id)
+        if not location:
+            return {"needs_location": True, "offers": []}
+        query = """
+            SELECT pr.id, pr.dealer_id, pr.title, pr.offer_type, pr.offer_value, pr.gift_text, pr.details, pr.promo_code,
+                   UNIX_TIMESTAMP(pr.starts_at) AS starts_epoch, UNIX_TIMESTAMP(pr.ends_at) AS ends_epoch, pp.product_id,
+                   dp.business_name AS shop, dp.owner_name, dp.business_address AS address, dp.gst_number,
+                   u.phone AS phone, u.email AS email
+            FROM dealer_promotions pr
+            JOIN promotion_products pp ON pp.promotion_id=pr.id
+            JOIN users u ON u.id=pr.dealer_id AND u.deleted_at IS NULL
+            JOIN dealer_profiles dp ON dp.user_id=pr.dealer_id AND dp.deleted_at IS NULL AND dp.subscribed=TRUE
+            WHERE pr.status='active' AND pr.starts_at<=NOW() AND pr.ends_at>NOW()
+        """
+        params: list[Any] = []
+        if product_ids is not None:
+            if not product_ids:
+                return {"needs_location": False, "offers": []}
+            query += f" AND pp.product_id IN ({','.join(['%s'] * len(product_ids))})"
+            params.extend(product_ids)
+        cursor.execute(query + " ORDER BY pr.ends_at, pr.id", params)
+        rows = cursor.fetchall()
+        distinct = list(dict.fromkeys(row["product_id"] for row in rows))[:product_limit]
+        reachable = {pid: set(dealer_ops.matching_dealer_ids(cursor, pid, location, 0.0, True)) for pid in distinct}
+        offers: dict[str, dict[str, Any]] = {}
+        for row in rows:
+            if row["product_id"] not in reachable or row["dealer_id"] not in reachable[row["product_id"]]:
+                continue
+            offer = offers.get(row["id"])
+            if not offer:
+                offer = offers[row["id"]] = {
+                    "id": row["id"], "title": row["title"], "offer_type": row["offer_type"], "offer_value": row["offer_value"],
+                    "gift_text": row["gift_text"] or "", "details": row["details"] or "", "promo_code": row["promo_code"] or "",
+                    "headline": promotions.headline(row), "starts_at": _epoch_iso(row["starts_epoch"]), "ends_at": _epoch_iso(row["ends_epoch"]),
+                    "shop": {"name": row["shop"], "owner": row["owner_name"], "phone": row["phone"], "email": row["email"], "address": row["address"], "gst": row["gst_number"]},
+                    "product_ids": [],
+                }
+            offer["product_ids"].append(row["product_id"])
+        matched = list(dict.fromkeys(pid for offer in offers.values() for pid in offer["product_ids"]))
+        info: dict[str, Any] = {}
+        if matched:
+            cursor.execute(f"SELECT id, name, brand, model, image_url FROM products WHERE id IN ({','.join(['%s'] * len(matched))})", matched)
+            info = {row["id"]: row for row in cursor.fetchall()}
+        result = []
+        for offer in offers.values():
+            offer["product_count"] = len(offer["product_ids"])
+            offer["products"] = [info[pid] for pid in offer["product_ids"] if pid in info][:6]
+            result.append(offer)
+        return {"needs_location": False, "offers": result}
+
+
+def _selected_product_ids(buyer_id: str) -> list[str]:
+    """Products the buyer has chosen: what is in the cart and what has an open request."""
+    with db() as conn, conn.cursor() as cursor:
+        cursor.execute(
+            """
+            SELECT ci.product_id FROM cart_items ci JOIN carts c ON c.id=ci.cart_id WHERE c.buyer_id=%s AND c.status='active'
+            UNION
+            SELECT br.product_id FROM bid_requests br WHERE br.buyer_id=%s AND br.status='active' AND br.deleted_at IS NULL
+            """,
+            [buyer_id, buyer_id],
+        )
+        return [row["product_id"] for row in cursor.fetchall()]
+
+
+@app.get("/buyer/promotions")
+async def buyer_promotions(
+    scope: Literal["product", "selected", "nearby"] = "selected",
+    product_id: str | None = Query(default=None, max_length=40),
+    location_id: str | None = Query(default=None, max_length=40),
+    user: dict[str, Any] = Depends(require_role("buyer")),
+) -> dict[str, Any]:
+    """scope=product: offers on one product. selected: products in the cart or with an open request. nearby: everything live in the area."""
+    if scope == "product":
+        if not product_id:
+            raise HTTPException(status_code=400, detail="Choose a product")
+        ids: list[str] | None = [product_id]
+    elif scope == "selected":
+        ids = await asyncio.to_thread(_selected_product_ids, user["sub"])
+    else:
+        ids = None
+    return await asyncio.to_thread(visible_promotions, user["sub"], ids, location_id)
+
+
+@app.post("/buyer/promotions/summary")
+async def buyer_promotion_summary(payload: PromotionSummaryIn, user: dict[str, Any] = Depends(require_role("buyer"))) -> dict[str, int]:
+    """How many live offers each product on screen has, so the catalogue can show a Deals badge."""
+    result = await asyncio.to_thread(visible_promotions, user["sub"], payload.product_ids)
+    counts: dict[str, int] = {}
+    for offer in result["offers"]:
+        for product_id in offer["product_ids"]:
+            counts[product_id] = counts.get(product_id, 0) + 1
+    return counts
+
+
 @app.get("/admin/subscription-payments")
 def admin_subscription_payments(user: dict[str, Any] = Depends(require_role("admin"))) -> list[dict[str, Any]]:
     with db() as conn, conn.cursor() as cursor:
@@ -5216,6 +5506,10 @@ async def buyer_start_bid(payload: StartBidIn, user: dict[str, Any] = Depends(re
         fields,
         payload.skip_flagged_dealers,
         payload.expiry_minutes,
+        payload.budget,
+        payload.warranty,
+        payload.delivery,
+        payload.installation,
     )
     with db() as conn, conn.cursor() as cursor:
         cursor.execute("SELECT expires_at FROM bid_requests WHERE id = %s", [request_id])
@@ -5323,7 +5617,7 @@ def buyer_requests(include_closed: bool = False, user: dict[str, Any] = Depends(
         expire_due_bid_requests(cursor)
         cursor.execute(
             """
-            SELECT br.id, br.product_id, p.name AS product, p.brand, p.model, p.image_url, br.quantity, br.expires_at, br.status,
+            SELECT br.id, br.product_id, p.name AS product, p.brand, p.model, p.image_url, br.quantity, br.budget_amount, br.want_warranty, br.want_delivery, br.want_installation, br.expires_at, br.status,
                    UNIX_TIMESTAMP(br.expires_at) AS expires_at_epoch,
                    l.address_line AS buyer_address, l.city AS buyer_city, l.area AS buyer_area,
                    l.state AS buyer_state, l.pincode AS buyer_pincode,

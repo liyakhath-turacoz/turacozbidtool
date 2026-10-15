@@ -32,6 +32,7 @@ import {
   Settings,
   ShoppingCart,
   Store,
+  Tag,
   Trash2,
   User,
   Users,
@@ -44,6 +45,7 @@ import CatalogFilters, {emptyCatalogFilters, catalogParams} from './CatalogFilte
 import ProductSourcesPage from './ProductSourcesPage.jsx';
 import { SubscribeModal, SubscriptionPanel } from './subscription.jsx';
 import { DealerProductsPage } from './catalogue.jsx';
+import { BuyerDealsPage, DealerOffersPage, ProductDeals, useDealCounts } from './offers.jsx';
 import { friendlyErrorMessage } from './format.js';
 import {
   Countdown,
@@ -96,6 +98,7 @@ const buyerNav = [
   ['My requests', Bolt],
   ['Orders', ClipboardList],
   ['Cart', ShoppingCart],
+  ['Deals', Tag],
   ['Alerts', Bell],
   ['Account', User],
   ['Help & reports', LifeBuoy],
@@ -107,6 +110,7 @@ const dealerNav = [
   ['My bids', Gavel],
   ['Past bids', ClipboardList],
   ['My products', Package],
+  ['My offers', Tag],
   ['My shop', Store],
   ['Alerts', Bell],
   ['Help & reports', LifeBuoy],
@@ -338,6 +342,7 @@ function App() {
         ['bids', 'dealerRequests', 'profile', 'settings'],
         ['bids'],
         ['profile'],
+        ['profile'],
         ['profile', 'categories', 'settings'],
         ['notifications'],
         ['reports'],
@@ -348,6 +353,7 @@ function App() {
       ['bids', 'buyerRequests', 'buyerLocations', 'settings'],
       ['bids', 'buyerRequests'],
       ['cart', 'buyerLocations', 'settings'],
+      ['buyerLocations'],
       ['notifications'],
       ['profile', 'buyerLocations', 'reports'],
       ['reports'],
@@ -683,7 +689,7 @@ function App() {
 
   if (!user) return page;
 
-  const alertsIndex = user.role === 'buyer' ? 4 : user.role === 'dealer' ? 6 : -1;
+  const alertsIndex = user.role === 'buyer' ? 5 : user.role === 'dealer' ? 7 : -1;
   const roleLabel = user.role === 'dealer' ? 'Shop account' : user.role === 'buyer' ? 'Buyer account' : 'Administrator';
   const liveLabel = live === 'live' ? 'Live' : live === 'reconnecting' ? 'Reconnecting' : 'Connecting';
 
@@ -771,8 +777,9 @@ function App() {
             product={bidProduct}
             locations={data.buyerLocations}
             rules={data.settings?.bid_rules}
+            token={user.access_token}
             onClose={() => setBidProduct(null)}
-            onAddLocation={() => { setBidProduct(null); setTab(5); }}
+            onAddLocation={() => { setBidProduct(null); setTab(6); }}
             onStart={(payload) => run((token) => api.startBid(token, payload), 'Bid started. Nearby shops can now send offers.').then((ok) => { if (ok) { setBidProduct(null); setTab(1); } })}
           />
         ) : null}
@@ -828,6 +835,7 @@ function renderPage(ctx) {
       <DealerBidsPage {...ctx} />,
       <DealerHistoryPage {...ctx} />,
       <DealerProductsPage {...ctx} />,
+      <DealerOffersPage {...ctx} />,
       <BusinessProfilePage {...ctx} />,
       <NotificationsPage {...ctx} />,
       <ReportsPage {...ctx} />,
@@ -838,6 +846,7 @@ function renderPage(ctx) {
     <BuyerRequestsPage {...ctx} />,
     <OrdersHistoryPage {...ctx} />,
     <CartPage {...ctx} />,
+    <BuyerDealsPage {...ctx} />,
     <NotificationsPage {...ctx} />,
     <ProfilePage {...ctx} />,
     <ReportsPage {...ctx} />,
@@ -949,7 +958,7 @@ function DealerHomePage({ user, data, loading, setTab, setDealerOffer, subscribe
                   <span>{step.hint}</span>
                 </div>
                 {step.done ? <span className="muted-small">Done</span> : (
-                  <button type="button" className="small primary" onClick={() => (step.action === 'subscribe' ? subscribe() : setTab(step.action === 'products' ? 4 : 5))}>{step.action === 'subscribe' ? 'Subscribe' : 'Set up'}</button>
+                  <button type="button" className="small primary" onClick={() => (step.action === 'subscribe' ? subscribe() : setTab(step.action === 'products' ? 4 : 6))}>{step.action === 'subscribe' ? 'Subscribe' : 'Set up'}</button>
                 )}
               </li>
             ))}
@@ -1046,7 +1055,7 @@ function DealerRequestsPage({ data, loading, setDealerOffer, setTab, subscribe }
         <Empty
           title="No open requests right now"
           hint="You are shown requests for products you sell, from buyers inside your service area. If nothing arrives for a while, check that your shop lists the right products and area."
-          action={<button type="button" onClick={() => setTab(5)}>Check my shop settings</button>}
+          action={<button type="button" onClick={() => setTab(6)}>Check my shop settings</button>}
         />
       )}
     </Page>
@@ -1087,7 +1096,7 @@ function DealerBidsPage({ user, data, loading, setDealerOffer, setReportBid, set
               key={bid.id}
               bid={bid}
               standing={standingFor(bid, data.bids)}
-              onRevise={(row) => setDealerOffer({ request: { id: row.bid_request_id, product: row.product, quantity: row.quantity, expires_at: row.ends_at, buyer_area: [row.buyer_area, row.buyer_city].filter(Boolean).join(', ') }, bid: row })}
+              onRevise={(row) => setDealerOffer({ request: { id: row.bid_request_id, product: row.product, quantity: row.quantity, expires_at: row.ends_at, buyer_area: [row.buyer_area, row.buyer_city].filter(Boolean).join(', '), budget_amount: row.budget_amount, want_warranty: row.want_warranty, want_delivery: row.want_delivery, want_installation: row.want_installation }, bid: row })}
               onWithdraw={withdraw}
               onDetails={(row) => setDetails({ bid: row, mine: true })}
             />
@@ -1321,6 +1330,7 @@ function DashboardPage({ title, subtitle, data, extra }) {
 
 function BuyerHomePage({ data, setBidProduct, setTab, run, user }) {
   const [products, setProducts] = useState([]);
+  const dealCounts = useDealCounts(user.access_token, products.map((product) => product.id));
   const [query, setQuery] = useState('');
   const [appliedQuery, setAppliedQuery] = useState('');
   const [filters, setFilters] = useState(emptyCatalogFilters);
@@ -1403,7 +1413,7 @@ function BuyerHomePage({ data, setBidProduct, setTab, run, user }) {
             <strong>Add a delivery location to start a bid.</strong>
             <p>Shops are matched by distance, so we need a pin on the map first.</p>
           </div>
-          <button type="button" className="primary" onClick={() => setTab(5)}>Add location</button>
+          <button type="button" className="primary" onClick={() => setTab(6)}>Add location</button>
         </div>
       ) : howItWorks ? (
         <div className="page-banner">
@@ -1450,14 +1460,14 @@ function BuyerHomePage({ data, setBidProduct, setTab, run, user }) {
           {catalogLoading && !products.length ? <p role="status" className="muted">Loading products…</p> : null}
           <div className="product-grid buyer-grid">
             {products.map((product) => (
-              <ProductCard key={product.id} product={product} onSelect={() => openProduct(product)} onCart={() => addToCart(product)} onBid={() => setBidProduct(product)} />
+              <ProductCard key={product.id} product={product} deals={dealCounts[product.id]} onSelect={() => openProduct(product)} onCart={() => addToCart(product)} onBid={() => setBidProduct(product)} />
             ))}
           </div>
           {!catalogLoading && !catalogError && !products.length ? <Empty title="No products match" hint="Try fewer filters or a shorter search." action={<button type="button" onClick={() => { setFilters(emptyCatalogFilters()); setQuery(''); }}>Clear search and filters</button>} /> : null}
           {products.length < total ? <button type="button" disabled={catalogLoading} onClick={loadMore}>{catalogLoading ? 'Loading…' : 'Show more products'}</button> : null}
         </section>
       </div>
-      {selected ? <ProductDetailsModal product={selected} onClose={closeProduct} onCart={() => addToCart(selected)} onBid={() => { const product = selected; closeProduct(); setBidProduct(product); }} /> : null}
+      {selected ? <ProductDetailsModal product={selected} token={user.access_token} onClose={closeProduct} onCart={() => addToCart(selected)} onBid={() => { const product = selected; closeProduct(); setBidProduct(product); }} /> : null}
     </Page>
   );
 }
@@ -1498,8 +1508,9 @@ function OrdersHistoryPage({ user, data, setReportBid, setBidProduct, run }) {
   );
 }
 
-function CartPage({ data, setBidProduct, setTab, run }) {
+function CartPage({ user, data, setBidProduct, setTab, run }) {
   const items = list(data.cart?.items);
+  const deals = useDealCounts(user.access_token, items.map((item) => item.product_id).filter(Boolean));
   const startBid = (item) => run(async (token) => {
     const product = await api.productDetail(token, item.product_id);
     setBidProduct({ ...product, bidQuantity: item.quantity || 1 });
@@ -1518,6 +1529,7 @@ function CartPage({ data, setBidProduct, setTab, run }) {
               icon={<ShoppingCart size={18} aria-hidden="true" />}
               title={item.name || item.product || item.product_name}
               subtitle={`${item.brand || ''} ${item.model || ''}`.trim() || undefined}
+              meta={deals[item.product_id] ? <button type="button" className="deal-badge" onClick={() => setTab(4)}>{plural(deals[item.product_id], 'offer')} near you</button> : undefined}
               trailing={(
                 <div className="admin-item-actions">
                   <span className="qty-chip">{plural(Number(item.quantity || 1), 'unit')}</span>
@@ -2076,7 +2088,7 @@ function AdminList({ rows = [], empty, hint, children }) {
   return <div className="admin-list">{rows.map((row, index) => <React.Fragment key={row.id || index}>{children(row, index)}</React.Fragment>)}</div>;
 }
 
-function AdminListItem({ icon, title, subtitle, trailing, onClick }) {
+function AdminListItem({ icon, title, subtitle, meta, trailing, onClick }) {
   const activate = (event) => {
     // Only react to keys pressed on the row itself, not on buttons or selects inside it.
     if (event.target !== event.currentTarget) return;
@@ -2097,6 +2109,7 @@ function AdminListItem({ icon, title, subtitle, trailing, onClick }) {
       <div className="admin-list-main">
         <strong>{title}</strong>
         {subtitle ? <span>{subtitle}</span> : null}
+        {meta || null}
       </div>
       <div className="admin-list-trailing">{trailing}</div>
     </div>
@@ -2340,7 +2353,7 @@ function ComparisonPanel({ title, rows = [] }) {
   );
 }
 
-function ProductDetailsModal({ product, onClose, onCart, onBid }) {
+function ProductDetailsModal({ product, token, onClose, onCart, onBid }) {
   const specs = Object.entries(product.specifications || {});
   const technicalGroups = list(product.technical_specifications);
   const softwareGroups = list(product.software_specifications);
@@ -2361,6 +2374,7 @@ function ProductDetailsModal({ product, onClose, onCart, onBid }) {
           {product.description || product.summary_description ? <p>{product.description || product.summary_description}</p> : null}
         </div>
       </div>
+      <ProductDeals token={token} productId={product.id} />
       <Panel title="Specification highlights">
         {specs.length ? <div className="details-grid">{specs.map(([key, value]) => <KV key={key} label={key} value={value} />)}</div> : <Empty title="No specifications added." />}
       </Panel>
@@ -3226,7 +3240,7 @@ function AdminAccountDetails({ details, role, onClose }) {
   );
 }
 
-function ProductCard({ product, onCart, onBid, onSelect }) {
+function ProductCard({ product, deals = 0, onCart, onBid, onSelect }) {
   const specs = productSpecs(product);
   return (
     <article className="product-card" onClick={onSelect}>
@@ -3234,6 +3248,7 @@ function ProductCard({ product, onCart, onBid, onSelect }) {
       {product.brand ? <span className="product-brand">{product.brand}</span> : null}
       <h3 title={product.name}><button type="button" onClick={(event) => { event.stopPropagation(); onSelect(); }}>{product.name}</button></h3>
       <p title={specs}>{specs || 'Standard edition'}</p>
+      {deals ? <span className="deal-badge"><Tag size={12} aria-hidden="true" /> {plural(deals, 'offer')}</span> : null}
       {product.release_year ? <span className="product-year">{product.release_date_basis === 'legacy_reported_year' ? 'Reported ' : 'Released '}{product.release_year}</span> : null}
       <div className="product-actions">
         <button type="button" className="primary" onClick={(event) => { event.stopPropagation(); onBid(); }}>Start bid</button>

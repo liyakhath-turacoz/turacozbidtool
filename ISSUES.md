@@ -10,6 +10,13 @@ A full review of the backend, the React app and the bidding flow, followed by a 
 
 A request now reaches every dealer who deals in the product and whose own service area covers the buyer, with no cap on how many are notified. Only dealers with an active subscription and an account that is active or verified receive it; pending, flagged, rejected, held, suspended and banned accounts never do. A buyer's own distance limit and the "invite only shops in good standing" option no longer apply, and the admin "maximum invited dealers" setting is ignored (the Flutter admin screen still shows it). The API fields remain for compatibility. Verified against the database with 20 matching shops (all 20 notified, previously at most 10) and with flagged, pending, unsubscribed, banned, rejected, suspended and held shops (none notified).
 
+### Added: buyer requirements and dealer promotional offers (15 October 2026)
+
+1. **Buyer requirements.** `bid_requests` gains `budget_amount`, `want_warranty`, `want_delivery` and `want_installation` (added by `ensure_runtime_schema`). They are optional, validated on start (budget must be a number greater than 0) and returned to every shop that receives the request, to shops that have already bid, and to the buyer.
+2. **Promotional offers.** New tables `dealer_promotions` and `promotion_products`; rules and wording in `backend/promotions.py`; routes `/dealer/promotions*`, `/buyer/promotions` and `/buyer/promotions/summary`. A shop can only attach products it has listed, can have 50 running or scheduled offers, and each offer can run for 180 days. Buyer visibility reuses `matching_dealer_ids`, so an offer reaches exactly the buyers whose request that shop would receive.
+3. Checked with 36 live API checks (`verify_offers`), 11 new unit tests in `backend/tests/test_promotions.py`, web unit tests, and the three browser suites. The new screens were walked through in the browser as a dealer and a buyer.
+4. Not done: the Flutter app does not show requirements or offers; buyers are not notified when a shop publishes an offer; offers cannot be attached to a bid automatically.
+
 ### Changed: three marketplace features (14 October 2026)
 
 1. **Buyers see each shop's contact and payment details on every bid**, before accepting. Shops see each other only as "Dealer N". See the README section "What buyers see on a bid".
