@@ -1,5 +1,8 @@
 # Code audit and fixes
 
+> Audit, 18 October 2026: see the [current production audit](audit-report/REPORT.txt). Generated E2E reports were archived during cleanup; earlier pass claims below are historical. No application bugs were fixed.
+
+
 This report covers the FastAPI backend, React web app, Flutter app, and local seed scripts. The initial review was static; subsequent startup/database repair and browser/API end-to-end checks are described below. Native Android execution remains unverified.
 
 ## Review and redesign pass (14 October 2026)
@@ -200,7 +203,7 @@ The browser/API checks use a real MariaDB database, existing catalog products, o
 2. Revoking a dealer subscription after login blocks further offers and acceptance of the old offer. Another eligible dealer can win.
 3. Searching and changing the buyer's saved location changes which shop receives the request. A buyer distance cap narrows eligibility further. Cancellation and live open-thread messaging work.
 
-Separate incognito tabs retain different logins; same-account tabs remain connected without idle reconnect loops. No browser JavaScript errors were recorded. Temporary test accounts, requests, messages and locations are removed afterward. See [E2E_RESULTS.md](E2E_RESULTS.md).
+Separate incognito tabs retain different logins; same-account tabs remain connected without idle reconnect loops. No browser JavaScript errors were recorded. Temporary test accounts, requests, messages and locations are removed afterward. See `E2E_RESULTS.md`.
 
 React production build and Flutter web release build succeeded. Dart analysis found no type errors; existing lint/unused-code warnings remain. Native Android execution and rebuilding the APK have not been verified. The backend is stopped after verification so it can be started manually.
 
@@ -214,7 +217,7 @@ React production build and Flutter web release build succeeded. Dart analysis fo
 - All 33 database tables were readable. React production and Flutter web release builds succeeded; Dart analysis had no errors, with existing warnings remaining.
 - Existing catalog products were used. Temporary fixture accounts, requests, messages and locations were cleaned up; native Android execution remains unverified.
 
-Detailed results: [original scenarios](E2E_RESULTS.md), [concurrent bidding](LIVE_E2E_RESULTS.md), [business-profile controls](BUSINESS_PROFILE_E2E_RESULTS.md), [Flutter web](MOBILE_WEB_E2E_RESULTS.md).
+Detailed results: `E2E_RESULTS.md`, `LIVE_E2E_RESULTS.md`, `BUSINESS_PROFILE_E2E_RESULTS.md`, `MOBILE_WEB_E2E_RESULTS.md`.
 
 ### Admin audit — 12 October 2026
 
@@ -226,7 +229,7 @@ Detailed results: [original scenarios](E2E_RESULTS.md), [concurrent bidding](LIV
 - Account deletion requires confirmation. Admin accounts cannot be moderated through buyer/dealer routes or deleted through marketplace profile controls. Seeding refuses an empty admin password.
 - Local credentials load from private `.env` with explicit environment overrides. Removed embedded database/admin passwords and signing-key defaults from published source; replaced the old local signing fallback with a private random secret. Existing admin/database passwords remain unchanged. Private data, uploads, recovery snapshots, fixture tokens, downloaded catalog files and builds are excluded from Git.
 - The production web fallback now rejects paths outside its build directory, including attempts to read private configuration files.
-- Ten admin browser/API checks and four admin/web protection unit checks passed. The 12 connection/transaction unit checks, 11 original bidding checks and 18 live bidding checks passed; all 33 database tables were readable and the React production build succeeded. Temporary records were removed. See [ADMIN_E2E_RESULTS.md](ADMIN_E2E_RESULTS.md).
+- Ten admin browser/API checks and four admin/web protection unit checks passed. The 12 connection/transaction unit checks, 11 original bidding checks and 18 live bidding checks passed; all 33 database tables were readable and the React production build succeeded. Temporary records were removed. See `ADMIN_E2E_RESULTS.md`.
 
 ## Catalog filters, source imports and age audit — 12 October 2026
 

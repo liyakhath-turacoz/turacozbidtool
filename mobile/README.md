@@ -1,5 +1,7 @@
 # Turacoz Bid Tool Mobile
 
+> Audit, 18 October 2026: see the [current production audit](../audit-report/REPORT.txt). Generated E2E reports were archived during cleanup; earlier pass claims below are historical. No application bugs were fixed.
+
 Flutter app for buyers, dealers, and admin users. See the [project README](../README.md) for backend and database setup.
 
 For Android Emulator, use `10.0.2.2` to reach the API on the host computer:
@@ -19,7 +21,7 @@ WebSocket request snapshots update competing offers and open offer dialogs direc
 
 On Windows, plugin builds need Developer Mode/symlink support. The current source passes Dart type analysis with existing lint warnings; native Android execution and a rebuilt APK have not been verified for these changes.
 
-The release Flutter web build passed browser checks for separate accounts, live competing offers, dashboard counts, open dialogs, immediate winning contacts and private chat in both directions. See [MOBILE_WEB_E2E_RESULTS.md](../MOBILE_WEB_E2E_RESULTS.md). Run `python backend\scripts\e2e_bidding.py --suite mobile` from the project root while the API and release web build on port 5180 are running.
+The release Flutter web build passed browser checks for separate accounts, live competing offers, dashboard counts, open dialogs, immediate winning contacts and private chat in both directions. See `MOBILE_WEB_E2E_RESULTS.md`. Run `python backend\scripts\e2e_bidding.py --suite mobile` from the project root while the API and release web build on port 5180 are running.
 
 Build an APK:
 

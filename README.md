@@ -1,5 +1,8 @@
 # Turacoz Bid Tool
 
+> Audit, 18 October 2026: see the [current production audit](audit-report/REPORT.txt). Generated E2E reports were archived during cleanup; earlier pass claims below are historical. No application bugs were fixed.
+
+
 A location based marketplace where buyers request offers for products and eligible dealers submit bids. The project contains one FastAPI backend, a React web app, and a Flutter mobile app.
 
 ```text
@@ -233,13 +236,13 @@ python backend\scripts\e2e_bidding.py --suite profile
 python backend\scripts\e2e_bidding.py --suite admin
 ```
 
-Install web dependencies first (`npm install` in `web`). The checks use installed Microsoft Edge in headless mode; `E2E_BROWSER` can select another installed Playwright channel. `E2E_API_URL` and `E2E_WEB_URL` override local defaults. Temporary fixture accounts use the existing product catalog and are cleaned up afterward. The browser address responses are mocked for repeatability; login, saved pins, subscriptions, matching, offers and messages use the real API/database. Successful runs write [E2E_RESULTS.md](E2E_RESULTS.md) and [LIVE_E2E_RESULTS.md](LIVE_E2E_RESULTS.md).
+Install web dependencies first (`npm install` in `web`). The checks use installed Microsoft Edge in headless mode; `E2E_BROWSER` can select another installed Playwright channel. `E2E_API_URL` and `E2E_WEB_URL` override local defaults. Temporary fixture accounts use the existing product catalog and are cleaned up afterward. The browser address responses are mocked for repeatability; login, saved pins, subscriptions, matching, offers and messages use the real API/database. Successful runs write `E2E_RESULTS.md` and `LIVE_E2E_RESULTS.md`.
 
-The profile suite also checks subscription and deletion buttons using only its temporary account. See [BUSINESS_PROFILE_E2E_RESULTS.md](BUSINESS_PROFILE_E2E_RESULTS.md). Backend unit tests run with `python -m unittest discover -s backend/tests -p "test_*.py"` from the project root, and the web helper tests with `npm test` in `web`. The `live` and `mobile` browser suites target features that were removed earlier (buyer and dealer chat, the old dealer item fields) and need rewriting before they can pass again; the `bidding`, `profile` and `admin` suites match the current interface.
+The profile suite also checks subscription and deletion buttons using only its temporary account. See `BUSINESS_PROFILE_E2E_RESULTS.md`. Backend unit tests run with `python -m unittest discover -s backend/tests -p "test_*.py"` from the project root, and the web helper tests with `npm test` in `web`. The `live` and `mobile` browser suites target features that were removed earlier (buyer and dealer chat, the old dealer item fields) and need rewriting before they can pass again; the `bidding`, `profile` and `admin` suites match the current interface.
 
-The admin suite creates temporary categories/products/accounts, checks the real admin forms and protected API operations, and removes its fixtures afterward. See [ADMIN_E2E_RESULTS.md](ADMIN_E2E_RESULTS.md).
+The admin suite creates temporary categories/products/accounts, checks the real admin forms and protected API operations, and removes its fixtures afterward. See `ADMIN_E2E_RESULTS.md`.
 
-To check the built Flutter web interface, build it with `flutter build web --release` in `mobile`, serve it from the project root with `python -m http.server 5180 --bind 127.0.0.1 --directory mobile/build/web`, and run `python backend\scripts\e2e_bidding.py --suite mobile` in another terminal. Set `E2E_MOBILE_URL` when using a different URL and allow that origin in the backend CORS configuration. Results are written to [MOBILE_WEB_E2E_RESULTS.md](MOBILE_WEB_E2E_RESULTS.md).
+To check the built Flutter web interface, build it with `flutter build web --release` in `mobile`, serve it from the project root with `python -m http.server 5180 --bind 127.0.0.1 --directory mobile/build/web`, and run `python backend\scripts\e2e_bidding.py --suite mobile` in another terminal. Set `E2E_MOBILE_URL` when using a different URL and allow that origin in the backend CORS configuration. Results are written to `MOBILE_WEB_E2E_RESULTS.md`.
 
 ## Rebuild existing apps after source changes
 
