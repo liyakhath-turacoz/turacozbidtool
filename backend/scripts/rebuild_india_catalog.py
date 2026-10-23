@@ -44,6 +44,8 @@ SOURCES = [
     ('https://www.tpstech.in', None),
 ]
 EXCLUDE = re.compile(r'\b(refurbished|renewed|refab|repacked|pre.?owned|open.?box|pre.?order|coming soon|warrant(?:y|ies)|gift|combo|bundle|spare|refill|replacement|strap|ear tips|screen protector|screen guard|tempered glass|case|cover|mount|stand|bag|sleeve|cleaning kit|cookware|kadhai|tawa|fry pan|platter|container|ink|toner|cartridge)\b', re.I)
+NON_ELECTRICAL_HOUSEWARE = re.compile(r'\b(?:glass bottle|glass cups?|espresso coffee cups?|pour[- ]over coffee maker|coffee dripper)\b', re.I)
+MEDICAL_INSPECTION_TOOLS = re.compile(r'\b(?:otoscope|earwax remover|ear endoscope)\b', re.I)
 # Specific types precede broad matches; unmatched inventory is excluded, never guessed.
 TYPES = [
  ('A','Smartphones',r'\biphone\b|\bsmartphone\b'), ('A','Tablets',r'\bipad\b|\btablet\b'),
@@ -239,6 +241,17 @@ def fetch_store(source, cache, max_pages, reuse_cache=False):
 def make_row(url, brand, product, fields, departments, as_of, cutoff):
     title = text(product.get('title'))
     if EXCLUDE.search(title + ' ' + product.get('product_type', '')) or '🎁' in title:
+        return None, 'used_bundle_accessory_or_non_product'
+    water_bottle_only = re.search(r'\bwater bottle\b', title, re.I) and not re.search(r'\b(?:electric|pump|dispenser)\b', title, re.I)
+    if NON_ELECTRICAL_HOUSEWARE.search(title) or water_bottle_only or MEDICAL_INSPECTION_TOOLS.search(title):
+        return None, 'out_of_scope_houseware_or_medical_tool'
+    source_description = BeautifulSoup(product.get('body_html') or '', 'html.parser').get_text(' ', strip=True)
+    if (re.search(r'\bkettle\b', title, re.I)
+            and not re.search(r'\belectric\b', title, re.I)
+            and re.search(r'\bstovetop\b|\bstove[- ]top\b|microwave.safe', source_description, re.I)):
+        return None, 'out_of_scope_houseware_or_medical_tool'
+    if (re.search(r'robot vacuum cleaner kit', title, re.I)
+            and re.search(r'mop cloth pads?|easy to install and easy to replace', source_description, re.I)):
         return None, 'used_bundle_accessory_or_non_product'
     if LEGACY_TITLE.search(title):
         return None, 'known_legacy_hardware_generation'

@@ -9,7 +9,7 @@ B,ASUS,16
 B,ASUSTOR,2
 B,Acer,10
 B,Apacer,5
-B,Apple,36
+B,Apple,35
 B,BIWIN,2
 B,BenQ,11
 B,COLORFUL,1
@@ -63,22 +63,22 @@ D,HP,1
 D,Intex,3
 D,LAPCARE,3
 D,Noise,15
-D,Portronics,41
+D,Portronics,40
 D,Sony,9
 D,TVSE,3
 D,Zebronics,149
 D,boAt,2
-E,AGARO,10
+E,AGARO,6
 E,Crompton,2
 E,Voltas,53
 E,Zebronics,1
-F,AGARO,23
+F,AGARO,18
 F,Crompton,4
 F,Philips,12
 F,Ugreen,1
 F,Voltas,2
 F,Wonderchef,3
-G,AGARO,12
+G,AGARO,11
 G,Philips,8
 G,Portronics,3
 H,AGARO,7
@@ -89,7 +89,6 @@ H,Zebronics,21
 I,AGARO,30
 I,Portronics,3
 I,Zebronics,7
-J,AGARO,1
 J,Owl Labs,1
 J,Sony,8
 J,Zebronics,2

@@ -1,6 +1,6 @@
 # Current India store catalogue
 
-Verified on **2026-10-23**: **1,492 purchasable variants**, **70 brands**, **16 departments**.
+Verified on **2026-10-23**: **1,479 purchasable variants**, **70 brands**, **16 departments**.
 
 Every visible row has an in-stock store variant, positive INR selling price, technical details, a purchase URL and a decoded, locally stored product photograph. Prices and stock are point-in-time store claims. Reconfirm delivery pincode, stock and price before purchase.
 
@@ -9,15 +9,15 @@ Every visible row has an in-stock store variant, positive INR selling price, tec
 | Department | Products |
 |---|---:|
 | Mobile Phones & Tablets | 80 |
-| Computers, Laptops & IT Equipment | 416 |
+| Computers, Laptops & IT Equipment | 415 |
 | TVs, Video & Home Entertainment | 74 |
-| Audio, Headphones & Speakers | 232 |
-| Large Home Appliances | 66 |
-| Kitchen Appliances | 45 |
-| Cleaning, Laundry & Floor Care | 23 |
+| Audio, Headphones & Speakers | 231 |
+| Large Home Appliances | 62 |
+| Kitchen Appliances | 40 |
+| Cleaning, Laundry & Floor Care | 22 |
 | Air Conditioning, Cooling & Air Quality | 95 |
 | Personal Care & Grooming Appliances | 40 |
-| Cameras, Photography & Imaging | 12 |
+| Cameras, Photography & Imaging | 11 |
 | Gaming & Virtual Reality | 20 |
 | Wearables & Smart Devices | 7 |
 | Smart Home, Security & Surveillance | 83 |

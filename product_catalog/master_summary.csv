@@ -1,14 +1,14 @@
 ﻿category_code,department,products,brands,status
 A,Mobile Phones & Tablets,80,2,VERIFIED_SUBSET
-B,"Computers, Laptops & IT Equipment",416,48,VERIFIED_SUBSET
+B,"Computers, Laptops & IT Equipment",415,48,VERIFIED_SUBSET
 C,"TVs, Video & Home Entertainment",74,8,VERIFIED_SUBSET
-D,"Audio, Headphones & Speakers",232,11,VERIFIED_SUBSET
-E,Large Home Appliances,66,4,VERIFIED_SUBSET
-F,Kitchen Appliances,45,6,VERIFIED_SUBSET
-G,"Cleaning, Laundry & Floor Care",23,3,VERIFIED_SUBSET
+D,"Audio, Headphones & Speakers",231,11,VERIFIED_SUBSET
+E,Large Home Appliances,62,4,VERIFIED_SUBSET
+F,Kitchen Appliances,40,6,VERIFIED_SUBSET
+G,"Cleaning, Laundry & Floor Care",22,3,VERIFIED_SUBSET
 H,"Air Conditioning, Cooling & Air Quality",95,5,VERIFIED_SUBSET
 I,Personal Care & Grooming Appliances,40,3,VERIFIED_SUBSET
-J,"Cameras, Photography & Imaging",12,4,VERIFIED_SUBSET
+J,"Cameras, Photography & Imaging",11,3,VERIFIED_SUBSET
 K,Gaming & Virtual Reality,20,3,VERIFIED_SUBSET
 L,Wearables & Smart Devices,7,3,VERIFIED_SUBSET
 M,"Smart Home, Security & Surveillance",83,5,VERIFIED_SUBSET

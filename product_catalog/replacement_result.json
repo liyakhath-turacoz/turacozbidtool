@@ -1,6 +1,6 @@
 {
-  "products": 1492,
-  "deleted_unreferenced_old_products": 1,
+  "products": 1479,
+  "deleted_unreferenced_old_products": 13,
   "history_products_preserved_hidden": 3,
-  "backup": "backend\\recovery\\catalog-replacement-20261023T143533"
+  "backup": "backend\\recovery\\catalog-replacement-20261023T151015"
 }

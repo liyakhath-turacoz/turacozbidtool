@@ -42,5 +42,20 @@ class InventoryGatesTests(unittest.TestCase):
         product['title']='Refurbished Wireless Headphones'
         self.assertEqual(make_row('https://example.com','Sony',product,[],{},'2026-10-23','2025-04-23')[1], 'used_bundle_accessory_or_non_product')
 
+    def test_non_electrical_housewares_and_replacement_kits_are_excluded(self):
+        products = [
+            ({'title':'Elegant Flip Top Glass Bottle 1L Blue Freezer Safe', 'product_type':'Freezers'}, 'out_of_scope_houseware_or_medical_tool'),
+            ({'title':'Adore Borosilicate Glass Kettle 900ml', 'product_type':'Kettles', 'body_html':'<p>Stovetop and microwave safe glass kettle</p>'}, 'out_of_scope_houseware_or_medical_tool'),
+            ({'title':'Elegant Glass Cup 180ml Set of 6', 'product_type':'Kitchen appliances'}, 'out_of_scope_houseware_or_medical_tool'),
+            ({'title':'Alpha Pro Robot Vacuum Cleaner Kit 2', 'product_type':'Vacuum cleaners', 'body_html':'<p>Contains: 10 Microfiber Mop Cloth Pads. Easy to install and easy to replace.</p>'}, 'used_bundle_accessory_or_non_product'),
+            ({'title':'Regal Ear Endoscope Cleaner with HD Camera', 'product_type':'Cameras'}, 'out_of_scope_houseware_or_medical_tool'),
+        ]
+        for product, expected_reason in products:
+            row, reason = make_row('https://example.com', 'AGARO', product, [], {}, '2026-10-23', '2025-04-23')
+            self.assertIsNone(row, product['title'])
+            self.assertEqual(reason, expected_reason, product['title'])
+        pump = {'title':'Delite Electric Water Dispenser Pump for 20 Litre Water Bottle', 'product_type':'Water pumps', 'created_at':'2026-10-10', 'published_at':'2026-10-10', 'body_html':'<p>Electric pump for water bottle</p>', 'variants':[{'available':True,'price':'348'}]}
+        self.assertNotEqual(make_row('https://example.com','AGARO',pump,[],{},'2026-10-23','2025-04-23')[1], 'out_of_scope_houseware_or_medical_tool')
+
 
 if __name__ == '__main__': unittest.main()
