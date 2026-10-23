@@ -23,3 +23,7 @@ The generated `bin/catalog_matcher.exe` is used automatically. If the binary
 is absent or fails to launch, the backend uses its small Python fallback. The
 binary handles one query at a time and exits immediately after ranking; it
 does not run as a service.
+
+## License
+
+The `catalog-matcher` binary statically includes the `strsim` 0.11.1 crate by Danny Guo, Titus Wormer, and Akash Kurdekar. `strsim` is licensed under MIT; the full notice is in `licenses/strsim-MIT.txt`.

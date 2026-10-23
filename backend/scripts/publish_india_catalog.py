@@ -51,7 +51,6 @@ def documentation(folder, rows, report):
         'Deploy product_catalog/images with the backend. Restart a backend running without reload to enable the /catalog-images/ route.']
     body='\n'.join(lines)+'\n'
     (folder/'README.md').write_text(body,encoding='utf-8')
-    (ROOT/'PRODUCT_CATALOG_REPORT.md').write_text(body,encoding='utf-8')
 
 
 def exports(folder, rows, fields, plans):

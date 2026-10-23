@@ -13,25 +13,10 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
-Write-Host "`n[2/5] Setting up MariaDB/MySQL database..." -ForegroundColor Yellow
-$resetDatabase = Read-Host "This deletes every row in the configured database. Type RESET to confirm; press Enter to keep existing data"
-if ($resetDatabase -ceq "RESET") {
-    python backend\scripts\seed_test_accounts.py --reset
-} else {
-    python backend\scripts\seed_test_accounts.py
-}
-if ($LASTEXITCODE -ne 0) {
-    Write-Host "[-] Failed to seed database roles and test accounts." -ForegroundColor Red
-    exit 1
-}
+Write-Host "`n[2/4] Database setup..." -ForegroundColor Yellow
+Write-Host "Ensure MariaDB/MySQL is running, the configured database exists, and the repository .env has production-safe credentials." -ForegroundColor Gray
 
-python backend\scripts\add_dummy_data.py
-if ($LASTEXITCODE -ne 0) {
-    Write-Host "[-] Failed to populate dummy marketplace data." -ForegroundColor Red
-    exit 1
-}
-
-Write-Host "`n[3/5] Installing and building React web frontend..." -ForegroundColor Yellow
+Write-Host "`n[3/4] Installing and building React web frontend..." -ForegroundColor Yellow
 Push-Location web
 npm install
 if ($LASTEXITCODE -ne 0) {
@@ -47,7 +32,7 @@ if ($LASTEXITCODE -ne 0) {
 }
 Pop-Location
 
-Write-Host "`n[4/5] Optional Flutter Android build..." -ForegroundColor Yellow
+Write-Host "`n[4/4] Optional Flutter Android build..." -ForegroundColor Yellow
 $rebuild = Read-Host "Do you want to build the Flutter Android APK? (y/N)"
 if ($rebuild -eq 'y' -or $rebuild -eq 'Y') {
     $apiUrl = Read-Host "API URL reachable from the Android device [http://10.0.2.2:8000]"
@@ -61,7 +46,7 @@ if ($rebuild -eq 'y' -or $rebuild -eq 'Y') {
     }
 }
 
-Write-Host "`n[5/5] Starting backend API..." -ForegroundColor Yellow
+Write-Host "`nStarting backend API..." -ForegroundColor Yellow
 Write-Host "[*] Backend: http://localhost:8000" -ForegroundColor Green
 Write-Host "[*] In another terminal, run: cd web; npm run dev" -ForegroundColor Green
 python server.py

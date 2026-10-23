@@ -1,42 +1,21 @@
-# Turacoz Product Catalog Bundle
+# Optional Open Icecat Catalog Bundle
 
-This folder contains instructions for importing an optional Open Icecat catalog bundle. Downloaded manifests, shards and reports are local files excluded from Git; supply a bundle separately to import it into a fresh clone.
+This directory can contain an Open Icecat product bundle. Downloaded manifests and shards are supplied separately and are excluded from Git. The current India buyer catalog is documented in [product_catalog/README.md](../product_catalog/README.md).
 
-## Import into a database
+## Import
 
-From the project root:
+From the repository root, run:
 
 ```powershell
 python backend\scripts\import_product_catalog.py --products-root products
 ```
 
-Use `--replace-existing` only when intentionally replacing disposable/sample
-catalog data and its dependent sample bids, carts, and reports:
+Use `--replace-existing` only when intentionally replacing catalog data and its dependent records. Review the importer options before running it against a database with production data.
 
-```powershell
-python backend\scripts\import_product_catalog.py --products-root products --replace-existing
-```
+The importer validates shard checksums, uses stable Icecat product IDs, acquires a MariaDB named lock, and records successful catalog versions. Backend startup does not import this bundle unless `TURACOZ_IMPORT_PRODUCTS_ON_STARTUP=true` is set.
 
-The importer validates every shard checksum, uses stable Icecat-based product
-IDs, acquires a MariaDB named lock, records the catalog version in
-`catalog_imports`, and skips a version that has already imported successfully.
-
-When `TURACOZ_IMPORT_PRODUCTS_ON_STARTUP=true` (the default), backend startup
-also imports a present bundle once per catalog version. Production deployments
-can instead run the explicit import command as a pre-start/release task.
-
-## Format
+## Bundle format
 
 - `manifest.json`: version, counts, filters, checksums, and attribution.
 - `data/*.jsonl.gz`: gzip-compressed JSON Lines shards grouped by category.
-- `reports/summary.json`: build summary.
-- `reports/failures.jsonl`: inaccessible/rejected Icecat candidate report.
-
-Temporary global indexes, per-product raw responses, and the discovery database
-are deleted after a successful build.
-
-## Catalog audit and live sources
-
-The inspected directory has no nested `products/products` folder. Its local data lives in `manifest.json` and `data/*.jsonl.gz`. New imports and admin schedules are documented in [the product source guide](../PRODUCT_SOURCES_GUIDE.md); current counts and date confidence are in [the catalog report](../PRODUCT_CATALOG_REPORT.md). Private detailed CSVs and backup snapshots live in `reports/`.
-
-The importer preserves removed products and existing bidding history. The builder now requires a release date rather than substituting catalog-added dates; previously generated bundles may still contain unverified years.
+- `reports/`: importer/build summaries when present.
