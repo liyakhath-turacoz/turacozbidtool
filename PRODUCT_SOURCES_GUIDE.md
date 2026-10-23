@@ -1,5 +1,7 @@
 # Product fetching and catalog dates
 
+The browsing catalogue now uses verified Indian store inventory, not announcement feeds. Follow `product_catalog/README.md` and the rebuild/publish commands in the root README. The adapters below remain research/import tools; their schedules are disabled after catalog replacement. A dated announcement or registry record alone does not establish Indian stock, price, or delivery availability.
+
 ## Admin operation
 
 Restart the backend after installing these changes. In either app, open **Admin → Product Fetch & Reports**.

@@ -10,6 +10,7 @@ import React, {
 } from 'react';
 import { Package, X } from 'lucide-react';
 import { dateTime, timeLeftLabel, timeTone, titleCase, toTime } from './format.js';
+import { productImageUrl } from './api.js';
 
 /* Formatting lives in format.js so it can be tested without React. */
 export { text, titleCase, money, toTime, dateTime, plural, timeLeftLabel, timeTone } from './format.js';
@@ -264,8 +265,9 @@ export function KV({ label, value }) {
 export function ProductImage({ product, className = 'product-art', iconSize = 42 }) {
   const [loaded, setLoaded] = useState(false);
   const [failed, setFailed] = useState(false);
+  useEffect(() => { setLoaded(false); setFailed(false); }, [product.image_url]);
   const placeholder = '/catalog-placeholder.svg';
-  const source = !product.image_url || failed ? placeholder : product.image_url;
+  const source = !product.image_url || failed ? placeholder : productImageUrl(product.image_url);
   return (
     <div className={className}>
       {!loaded && failed ? <Package size={iconSize} aria-hidden="true" /> : null}

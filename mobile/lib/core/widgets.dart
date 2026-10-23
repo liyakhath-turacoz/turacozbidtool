@@ -3,6 +3,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 
 import 'models.dart';
+import 'api_client.dart' show apiBaseUrl;
 
 class SectionHeader extends StatelessWidget {
   const SectionHeader({
@@ -341,7 +342,9 @@ class ProductCard extends StatelessWidget {
                   ),
                   child: product.imageUrl.isNotEmpty
                       ? Image.network(
-                          product.imageUrl,
+                          product.imageUrl.startsWith('/catalog-images/')
+                              ? '$apiBaseUrl${product.imageUrl}'
+                              : product.imageUrl,
                           fit: BoxFit.contain,
                           errorBuilder: (_, __, ___) => Icon(
                             Icons.inventory_2_outlined,

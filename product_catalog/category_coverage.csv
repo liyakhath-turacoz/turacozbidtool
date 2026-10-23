@@ -1,17 +1,17 @@
-﻿category_code,department,total_products,brands,release_year_present,official_price_present,image_url_present,specifications_present,source_url_present,release_year_missing,price_missing,image_missing
-A,Mobile Phones & Tablets,202,44,186,107,13,197,202,16,95,189
-B,"Computers, Laptops & IT Equipment",209,26,189,114,134,209,209,20,95,75
-C,"TVs, Video & Home Entertainment",68,19,58,43,41,68,68,10,25,27
-D,"Audio, Headphones & Speakers",73,17,71,45,34,73,73,2,28,39
-E,Large Home Appliances,109,17,61,91,62,109,109,48,18,47
-F,Kitchen Appliances,111,10,19,82,66,96,111,92,29,45
-G,"Cleaning, Laundry & Floor Care",90,15,30,61,67,68,90,60,29,23
-H,"Air Conditioning, Cooling & Air Quality",343,24,43,209,261,163,343,300,134,82
-I,Personal Care & Grooming Appliances,141,10,22,42,129,134,141,119,99,12
-J,"Cameras, Photography & Imaging",78,20,26,23,32,46,78,52,55,46
-K,Gaming & Virtual Reality,90,28,65,36,54,90,90,25,54,36
-L,Wearables & Smart Devices,85,30,74,32,47,76,85,11,53,38
-M,"Smart Home, Security & Surveillance",77,16,75,21,47,77,77,2,56,30
-N,"Networking, GPS & Communication",104,16,73,25,63,104,104,31,79,41
-O,"Printers, Scanners & Office Electronics",124,20,71,14,41,124,124,53,110,83
-P,"Power Backup, Batteries & Electrical Equipment",179,24,13,52,70,179,179,166,127,109
+﻿category_code,products,with_price,with_image,with_specs,with_store_source,with_verified_release_date
+A,80,80,80,80,80,0
+B,416,416,416,416,416,0
+C,74,74,74,74,74,0
+D,232,232,232,232,232,0
+E,66,66,66,66,66,0
+F,45,45,45,45,45,0
+G,23,23,23,23,23,0
+H,95,95,95,95,95,0
+I,40,40,40,40,40,0
+J,12,12,12,12,12,0
+K,20,20,20,20,20,0
+L,7,7,7,7,7,0
+M,83,83,83,83,83,0
+N,81,81,81,81,81,0
+O,88,88,88,88,88,0
+P,130,130,130,130,130,0

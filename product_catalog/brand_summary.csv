@@ -1,337 +1,131 @@
-﻿category_code,department,brand,products_count
-A,Mobile Phones & Tablets,ASUS ROG,2
-A,Mobile Phones & Tablets,Acer,1
-A,Mobile Phones & Tablets,Amazon,7
-A,Mobile Phones & Tablets,Ambrane,1
-A,Mobile Phones & Tablets,Anker,1
-A,Mobile Phones & Tablets,Apple,30
-A,Mobile Phones & Tablets,BOOX,2
-A,Mobile Phones & Tablets,Beats,2
-A,Mobile Phones & Tablets,Belkin,1
-A,Mobile Phones & Tablets,Gigaset,2
-A,Mobile Phones & Tablets,Google,9
-A,Mobile Phones & Tablets,HMD,2
-A,Mobile Phones & Tablets,HONOR,6
-A,Mobile Phones & Tablets,Huawei,5
-A,Mobile Phones & Tablets,Infinix,3
-A,Mobile Phones & Tablets,Jio,1
-A,Mobile Phones & Tablets,Kobo,3
-A,Mobile Phones & Tablets,Lava,5
-A,Mobile Phones & Tablets,Lenovo,2
-A,Mobile Phones & Tablets,Microsoft,2
-A,Mobile Phones & Tablets,Motorola,3
-A,Mobile Phones & Tablets,Nokia,10
-A,Mobile Phones & Tablets,Nothing,2
-A,Mobile Phones & Tablets,ONYX BOOX,1
-A,Mobile Phones & Tablets,OPPO,9
-A,Mobile Phones & Tablets,OnePlus,3
-A,Mobile Phones & Tablets,POCO,1
-A,Mobile Phones & Tablets,PocketBook,3
-A,Mobile Phones & Tablets,REDMAGIC,2
-A,Mobile Phones & Tablets,Redmi,3
-A,Mobile Phones & Tablets,Samsung,39
-A,Mobile Phones & Tablets,Sony,2
-A,Mobile Phones & Tablets,Spigen,1
-A,Mobile Phones & Tablets,Stuffcool,1
-A,Mobile Phones & Tablets,TECNO,4
-A,Mobile Phones & Tablets,UGREEN,5
-A,Mobile Phones & Tablets,VTech,1
-A,Mobile Phones & Tablets,Xiaomi,8
-A,Mobile Phones & Tablets,Yealink,3
-A,Mobile Phones & Tablets,iQOO,1
-A,Mobile Phones & Tablets,itel,5
-A,Mobile Phones & Tablets,reMarkable,1
-A,Mobile Phones & Tablets,realme,4
-A,Mobile Phones & Tablets,vivo,3
-B,"Computers, Laptops & IT Equipment",AMD,20
-B,"Computers, Laptops & IT Equipment",AOC,6
-B,"Computers, Laptops & IT Equipment",ASUS,10
-B,"Computers, Laptops & IT Equipment",Acer,9
-B,"Computers, Laptops & IT Equipment",Anker,12
-B,"Computers, Laptops & IT Equipment",Apple,2
-B,"Computers, Laptops & IT Equipment",BenQ,2
-B,"Computers, Laptops & IT Equipment",Corsair,4
-B,"Computers, Laptops & IT Equipment",Dell,6
-B,"Computers, Laptops & IT Equipment",HP,3
-B,"Computers, Laptops & IT Equipment",Infinix,2
-B,"Computers, Laptops & IT Equipment",Intel,3
-B,"Computers, Laptops & IT Equipment",Kingston,18
-B,"Computers, Laptops & IT Equipment",LG,3
-B,"Computers, Laptops & IT Equipment",Lenovo,63
-B,"Computers, Laptops & IT Equipment",Logitech,4
-B,"Computers, Laptops & IT Equipment",MSI,15
-B,"Computers, Laptops & IT Equipment",Microsoft,3
-B,"Computers, Laptops & IT Equipment",NVIDIA,4
-B,"Computers, Laptops & IT Equipment",Noctua,3
-B,"Computers, Laptops & IT Equipment",Razer,1
-B,"Computers, Laptops & IT Equipment",Samsung,7
-B,"Computers, Laptops & IT Equipment",SanDisk Professional,1
-B,"Computers, Laptops & IT Equipment",Seagate,2
-B,"Computers, Laptops & IT Equipment",WD,5
-B,"Computers, Laptops & IT Equipment",WD_BLACK,1
-C,"TVs, Video & Home Entertainment",Amazon,1
-C,"TVs, Video & Home Entertainment",BenQ,1
-C,"TVs, Video & Home Entertainment",Dangbei,3
-C,"TVs, Video & Home Entertainment",Epson,4
-C,"TVs, Video & Home Entertainment",Google,1
-C,"TVs, Video & Home Entertainment",Haier,2
-C,"TVs, Video & Home Entertainment",Hisense,4
-C,"TVs, Video & Home Entertainment",Jio,1
-C,"TVs, Video & Home Entertainment",LG,12
-C,"TVs, Video & Home Entertainment",NEBULA,2
-C,"TVs, Video & Home Entertainment",Optoma,1
-C,"TVs, Video & Home Entertainment",Panasonic,5
-C,"TVs, Video & Home Entertainment",Roku,2
-C,"TVs, Video & Home Entertainment",Samsung,9
-C,"TVs, Video & Home Entertainment",Sony,5
-C,"TVs, Video & Home Entertainment",TCL,6
-C,"TVs, Video & Home Entertainment",Tata Play,1
-C,"TVs, Video & Home Entertainment",XGIMI,5
-C,"TVs, Video & Home Entertainment",Xiaomi,3
-D,"Audio, Headphones & Speakers",Amazon,2
-D,"Audio, Headphones & Speakers",Amazon Fire TV,1
-D,"Audio, Headphones & Speakers",Apple,3
-D,"Audio, Headphones & Speakers",Bose,5
-D,"Audio, Headphones & Speakers",Denon,1
-D,"Audio, Headphones & Speakers",Google,2
-D,"Audio, Headphones & Speakers",JBL,9
-D,"Audio, Headphones & Speakers",OnePlus,5
-D,"Audio, Headphones & Speakers",R?DE,3
-D,"Audio, Headphones & Speakers",Samsung,15
-D,"Audio, Headphones & Speakers",Sennheiser,6
-D,"Audio, Headphones & Speakers",Shure,3
-D,"Audio, Headphones & Speakers",Sonos,3
-D,"Audio, Headphones & Speakers",Sony,12
-D,"Audio, Headphones & Speakers",TCL,1
-D,"Audio, Headphones & Speakers",WiiM,1
-D,"Audio, Headphones & Speakers",Yamaha,1
-E,Large Home Appliances,A. O. Smith,6
-E,Large Home Appliances,Bosch,14
-E,Large Home Appliances,Candy,1
-E,Large Home Appliances,Faber,1
-E,Large Home Appliances,Glen,4
-E,Large Home Appliances,Godrej,1
-E,Large Home Appliances,Haier,33
-E,Large Home Appliances,IFB,3
-E,Large Home Appliances,KENT,4
-E,Large Home Appliances,Kenstar,2
-E,Large Home Appliances,LG,21
-E,Large Home Appliances,Midea,2
-E,Large Home Appliances,Panasonic,1
-E,Large Home Appliances,Realme TechLife,1
-E,Large Home Appliances,Samsung,9
-E,Large Home Appliances,VW,1
-E,Large Home Appliances,Whirlpool,5
-F,Kitchen Appliances,Bosch,30
-F,Kitchen Appliances,De'Longhi,5
-F,Kitchen Appliances,Havells,2
-F,Kitchen Appliances,INALSA,3
-F,Kitchen Appliances,Instant Pot,6
-F,Kitchen Appliances,Ninja,5
-F,Kitchen Appliances,Panasonic,2
-F,Kitchen Appliances,Philips,31
-F,Kitchen Appliances,Prestige,20
-F,Kitchen Appliances,Wonderchef,7
-G,"Cleaning, Laundry & Floor Care",Agaro,1
-G,"Cleaning, Laundry & Floor Care",BISSELL,1
-G,"Cleaning, Laundry & Floor Care",Dreame,19
-G,"Cleaning, Laundry & Floor Care",Dyson,2
-G,"Cleaning, Laundry & Floor Care",ECOVACS,9
-G,"Cleaning, Laundry & Floor Care",Ecovacs,1
-G,"Cleaning, Laundry & Floor Care",Eureka Forbes,2
-G,"Cleaning, Laundry & Floor Care",K?rcher,7
-G,"Cleaning, Laundry & Floor Care",NARWAL,1
-G,"Cleaning, Laundry & Floor Care",Philips,18
-G,"Cleaning, Laundry & Floor Care",Roborock,2
-G,"Cleaning, Laundry & Floor Care",Shark,5
-G,"Cleaning, Laundry & Floor Care",Singer India,15
-G,"Cleaning, Laundry & Floor Care",Tineco,1
-G,"Cleaning, Laundry & Floor Care",iRobot,6
-H,"Air Conditioning, Cooling & Air Quality",Bajaj,1
-H,"Air Conditioning, Cooling & Air Quality",Bepure,1
-H,"Air Conditioning, Cooling & Air Quality",Blue Star,9
-H,"Air Conditioning, Cooling & Air Quality",Crompton,69
-H,"Air Conditioning, Cooling & Air Quality",Cuckoo,1
-H,"Air Conditioning, Cooling & Air Quality",Daikin,69
-H,"Air Conditioning, Cooling & Air Quality",Dyson,1
-H,"Air Conditioning, Cooling & Air Quality",Eureka Forbes,3
-H,"Air Conditioning, Cooling & Air Quality",Godrej,2
-H,"Air Conditioning, Cooling & Air Quality",Havells,2
-H,"Air Conditioning, Cooling & Air Quality",Hisense,1
-H,"Air Conditioning, Cooling & Air Quality",KENT,1
-H,"Air Conditioning, Cooling & Air Quality",Karcher,1
-H,"Air Conditioning, Cooling & Air Quality",Kenstar,1
-H,"Air Conditioning, Cooling & Air Quality",LG,56
-H,"Air Conditioning, Cooling & Air Quality",Levoit,1
-H,"Air Conditioning, Cooling & Air Quality",MarQ by Flipkart,1
-H,"Air Conditioning, Cooling & Air Quality",Orient Electric,1
-H,"Air Conditioning, Cooling & Air Quality",Panasonic,5
-H,"Air Conditioning, Cooling & Air Quality",Philips,13
-H,"Air Conditioning, Cooling & Air Quality",Sansui,1
-H,"Air Conditioning, Cooling & Air Quality",Singer,1
-H,"Air Conditioning, Cooling & Air Quality",Symphony,58
-H,"Air Conditioning, Cooling & Air Quality",Voltas,44
-I,Personal Care & Grooming Appliances,Beurer,50
-I,Personal Care & Grooming Appliances,Braun,2
-I,Personal Care & Grooming Appliances,Dyson,2
-I,Personal Care & Grooming Appliances,Oral-B,1
-I,Personal Care & Grooming Appliances,Panasonic,8
-I,Personal Care & Grooming Appliances,Philips,68
-I,Personal Care & Grooming Appliances,Remington,2
-I,Personal Care & Grooming Appliances,Shark,2
-I,Personal Care & Grooming Appliances,Wahl,2
-I,Personal Care & Grooming Appliances,Xiaomi,4
-J,"Cameras, Photography & Imaging",AVerMedia,1
-J,"Cameras, Photography & Imaging",Aputure,2
-J,"Cameras, Photography & Imaging",Canon,9
-J,"Cameras, Photography & Imaging",DJI,3
-J,"Cameras, Photography & Imaging",Elgato,3
-J,"Cameras, Photography & Imaging",Fujifilm,5
-J,"Cameras, Photography & Imaging",GoPro,6
-J,"Cameras, Photography & Imaging",Godox,6
-J,"Cameras, Photography & Imaging",Hasselblad,1
-J,"Cameras, Photography & Imaging",Insta360,3
-J,"Cameras, Photography & Imaging",Leica,2
-J,"Cameras, Photography & Imaging",Manfrotto,1
-J,"Cameras, Photography & Imaging",Nikon,18
-J,"Cameras, Photography & Imaging",OM SYSTEM,1
-J,"Cameras, Photography & Imaging",Panasonic,3
-J,"Cameras, Photography & Imaging",Peak Design,2
-J,"Cameras, Photography & Imaging",Ricoh,1
-J,"Cameras, Photography & Imaging",Sigma,2
-J,"Cameras, Photography & Imaging",Sony,6
-J,"Cameras, Photography & Imaging",Tamron,3
-K,Gaming & Virtual Reality,8BitDo,2
-K,Gaming & Virtual Reality,ASUS,2
-K,Gaming & Virtual Reality,AYANEO,1
-K,Gaming & Virtual Reality,AndaSeat,1
-K,Gaming & Virtual Reality,Apple,1
-K,Gaming & Virtual Reality,Bigscreen,1
-K,Gaming & Virtual Reality,Corsair,3
-K,Gaming & Virtual Reality,GPD,1
-K,Gaming & Virtual Reality,HTC VIVE,1
-K,Gaming & Virtual Reality,HyperX,2
-K,Gaming & Virtual Reality,Lenovo,2
-K,Gaming & Virtual Reality,Logitech G,4
-K,Gaming & Virtual Reality,MSI,3
-K,Gaming & Virtual Reality,Meta,2
-K,Gaming & Virtual Reality,Microsoft Xbox,13
-K,Gaming & Virtual Reality,Nintendo,19
-K,Gaming & Virtual Reality,One-Netbook,1
-K,Gaming & Virtual Reality,PDP,1
-K,Gaming & Virtual Reality,PICO,1
-K,Gaming & Virtual Reality,PowerA,1
-K,Gaming & Virtual Reality,Razer,10
-K,Gaming & Virtual Reality,Secretlab,3
-K,Gaming & Virtual Reality,Sony,5
-K,Gaming & Virtual Reality,Sony Interactive Entertainment,5
-K,Gaming & Virtual Reality,SteelSeries,2
-K,Gaming & Virtual Reality,Turtle Beach,1
-K,Gaming & Virtual Reality,Valve,1
-K,Gaming & Virtual Reality,Victrix,1
-L,Wearables & Smart Devices,Amazfit,7
-L,Wearables & Smart Devices,Amazon,1
-L,Wearables & Smart Devices,Apple,8
-L,Wearables & Smart Devices,CMF,1
-L,Wearables & Smart Devices,CMF by Nothing,1
-L,Wearables & Smart Devices,Chipolo,3
-L,Wearables & Smart Devices,Even Realities,1
-L,Wearables & Smart Devices,Fitbit,1
-L,Wearables & Smart Devices,Garmin,8
-L,Wearables & Smart Devices,Google,4
-L,Wearables & Smart Devices,Google Fitbit,1
-L,Wearables & Smart Devices,Huawei,5
-L,Wearables & Smart Devices,Motorola,1
-L,Wearables & Smart Devices,Noise,1
-L,Wearables & Smart Devices,Oakley / Meta,2
-L,Wearables & Smart Devices,OnePlus,3
-L,Wearables & Smart Devices,Oura,3
-L,Wearables & Smart Devices,Pebble,1
-L,Wearables & Smart Devices,Pebblebee,2
-L,Wearables & Smart Devices,Ray-Ban / Meta,4
-L,Wearables & Smart Devices,Redmi,1
-L,Wearables & Smart Devices,RingConn,2
-L,Wearables & Smart Devices,SPOT,1
-L,Wearables & Smart Devices,Samsung,14
-L,Wearables & Smart Devices,Tile,2
-L,Wearables & Smart Devices,Ultrahuman,1
-L,Wearables & Smart Devices,Vuzix,1
-L,Wearables & Smart Devices,XREAL,2
-L,Wearables & Smart Devices,Xiaomi,2
-L,Wearables & Smart Devices,Zebronics,1
-M,"Smart Home, Security & Surveillance",Amazon,5
-M,"Smart Home, Security & Surveillance",Apple,1
-M,"Smart Home, Security & Surveillance",Aqara,20
-M,"Smart Home, Security & Surveillance",Arlo,1
-M,"Smart Home, Security & Surveillance",Arlo Technologies,2
-M,"Smart Home, Security & Surveillance",Google,1
-M,"Smart Home, Security & Surveillance",Google Nest,3
-M,"Smart Home, Security & Surveillance",Nanoleaf,1
-M,"Smart Home, Security & Surveillance",Philips Hue,12
-M,"Smart Home, Security & Surveillance",Reolink,3
-M,"Smart Home, Security & Surveillance",Ring,8
-M,"Smart Home, Security & Surveillance",TP-Link Tapo,13
-M,"Smart Home, Security & Surveillance",TP-Link VIGI,3
-M,"Smart Home, Security & Surveillance",Wyze Labs,1
-M,"Smart Home, Security & Surveillance",Yale,1
-M,"Smart Home, Security & Surveillance",eufy,2
-N,"Networking, GPS & Communication",ASUS,5
-N,"Networking, GPS & Communication",Amazon eero,3
-N,"Networking, GPS & Communication",CommScope ARRIS,1
-N,"Networking, GPS & Communication",GL.iNet,1
-N,"Networking, GPS & Communication",Garmin,14
-N,"Networking, GPS & Communication",Grandstream,3
-N,"Networking, GPS & Communication",Hytera,2
-N,"Networking, GPS & Communication",Motorola Solutions,2
-N,"Networking, GPS & Communication",NETGEAR,6
-N,"Networking, GPS & Communication",Retevis,10
-N,"Networking, GPS & Communication",StarTech.com,1
-N,"Networking, GPS & Communication",Starlink,1
-N,"Networking, GPS & Communication",TP-Link,15
-N,"Networking, GPS & Communication",TP-Link Omada,12
-N,"Networking, GPS & Communication",Ubiquiti,18
-N,"Networking, GPS & Communication",Yealink,10
-O,"Printers, Scanners & Office Electronics","Block, Inc.",3
-O,"Printers, Scanners & Office Electronics",Brother,13
-O,"Printers, Scanners & Office Electronics",Canon,17
-O,"Printers, Scanners & Office Electronics",Clover Network,1
-O,"Printers, Scanners & Office Electronics",DYMO,2
-O,"Printers, Scanners & Office Electronics",Epson,28
-O,"Printers, Scanners & Office Electronics",Fellowes,6
-O,"Printers, Scanners & Office Electronics",GBC,3
-O,"Printers, Scanners & Office Electronics",HP,19
-O,"Printers, Scanners & Office Electronics",HP Poly,3
-O,"Printers, Scanners & Office Electronics",Honeywell,2
-O,"Printers, Scanners & Office Electronics",Logitech,6
-O,"Printers, Scanners & Office Electronics",Ricoh,3
-O,"Printers, Scanners & Office Electronics",SATO,2
-O,"Printers, Scanners & Office Electronics",Star Micronics,2
-O,"Printers, Scanners & Office Electronics",Stripe,1
-O,"Printers, Scanners & Office Electronics",TSC Auto ID,1
-O,"Printers, Scanners & Office Electronics",Xerox,1
-O,"Printers, Scanners & Office Electronics",Yealink,2
-O,"Printers, Scanners & Office Electronics",Zebra,9
-P,"Power Backup, Batteries & Electrical Equipment",APC by Schneider Electric,15
-P,"Power Backup, Batteries & Electrical Equipment",Anker,5
-P,"Power Backup, Batteries & Electrical Equipment",Anker SOLIX,5
-P,"Power Backup, Batteries & Electrical Equipment",BLUETTI,10
-P,"Power Backup, Batteries & Electrical Equipment",Battery Tender,2
-P,"Power Backup, Batteries & Electrical Equipment",Belkin,2
-P,"Power Backup, Batteries & Electrical Equipment",CTEK,2
-P,"Power Backup, Batteries & Electrical Equipment",CyberPower,9
-P,"Power Backup, Batteries & Electrical Equipment",Eaton,13
-P,"Power Backup, Batteries & Electrical Equipment",EcoFlow,13
-P,"Power Backup, Batteries & Electrical Equipment",Energizer,11
-P,"Power Backup, Batteries & Electrical Equipment",Exide,5
-P,"Power Backup, Batteries & Electrical Equipment",Fluke,12
-P,"Power Backup, Batteries & Electrical Equipment",Goal Zero,4
-P,"Power Backup, Batteries & Electrical Equipment",Jackery,7
-P,"Power Backup, Batteries & Electrical Equipment",Klein Tools,7
-P,"Power Backup, Batteries & Electrical Equipment",Luminous,22
-P,"Power Backup, Batteries & Electrical Equipment",Megger,6
-P,"Power Backup, Batteries & Electrical Equipment",Microtek,14
-P,"Power Backup, Batteries & Electrical Equipment",NOCO,4
-P,"Power Backup, Batteries & Electrical Equipment",Schneider Electric,3
-P,"Power Backup, Batteries & Electrical Equipment",Vertiv,5
-P,"Power Backup, Batteries & Electrical Equipment",Victron Energy,1
-P,"Power Backup, Batteries & Electrical Equipment",Zendure,2
+﻿category_code,brand,products
+A,Apple,33
+A,Samsung,47
+B,ADATA,1
+B,AGARO,8
+B,AOC,18
+B,ARCTIC,2
+B,ASUS,16
+B,ASUSTOR,2
+B,Acer,10
+B,Apacer,5
+B,Apple,36
+B,BIWIN,2
+B,BenQ,11
+B,COLORFUL,1
+B,Chenbro,1
+B,Cougar,2
+B,Crucial,3
+B,Cybeart,7
+B,DELL,19
+B,G.SKILL,1
+B,GIGABYTE,4
+B,HP,17
+B,Hynix,1
+B,HyperX,2
+B,Intex,13
+B,Kingston,7
+B,LENOVO,1
+B,LG,13
+B,Lexar,14
+B,Logitech,3
+B,MSI,5
+B,Micron,3
+B,Noctua,1
+B,PNY,6
+B,Patriot,9
+B,Portronics,29
+B,Prolab Design,9
+B,QNAP,1
+B,SSSTC,1
+B,Samsung,8
+B,SanDisk,3
+B,Sapphire,1
+B,Seagate,1
+B,Sony,4
+B,Synology,18
+B,TVSE,4
+B,Ugreen,11
+B,Western Digital,8
+B,Zebronics,53
+B,Zion,21
+C,Acer,6
+C,EGATE,2
+C,LAPCARE,2
+C,LG,1
+C,Portronics,5
+C,Sony,24
+C,WZATCO,2
+C,Zebronics,32
+D,AGARO,4
+D,Grandstream,2
+D,HP,1
+D,Intex,3
+D,LAPCARE,3
+D,Noise,15
+D,Portronics,41
+D,Sony,9
+D,TVSE,3
+D,Zebronics,149
+D,boAt,2
+E,AGARO,10
+E,Crompton,2
+E,Voltas,53
+E,Zebronics,1
+F,AGARO,23
+F,Crompton,4
+F,Philips,12
+F,Ugreen,1
+F,Voltas,2
+F,Wonderchef,3
+G,AGARO,12
+G,Philips,8
+G,Portronics,3
+H,AGARO,7
+H,Philips,1
+H,Portronics,19
+H,Voltas,47
+H,Zebronics,21
+I,AGARO,30
+I,Portronics,3
+I,Zebronics,7
+J,AGARO,1
+J,Owl Labs,1
+J,Sony,8
+J,Zebronics,2
+K,Cybeart,10
+K,Sony,2
+K,Zebronics,8
+L,Noise,2
+L,Zebronics,4
+L,boAt,1
+M,CP PLUS,69
+M,Qubo,5
+M,Seagate,1
+M,Synology,1
+M,Zebronics,7
+N,AGARO,1
+N,Aditron,15
+N,CP PLUS,8
+N,Grandstream,42
+N,QNAP,1
+N,Synology,1
+N,TP-Link,7
+N,Ugreen,4
+N,Zebronics,2
+O,Canon,8
+O,DCode,17
+O,EPSON,1
+O,HP,10
+O,Kyocera,8
+O,Portronics,7
+O,TSC,3
+O,TVSE,34
+P,AGARO,21
+P,Belkin,1
+P,Intex,1
+P,Microtek,23
+P,Noise,2
+P,Portronics,50
+P,Sony,1
+P,Zebronics,31

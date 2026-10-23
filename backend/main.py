@@ -3257,7 +3257,7 @@ async def lifespan(app_instance: FastAPI):
     execute_sql_file()
     ensure_runtime_schema()
     seed_database()
-    if os.getenv("TURACOZ_IMPORT_PRODUCTS_ON_STARTUP", "true").lower() in {"1", "true", "yes", "on"}:
+    if os.getenv("TURACOZ_IMPORT_PRODUCTS_ON_STARTUP", "false").lower() in {"1", "true", "yes", "on"}:
         import_result = import_bundle_if_needed(ROOT.parent / "products")
         logger.info("Product catalog startup import: %s", import_result)
     check_database_storage()
@@ -3280,6 +3280,10 @@ async def lifespan(app_instance: FastAPI):
 
 
 app = FastAPI(title="Turacoz Bid Tool API", version="1.0.0", lifespan=lifespan)
+
+# Versioned, verified product photos travel with the catalogue deployment.
+# Mount before the web fallback so both web and mobile can fetch the same asset.
+app.mount('/catalog-images', StaticFiles(directory=ROOT.parent / 'product_catalog' / 'images', check_dir=False), name='catalog-images')
 
 
 @app.exception_handler(DatabaseHealthError)

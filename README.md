@@ -49,13 +49,18 @@ Set `TURACOZ_ADMIN_PASSWORD` before the first seed. Startup seeding preserves an
 
 ### Visible product catalogue
 
-The current visible catalogue contains 2,083 products across 16 departments and 314 manufacturer/company names. Its source rows are in `product_catalog/all_products.csv`; category totals and provenance notes are in `product_catalog/README.md`. The import script is resumable and preserves old product IDs while hiding old rows from browsing:
+The India store catalogue is maintained in `product_catalog/all_products.csv`, with downloaded photos in `product_catalog/images` and per-variant evidence in `availability_evidence.json`. See `product_catalog/README.md` for counts, coverage and verification dates. Unknown manufacturer release dates are left blank. Reconfirm store stock and delivery availability before purchase.
+
+Rebuild and review a fresh snapshot before replacing the catalogue:
 
 ```powershell
-python backend\catalogue_app_import.py --apply
+pip install -r backend\scripts\requirements-catalog.txt
+python backend\scripts\rebuild_india_catalog.py --as-of 2026-10-23 --listed-since 2025-04-23
+python backend\scripts\publish_india_catalog.py
+python backend\scripts\publish_india_catalog.py --apply
 ```
 
-The importer saves previous product visibility values in `product_catalog/app_catalog_visibility_backup.csv`. It does not delete products referenced by bids or carts. Older Icecat bundle imports stay hidden from buyer/dealer catalog search.
+Use the actual verification date and desired store-listing cutoff when refreshing. Publication rejects evidence older than seven days, incomplete products, missing photos and duplicate identities. Backups are private under `backend/recovery/`. Unreferenced old products are deleted; bid/cart history products remain hidden. Automatic legacy bundle import at startup is disabled by default. Downloaded photos are served at `/catalog-images/`; web and mobile resolve that path against their configured API server.
 
 ## Start the backend
 

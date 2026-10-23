@@ -11,16 +11,22 @@ import hashlib
 import json
 import sys
 import uuid
-from datetime import date
+from datetime import date, datetime
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
 
-from catalog_importer import connect
-import catalog_filters
+try:
+    from .catalog_importer import connect
+    from . import catalog_filters
+    from .catalog_validation import validate_snapshot
+except ImportError:
+    from catalog_importer import connect
+    import catalog_filters
+    from catalog_validation import validate_snapshot
 
 ROOT = Path(__file__).resolve().parent.parent
 CSV_PATH = ROOT / "product_catalog" / "all_products.csv"
-BACKUP_PATH = ROOT / "product_catalog" / "app_catalog_visibility_backup.csv"
+BACKUP_PATH = ROOT / "backend" / "recovery" / ("catalog-visibility-" + datetime.now().strftime('%Y%m%dT%H%M%S%f') + '.csv')
 NAMESPACE = uuid.UUID("3cdbf650-f7f2-4dbd-a90c-2dc89c6b67a1")
 
 
@@ -31,6 +37,7 @@ def stable_id(kind: str, value: str) -> str:
 def rows_from_file() -> list[dict]:
     with CSV_PATH.open(encoding="utf-8-sig", newline="") as stream:
         rows = list(csv.DictReader(stream))
+    validate_snapshot(rows, ROOT / 'product_catalog' / 'images')
     keys = [(r["category_code"], r["manufacturer"], r["brand"], r["model"], r["product_name"]) for r in rows]
     if len(keys) != len(set(keys)):
         raise ValueError("The standalone catalogue contains duplicate import identities")
@@ -61,6 +68,7 @@ def main() -> int:
             cursor.execute("SELECT COUNT(*) total FROM products p WHERE p.deleted_at IS NULL AND (EXISTS (SELECT 1 FROM bid_requests br WHERE br.product_id=p.id AND br.status='active' AND br.deleted_at IS NULL) OR EXISTS (SELECT 1 FROM cart_items ci JOIN carts ca ON ca.id=ci.cart_id WHERE ci.product_id=p.id AND ca.status='active' AND ca.deleted_at IS NULL))")
             linked_live = int(cursor.fetchone()["total"])
             if not BACKUP_PATH.exists():
+                BACKUP_PATH.parent.mkdir(parents=True, exist_ok=True)
                 cursor.execute("SELECT id,catalog_visible FROM products")
                 visibility = cursor.fetchall()
                 with BACKUP_PATH.open("w", encoding="utf-8", newline="") as stream:

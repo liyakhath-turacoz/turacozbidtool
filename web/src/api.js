@@ -1,6 +1,10 @@
 const defaultApiUrl=globalThis.location?.port==='8000' ? globalThis.location.origin : 'http://localhost:8000';
 const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || defaultApiUrl).replace(/\/+$/, '');
 
+export function productImageUrl(value) {
+  return value?.startsWith('/catalog-images/') ? `${API_BASE_URL}${value}` : value;
+}
+
 function queryString(filters) {
   const query=new URLSearchParams();
   Object.entries(filters).forEach(([key,value])=>{
