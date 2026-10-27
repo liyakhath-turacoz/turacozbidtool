@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import csv
 import io
+import json
 import re
 import zipfile
 import xml.etree.ElementTree as ET
@@ -18,8 +19,10 @@ from decimal import Decimal, InvalidOperation
 from typing import Any, Callable
 
 try:
+    from . import catalog_filters
     from . import product_identity as identity
 except ImportError:  # run as a plain script
+    import catalog_filters
     import product_identity as identity
 
 MAX_FILE_BYTES = 5 * 1024 * 1024
@@ -28,6 +31,9 @@ MAX_UNZIPPED_BYTES = 40 * 1024 * 1024
 LOCK_NAME = "turacoz_product_catalogue"
 
 FIELD_LIMITS = {"name": 255, "brand": 190, "model": 190, "mpn": 190, "category": 120, "item": 120, "description": 4000, "sku": 120}
+MAX_SPEC_COLUMNS = 60
+MAX_SPEC_NAME_LENGTH = 100
+MAX_SPEC_VALUE_LENGTH = 500
 
 # Column headings people actually use, reduced to lower-case letters and digits.
 ALIASES: dict[str, tuple[str, ...]] = {
@@ -44,38 +50,76 @@ ALIASES: dict[str, tuple[str, ...]] = {
 }
 
 TEMPLATE_HEADERS = [
-    "Product name (replace or delete sample rows)",
-    "Brand",
-    "Model (model code)",
-    "Part number (MPN, optional)",
-    "Barcode (EAN/UPC, optional)",
-    "Category (department)",
-    "Item type (subcategory)",
-    "Description (key technical specifications)",
-    "Your SKU (optional)",
-    "Your price (Rs., sample only)",
+    "Product name (replace or delete these 5 examples)", "Brand", "Model (model code)", "Part number (MPN)",
+    "Barcode (GTIN / EAN / UPC)", "Category (department)", "Item type (subcategory)", "Variant / colour / configuration",
+    "Description", "Your SKU", "Your price (Rs.)", "Processor", "RAM", "Storage",
+    "Graphics / GPU", "Operating system", "Display size", "Display technology", "Resolution",
+    "Refresh rate", "Camera resolution", "Battery capacity", "Connectivity", "Ports / connectors",
+    "Capacity", "Configuration / product type", "Cooling / compressor / motor",
+    "Energy rating", "Power consumption", "Dimensions (W x H x D)", "Weight", "Warranty",
+    "Included accessories / package contents", "Colour / finish", "Other specification",
 ]
+
+# Five illustrative products from distinct product types. Blank cells mean "not applicable" or "not known".
+def _template_row(values: dict[str, str]) -> list[str]:
+    return [values.get(header, "") for header in TEMPLATE_HEADERS]
+
+
 TEMPLATE_ROWS = [
-    ["Samsung Galaxy S25 Ultra 256 GB, Titanium Black", "Samsung", "SM-S938B", "SM-S938B/DS", "", "Mobile Phones & Tablets", "Smartphones", "Display: 6.9-inch QHD+ Dynamic AMOLED 2X, 120 Hz; RAM: 12 GB; storage: 256 GB; processor: Snapdragon 8 Elite; rear cameras: 200 MP main, 50 MP ultrawide, 50 MP telephoto; connectivity: 5G, Wi-Fi 7, Bluetooth; colour: Titanium Black", "EX-SAM-S25U-256", "129999"],
-    ["Apple iPhone 17 256 GB, Black", "Apple", "iPhone 17 256 GB", "", "195950643442", "Mobile Phones & Tablets", "Smartphones", "Storage: 256 GB; display: 6.3-inch Super Retina XDR; chip: A19; camera: 48 MP Fusion system; connectivity: 5G, Wi-Fi, Bluetooth; colour: Black", "EX-APL-IP17-256-BLK", "94900"],
-    ["Apple iPad Air 11-inch (M3) 256 GB Wi-Fi, Space Grey", "Apple", "iPad Air 11-inch M3 Wi-Fi", "A3266", "", "Mobile Phones & Tablets", "Tablets", "Display: 11-inch Liquid Retina; chip: Apple M3; storage: 256 GB; connectivity: Wi-Fi 6E, Bluetooth; ports: USB-C; colour: Space Grey", "EX-APL-IPADAIR-256", "74900"],
-    ["Lenovo IdeaPad Slim 5 14-inch, 16 GB RAM, 1 TB SSD", "Lenovo", "IdeaPad Slim 5 14IMH9", "14IMH9", "", "Computers, Laptops & IT Equipment", "Laptops", "Processor: Intel Core Ultra 5; memory: 16 GB; storage: 1 TB NVMe SSD; display: 14-inch OLED, 2.8K; graphics: integrated Intel Arc; operating system: Windows 11; ports: USB-C, USB-A, HDMI", "EX-LEN-SLIM5-14", "89990"],
-    ["Dell Inspiron 3030 Desktop, Core i5, 16 GB RAM, 512 GB SSD", "Dell", "Inspiron 3030 Desktop", "D3030-16-512", "", "Computers, Laptops & IT Equipment", "Desktop Computers", "Processor: Intel Core i5; memory: 16 GB DDR5; storage: 512 GB NVMe SSD; graphics: integrated; operating system: Windows 11; includes: tower, keyboard and mouse", "EX-DEL-DESKTOP-3030", "64990"],
-    ["LG UltraGear 27-inch QHD Gaming Monitor, 165 Hz", "LG", "27GP850-B", "27GP850-B", "", "Computers, Laptops & IT Equipment", "Monitors", "Screen: 27-inch IPS; resolution: 2560 x 1440; refresh rate: 165 Hz (180 Hz overclock); response time: 1 ms; ports: 2 HDMI, DisplayPort; stand: height, tilt and pivot adjustment", "EX-LG-27GP850", "34990"],
-    ["Samsung 55-inch Neo QLED 4K Smart TV QN90F", "Samsung", "QA55QN90FAULXL", "QA55QN90FAULXL", "", "TVs, Video & Home Entertainment", "Televisions", "Screen: 55-inch Neo QLED; resolution: 3840 x 2160; refresh rate: 120 Hz; HDR: Quantum HDR; smart platform: Tizen; connectivity: Wi-Fi, Bluetooth; ports: HDMI, USB; include screen size and model suffix", "EX-SAM-QN90F-55", "159990"],
-    ["Sony WH-1000XM5 Wireless Noise-Cancelling Headphones, Black", "Sony", "WH-1000XM5", "WH1000XM5/B", "", "Audio, Headphones & Speakers", "Headphones", "Type: over-ear wireless; noise cancellation: adaptive ANC; microphones: 8; battery: up to 30 hours with ANC; charging: USB-C; connectivity: Bluetooth, 3.5 mm audio; colour: Black", "EX-SONY-XM5-BLK", "29990"],
-    ["LG 655 L Side-by-Side Refrigerator, Matte Black", "LG", "GC-B257KQMV", "GC-B257KQMV", "", "Large Home Appliances", "Refrigerators", "Capacity: 655 L; configuration: side-by-side; cooling: inverter compressor, frost-free; features: door cooling, multi-air flow; energy rating: enter the label rating; dimensions: enter width x height x depth", "EX-LG-FRIDGE-655", "89990"],
-    ["Bosch 9 kg Front-Load Washing Machine, 1400 rpm", "Bosch", "WGA24400IN", "WGA24400IN", "", "Large Home Appliances", "Washing Machines", "Capacity: 9 kg; type: front-load, fully automatic; spin speed: 1400 rpm; motor: EcoSilence Drive; programmes: list the included wash cycles; energy rating: enter the label rating; colour: Silver", "EX-BOSCH-WM-9KG", "64990"],
-    ["Daikin 1.5 Ton 5-Star Inverter Split Air Conditioner", "Daikin", "FTKM50U", "FTKM50U", "", "Air Conditioning, Cooling & Air Quality", "Air Conditioners", "Capacity: 1.5 ton; type: inverter split AC; energy rating: 5-star; refrigerant: R-32; features: copper condenser, PM 2.5 filter; include indoor/outdoor unit model suffix and applicable ISEER value", "EX-DAIKIN-AC-15T", "57990"],
-    ["Samsung 28 L Convection Microwave Oven", "Samsung", "MC28A5145VK/TL", "MC28A5145VK/TL", "", "Kitchen Appliances", "Microwave ovens", "Capacity: 28 L; type: convection; power: enter microwave/grill/convection wattage; programmes: list key modes; control: touch; colour: Black; include installation or included accessories if relevant", "EX-SAM-MWO-28L", "16990"],
-    ["Sony Alpha 7 IV Full-Frame Mirrorless Camera Body", "Sony", "ILCE-7M4", "ILCE-7M4/BQ IN5", "", "Cameras, Photography & Imaging", "Cameras", "Sensor: 33 MP full-frame Exmor R CMOS; processor: BIONZ XR; stabilisation: 5-axis IBIS; video: 4K 60p; autofocus: real-time tracking; lens: body only; mount: Sony E", "EX-SONY-A7IV-BODY", "219990"],
-    ["Sony WF-1000XM5 True Wireless Earbuds, Black", "Sony", "WF-1000XM5", "WF1000XM5/B", "", "Audio, Headphones & Speakers", "Earbuds", "Type: true wireless in-ear; noise cancellation: ANC; microphones: 6; battery: up to 8 hours per charge, with charging case; charging: USB-C, Qi wireless; connectivity: Bluetooth; colour: Black", "EX-SONY-WF5-BLK", "24990"],
-    ["Apple Watch Series 10 GPS 46 mm, Jet Black Aluminium", "Apple", "Watch Series 10 GPS 46 mm", "A2998", "", "Wearables & Smart Devices", "Smartwatches", "Case: 46 mm aluminium; display: Always-On Retina LTPO3 OLED; connectivity: GPS, Bluetooth, Wi-Fi; sensors: heart rate, ECG, temperature, blood oxygen where supported; water resistance: 50 m; band size: specify", "EX-APL-WATCH10-46", "46900"],
-    ["Sony PlayStation 5 Slim Disc Edition", "Sony", "CFI-2008A01", "CFI-2008A01", "", "Gaming & Virtual Reality", "Gaming Consoles", "Edition: slim with disc drive; storage: 1 TB SSD; output: up to 4K, 120 Hz; connectivity: Wi-Fi 6, Bluetooth, HDMI; includes: DualSense controller; specify region and bundled games", "EX-SONY-PS5-SLIM", "54990"],
-    ["TP-Link Archer AX55 Wi-Fi 6 Router", "TP-Link", "Archer AX55", "ARCHER-AX55", "", "Networking, GPS & Communication", "Routers", "Wireless standard: Wi-Fi 6 (802.11ax); class: AX3000 dual-band; ports: 1 Gigabit WAN, 4 Gigabit LAN, USB 3.0; features: WPA3, OFDMA, OneMesh; include hardware revision", "EX-TPL-AX55", "7990"],
-    ["HP LaserJet MFP M234sdw Monochrome Printer", "HP", "LaserJet MFP M234sdw", "6GX01A", "", "Printers, Scanners & Office Electronics", "Printers", "Type: monochrome laser multifunction; functions: print, scan, copy; print speed: enter ppm; duplex: automatic; connectivity: Wi-Fi, Ethernet, USB; include toner/cartridge code", "EX-HP-M234SDW", "21999"],
-    ["APC Back-UPS 1100 VA, BX1100C-IN", "APC", "BX1100C-IN", "BX1100C-IN", "", "Power Backup, Batteries & Electrical Equipment", "UPS", "Capacity: 1100 VA; topology: line-interactive; output: 230 V; outlets: specify count and type; battery: replaceable; backup time: depends on connected load; include battery warranty", "EX-APC-BX1100", "8999"],
-    ["Ambrane 20,000 mAh 22.5 W Power Bank", "Ambrane", "Stylo 20K", "Stylo 20K", "", "Power Backup, Batteries & Electrical Equipment", "Power banks", "Capacity: 20,000 mAh; rated output: specify Wh; maximum output: 22.5 W; ports: USB-A, USB-C; charging protocols: list supported standards; include colour and exact model suffix", "EX-AMBRANE-20K", "1999"],
+    _template_row({
+        "Product name (replace or delete these 5 examples)": "Samsung Galaxy S25 Ultra 256 GB, Titanium Black",
+        "Brand": "Samsung", "Model (model code)": "SM-S938B", "Part number (MPN)": "SM-S938B/DS",
+        "Category (department)": "Mobile Phones & Tablets", "Item type (subcategory)": "Smartphones",
+        "Variant / colour / configuration": "256 GB, Titanium Black", "Description": "Illustrative sample only; replace with your own product data.",
+        "Your SKU": "EX-SAM-S25U-256", "Processor": "Snapdragon 8 Elite", "RAM": "12 GB", "Storage": "256 GB",
+        "Operating system": "Android", "Display size": "6.9 in", "Display technology": "Dynamic AMOLED 2X",
+        "Resolution": "QHD+", "Refresh rate": "120 Hz", "Camera resolution": "200 MP main; 50 MP ultrawide; telephoto",
+        "Battery capacity": "5,000 mAh", "Connectivity": "5G; Wi-Fi 7; Bluetooth", "Ports / connectors": "USB-C",
+        "Configuration / product type": "Smartphone; dual SIM variant", "Included accessories / package contents": "USB-C cable; S Pen",
+        "Colour / finish": "Titanium Black", "Other specification": "S Pen support",
+    }),
+    _template_row({
+        "Product name (replace or delete these 5 examples)": "Lenovo IdeaPad Slim 5 14-inch, 16 GB RAM, 1 TB SSD",
+        "Brand": "Lenovo", "Model (model code)": "IdeaPad Slim 5 14IMH9", "Part number (MPN)": "14IMH9",
+        "Category (department)": "Computers, Laptops & IT Equipment", "Item type (subcategory)": "Laptops",
+        "Variant / colour / configuration": "14-inch, 16 GB, 1 TB", "Description": "Illustrative sample only; replace with your own product data.",
+        "Your SKU": "EX-LEN-SLIM5-14", "Processor": "Intel Core Ultra 5", "RAM": "16 GB", "Storage": "1 TB NVMe SSD",
+        "Graphics / GPU": "Integrated Intel Arc", "Operating system": "Windows 11", "Display size": "14 in",
+        "Display technology": "OLED", "Resolution": "2.8K", "Connectivity": "Wi-Fi; Bluetooth",
+        "Ports / connectors": "USB-C; USB-A; HDMI", "Configuration / product type": "Laptop; clamshell",
+        "Included accessories / package contents": "Power adapter", "Other specification": "Enter the exact processor and display configuration",
+    }),
+    _template_row({
+        "Product name (replace or delete these 5 examples)": "Samsung 55-inch Neo QLED 4K Smart TV QN90F",
+        "Brand": "Samsung", "Model (model code)": "QA55QN90FAULXL", "Part number (MPN)": "QA55QN90FAULXL",
+        "Category (department)": "TVs, Video & Home Entertainment", "Item type (subcategory)": "Televisions",
+        "Variant / colour / configuration": "55-inch", "Description": "Illustrative sample only; replace with your own product data.",
+        "Your SKU": "EX-SAM-QN90F-55", "Operating system": "Tizen", "Display size": "55 in",
+        "Display technology": "Neo QLED", "Resolution": "3840 x 2160 (4K UHD)", "Refresh rate": "120 Hz",
+        "Connectivity": "Wi-Fi; Bluetooth", "Ports / connectors": "HDMI; USB", "Configuration / product type": "Smart TV",
+        "Included accessories / package contents": "Remote; power cable", "Other specification": "Enter exact regional model suffix and HDMI port count",
+    }),
+    _template_row({
+        "Product name (replace or delete these 5 examples)": "LG 655 L Side-by-Side Refrigerator, Matte Black",
+        "Brand": "LG", "Model (model code)": "GC-B257KQMV", "Part number (MPN)": "GC-B257KQMV",
+        "Category (department)": "Large Home Appliances", "Item type (subcategory)": "Refrigerators",
+        "Variant / colour / configuration": "655 L, Matte Black", "Description": "Illustrative sample only; replace with your own product data.",
+        "Your SKU": "EX-LG-FRIDGE-655", "Capacity": "655 L", "Configuration / product type": "Side-by-side, frost-free",
+        "Cooling / compressor / motor": "Inverter compressor", "Energy rating": "5-star label (example)",
+        "Dimensions (W x H x D)": "Enter width x height x depth", "Included accessories / package contents": "Power cable; shelves",
+        "Colour / finish": "Matte Black", "Other specification": "Add dispenser and cooling zone details if applicable",
+    }),
+    _template_row({
+        "Product name (replace or delete these 5 examples)": "Daikin 1.5 Ton Inverter Split Air Conditioner",
+        "Brand": "Daikin", "Model (model code)": "FTKM50U", "Part number (MPN)": "FTKM50U",
+        "Category (department)": "Air Conditioning, Cooling & Air Quality", "Item type (subcategory)": "Air Conditioners",
+        "Variant / colour / configuration": "1.5 ton, split inverter", "Description": "Illustrative sample only; replace with your own product data.",
+        "Your SKU": "EX-DAIKIN-AC-15T", "Capacity": "1.5 ton", "Configuration / product type": "Split inverter AC",
+        "Cooling / compressor / motor": "Inverter compressor; R-32 refrigerant", "Energy rating": "Enter the product's BEE label rating",
+        "Power consumption": "Enter rated input power", "Dimensions (W x H x D)": "Enter indoor/outdoor unit dimensions",
+        "Included accessories / package contents": "Remote; indoor/outdoor units",
+        "Other specification": "Add exact indoor/outdoor model suffix and installation scope",
+    }),
 ]
 
 
@@ -185,8 +229,8 @@ def read_csv(content: bytes) -> list[list[str]]:
     return [row for row in csv.reader(io.StringIO(text), dialect)]
 
 
-def parse_catalogue_file(filename: str, content: bytes) -> list[dict[str, str]]:
-    """Rows as dictionaries keyed by our field names. Raises CatalogueError for problems with the file itself."""
+def parse_catalogue_file(filename: str, content: bytes) -> list[dict[str, Any]]:
+    """Parse core columns and retain all other non-empty columns as product specifications."""
     if not content:
         raise CatalogueError("The file is empty.")
     if len(content) > MAX_FILE_BYTES:
@@ -203,18 +247,33 @@ def parse_catalogue_file(filename: str, content: bytes) -> list[dict[str, str]]:
     table = [row for row in table if any(str(cell).strip() for cell in row)]
     if len(table) < 2:
         raise CatalogueError("The file needs a heading row and at least one product.")
-    mapping = {index: _canonical_field(heading) for index, heading in enumerate(table[0])}
+    mapping: dict[int, str] = {}
+    specification_columns: dict[int, str] = {}
+    for index, heading in enumerate(table[0]):
+        field = _canonical_field(heading)
+        if field:
+            mapping[index] = field
+        else:
+            label = " ".join(str(heading or "").split())
+            if label:
+                if len(label) > MAX_SPEC_NAME_LENGTH:
+                    raise CatalogueError(f"Column heading “{label[:40]}…” is longer than {MAX_SPEC_NAME_LENGTH} characters.")
+                specification_columns[index] = label
+    if len(specification_columns) > MAX_SPEC_COLUMNS:
+        raise CatalogueError(f"The file has more than {MAX_SPEC_COLUMNS} custom specification columns. Remove unused columns and try again.")
     if "name" not in mapping.values():
         raise CatalogueError("We could not find a product name column. Use the headings in the template: Name, Brand, Model, Category.")
     if len(table) - 1 > MAX_ROWS:
         raise CatalogueError(f"The file has more than {MAX_ROWS:,} products. Split it into smaller files.")
     parsed = []
     for number, raw in enumerate(table[1:], start=2):
-        row = {"_row": str(number)}
+        row: dict[str, Any] = {"_row": str(number), "specifications": {}}
         for index, value in enumerate(raw):
             field = mapping.get(index)
             if field and field not in row:
                 row[field] = str(value).strip()
+            elif index in specification_columns and str(value).strip():
+                row["specifications"][specification_columns[index]] = str(value).strip()
         parsed.append(row)
     return parsed
 
@@ -229,6 +288,22 @@ def clean_row(raw: dict[str, Any]) -> tuple[dict[str, Any], list[str], list[str]
     row["description"] = str(raw.get("description") or "").strip()
     errors: list[str] = []
     warnings: list[str] = []
+    row["specifications"] = {}
+    specifications = raw.get("specifications")
+    if isinstance(specifications, dict):
+        for key, value in specifications.items():
+            name = " ".join(str(key or "").split())
+            text = " ".join(str(value or "").split())
+            if not name or not text:
+                continue
+            if len(name) > MAX_SPEC_NAME_LENGTH:
+                errors.append(f"Specification heading is longer than {MAX_SPEC_NAME_LENGTH} characters.")
+            elif len(text) > MAX_SPEC_VALUE_LENGTH:
+                errors.append(f"“{name}” is longer than {MAX_SPEC_VALUE_LENGTH} characters.")
+            else:
+                row["specifications"][name] = text
+    elif specifications:
+        errors.append("Product specifications must be supplied as column/value pairs.")
     if not row["name"]:
         errors.append("The product name is empty.")
     if not row["brand"]:
@@ -254,7 +329,7 @@ def clean_row(raw: dict[str, Any]) -> tuple[dict[str, Any], list[str], list[str]
 
 
 def row_summary(row: dict[str, Any]) -> dict[str, Any]:
-    return {key: row.get(key, "") for key in ("name", "brand", "model", "mpn", "gtin", "category", "item", "description", "sku")} | {"price": str(row["price"]) if row.get("price") is not None else ""}
+    return {key: row.get(key, "") for key in ("name", "brand", "model", "mpn", "gtin", "category", "item", "description", "sku", "specifications")} | {"price": str(row["price"]) if row.get("price") is not None else ""}
 
 
 # ---------------------------------------------------------------------------
@@ -398,17 +473,18 @@ def create_product(cursor, dealer_id: str, row: dict[str, Any], category_id: str
         """
         INSERT INTO products
           (id, category_id, subcategory_id, name, brand, manufacturer, model, source, source_product_id, mpn, gtin, description,
-           verification_status, status, catalog_visible, catalog_added_at, created_by, created_at, updated_at)
-        VALUES (%s, %s, %s, %s, %s, %s, NULLIF(%s,''), 'dealer', %s, NULLIF(%s,''), %s, NULLIF(%s,''),
+           highlights, verification_status, status, catalog_visible, catalog_added_at, created_by, created_at, updated_at)
+        VALUES (%s, %s, %s, %s, %s, %s, NULLIF(%s,''), 'dealer', %s, NULLIF(%s,''), %s, NULLIF(%s,''), %s,
                 'dealer_added', 'active', TRUE, CURDATE(), %s, NOW(), NOW())
         """,
         [product_id, category_id, item_id, row["name"], row["brand"], row["brand"], row.get("model", ""), product_id,
-         row.get("mpn", ""), first_barcode, row.get("description", ""), dealer_id],
+         row.get("mpn", ""), first_barcode, row.get("description", ""), json.dumps(row.get("specifications") or {}), dealer_id],
     )
     taken = register_identities(cursor, product_id, row)
     if taken:
         # Another product owns one of the keys (a race or an older duplicate). Never keep two products for one key.
         raise CatalogueError("This product was just added by someone else. Try again and it will be matched.")
+    catalog_filters.index_product(cursor, {"id": product_id, "highlights": row.get("specifications") or {}, "item": row.get("item", "")})
     return product_id
 
 
