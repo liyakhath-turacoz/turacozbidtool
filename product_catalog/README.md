@@ -12,9 +12,9 @@
 | Rows with verified image files | 9,195 / 9,195 |
 | Rows with positive INR listed price | 9,195 / 9,195 |
 | Rows with GTIN | 342 / 9,195 |
-| Rows with release year | 3,892 / 9,195 |
+| Rows with release year | 4,133 / 9,195 |
 | Newly imported rows with verified year at ingestion | 33 |
-| Rows enriched in current exact-name research pass | 318 |
+| Rows enriched in current exact-name research pass | 559 |
 
 ## Department coverage
 
