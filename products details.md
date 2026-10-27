@@ -25,35 +25,35 @@
 | At least 5 technical specification fields | 9,169 | 99.7% |
 | GTIN populated | 342 | 3.7% |
 | GTIN blank | 8,853 | 96.3% |
-| Release year populated | 3,466 | 37.7% |
-| Release year blank | 5,729 | 62.3% |
-| Exact release date populated | 1,755 | 19.1% |
+| Release year populated | 3,518 | 38.3% |
+| Release year blank | 5,677 | 61.7% |
+| Exact release date populated | 1,799 | 19.6% |
 | Verified release year in live database | 1,867 | Database evidence basis |
 | New rows with verified release year | 33 | New additions |
 | New rows with GTIN | 250 | New additions |
 | New rows with local image | 6,031 | New additions |
-| Rows with release evidence record | 1,632 | 17.7% |
+| Rows with release evidence record | 1,684 | 18.3% |
 
 ## Department totals
 
 | Department | Products | Product types | Brands | With GTIN | With year |
 | --- | --- | --- | --- | --- | --- |
-| Air Conditioning, Cooling & Air Quality | 304 | 7 | 38 | 3 | 258 |
-| Audio, Headphones & Speakers | 1,009 | 6 | 41 | 2 | 244 |
-| Cameras, Photography & Imaging | 28 | 5 | 7 | 0 | 15 |
-| Cleaning, Laundry & Floor Care | 88 | 4 | 22 | 3 | 21 |
-| Computers, Laptops & IT Equipment | 3,502 | 20 | 90 | 226 | 592 |
-| Gaming & Virtual Reality | 80 | 7 | 19 | 1 | 23 |
-| Kitchen Appliances | 119 | 18 | 25 | 5 | 47 |
-| Large Home Appliances | 683 | 5 | 31 | 79 | 362 |
-| Mobile Phones & Tablets | 1,747 | 2 | 16 | 15 | 1,324 |
-| Networking, GPS & Communication | 319 | 4 | 18 | 2 | 82 |
-| Personal Care & Grooming Appliances | 61 | 6 | 10 | 0 | 43 |
-| Power Backup, Batteries & Electrical Equipment | 227 | 4 | 19 | 0 | 130 |
-| Printers, Scanners & Office Electronics | 370 | 4 | 19 | 5 | 105 |
-| Smart Home, Security & Surveillance | 96 | 2 | 7 | 0 | 83 |
-| TVs, Video & Home Entertainment | 225 | 2 | 26 | 1 | 118 |
-| Wearables & Smart Devices | 337 | 3 | 7 | 0 | 19 |
+| Air Conditioning, Cooling & Air Quality | 304 | 7 | 38 | 3 | 0 |
+| Audio, Headphones & Speakers | 1,009 | 6 | 41 | 2 | 0 |
+| Cameras, Photography & Imaging | 28 | 5 | 7 | 0 | 0 |
+| Cleaning, Laundry & Floor Care | 88 | 4 | 22 | 3 | 0 |
+| Computers, Laptops & IT Equipment | 3,502 | 20 | 90 | 226 | 0 |
+| Gaming & Virtual Reality | 80 | 7 | 19 | 1 | 0 |
+| Kitchen Appliances | 119 | 18 | 25 | 5 | 0 |
+| Large Home Appliances | 683 | 5 | 31 | 79 | 0 |
+| Mobile Phones & Tablets | 1,747 | 2 | 16 | 15 | 0 |
+| Networking, GPS & Communication | 319 | 4 | 18 | 2 | 0 |
+| Personal Care & Grooming Appliances | 61 | 6 | 10 | 0 | 0 |
+| Power Backup, Batteries & Electrical Equipment | 227 | 4 | 19 | 0 | 0 |
+| Printers, Scanners & Office Electronics | 370 | 4 | 19 | 5 | 0 |
+| Smart Home, Security & Surveillance | 96 | 2 | 7 | 0 | 0 |
+| TVs, Video & Home Entertainment | 225 | 2 | 26 | 1 | 0 |
+| Wearables & Smart Devices | 337 | 3 | 7 | 0 | 0 |
 
 ## Product type totals
 
@@ -131,8 +131,8 @@
 | Large Home Appliances | Refrigerators | 492 | 18 | 492 | 56 | 293 | 492 |
 | Large Home Appliances | Washing machines | 160 | 21 | 160 | 23 | 55 | 160 |
 | Large Home Appliances | Water heaters | 6 | 4 | 6 | 0 | 4 | 4 |
-| Mobile Phones & Tablets | Smartphones | 1,074 | 13 | 1074 | 13 | 762 | 1074 |
-| Mobile Phones & Tablets | Tablets | 673 | 9 | 673 | 2 | 562 | 673 |
+| Mobile Phones & Tablets | Smartphones | 1,074 | 13 | 1074 | 13 | 802 | 1074 |
+| Mobile Phones & Tablets | Tablets | 673 | 9 | 673 | 2 | 574 | 673 |
 | Networking, GPS & Communication | Network adapters | 64 | 9 | 64 | 0 | 22 | 64 |
 | Networking, GPS & Communication | Network switches | 78 | 9 | 78 | 0 | 44 | 78 |
 | Networking, GPS & Communication | Routers | 115 | 8 | 115 | 2 | 3 | 115 |
@@ -163,133 +163,133 @@
 
 | Brand | Products | Product types | With image | With GTIN | With year |
 | --- | --- | --- | --- | --- | --- |
-| boAt | 920 | 8 | 920 | 0 | 12 |
-| Apple | 868 | 6 | 868 | 16 | 862 |
-| Samsung | 532 | 15 | 532 | 14 | 299 |
-| Whirlpool | 355 | 5 | 355 | 81 | 280 |
-| Zebronics | 324 | 30 | 324 | 0 | 317 |
-| Portronics | 299 | 22 | 299 | 0 | 156 |
-| ASUS | 285 | 17 | 285 | 5 | 16 |
-| HP | 223 | 11 | 223 | 0 | 59 |
-| LG | 200 | 9 | 200 | 17 | 61 |
-| DELL | 179 | 12 | 179 | 30 | 22 |
-| GIGABYTE | 149 | 4 | 149 | 35 | 17 |
-| Western Digital | 147 | 4 | 147 | 0 | 8 |
-| AGARO | 128 | 29 | 128 | 0 | 106 |
-| MSI | 124 | 8 | 124 | 14 | 6 |
-| OPPO | 124 | 2 | 124 | 0 | 74 |
-| Xiaomi | 123 | 4 | 123 | 0 | 49 |
-| TP-Link | 119 | 8 | 119 | 2 | 8 |
-| Voltas | 117 | 8 | 117 | 0 | 106 |
-| Lenovo | 114 | 8 | 114 | 0 | 4 |
-| VIVO | 112 | 1 | 112 | 0 | 37 |
-| Grandstream | 110 | 5 | 110 | 0 | 44 |
-| Realme | 110 | 2 | 110 | 0 | 55 |
-| Intel | 109 | 5 | 109 | 0 | 3 |
-| EPSON | 105 | 3 | 105 | 1 | 2 |
+| boAt | 920 | 8 | 920 | 0 | 0 |
+| Apple | 868 | 6 | 868 | 16 | 0 |
+| Samsung | 532 | 15 | 532 | 14 | 0 |
+| Whirlpool | 355 | 5 | 355 | 81 | 0 |
+| Zebronics | 324 | 30 | 324 | 0 | 0 |
+| Portronics | 299 | 22 | 299 | 0 | 0 |
+| ASUS | 285 | 17 | 285 | 5 | 0 |
+| HP | 223 | 11 | 223 | 0 | 0 |
+| LG | 200 | 9 | 200 | 17 | 0 |
+| DELL | 179 | 12 | 179 | 30 | 0 |
+| GIGABYTE | 149 | 4 | 149 | 35 | 0 |
+| Western Digital | 147 | 4 | 147 | 0 | 0 |
+| AGARO | 128 | 29 | 128 | 0 | 0 |
+| MSI | 124 | 8 | 124 | 14 | 0 |
+| OPPO | 124 | 2 | 124 | 0 | 0 |
+| Xiaomi | 123 | 4 | 123 | 0 | 0 |
+| TP-Link | 119 | 8 | 119 | 2 | 0 |
+| Voltas | 117 | 8 | 117 | 0 | 0 |
+| Lenovo | 114 | 8 | 114 | 0 | 0 |
+| VIVO | 112 | 1 | 112 | 0 | 0 |
+| Grandstream | 110 | 5 | 110 | 0 | 0 |
+| Realme | 110 | 2 | 110 | 0 | 0 |
+| Intel | 109 | 5 | 109 | 0 | 0 |
+| EPSON | 105 | 3 | 105 | 1 | 0 |
 | XPG | 101 | 2 | 101 | 74 | 0 |
-| Acer | 98 | 5 | 98 | 0 | 16 |
-| Seagate | 97 | 4 | 97 | 2 | 3 |
-| Kingston | 94 | 4 | 94 | 0 | 7 |
-| G.SKILL | 90 | 1 | 90 | 0 | 1 |
-| Crucial | 86 | 3 | 86 | 0 | 6 |
+| Acer | 98 | 5 | 98 | 0 | 0 |
+| Seagate | 97 | 4 | 97 | 2 | 0 |
+| Kingston | 94 | 4 | 94 | 0 | 0 |
+| G.SKILL | 90 | 1 | 90 | 0 | 0 |
+| Crucial | 86 | 3 | 86 | 0 | 0 |
 | CORSAIR | 84 | 5 | 84 | 0 | 0 |
-| CP PLUS | 80 | 3 | 80 | 0 | 77 |
-| One Plus | 74 | 3 | 74 | 0 | 67 |
-| POCO | 71 | 1 | 71 | 0 | 15 |
-| Synology | 71 | 6 | 71 | 0 | 21 |
-| AMD | 70 | 3 | 70 | 0 | 5 |
-| Sony | 70 | 13 | 70 | 0 | 52 |
-| ADATA | 64 | 4 | 64 | 29 | 1 |
-| QNAP | 64 | 3 | 64 | 0 | 3 |
-| Toshiba | 62 | 5 | 62 | 0 | 2 |
+| CP PLUS | 80 | 3 | 80 | 0 | 0 |
+| One Plus | 74 | 3 | 74 | 0 | 0 |
+| POCO | 71 | 1 | 71 | 0 | 0 |
+| Synology | 71 | 6 | 71 | 0 | 0 |
+| AMD | 70 | 3 | 70 | 0 | 0 |
+| Sony | 70 | 13 | 70 | 0 | 0 |
+| ADATA | 64 | 4 | 64 | 29 | 0 |
+| QNAP | 64 | 3 | 64 | 0 | 0 |
+| Toshiba | 62 | 5 | 62 | 0 | 0 |
 | ViewSonic | 57 | 2 | 57 | 1 | 0 |
-| Logitech | 56 | 7 | 56 | 0 | 3 |
-| BenQ | 55 | 2 | 55 | 0 | 11 |
+| Logitech | 56 | 7 | 56 | 0 | 0 |
+| BenQ | 55 | 2 | 55 | 0 | 0 |
 | Cooler Master | 46 | 4 | 46 | 0 | 0 |
-| BROTHER | 44 | 3 | 44 | 4 | 1 |
-| Philips | 44 | 19 | 44 | 9 | 27 |
-| BIWIN | 43 | 4 | 43 | 1 | 2 |
-| TVSE | 42 | 5 | 42 | 0 | 41 |
-| BPL | 41 | 5 | 41 | 0 | 6 |
-| Haier | 41 | 7 | 41 | 0 | 3 |
+| BROTHER | 44 | 3 | 44 | 4 | 0 |
+| Philips | 44 | 19 | 44 | 9 | 0 |
+| BIWIN | 43 | 4 | 43 | 1 | 0 |
+| TVSE | 42 | 5 | 42 | 0 | 0 |
+| BPL | 41 | 5 | 41 | 0 | 0 |
+| Haier | 41 | 7 | 41 | 0 | 0 |
 | Thermaltake | 41 | 3 | 41 | 0 | 0 |
 | Zotac | 41 | 2 | 41 | 0 | 0 |
 | ASRock | 40 | 2 | 40 | 0 | 0 |
-| LAPCARE | 40 | 16 | 40 | 0 | 5 |
-| Google | 39 | 1 | 39 | 0 | 39 |
-| SanDisk | 35 | 3 | 35 | 0 | 3 |
-| ARCTIC | 34 | 2 | 34 | 4 | 2 |
-| PNY | 34 | 2 | 34 | 0 | 6 |
-| Canon | 33 | 4 | 33 | 0 | 9 |
-| Microsoft | 33 | 1 | 33 | 0 | 8 |
-| Noise | 33 | 5 | 33 | 0 | 19 |
-| Godrej | 30 | 3 | 30 | 0 | 3 |
-| Cougar | 29 | 3 | 29 | 0 | 2 |
-| AOC | 26 | 2 | 26 | 1 | 18 |
-| IQOO | 26 | 1 | 26 | 0 | 20 |
-| Nothing | 25 | 2 | 25 | 0 | 18 |
-| BLUESTAR | 24 | 2 | 24 | 0 | 15 |
-| Sapphire | 24 | 3 | 24 | 0 | 2 |
-| Microtek | 23 | 1 | 23 | 0 | 23 |
-| Ugreen | 22 | 3 | 22 | 0 | 16 |
+| LAPCARE | 40 | 16 | 40 | 0 | 0 |
+| Google | 39 | 1 | 39 | 0 | 0 |
+| SanDisk | 35 | 3 | 35 | 0 | 0 |
+| ARCTIC | 34 | 2 | 34 | 4 | 0 |
+| PNY | 34 | 2 | 34 | 0 | 0 |
+| Canon | 33 | 4 | 33 | 0 | 0 |
+| Microsoft | 33 | 1 | 33 | 0 | 0 |
+| Noise | 33 | 5 | 33 | 0 | 0 |
+| Godrej | 30 | 3 | 30 | 0 | 0 |
+| Cougar | 29 | 3 | 29 | 0 | 0 |
+| AOC | 26 | 2 | 26 | 1 | 0 |
+| IQOO | 26 | 1 | 26 | 0 | 0 |
+| Nothing | 25 | 2 | 25 | 0 | 0 |
+| BLUESTAR | 24 | 2 | 24 | 0 | 0 |
+| Sapphire | 24 | 3 | 24 | 0 | 0 |
+| Microtek | 23 | 1 | 23 | 0 | 0 |
+| Ugreen | 22 | 3 | 22 | 0 | 0 |
 | GEONIX | 21 | 5 | 21 | 0 | 0 |
-| LLOYD | 21 | 2 | 21 | 0 | 16 |
+| LLOYD | 21 | 2 | 21 | 0 | 0 |
 | ORICO | 21 | 3 | 21 | 0 | 0 |
-| Prolab Design | 21 | 3 | 21 | 0 | 9 |
-| Zion | 21 | 2 | 21 | 0 | 21 |
+| Prolab Design | 21 | 3 | 21 | 0 | 0 |
+| Zion | 21 | 2 | 21 | 0 | 0 |
 | Foxin | 20 | 5 | 20 | 0 | 0 |
-| COLORFUL | 19 | 2 | 19 | 0 | 1 |
-| Cybeart | 19 | 3 | 19 | 0 | 17 |
-| Panasonic | 19 | 4 | 19 | 0 | 16 |
+| COLORFUL | 19 | 2 | 19 | 0 | 0 |
+| Cybeart | 19 | 3 | 19 | 0 | 0 |
+| Panasonic | 19 | 4 | 19 | 0 | 0 |
 | EVM | 18 | 2 | 18 | 0 | 0 |
-| Intex | 18 | 6 | 18 | 0 | 17 |
-| Micron | 18 | 2 | 18 | 0 | 2 |
+| Intex | 18 | 6 | 18 | 0 | 0 |
+| Micron | 18 | 2 | 18 | 0 | 0 |
 | NVIDIA | 18 | 1 | 18 | 0 | 0 |
-| TSC | 18 | 1 | 18 | 1 | 3 |
-| DCode | 17 | 2 | 17 | 0 | 17 |
+| TSC | 18 | 1 | 18 | 1 | 0 |
+| DCode | 17 | 2 | 17 | 0 | 0 |
 | INNO3D | 17 | 1 | 17 | 0 | 0 |
-| Lexar | 17 | 1 | 17 | 0 | 14 |
+| Lexar | 17 | 1 | 17 | 0 | 0 |
 | Bosch | 16 | 2 | 16 | 0 | 0 |
-| IFB | 16 | 4 | 16 | 0 | 4 |
+| IFB | 16 | 4 | 16 | 0 | 0 |
 | Jabra | 16 | 3 | 16 | 0 | 0 |
-| Aditron | 15 | 1 | 15 | 0 | 15 |
+| Aditron | 15 | 1 | 15 | 0 | 0 |
 | CADYCE | 14 | 6 | 14 | 0 | 0 |
 | DEEPCOOL | 14 | 2 | 14 | 0 | 0 |
-| Wonderchef | 14 | 6 | 14 | 0 | 3 |
+| Wonderchef | 14 | 6 | 14 | 0 | 0 |
 | Foxsky | 12 | 3 | 12 | 0 | 0 |
-| Hitachi | 12 | 1 | 12 | 0 | 9 |
-| Kyocera | 12 | 1 | 12 | 0 | 9 |
+| Hitachi | 12 | 1 | 12 | 0 | 0 |
+| Kyocera | 12 | 1 | 12 | 0 | 0 |
 | Zebra | 12 | 2 | 12 | 0 | 0 |
 | Nikon | 11 | 2 | 11 | 0 | 0 |
-| ASUSTOR | 10 | 2 | 10 | 0 | 2 |
-| Daikin | 10 | 1 | 10 | 0 | 10 |
-| General | 10 | 1 | 10 | 0 | 10 |
-| Carrier | 9 | 1 | 9 | 0 | 8 |
-| Crompton | 9 | 4 | 9 | 0 | 6 |
-| Dreame | 9 | 2 | 9 | 0 | 1 |
-| EGATE | 9 | 1 | 9 | 0 | 2 |
+| ASUSTOR | 10 | 2 | 10 | 0 | 0 |
+| Daikin | 10 | 1 | 10 | 0 | 0 |
+| General | 10 | 1 | 10 | 0 | 0 |
+| Carrier | 9 | 1 | 9 | 0 | 0 |
+| Crompton | 9 | 4 | 9 | 0 | 0 |
+| Dreame | 9 | 2 | 9 | 0 | 0 |
+| EGATE | 9 | 1 | 9 | 0 | 0 |
 | Motorola | 9 | 2 | 9 | 0 | 0 |
-| Patriot | 9 | 2 | 9 | 0 | 9 |
+| Patriot | 9 | 2 | 9 | 0 | 0 |
 | Voltas Beko | 9 | 2 | 9 | 0 | 0 |
-| Belkin | 8 | 2 | 8 | 0 | 1 |
+| Belkin | 8 | 2 | 8 | 0 | 0 |
 | D-Link | 8 | 2 | 8 | 0 | 0 |
-| Dyson | 8 | 5 | 8 | 0 | 1 |
+| Dyson | 8 | 5 | 8 | 0 | 0 |
 | JIO | 8 | 2 | 8 | 0 | 0 |
 | Kelvinator | 8 | 3 | 8 | 0 | 0 |
-| Mitsubishi Heavy | 8 | 1 | 8 | 0 | 8 |
+| Mitsubishi Heavy | 8 | 1 | 8 | 0 | 0 |
 | PowerColor | 8 | 1 | 8 | 0 | 0 |
-| TCL | 8 | 3 | 8 | 0 | 2 |
+| TCL | 8 | 3 | 8 | 0 | 0 |
 | Electrolux | 7 | 2 | 7 | 0 | 0 |
 | Eureka Forbes | 7 | 2 | 7 | 0 | 0 |
 | JBL | 7 | 1 | 7 | 0 | 0 |
 | PEGASUS | 7 | 2 | 7 | 0 | 0 |
 | SHARK NINJA | 7 | 3 | 7 | 0 | 0 |
 | Sharp | 7 | 3 | 7 | 0 | 0 |
-| Apacer | 6 | 1 | 6 | 0 | 5 |
+| Apacer | 6 | 1 | 6 | 0 | 0 |
 | Audio-Technica | 6 | 1 | 6 | 0 | 0 |
 | Forbes | 6 | 1 | 6 | 0 | 0 |
-| HISENSE | 6 | 2 | 6 | 0 | 3 |
+| HISENSE | 6 | 2 | 6 | 0 | 0 |
 | NZXT | 6 | 2 | 6 | 0 | 0 |
 | PIGEON | 6 | 4 | 6 | 0 | 0 |
 | Syrotech | 6 | 2 | 6 | 0 | 0 |
@@ -298,18 +298,18 @@
 | LaCie | 5 | 1 | 5 | 0 | 0 |
 | MAIWO | 5 | 3 | 5 | 0 | 0 |
 | NEXTRON | 5 | 1 | 5 | 0 | 0 |
-| Qubo | 5 | 1 | 5 | 0 | 5 |
+| Qubo | 5 | 1 | 5 | 0 | 0 |
 | SilverStone | 5 | 1 | 5 | 0 | 0 |
 | Xtrfy | 5 | 1 | 5 | 0 | 0 |
-| Amazfit | 4 | 3 | 4 | 0 | 3 |
+| Amazfit | 4 | 3 | 4 | 0 | 0 |
 | APC | 4 | 1 | 4 | 0 | 0 |
 | HIKVISION | 4 | 1 | 4 | 0 | 0 |
-| HyperX | 4 | 2 | 4 | 0 | 2 |
+| HyperX | 4 | 2 | 4 | 0 | 0 |
 | KINGFAST | 4 | 2 | 4 | 0 | 0 |
 | Milagrow | 4 | 1 | 4 | 0 | 0 |
 | Plantronics | 4 | 2 | 4 | 0 | 0 |
 | POLY | 4 | 1 | 4 | 0 | 0 |
-| WZATCO | 4 | 1 | 4 | 0 | 2 |
+| WZATCO | 4 | 1 | 4 | 0 | 0 |
 | Fire-Boltt | 3 | 1 | 3 | 0 | 0 |
 | Fractal Design | 3 | 1 | 3 | 0 | 0 |
 | Gamdias | 3 | 2 | 3 | 0 | 0 |
@@ -320,28 +320,28 @@
 | Ubiquiti | 3 | 1 | 3 | 0 | 0 |
 | Xerox | 3 | 1 | 3 | 0 | 0 |
 | ANTEC | 2 | 2 | 2 | 0 | 0 |
-| Chenbro | 2 | 2 | 2 | 0 | 1 |
+| Chenbro | 2 | 2 | 2 | 0 | 0 |
 | Cisco | 2 | 1 | 2 | 0 | 0 |
 | ECOVACS | 2 | 1 | 2 | 0 | 0 |
-| EvoFox | 2 | 2 | 2 | 0 | 2 |
+| EvoFox | 2 | 2 | 2 | 0 | 0 |
 | Galax | 2 | 1 | 2 | 0 | 0 |
 | Hammer | 2 | 2 | 2 | 0 | 0 |
 | Hynix | 2 | 1 | 2 | 0 | 0 |
 | itGO | 2 | 1 | 2 | 0 | 0 |
 | LIVA | 2 | 1 | 2 | 0 | 0 |
 | LYF | 2 | 2 | 2 | 0 | 0 |
-| Mijia | 2 | 1 | 2 | 0 | 2 |
-| Mitsubishi | 2 | 1 | 2 | 0 | 2 |
+| Mijia | 2 | 1 | 2 | 0 | 0 |
+| Mitsubishi | 2 | 1 | 2 | 0 | 0 |
 | Morphy Richards | 2 | 2 | 2 | 0 | 0 |
 | NATRAJ | 2 | 1 | 2 | 0 | 0 |
-| Noctua | 2 | 1 | 2 | 0 | 1 |
+| Noctua | 2 | 1 | 2 | 0 | 0 |
 | NU REPUBLIC | 2 | 1 | 2 | 0 | 0 |
 | NVY | 2 | 1 | 2 | 0 | 0 |
-| OGeneral | 2 | 1 | 2 | 0 | 2 |
+| OGeneral | 2 | 1 | 2 | 0 | 0 |
 | Onida | 2 | 1 | 2 | 0 | 0 |
 | Origin | 2 | 1 | 2 | 0 | 0 |
 | S-Tech | 2 | 1 | 2 | 0 | 0 |
-| Sansui | 2 | 2 | 2 | 0 | 1 |
+| Sansui | 2 | 2 | 2 | 0 | 0 |
 | Targus | 2 | 1 | 2 | 0 | 0 |
 | Team Group | 2 | 2 | 2 | 0 | 0 |
 | Toreto | 2 | 2 | 2 | 0 | 0 |
@@ -366,8 +366,8 @@
 | Dewalt | 1 | 1 | 1 | 0 | 0 |
 | EDIFIER | 1 | 1 | 1 | 0 | 0 |
 | Faber | 1 | 1 | 1 | 0 | 0 |
-| FiiO | 1 | 1 | 1 | 1 | 1 |
-| Fujifilm | 1 | 1 | 1 | 0 | 1 |
+| FiiO | 1 | 1 | 1 | 1 | 0 |
+| Fujifilm | 1 | 1 | 1 | 0 | 0 |
 | GENERIC | 1 | 1 | 1 | 0 | 0 |
 | Gharana Products | 1 | 1 | 1 | 0 | 0 |
 | Greenchef | 1 | 1 | 1 | 0 | 0 |
@@ -384,13 +384,13 @@
 | MARSHALL CAVENDISH | 1 | 1 | 1 | 0 | 0 |
 | NARWAL | 1 | 1 | 1 | 0 | 0 |
 | NETGEAR | 1 | 1 | 1 | 0 | 0 |
-| Ninja | 1 | 1 | 1 | 0 | 1 |
+| Ninja | 1 | 1 | 1 | 0 | 0 |
 | NUUK | 1 | 1 | 1 | 0 | 0 |
 | OMEN | 1 | 1 | 1 | 0 | 0 |
-| Orient Electric | 1 | 1 | 1 | 0 | 1 |
-| Owl Labs | 1 | 1 | 1 | 0 | 1 |
+| Orient Electric | 1 | 1 | 1 | 0 | 0 |
+| Owl Labs | 1 | 1 | 1 | 0 | 0 |
 | PANSEBA | 1 | 1 | 1 | 0 | 0 |
-| Perrel | 1 | 1 | 1 | 0 | 1 |
+| Perrel | 1 | 1 | 1 | 0 | 0 |
 | Reconnect | 1 | 1 | 1 | 0 | 0 |
 | Sennheiser | 1 | 1 | 1 | 0 | 0 |
 | Shark | 1 | 1 | 1 | 0 | 0 |
@@ -414,12 +414,12 @@
 | 2019 | 7 |
 | 2020 | 10 |
 | 2021 | 18 |
-| 2022 | 34 |
+| 2022 | 38 |
 | 2023 | 164 |
-| 2024 | 263 |
-| 2025 | 891 |
-| 2026 | 2,066 |
-| Unknown / blank | 5,729 |
+| 2024 | 269 |
+| 2025 | 905 |
+| 2026 | 2,094 |
+| Unknown / blank | 5,677 |
 
 ## Release evidence records
 
@@ -427,11 +427,11 @@
 | --- | ---: |
 | manufacturer_store_listing_date | 689 |
 | retailer_store_listing_date | 372 |
-| manufacturer_release_date | 239 |
-| manufacturer_announcement | 47 |
+| manufacturer_release_date | 258 |
+| manufacturer_announcement | 61 |
+| retailer_release_date | 52 |
 | retailer_model_year | 40 |
 | manufacturer_release_year | 39 |
-| retailer_release_date | 33 |
 | manufacturer_release | 23 |
 | icecat_explicit_release_date | 13 |
 | retailer_first_available | 11 |
@@ -543,10 +543,10 @@
 
 | Stored precision | Products |
 | --- | ---: |
-| day | 1,737 |
+| day | 1,781 |
 | month | 18 |
-| **With any exact release-date value** | **1,755** |
-| **Year only / no exact date** | **1,711** |
+| **With any exact release-date value** | **1,799** |
+| **Year only / no exact date** | **1,719** |
 
 ## Product page coverage by host
 
@@ -6484,10 +6484,10 @@ One row per catalog record. Product names link to India listings; complete descr
 | Product ID | Product | Product type | Brand / model / MPN | Price (INR) | Price type | Release year | GTIN | Key technical specifications | Local image | Manufacturer spec source |
 | --- | --- | --- | --- | ---: | --- | ---: | --- | --- | --- | --- |
 | 4344f6be-b255-51ac-80de-93b802907840 | [Apple iPhone 13 128 GB, Pink](<https://www.reliancedigital.in/product/apple-iphone-13-128-gb-pink-lwhntk-7672649>) | Smartphones | Apple / Apple iPhone 13 128 GB, Pink | 49,900.00 | current_store_listed_price | ? | — | Capacity: 128 GB<br>Item Code: 491997703<br>Brand: Apple | [image](<product_catalog/images/f4579a8645089cb183fc8bc1.webp>) | [source](<https://www.reliancedigital.in/product/apple-iphone-13-128-gb-pink-lwhntk-7672649>) |
-| 82af1899-e139-53d4-a63c-eaa3db8d8178 | [Apple iPhone 14 128 GB, Blue](<https://www.reliancedigital.in/product/apple-iphone-14-128-gb-blue-l7ucfz>) | Smartphones | Apple / Apple iPhone 14 128 GB, Blue | 54,900.00 | current_store_listed_price | ? | — | Capacity: 128 GB<br>Item Code: 493177752<br>Brand: Apple | [image](<product_catalog/images/bd60332b2a50d7b15cde5835.webp>) | [source](<https://www.reliancedigital.in/product/apple-iphone-14-128-gb-blue-l7ucfz>) |
-| d56bcf60-0306-50b6-8207-e322766d634f | [Apple iPhone 14 128 GB, Midnight](<https://www.reliancedigital.in/product/apple-iphone-14-128-gb-midnight-l7ucfv>) | Smartphones | Apple / Apple iPhone 14 128 GB, Midnight | 54,900.00 | current_store_listed_price | ? | — | Capacity: 128 GB<br>Item Code: 493177749<br>Brand: Apple | [image](<product_catalog/images/e1b1fbc7c905c665c9d915e6.webp>) | [source](<https://www.reliancedigital.in/product/apple-iphone-14-128-gb-midnight-l7ucfv>) |
-| 10eb9007-e918-5761-98b9-7e40ab00e6ac | [Apple iPhone 14 128 GB, Red](<https://www.reliancedigital.in/product/apple-iphone-14-128-gb-red-l7ucfx>) | Smartphones | Apple / Apple iPhone 14 128 GB, Red | 54,900.00 | current_store_listed_price | ? | — | Capacity: 128 GB<br>Item Code: 493177751<br>Brand: Apple | [image](<product_catalog/images/cefaaf896634b2e34c3dcce9.webp>) | [source](<https://www.reliancedigital.in/product/apple-iphone-14-128-gb-red-l7ucfx>) |
-| 52e64918-2ad1-5283-98b0-39d49400f33c | [Apple iPhone 14 128 GB, Starlight](<https://www.reliancedigital.in/product/apple-iphone-14-128-gb-starlight-l7ucfx>) | Smartphones | Apple / Apple iPhone 14 128 GB, Starlight | 54,900.00 | current_store_listed_price | ? | — | Capacity: 128 GB<br>Item Code: 493177750<br>Brand: Apple | [image](<product_catalog/images/5fec70bac6cd68f46673a8fe.webp>) | [source](<https://www.reliancedigital.in/product/apple-iphone-14-128-gb-starlight-l7ucfx>) |
+| 82af1899-e139-53d4-a63c-eaa3db8d8178 | [Apple iPhone 14 128 GB, Blue](<https://www.reliancedigital.in/product/apple-iphone-14-128-gb-blue-l7ucfz>) | Smartphones | Apple / Apple iPhone 14 128 GB, Blue | 54,900.00 | current_store_listed_price | 2022 | — | Capacity: 128 GB<br>Item Code: 493177752<br>Brand: Apple | [image](<product_catalog/images/bd60332b2a50d7b15cde5835.webp>) | [source](<https://www.reliancedigital.in/product/apple-iphone-14-128-gb-blue-l7ucfz>) |
+| d56bcf60-0306-50b6-8207-e322766d634f | [Apple iPhone 14 128 GB, Midnight](<https://www.reliancedigital.in/product/apple-iphone-14-128-gb-midnight-l7ucfv>) | Smartphones | Apple / Apple iPhone 14 128 GB, Midnight | 54,900.00 | current_store_listed_price | 2022 | — | Capacity: 128 GB<br>Item Code: 493177749<br>Brand: Apple | [image](<product_catalog/images/e1b1fbc7c905c665c9d915e6.webp>) | [source](<https://www.reliancedigital.in/product/apple-iphone-14-128-gb-midnight-l7ucfv>) |
+| 10eb9007-e918-5761-98b9-7e40ab00e6ac | [Apple iPhone 14 128 GB, Red](<https://www.reliancedigital.in/product/apple-iphone-14-128-gb-red-l7ucfx>) | Smartphones | Apple / Apple iPhone 14 128 GB, Red | 54,900.00 | current_store_listed_price | 2022 | — | Capacity: 128 GB<br>Item Code: 493177751<br>Brand: Apple | [image](<product_catalog/images/cefaaf896634b2e34c3dcce9.webp>) | [source](<https://www.reliancedigital.in/product/apple-iphone-14-128-gb-red-l7ucfx>) |
+| 52e64918-2ad1-5283-98b0-39d49400f33c | [Apple iPhone 14 128 GB, Starlight](<https://www.reliancedigital.in/product/apple-iphone-14-128-gb-starlight-l7ucfx>) | Smartphones | Apple / Apple iPhone 14 128 GB, Starlight | 54,900.00 | current_store_listed_price | 2022 | — | Capacity: 128 GB<br>Item Code: 493177750<br>Brand: Apple | [image](<product_catalog/images/5fec70bac6cd68f46673a8fe.webp>) | [source](<https://www.reliancedigital.in/product/apple-iphone-14-128-gb-starlight-l7ucfx>) |
 | be0665d4-ab45-565f-9ee6-17f92908d890 | [Apple iPhone 14 128 GB, Yellow, Mobile Phone](<https://www.reliancedigital.in/product/apple-iphone-14-128-gb-yellow-mobile-phone-lt5osz-7536774>) | Smartphones | Apple / Apple iPhone 14 | 54,900.00 | current_store_selling_price | 2023 | — | Capacity: 128 GB<br>Display size: 15.40 cm<br>Camera: 12 MP | [image](<product_catalog/images/85cd224694630f6efabd2955.webp>) | [source](<https://www.apple.com/in/newsroom/2023/03/hello-yellow-apple-introduces-new-iphone-14-and-iphone-14-plus/>) |
 | 3b9ab20b-2891-5ce6-b061-86c1589c3aab | [Apple iPhone 15 (128GB Storage, Black)](<https://www.vijaysales.com/p/P220946/220946/apple-iphone-15-128gb-storage-black>) | Smartphones | Apple / Apple iPhone 15 | 59,900.00 | current_store_listed_price | 2023 | — | Capacity: 128GB<br>Display: 6.1-inch all-screen OLED display (Super Retina XDR display)<br>Storage: 128GB Storage | [image](<product_catalog/images/de2e10169f6eeca9dd395afa.webp>) | [source](<https://www.apple.com/in/newsroom/2023/09/apple-debuts-iphone-15-and-iphone-15-plus/>) |
 | eeb5bb87-d090-54a6-9520-4928c678a3aa | [Apple iPhone 15 (128GB Storage, Blue)](<https://www.vijaysales.com/p/P220946/220949/apple-iphone-15-128gb-storage-blue>) | Smartphones | Apple / Apple iPhone 15 | 59,900.00 | current_store_listed_price | 2023 | — | Capacity: 128GB<br>Display: 6.1-inch all-screen OLED display (Super Retina XDR display)<br>Storage: 128GB Storage | [image](<product_catalog/images/e237f799cf999a79960bac27.webp>) | [source](<https://www.apple.com/in/newsroom/2023/09/apple-debuts-iphone-15-and-iphone-15-plus/>) |
@@ -6794,12 +6794,12 @@ One row per catalog record. Product names link to India listings; complete descr
 | 7820fd43-5930-5402-ae80-8c9dc9a11ee8 | [Grandstream GXV3470 IP Video Phone with HD Video Calling, Wi-Fi 6 & Android](<https://www.tpstech.in/products/grandstream-gxv3470-ip-video-phone-wifi-6-bluetooth?variant=58105096732975>) | Smartphones | Grandstream / GXV3470 / GXV3470 | 47,424.00 | current_store_listed_price | ? | — | Specification: Details<br>Brand: Grandstream<br>Model: GXV3470 | [image](<product_catalog/images/f8f3781d6b52b679dab6854c.webp>) | [source](<https://www.tpstech.in/products/grandstream-gxv3470-ip-video-phone-wifi-6-bluetooth?variant=58105096732975>) |
 | 56a51e63-9f30-5b14-9285-c908aba57f50 | [Grandstream GXV3480 IP Video Phone with Android & HD Video Calling](<https://www.tpstech.in/products/grandstream-gxv3480-ip-video-phone-android-wifi-6-bluetooth?variant=58105126158639>) | Smartphones | Grandstream / GXV3480 / GXV3480 | 48,851.00 | current_store_listed_price | ? | — | Specification: Details<br>Brand: Grandstream<br>Model: GXV3480 | [image](<product_catalog/images/46682080c76acb0c48b6ce33.webp>) | [source](<https://www.tpstech.in/products/grandstream-gxv3480-ip-video-phone-android-wifi-6-bluetooth?variant=58105126158639>) |
 | 2481dc27-2445-5da7-a6ea-ecfde15ed39e | [Grandstream WP856 Wi-Fi Smartphone with Barcode Scanner](<https://www.tpstech.in/products/grandstream-wp856-wifi-smartphone-barcode-scanner-android-13?variant=58258513035567>) | Smartphones | Grandstream / WP856 / WP856 | 58,650.00 | current_store_listed_price | ? | — | Specification: Details<br>Brand: Grandstream<br>Model: WP856 | [image](<product_catalog/images/a4936528f5c12daf55ed05cb.webp>) | [source](<https://www.tpstech.in/products/grandstream-wp856-wifi-smartphone-barcode-scanner-android-13?variant=58258513035567>) |
-| 7ddc155f-e248-5b66-937e-537007693aa7 | [IQOO 15 5G 256 GB, 12 GB RAM, Alpha, Mobile Phone](<https://www.reliancedigital.in/product/iqoo-15-5g-256-gb-12-gb-ram-alpha-mobile-phone-ms8tso-10375034>) | Smartphones | IQOO / IQOO 15 5G 256 GB, 12 GB RAM, Alpha, Mobile Phone | 85,999.00 | current_store_listed_price | ? | — | Capacity: 256 GB<br>Display size: 17.39 cm<br>Camera: 50 MP | [image](<product_catalog/images/b38a09f2222913b5cdd36d52.webp>) | [source](<https://www.reliancedigital.in/product/iqoo-15-5g-256-gb-12-gb-ram-alpha-mobile-phone-ms8tso-10375034>) |
-| 4284ad8f-0a48-5f28-8d54-90c42c74cd5b | [IQOO 15 5G 256 GB, 12 GB RAM, Apex, Mobile Phone](<https://www.reliancedigital.in/product/iqoo-15-5g-256-gb-12-gb-ram-apex-mobile-phone-ms8tsn-10375032>) | Smartphones | IQOO / IQOO 15 5G 256 GB, 12 GB RAM, Apex, Mobile Phone | 85,999.00 | current_store_listed_price | ? | — | Capacity: 256 GB<br>Display size: 17.39 cm<br>Camera: 50 MP | [image](<product_catalog/images/4e9dda992923f18d3669af14.webp>) | [source](<https://www.reliancedigital.in/product/iqoo-15-5g-256-gb-12-gb-ram-apex-mobile-phone-ms8tsn-10375032>) |
-| 1c8a454c-a688-5ccd-ad7b-29a3f78c06a4 | [IQOO 15 5G 256 GB, 12 GB RAM, Legend, Mobile Phone](<https://www.reliancedigital.in/product/iqoo-15-5g-256-gb-12-gb-ram-legend-mobile-phone-ms8tsn-10375036>) | Smartphones | IQOO / IQOO 15 5G 256 GB, 12 GB RAM, Legend, Mobile Phone | 85,999.00 | current_store_listed_price | ? | — | Capacity: 256 GB<br>Display size: 17.39 cm<br>Camera: 50 MP | [image](<product_catalog/images/e389a08cadfbf0f38a554ac6.webp>) | [source](<https://www.reliancedigital.in/product/iqoo-15-5g-256-gb-12-gb-ram-legend-mobile-phone-ms8tsn-10375036>) |
-| 043a470c-2bdc-5947-b4de-3781c066e132 | [IQOO 15 5G 512 GB, 16 GB RAM, Alpha, Mobile Phone](<https://www.reliancedigital.in/product/iqoo-15-5g-512-gb-16-gb-ram-alpha-mobile-phone-ms8tsp-10375031>) | Smartphones | IQOO / IQOO 15 5G 512 GB, 16 GB RAM, Alpha, Mobile Phone | 93,999.00 | current_store_listed_price | ? | — | Capacity: 512 GB<br>Display size: 17.39 cm<br>Camera: 50 MP | [image](<product_catalog/images/b38a09f2222913b5cdd36d52.webp>) | [source](<https://www.reliancedigital.in/product/iqoo-15-5g-512-gb-16-gb-ram-alpha-mobile-phone-ms8tsp-10375031>) |
-| 4b780176-9746-58b4-8f51-c02c53eabe88 | [IQOO 15 5G 512 GB, 16 GB RAM, Apex, Mobile Phone](<https://www.reliancedigital.in/product/iqoo-15-5g-512-gb-16-gb-ram-apex-mobile-phone-ms8tsn-10375033>) | Smartphones | IQOO / IQOO 15 5G 512 GB, 16 GB RAM, Apex, Mobile Phone | 93,999.00 | current_store_listed_price | ? | — | Capacity: 512 GB<br>Display size: 17.39 cm<br>Camera: 50 MP | [image](<product_catalog/images/4e9dda992923f18d3669af14.webp>) | [source](<https://www.reliancedigital.in/product/iqoo-15-5g-512-gb-16-gb-ram-apex-mobile-phone-ms8tsn-10375033>) |
-| 2ab3bd48-1c9e-54e4-9880-645d6d4f8f2b | [IQOO 15 5G 512 GB, 16 GB RAM, Legend, Mobile Phone](<https://www.reliancedigital.in/product/iqoo-15-5g-512-gb-16-gb-ram-legend-mobile-phone-ms8tsn-10375038>) | Smartphones | IQOO / IQOO 15 5G 512 GB, 16 GB RAM, Legend, Mobile Phone | 93,999.00 | current_store_listed_price | ? | — | Capacity: 512 GB<br>Display size: 17.39 cm<br>Camera: 50 MP | [image](<product_catalog/images/e389a08cadfbf0f38a554ac6.webp>) | [source](<https://www.reliancedigital.in/product/iqoo-15-5g-512-gb-16-gb-ram-legend-mobile-phone-ms8tsn-10375038>) |
+| 7ddc155f-e248-5b66-937e-537007693aa7 | [IQOO 15 5G 256 GB, 12 GB RAM, Alpha, Mobile Phone](<https://www.reliancedigital.in/product/iqoo-15-5g-256-gb-12-gb-ram-alpha-mobile-phone-ms8tso-10375034>) | Smartphones | IQOO / IQOO 15 5G 256 GB, 12 GB RAM, Alpha, Mobile Phone | 85,999.00 | current_store_listed_price | 2025 | — | Capacity: 256 GB<br>Display size: 17.39 cm<br>Camera: 50 MP | [image](<product_catalog/images/b38a09f2222913b5cdd36d52.webp>) | [source](<https://www.reliancedigital.in/product/iqoo-15-5g-256-gb-12-gb-ram-alpha-mobile-phone-ms8tso-10375034>) |
+| 4284ad8f-0a48-5f28-8d54-90c42c74cd5b | [IQOO 15 5G 256 GB, 12 GB RAM, Apex, Mobile Phone](<https://www.reliancedigital.in/product/iqoo-15-5g-256-gb-12-gb-ram-apex-mobile-phone-ms8tsn-10375032>) | Smartphones | IQOO / IQOO 15 5G 256 GB, 12 GB RAM, Apex, Mobile Phone | 85,999.00 | current_store_listed_price | 2025 | — | Capacity: 256 GB<br>Display size: 17.39 cm<br>Camera: 50 MP | [image](<product_catalog/images/4e9dda992923f18d3669af14.webp>) | [source](<https://www.reliancedigital.in/product/iqoo-15-5g-256-gb-12-gb-ram-apex-mobile-phone-ms8tsn-10375032>) |
+| 1c8a454c-a688-5ccd-ad7b-29a3f78c06a4 | [IQOO 15 5G 256 GB, 12 GB RAM, Legend, Mobile Phone](<https://www.reliancedigital.in/product/iqoo-15-5g-256-gb-12-gb-ram-legend-mobile-phone-ms8tsn-10375036>) | Smartphones | IQOO / IQOO 15 5G 256 GB, 12 GB RAM, Legend, Mobile Phone | 85,999.00 | current_store_listed_price | 2025 | — | Capacity: 256 GB<br>Display size: 17.39 cm<br>Camera: 50 MP | [image](<product_catalog/images/e389a08cadfbf0f38a554ac6.webp>) | [source](<https://www.reliancedigital.in/product/iqoo-15-5g-256-gb-12-gb-ram-legend-mobile-phone-ms8tsn-10375036>) |
+| 043a470c-2bdc-5947-b4de-3781c066e132 | [IQOO 15 5G 512 GB, 16 GB RAM, Alpha, Mobile Phone](<https://www.reliancedigital.in/product/iqoo-15-5g-512-gb-16-gb-ram-alpha-mobile-phone-ms8tsp-10375031>) | Smartphones | IQOO / IQOO 15 5G 512 GB, 16 GB RAM, Alpha, Mobile Phone | 93,999.00 | current_store_listed_price | 2025 | — | Capacity: 512 GB<br>Display size: 17.39 cm<br>Camera: 50 MP | [image](<product_catalog/images/b38a09f2222913b5cdd36d52.webp>) | [source](<https://www.reliancedigital.in/product/iqoo-15-5g-512-gb-16-gb-ram-alpha-mobile-phone-ms8tsp-10375031>) |
+| 4b780176-9746-58b4-8f51-c02c53eabe88 | [IQOO 15 5G 512 GB, 16 GB RAM, Apex, Mobile Phone](<https://www.reliancedigital.in/product/iqoo-15-5g-512-gb-16-gb-ram-apex-mobile-phone-ms8tsn-10375033>) | Smartphones | IQOO / IQOO 15 5G 512 GB, 16 GB RAM, Apex, Mobile Phone | 93,999.00 | current_store_listed_price | 2025 | — | Capacity: 512 GB<br>Display size: 17.39 cm<br>Camera: 50 MP | [image](<product_catalog/images/4e9dda992923f18d3669af14.webp>) | [source](<https://www.reliancedigital.in/product/iqoo-15-5g-512-gb-16-gb-ram-apex-mobile-phone-ms8tsn-10375033>) |
+| 2ab3bd48-1c9e-54e4-9880-645d6d4f8f2b | [IQOO 15 5G 512 GB, 16 GB RAM, Legend, Mobile Phone](<https://www.reliancedigital.in/product/iqoo-15-5g-512-gb-16-gb-ram-legend-mobile-phone-ms8tsn-10375038>) | Smartphones | IQOO / IQOO 15 5G 512 GB, 16 GB RAM, Legend, Mobile Phone | 93,999.00 | current_store_listed_price | 2025 | — | Capacity: 512 GB<br>Display size: 17.39 cm<br>Camera: 50 MP | [image](<product_catalog/images/e389a08cadfbf0f38a554ac6.webp>) | [source](<https://www.reliancedigital.in/product/iqoo-15-5g-512-gb-16-gb-ram-legend-mobile-phone-ms8tsn-10375038>) |
 | 8ba8142e-6262-57b8-a3c9-4aa150081632 | [IQOO 15R 5G 256 GB, 12 GB RAM, Dark Knight, Mobile Phone](<https://www.reliancedigital.in/product/iqoo-15r-5g-256-gb-12-gb-ram-dark-knight-mobile-phone-ms8tsn-10375037>) | Smartphones | IQOO / iQOO 15R | 59,999.00 | current_store_selling_price | 2026 | — | Capacity: 256 GB<br>Display size: 16.7 cm<br>Camera: 50 MP | [image](<product_catalog/images/9b346c10524dea88ecb6cfbf.webp>) | [source](<https://community.iqoo.com/in/thread/142052>) |
 | 33d81f0c-6fcf-5a53-a004-020f7dc57a54 | [IQOO 15R 5G 256 GB, 12 GB RAM, Triumph Silver, Mobile Phone](<https://www.reliancedigital.in/product/iqoo-15r-5g-256-gb-12-gb-ram-triumph-silver-mobile-phone-ms8tso-10375035>) | Smartphones | IQOO / iQOO 15R | 59,999.00 | current_store_selling_price | 2026 | — | Capacity: 256 GB<br>Display size: 16.7 cm<br>Camera: 50 MP | [image](<product_catalog/images/1dac6d03bf7953e90f5444fb.webp>) | [source](<https://community.iqoo.com/in/thread/142052>) |
 | a1ede0a4-7a82-5e01-9e16-95cebc1d57e4 | [IQOO 15R 5G 256 GB, 8 GB RAM, Dark Knight, Mobile Phone](<https://www.reliancedigital.in/product/iqoo-15r-5g-256-gb-8-gb-ram-dark-knight-mobile-phone-ms8tso-10375030>) | Smartphones | IQOO / iQOO 15R | 53,999.00 | current_store_selling_price | 2026 | — | Capacity: 256 GB<br>Display size: 16.7 cm<br>Camera: 50 MP | [image](<product_catalog/images/9b346c10524dea88ecb6cfbf.webp>) | [source](<https://community.iqoo.com/in/thread/142052>) |
@@ -7040,9 +7040,9 @@ One row per catalog record. Product names link to India listings; complete descr
 | 00a7dde7-6e8b-524a-a834-ee624a2db914 | [POCO C75 5G 64 GB, 4 GB RAM, Aqua, Mobile Phone](<https://www.reliancedigital.in/product/poco-c75-5g-64-gb-4-gb-ram-aqua-mobile-phone-m4qzgx-8769433>) | Smartphones | POCO / POCO C75 5G 64 GB, 4 GB RAM, Aqua, Mobile Phone | 10,999.00 | current_store_listed_price | ? | — | Capacity: 64 GB<br>Power: 10 Watts<br>Display size: 17.47 cm | [image](<product_catalog/images/b4937df20fc65642097ddbf0.webp>) | [source](<https://www.reliancedigital.in/product/poco-c75-5g-64-gb-4-gb-ram-aqua-mobile-phone-m4qzgx-8769433>) |
 | ccfdde81-3d02-5785-a7e1-5ec3995e5e87 | [POCO C75 5G 64 GB, 4 GB RAM, Green, Mobile Phone](<https://www.reliancedigital.in/product/poco-c75-5g-64-gb-4-gb-ram-green-mobile-phone-m4qzgy-8769436>) | Smartphones | POCO / POCO C75 5G 64 GB, 4 GB RAM, Green, Mobile Phone | 10,999.00 | current_store_listed_price | ? | — | Capacity: 64 GB<br>Power: 10 Watts<br>Display size: 17.47 cm | [image](<product_catalog/images/5d0c6b52a1e6a537a1dcbbba.webp>) | [source](<https://www.reliancedigital.in/product/poco-c75-5g-64-gb-4-gb-ram-green-mobile-phone-m4qzgy-8769436>) |
 | dd1830f6-7b59-51d1-b297-866751d5b6bd | [POCO C75 5G 64 GB, 4 GB RAM, Silver, Mobile Phone](<https://www.reliancedigital.in/product/poco-c75-5g-64-gb-4-gb-ram-silver-mobile-phone-m4qzgy-8769435>) | Smartphones | POCO / POCO C75 5G 64 GB, 4 GB RAM, Silver, Mobile Phone | 10,999.00 | current_store_listed_price | ? | — | Capacity: 64 GB<br>Power: 10 Watts<br>Display size: 17.47 cm | [image](<product_catalog/images/1ea8fc346a0770fa4b8de419.webp>) | [source](<https://www.reliancedigital.in/product/poco-c75-5g-64-gb-4-gb-ram-silver-mobile-phone-m4qzgy-8769435>) |
-| cca6ed78-2cca-5332-82fc-10c6f095d7d7 | [POCO C81 64 GB, 4 GB RAM, Elite Black, Mobile Phone](<https://www.reliancedigital.in/product/poco-c81-64-gb-4-gb-ram-elite-black-mobile-phone-modygz-10045463>) | Smartphones | POCO / POCO C81 64 GB, 4 GB RAM, Elite Black, Mobile Phone | 12,999.00 | current_store_listed_price | ? | — | Capacity: 64 GB<br>Display size: 17.53 cm<br>Camera: 13 MP | [image](<product_catalog/images/8c22752d525033e7d4cf3dfd.webp>) | [source](<https://www.reliancedigital.in/product/poco-c81-64-gb-4-gb-ram-elite-black-mobile-phone-modygz-10045463>) |
-| 1e6d1f04-1522-5ef9-a80e-d9fb9f2ae417 | [POCO C81 64 GB, 4 GB RAM, Sky Blue, Mobile Phone](<https://www.reliancedigital.in/product/poco-c81-64-gb-4-gb-ram-sky-blue-mobile-phone-modygz-10045462>) | Smartphones | POCO / POCO C81 64 GB, 4 GB RAM, Sky Blue, Mobile Phone | 12,999.00 | current_store_listed_price | ? | — | Capacity: 64 GB<br>Display size: 17.53 cm<br>Camera: 13 MP | [image](<product_catalog/images/29bb3ced62425ee63aa47653.webp>) | [source](<https://www.reliancedigital.in/product/poco-c81-64-gb-4-gb-ram-sky-blue-mobile-phone-modygz-10045462>) |
-| 3cdf8570-ce76-5c7b-b335-f6a48999f599 | [POCO C81 64 GB, 4 GB RAM, Sunset Gold, Mobile Phone](<https://www.reliancedigital.in/product/poco-c81-64-gb-4-gb-ram-sunset-gold-mobile-phone-modyh0-10045461>) | Smartphones | POCO / POCO C81 64 GB, 4 GB RAM, Sunset Gold, Mobile Phone | 12,999.00 | current_store_listed_price | ? | — | Capacity: 64 GB<br>Display size: 17.53 cm<br>Camera: 13 MP | [image](<product_catalog/images/02a8d3f0e9b0b1a864a24dc6.webp>) | [source](<https://www.reliancedigital.in/product/poco-c81-64-gb-4-gb-ram-sunset-gold-mobile-phone-modyh0-10045461>) |
+| cca6ed78-2cca-5332-82fc-10c6f095d7d7 | [POCO C81 64 GB, 4 GB RAM, Elite Black, Mobile Phone](<https://www.reliancedigital.in/product/poco-c81-64-gb-4-gb-ram-elite-black-mobile-phone-modygz-10045463>) | Smartphones | POCO / POCO C81 64 GB, 4 GB RAM, Elite Black, Mobile Phone | 12,999.00 | current_store_listed_price | 2026 | — | Capacity: 64 GB<br>Display size: 17.53 cm<br>Camera: 13 MP | [image](<product_catalog/images/8c22752d525033e7d4cf3dfd.webp>) | [source](<https://www.reliancedigital.in/product/poco-c81-64-gb-4-gb-ram-elite-black-mobile-phone-modygz-10045463>) |
+| 1e6d1f04-1522-5ef9-a80e-d9fb9f2ae417 | [POCO C81 64 GB, 4 GB RAM, Sky Blue, Mobile Phone](<https://www.reliancedigital.in/product/poco-c81-64-gb-4-gb-ram-sky-blue-mobile-phone-modygz-10045462>) | Smartphones | POCO / POCO C81 64 GB, 4 GB RAM, Sky Blue, Mobile Phone | 12,999.00 | current_store_listed_price | 2026 | — | Capacity: 64 GB<br>Display size: 17.53 cm<br>Camera: 13 MP | [image](<product_catalog/images/29bb3ced62425ee63aa47653.webp>) | [source](<https://www.reliancedigital.in/product/poco-c81-64-gb-4-gb-ram-sky-blue-mobile-phone-modygz-10045462>) |
+| 3cdf8570-ce76-5c7b-b335-f6a48999f599 | [POCO C81 64 GB, 4 GB RAM, Sunset Gold, Mobile Phone](<https://www.reliancedigital.in/product/poco-c81-64-gb-4-gb-ram-sunset-gold-mobile-phone-modyh0-10045461>) | Smartphones | POCO / POCO C81 64 GB, 4 GB RAM, Sunset Gold, Mobile Phone | 12,999.00 | current_store_listed_price | 2026 | — | Capacity: 64 GB<br>Display size: 17.53 cm<br>Camera: 13 MP | [image](<product_catalog/images/02a8d3f0e9b0b1a864a24dc6.webp>) | [source](<https://www.reliancedigital.in/product/poco-c81-64-gb-4-gb-ram-sunset-gold-mobile-phone-modyh0-10045461>) |
 | 899b9a16-6a33-5eba-bba2-98cee5186b5d | [POCO C81x 64 GB, 3 GB RAM, Crystal Black, Mobile Phone](<https://www.reliancedigital.in/product/poco-c81x-64-gb-3-gb-ram-crystal-black-mobile-phone-modygz-10045460>) | Smartphones | POCO / POCO C81x 64 GB, 3 GB RAM, Crystal Black, Mobile Phone | 11,999.00 | current_store_listed_price | ? | — | Capacity: 64 GB<br>Camera: 8 MP<br>Item Code: 494793007 | [image](<product_catalog/images/b292069b0a54da3befdbdb72.webp>) | [source](<https://www.reliancedigital.in/product/poco-c81x-64-gb-3-gb-ram-crystal-black-mobile-phone-modygz-10045460>) |
 | c1c7518c-1d65-56f0-93e2-6437f78294d2 | [POCO C81x 64 GB, 3 GB RAM, Ice Blue, Mobile Phone](<https://www.reliancedigital.in/product/poco-c81x-64-gb-3-gb-ram-ice-blue-mobile-phone-modygz-10045465>) | Smartphones | POCO / POCO C81x 64 GB, 3 GB RAM, Ice Blue, Mobile Phone | 11,999.00 | current_store_listed_price | ? | — | Capacity: 64 GB<br>Camera: 8 MP<br>Item Code: 494793008 | [image](<product_catalog/images/3fa29b782ec339e82c65b0a4.webp>) | [source](<https://www.reliancedigital.in/product/poco-c81x-64-gb-3-gb-ram-ice-blue-mobile-phone-modygz-10045465>) |
 | 67132756-01e9-5c78-ac50-30bcb6fab00d | [POCO C85 5G 128 GB, 4 GB RAM, Black, Mobile Phone](<https://www.reliancedigital.in/product/poco-c85-5g-128-gb-4-gb-ram-black-mobile-phone-mj70to-9691159>) | Smartphones | POCO / POCO C85 5G 128 GB, 4 GB RAM, Black, Mobile Phone | 16,499.00 | current_store_listed_price | 2025 | — | Capacity: 128 GB<br>Display size: 17.53 cm<br>Camera: 50 MP | [image](<product_catalog/images/cce45577a6c8cc618dd03675.webp>) | [source](<https://www.reliancedigital.in/product/poco-c85-5g-128-gb-4-gb-ram-black-mobile-phone-mj70to-9691159>) |
@@ -7074,27 +7074,27 @@ One row per catalog record. Product names link to India listings; complete descr
 | 5223ba55-05da-5620-92ea-3b07e6ba0006 | [POCO M7 Plus 5G 128 GB, 8 GB RAM, Black, Mobile Phone](<https://www.reliancedigital.in/product/poco-m7-plus-5g-128-gb-8-gb-ram-black-mobile-phone-meikoi-9344856>) | Smartphones | POCO / POCO M7 Plus 5G 128 GB, 8 GB RAM, Black, Mobile Phone | 17,999.00 | current_store_listed_price | ? | — | Capacity: 128 GB<br>Power: 33 Watts<br>Display size: 17.52 cm | [image](<product_catalog/images/656bfb14c1b0800720f5ed38.webp>) | [source](<https://www.reliancedigital.in/product/poco-m7-plus-5g-128-gb-8-gb-ram-black-mobile-phone-meikoi-9344856>) |
 | 6d743b3c-c376-535f-a0a5-bf1c314ebb9e | [POCO M7 Plus 5G 128 GB, 8 GB RAM, Blue, Mobile Phone](<https://www.reliancedigital.in/product/poco-m7-plus-5g-128-gb-8-gb-ram-blue-mobile-phone-meiku0-9344858>) | Smartphones | POCO / POCO M7 Plus 5G 128 GB, 8 GB RAM, Blue, Mobile Phone | 17,999.00 | current_store_listed_price | ? | — | Capacity: 128 GB<br>Power: 33 Watts<br>Display size: 17.52 cm | [image](<product_catalog/images/8ec3a1ecea82fd06327d61f5.webp>) | [source](<https://www.reliancedigital.in/product/poco-m7-plus-5g-128-gb-8-gb-ram-blue-mobile-phone-meiku0-9344858>) |
 | 5201a0c4-673b-53e6-9782-431fa946919e | [POCO M7 Plus 5G 128 GB, 8 GB RAM, Silver, Mobile Phone](<https://www.reliancedigital.in/product/poco-m7-plus-5g-128-gb-8-gb-ram-silver-mobile-phone-meiku0-9344859>) | Smartphones | POCO / POCO M7 Plus 5G 128 GB, 8 GB RAM, Silver, Mobile Phone | 17,999.00 | current_store_listed_price | ? | — | Capacity: 128 GB<br>Power: 33 Watts<br>Display size: 17.52 cm | [image](<product_catalog/images/2346e35bc236ca3c4c6394d4.webp>) | [source](<https://www.reliancedigital.in/product/poco-m7-plus-5g-128-gb-8-gb-ram-silver-mobile-phone-meiku0-9344859>) |
-| 4028f97e-206f-5d41-a8be-444149c723ba | [POCO M7 Pro 5G 128 GB, 6 GB RAM, Lavender, Mobile Phone](<https://www.reliancedigital.in/product/poco-m7-pro-5g-128-gb-6-gb-ram-lavender-mobile-phone-m4qzh0-8769437>) | Smartphones | POCO / POCO M7 Pro 5G 128 GB, 6 GB RAM, Lavender, Mobile Phone | 14,999.00 | current_store_listed_price | ? | — | Capacity: 128 GB<br>Item Code: 494493530<br>Brand: POCO | [image](<product_catalog/images/52d89db1e0683275fa3213df.webp>) | [source](<https://www.reliancedigital.in/product/poco-m7-pro-5g-128-gb-6-gb-ram-lavender-mobile-phone-m4qzh0-8769437>) |
-| dd454f8a-5fbf-576c-9046-fcfdba907cf8 | [POCO M7 Pro 5G 128 GB, 6 GB RAM, Lunar, Mobile Phone](<https://www.reliancedigital.in/product/poco-m7-pro-5g-128-gb-6-gb-ram-lunar-mobile-phone-m4qzgw-8769432>) | Smartphones | POCO / POCO M7 Pro 5G 128 GB, 6 GB RAM, Lunar, Mobile Phone | 14,999.00 | current_store_listed_price | ? | — | Capacity: 128 GB<br>Item Code: 494493529<br>Brand: POCO | [image](<product_catalog/images/1bd608d92421573f3b5a642b.webp>) | [source](<https://www.reliancedigital.in/product/poco-m7-pro-5g-128-gb-6-gb-ram-lunar-mobile-phone-m4qzgw-8769432>) |
-| 3bfef4d7-ad7f-5685-bc17-1db64c925bc7 | [POCO M7 Pro 5G 128 GB, 6 GB RAM, Olive, Mobile Phone](<https://www.reliancedigital.in/product/poco-m7-pro-5g-128-gb-6-gb-ram-olive-mobile-phone-m4qzgw-8769430>) | Smartphones | POCO / POCO M7 Pro 5G 128 GB, 6 GB RAM, Olive, Mobile Phone | 14,999.00 | current_store_listed_price | ? | — | Capacity: 128 GB<br>Item Code: 494493528<br>Brand: POCO | [image](<product_catalog/images/282caff52b904a596d14a57c.webp>) | [source](<https://www.reliancedigital.in/product/poco-m7-pro-5g-128-gb-6-gb-ram-olive-mobile-phone-m4qzgw-8769430>) |
-| 2a96cbb8-740b-54f2-a1ec-7eaff4e67ddb | [POCO M7 Pro 5G 256 GB, 8 GB RAM, Lavender, Mobile Phone](<https://www.reliancedigital.in/product/poco-m7-pro-5g-256-gb-8-gb-ram-lavender-mobile-phone-m4qzgy-8769434>) | Smartphones | POCO / POCO M7 Pro 5G 256 GB, 8 GB RAM, Lavender, Mobile Phone | 16,999.00 | current_store_listed_price | ? | — | Capacity: 256 GB<br>Item Code: 494493533<br>Brand: POCO | [image](<product_catalog/images/52d89db1e0683275fa3213df.webp>) | [source](<https://www.reliancedigital.in/product/poco-m7-pro-5g-256-gb-8-gb-ram-lavender-mobile-phone-m4qzgy-8769434>) |
-| 5cb70e2b-0f10-563f-b8ee-12cce6db8c69 | [POCO M7 Pro 5G 256 GB, 8 GB RAM, Lunar, Mobile Phone](<https://www.reliancedigital.in/product/poco-m7-pro-5g-256-gb-8-gb-ram-lunar-mobile-phone-m4qzgw-8769429>) | Smartphones | POCO / POCO M7 Pro 5G 256 GB, 8 GB RAM, Lunar, Mobile Phone | 16,999.00 | current_store_listed_price | ? | — | Capacity: 256 GB<br>Item Code: 494493532<br>Brand: POCO | [image](<product_catalog/images/1bd608d92421573f3b5a642b.webp>) | [source](<https://www.reliancedigital.in/product/poco-m7-pro-5g-256-gb-8-gb-ram-lunar-mobile-phone-m4qzgw-8769429>) |
-| a24164fd-ee28-5c2a-8052-b2aea178c18b | [POCO M7 Pro 5G 256 GB, 8 GB RAM, Olive, Mobile Phone](<https://www.reliancedigital.in/product/poco-m7-pro-5g-256-gb-8-gb-ram-olive-mobile-phone-m4qzgw-8769431>) | Smartphones | POCO / POCO M7 Pro 5G 256 GB, 8 GB RAM, Olive, Mobile Phone | 16,999.00 | current_store_listed_price | ? | — | Capacity: 256 GB<br>Item Code: 494493531<br>Brand: POCO | [image](<product_catalog/images/e37719eecaab6b5ab5e63952.webp>) | [source](<https://www.reliancedigital.in/product/poco-m7-pro-5g-256-gb-8-gb-ram-olive-mobile-phone-m4qzgw-8769431>) |
-| 88cca61e-0f4d-5b1f-af1e-59a1ffc284b1 | [POCO M8 5G 128 GB, 6 GB RAM, Black, Mobile Phone](<https://www.reliancedigital.in/product/poco-m8-5g-128-gb-6-gb-ram-black-mobile-phone-mkb4ye-9720945>) | Smartphones | POCO / POCO M8 5G 128 GB, 6 GB RAM, Black, Mobile Phone | 24,999.00 | current_store_listed_price | ? | — | Capacity: 128 GB<br>Display size: 17.20 cm<br>Camera: 50 MP | [image](<product_catalog/images/92f6541fc435f9d28d9ca32e.webp>) | [source](<https://www.reliancedigital.in/product/poco-m8-5g-128-gb-6-gb-ram-black-mobile-phone-mkb4ye-9720945>) |
-| fc941bde-7452-5814-b098-1bbf94135440 | [POCO M8 5G 128 GB, 6 GB RAM, Blue, Mobile Phone](<https://www.reliancedigital.in/product/poco-m8-5g-128-gb-6-gb-ram-blue-mobile-phone-mkb4ye-9720942>) | Smartphones | POCO / POCO M8 5G 128 GB, 6 GB RAM, Blue, Mobile Phone | 24,999.00 | current_store_listed_price | ? | — | Capacity: 128 GB<br>Display size: 17.20 cm<br>Camera: 50 MP | [image](<product_catalog/images/dd39bc4f7e560eb386d752c0.webp>) | [source](<https://www.reliancedigital.in/product/poco-m8-5g-128-gb-6-gb-ram-blue-mobile-phone-mkb4ye-9720942>) |
-| 5299b021-99a1-50df-814f-853f50b07bd7 | [POCO M8 5G 128 GB, 6 GB RAM, Silver, Mobile Phone](<https://www.reliancedigital.in/product/poco-m8-5g-128-gb-6-gb-ram-silver-mobile-phone-mkb4ye-9720940>) | Smartphones | POCO / POCO M8 5G 128 GB, 6 GB RAM, Silver, Mobile Phone | 24,999.00 | current_store_listed_price | ? | — | Capacity: 128 GB<br>Display size: 17.20 cm<br>Camera: 50 MP | [image](<product_catalog/images/3b249e902da09850ca8e7634.webp>) | [source](<https://www.reliancedigital.in/product/poco-m8-5g-128-gb-6-gb-ram-silver-mobile-phone-mkb4ye-9720940>) |
-| 7afb76c4-3d54-5c58-b501-1763dd290912 | [POCO M8 5G 128 GB, 8 GB RAM, Black, Mobile Phone](<https://www.reliancedigital.in/product/poco-m8-5g-128-gb-8-gb-ram-black-mobile-phone-mkb4ye-9720937>) | Smartphones | POCO / POCO M8 5G 128 GB, 8 GB RAM, Black, Mobile Phone | 26,999.00 | current_store_listed_price | ? | — | Capacity: 128 GB<br>Display size: 17.20 cm<br>Camera: 50 MP | [image](<product_catalog/images/92f6541fc435f9d28d9ca32e.webp>) | [source](<https://www.reliancedigital.in/product/poco-m8-5g-128-gb-8-gb-ram-black-mobile-phone-mkb4ye-9720937>) |
-| fc2c2a44-caaf-5fe2-bbaf-de3da725494b | [POCO M8 5G 128 GB, 8 GB RAM, Blue, Mobile Phone](<https://www.reliancedigital.in/product/poco-m8-5g-128-gb-8-gb-ram-blue-mobile-phone-mkb4ye-9720938>) | Smartphones | POCO / POCO M8 5G 128 GB, 8 GB RAM, Blue, Mobile Phone | 26,999.00 | current_store_listed_price | ? | — | Capacity: 128 GB<br>Display size: 17.20 cm<br>Camera: 50 MP | [image](<product_catalog/images/dd39bc4f7e560eb386d752c0.webp>) | [source](<https://www.reliancedigital.in/product/poco-m8-5g-128-gb-8-gb-ram-blue-mobile-phone-mkb4ye-9720938>) |
-| 8852b90c-b77d-59cb-917b-48ec93e42331 | [POCO M8 5G 128 GB, 8 GB RAM, Silver, Mobile Phone](<https://www.reliancedigital.in/product/poco-m8-5g-128-gb-8-gb-ram-silver-mobile-phone-mkb4ye-9720941>) | Smartphones | POCO / POCO M8 5G 128 GB, 8 GB RAM, Silver, Mobile Phone | 26,999.00 | current_store_listed_price | ? | — | Capacity: 128 GB<br>Display size: 17.20 cm<br>Camera: 50 MP | [image](<product_catalog/images/3b249e902da09850ca8e7634.webp>) | [source](<https://www.reliancedigital.in/product/poco-m8-5g-128-gb-8-gb-ram-silver-mobile-phone-mkb4ye-9720941>) |
-| 3d798ad7-1cad-5ffb-b58a-66282b12b678 | [POCO M8 5G 256 GB, 8 GB RAM, Black, Mobile Phone](<https://www.reliancedigital.in/product/poco-m8-5g-256-gb-8-gb-ram-black-mobile-phone-mkb4ye-9720939>) | Smartphones | POCO / POCO M8 5G 256 GB, 8 GB RAM, Black, Mobile Phone | 28,999.00 | current_store_listed_price | ? | — | Capacity: 256 GB<br>Display size: 17.20 cm<br>Camera: 50 MP | [image](<product_catalog/images/92f6541fc435f9d28d9ca32e.webp>) | [source](<https://www.reliancedigital.in/product/poco-m8-5g-256-gb-8-gb-ram-black-mobile-phone-mkb4ye-9720939>) |
-| 2f6ff648-85e4-5915-98b7-5f88fc7b2bad | [POCO M8 5G 256 GB, 8 GB RAM, Blue, Mobile Phone](<https://www.reliancedigital.in/product/poco-m8-5g-256-gb-8-gb-ram-blue-mobile-phone-mkb4ye-9720944>) | Smartphones | POCO / POCO M8 5G 256 GB, 8 GB RAM, Blue, Mobile Phone | 28,999.00 | current_store_listed_price | ? | — | Capacity: 256 GB<br>Display size: 17.20 cm<br>Camera: 50 MP | [image](<product_catalog/images/dd39bc4f7e560eb386d752c0.webp>) | [source](<https://www.reliancedigital.in/product/poco-m8-5g-256-gb-8-gb-ram-blue-mobile-phone-mkb4ye-9720944>) |
-| 5ad3253f-c575-59d4-b86e-684386d234de | [POCO M8 5G 256 GB, 8 GB RAM, Silver, Mobile Phone](<https://www.reliancedigital.in/product/poco-m8-5g-256-gb-8-gb-ram-silver-mobile-phone-mkb4ye-9720943>) | Smartphones | POCO / POCO M8 5G 256 GB, 8 GB RAM, Silver, Mobile Phone | 28,999.00 | current_store_listed_price | ? | — | Capacity: 256 GB<br>Display size: 17.20 cm<br>Camera: 50 MP | [image](<product_catalog/images/3b249e902da09850ca8e7634.webp>) | [source](<https://www.reliancedigital.in/product/poco-m8-5g-256-gb-8-gb-ram-silver-mobile-phone-mkb4ye-9720943>) |
-| b769461e-7499-5b7e-a5b8-3fc392e302e2 | [POCO M8x 5G 128 GB, 4 GB RAM, Smartphone, Black](<https://www.reliancedigital.in/product/poco-m8x-5g-128-gb-4-gb-ram-smartphone-black-mt77sg-10555454>) | Smartphones | POCO / POCO M8x 5G 128 GB, 4 GB RAM, Smartphone, Black | 18,299.00 | current_store_listed_price | ? | — | Capacity: 128 GB<br>Display size: 17.52 cm<br>Camera: 50 MP | [image](<product_catalog/images/82a8b1ce3b9608dece44b5e8.webp>) | [source](<https://www.reliancedigital.in/product/poco-m8x-5g-128-gb-4-gb-ram-smartphone-black-mt77sg-10555454>) |
-| c82772e2-486f-5188-863e-518af4779f29 | [POCO M8x 5G 128 GB, 4 GB RAM, Smartphone, Blue](<https://www.reliancedigital.in/product/poco-m8x-5g-128-gb-4-gb-ram-smartphone-blue-mt782n-10555462>) | Smartphones | POCO / POCO M8x 5G 128 GB, 4 GB RAM, Smartphone, Blue | 18,299.00 | current_store_listed_price | ? | — | Capacity: 128 GB<br>Display size: 17.52 cm<br>Camera: 50 MP | [image](<product_catalog/images/1ed9b97ef1de29275f6d8f15.webp>) | [source](<https://www.reliancedigital.in/product/poco-m8x-5g-128-gb-4-gb-ram-smartphone-blue-mt782n-10555462>) |
-| 063caad4-3e0c-5f93-b090-060eea6faea1 | [POCO M8x 5G 128 GB, 4 GB RAM, Smartphone, Green](<https://www.reliancedigital.in/product/poco-m8x-5g-128-gb-4-gb-ram-smartphone-green-mt77x7-10555458>) | Smartphones | POCO / POCO M8x 5G 128 GB, 4 GB RAM, Smartphone, Green | 18,299.00 | current_store_listed_price | ? | — | Capacity: 128 GB<br>Display size: 17.52 cm<br>Camera: 50 MP | [image](<product_catalog/images/9a6b94cefbd96df9bfc1ede6.webp>) | [source](<https://www.reliancedigital.in/product/poco-m8x-5g-128-gb-4-gb-ram-smartphone-green-mt77x7-10555458>) |
-| 1b7898bb-a166-5cd1-863e-1acd671cc1de | [POCO M8x 5G 128 GB, 6 GB RAM, Smartphone, Black](<https://www.reliancedigital.in/product/poco-m8x-5g-128-gb-6-gb-ram-smartphone-black-mt77us-10555456>) | Smartphones | POCO / POCO M8x 5G 128 GB, 6 GB RAM, Smartphone, Black | 20,299.00 | current_store_listed_price | ? | — | Capacity: 128 GB<br>Display size: 17.52 cm<br>Camera: 50 MP | [image](<product_catalog/images/82a8b1ce3b9608dece44b5e8.webp>) | [source](<https://www.reliancedigital.in/product/poco-m8x-5g-128-gb-6-gb-ram-smartphone-black-mt77us-10555456>) |
-| 282fe5eb-72be-52ce-9a47-128181c76dca | [POCO M8x 5G 128 GB, 6 GB RAM, Smartphone, Blue](<https://www.reliancedigital.in/product/poco-m8x-5g-128-gb-6-gb-ram-smartphone-blue-mt7855-10555464>) | Smartphones | POCO / POCO M8x 5G 128 GB, 6 GB RAM, Smartphone, Blue | 20,299.00 | current_store_listed_price | ? | — | Capacity: 128 GB<br>Display size: 17.52 cm<br>Camera: 50 MP | [image](<product_catalog/images/1ed9b97ef1de29275f6d8f15.webp>) | [source](<https://www.reliancedigital.in/product/poco-m8x-5g-128-gb-6-gb-ram-smartphone-blue-mt7855-10555464>) |
-| 550d38c7-f7d1-5e0f-8911-1601eb8aced9 | [POCO M8x 5G 128 GB, 6 GB RAM, Smartphone, Green](<https://www.reliancedigital.in/product/poco-m8x-5g-128-gb-6-gb-ram-smartphone-green-mt77zq-10555460>) | Smartphones | POCO / POCO M8x 5G 128 GB, 6 GB RAM, Smartphone, Green | 20,299.00 | current_store_listed_price | ? | — | Capacity: 128 GB<br>Display size: 17.52 cm<br>Camera: 50 MP | [image](<product_catalog/images/9a6b94cefbd96df9bfc1ede6.webp>) | [source](<https://www.reliancedigital.in/product/poco-m8x-5g-128-gb-6-gb-ram-smartphone-green-mt77zq-10555460>) |
+| 4028f97e-206f-5d41-a8be-444149c723ba | [POCO M7 Pro 5G 128 GB, 6 GB RAM, Lavender, Mobile Phone](<https://www.reliancedigital.in/product/poco-m7-pro-5g-128-gb-6-gb-ram-lavender-mobile-phone-m4qzh0-8769437>) | Smartphones | POCO / POCO M7 Pro 5G 128 GB, 6 GB RAM, Lavender, Mobile Phone | 14,999.00 | current_store_listed_price | 2024 | — | Capacity: 128 GB<br>Item Code: 494493530<br>Brand: POCO | [image](<product_catalog/images/52d89db1e0683275fa3213df.webp>) | [source](<https://www.reliancedigital.in/product/poco-m7-pro-5g-128-gb-6-gb-ram-lavender-mobile-phone-m4qzh0-8769437>) |
+| dd454f8a-5fbf-576c-9046-fcfdba907cf8 | [POCO M7 Pro 5G 128 GB, 6 GB RAM, Lunar, Mobile Phone](<https://www.reliancedigital.in/product/poco-m7-pro-5g-128-gb-6-gb-ram-lunar-mobile-phone-m4qzgw-8769432>) | Smartphones | POCO / POCO M7 Pro 5G 128 GB, 6 GB RAM, Lunar, Mobile Phone | 14,999.00 | current_store_listed_price | 2024 | — | Capacity: 128 GB<br>Item Code: 494493529<br>Brand: POCO | [image](<product_catalog/images/1bd608d92421573f3b5a642b.webp>) | [source](<https://www.reliancedigital.in/product/poco-m7-pro-5g-128-gb-6-gb-ram-lunar-mobile-phone-m4qzgw-8769432>) |
+| 3bfef4d7-ad7f-5685-bc17-1db64c925bc7 | [POCO M7 Pro 5G 128 GB, 6 GB RAM, Olive, Mobile Phone](<https://www.reliancedigital.in/product/poco-m7-pro-5g-128-gb-6-gb-ram-olive-mobile-phone-m4qzgw-8769430>) | Smartphones | POCO / POCO M7 Pro 5G 128 GB, 6 GB RAM, Olive, Mobile Phone | 14,999.00 | current_store_listed_price | 2024 | — | Capacity: 128 GB<br>Item Code: 494493528<br>Brand: POCO | [image](<product_catalog/images/282caff52b904a596d14a57c.webp>) | [source](<https://www.reliancedigital.in/product/poco-m7-pro-5g-128-gb-6-gb-ram-olive-mobile-phone-m4qzgw-8769430>) |
+| 2a96cbb8-740b-54f2-a1ec-7eaff4e67ddb | [POCO M7 Pro 5G 256 GB, 8 GB RAM, Lavender, Mobile Phone](<https://www.reliancedigital.in/product/poco-m7-pro-5g-256-gb-8-gb-ram-lavender-mobile-phone-m4qzgy-8769434>) | Smartphones | POCO / POCO M7 Pro 5G 256 GB, 8 GB RAM, Lavender, Mobile Phone | 16,999.00 | current_store_listed_price | 2024 | — | Capacity: 256 GB<br>Item Code: 494493533<br>Brand: POCO | [image](<product_catalog/images/52d89db1e0683275fa3213df.webp>) | [source](<https://www.reliancedigital.in/product/poco-m7-pro-5g-256-gb-8-gb-ram-lavender-mobile-phone-m4qzgy-8769434>) |
+| 5cb70e2b-0f10-563f-b8ee-12cce6db8c69 | [POCO M7 Pro 5G 256 GB, 8 GB RAM, Lunar, Mobile Phone](<https://www.reliancedigital.in/product/poco-m7-pro-5g-256-gb-8-gb-ram-lunar-mobile-phone-m4qzgw-8769429>) | Smartphones | POCO / POCO M7 Pro 5G 256 GB, 8 GB RAM, Lunar, Mobile Phone | 16,999.00 | current_store_listed_price | 2024 | — | Capacity: 256 GB<br>Item Code: 494493532<br>Brand: POCO | [image](<product_catalog/images/1bd608d92421573f3b5a642b.webp>) | [source](<https://www.reliancedigital.in/product/poco-m7-pro-5g-256-gb-8-gb-ram-lunar-mobile-phone-m4qzgw-8769429>) |
+| a24164fd-ee28-5c2a-8052-b2aea178c18b | [POCO M7 Pro 5G 256 GB, 8 GB RAM, Olive, Mobile Phone](<https://www.reliancedigital.in/product/poco-m7-pro-5g-256-gb-8-gb-ram-olive-mobile-phone-m4qzgw-8769431>) | Smartphones | POCO / POCO M7 Pro 5G 256 GB, 8 GB RAM, Olive, Mobile Phone | 16,999.00 | current_store_listed_price | 2024 | — | Capacity: 256 GB<br>Item Code: 494493531<br>Brand: POCO | [image](<product_catalog/images/e37719eecaab6b5ab5e63952.webp>) | [source](<https://www.reliancedigital.in/product/poco-m7-pro-5g-256-gb-8-gb-ram-olive-mobile-phone-m4qzgw-8769431>) |
+| 88cca61e-0f4d-5b1f-af1e-59a1ffc284b1 | [POCO M8 5G 128 GB, 6 GB RAM, Black, Mobile Phone](<https://www.reliancedigital.in/product/poco-m8-5g-128-gb-6-gb-ram-black-mobile-phone-mkb4ye-9720945>) | Smartphones | POCO / POCO M8 5G 128 GB, 6 GB RAM, Black, Mobile Phone | 24,999.00 | current_store_listed_price | 2026 | — | Capacity: 128 GB<br>Display size: 17.20 cm<br>Camera: 50 MP | [image](<product_catalog/images/92f6541fc435f9d28d9ca32e.webp>) | [source](<https://www.reliancedigital.in/product/poco-m8-5g-128-gb-6-gb-ram-black-mobile-phone-mkb4ye-9720945>) |
+| fc941bde-7452-5814-b098-1bbf94135440 | [POCO M8 5G 128 GB, 6 GB RAM, Blue, Mobile Phone](<https://www.reliancedigital.in/product/poco-m8-5g-128-gb-6-gb-ram-blue-mobile-phone-mkb4ye-9720942>) | Smartphones | POCO / POCO M8 5G 128 GB, 6 GB RAM, Blue, Mobile Phone | 24,999.00 | current_store_listed_price | 2026 | — | Capacity: 128 GB<br>Display size: 17.20 cm<br>Camera: 50 MP | [image](<product_catalog/images/dd39bc4f7e560eb386d752c0.webp>) | [source](<https://www.reliancedigital.in/product/poco-m8-5g-128-gb-6-gb-ram-blue-mobile-phone-mkb4ye-9720942>) |
+| 5299b021-99a1-50df-814f-853f50b07bd7 | [POCO M8 5G 128 GB, 6 GB RAM, Silver, Mobile Phone](<https://www.reliancedigital.in/product/poco-m8-5g-128-gb-6-gb-ram-silver-mobile-phone-mkb4ye-9720940>) | Smartphones | POCO / POCO M8 5G 128 GB, 6 GB RAM, Silver, Mobile Phone | 24,999.00 | current_store_listed_price | 2026 | — | Capacity: 128 GB<br>Display size: 17.20 cm<br>Camera: 50 MP | [image](<product_catalog/images/3b249e902da09850ca8e7634.webp>) | [source](<https://www.reliancedigital.in/product/poco-m8-5g-128-gb-6-gb-ram-silver-mobile-phone-mkb4ye-9720940>) |
+| 7afb76c4-3d54-5c58-b501-1763dd290912 | [POCO M8 5G 128 GB, 8 GB RAM, Black, Mobile Phone](<https://www.reliancedigital.in/product/poco-m8-5g-128-gb-8-gb-ram-black-mobile-phone-mkb4ye-9720937>) | Smartphones | POCO / POCO M8 5G 128 GB, 8 GB RAM, Black, Mobile Phone | 26,999.00 | current_store_listed_price | 2026 | — | Capacity: 128 GB<br>Display size: 17.20 cm<br>Camera: 50 MP | [image](<product_catalog/images/92f6541fc435f9d28d9ca32e.webp>) | [source](<https://www.reliancedigital.in/product/poco-m8-5g-128-gb-8-gb-ram-black-mobile-phone-mkb4ye-9720937>) |
+| fc2c2a44-caaf-5fe2-bbaf-de3da725494b | [POCO M8 5G 128 GB, 8 GB RAM, Blue, Mobile Phone](<https://www.reliancedigital.in/product/poco-m8-5g-128-gb-8-gb-ram-blue-mobile-phone-mkb4ye-9720938>) | Smartphones | POCO / POCO M8 5G 128 GB, 8 GB RAM, Blue, Mobile Phone | 26,999.00 | current_store_listed_price | 2026 | — | Capacity: 128 GB<br>Display size: 17.20 cm<br>Camera: 50 MP | [image](<product_catalog/images/dd39bc4f7e560eb386d752c0.webp>) | [source](<https://www.reliancedigital.in/product/poco-m8-5g-128-gb-8-gb-ram-blue-mobile-phone-mkb4ye-9720938>) |
+| 8852b90c-b77d-59cb-917b-48ec93e42331 | [POCO M8 5G 128 GB, 8 GB RAM, Silver, Mobile Phone](<https://www.reliancedigital.in/product/poco-m8-5g-128-gb-8-gb-ram-silver-mobile-phone-mkb4ye-9720941>) | Smartphones | POCO / POCO M8 5G 128 GB, 8 GB RAM, Silver, Mobile Phone | 26,999.00 | current_store_listed_price | 2026 | — | Capacity: 128 GB<br>Display size: 17.20 cm<br>Camera: 50 MP | [image](<product_catalog/images/3b249e902da09850ca8e7634.webp>) | [source](<https://www.reliancedigital.in/product/poco-m8-5g-128-gb-8-gb-ram-silver-mobile-phone-mkb4ye-9720941>) |
+| 3d798ad7-1cad-5ffb-b58a-66282b12b678 | [POCO M8 5G 256 GB, 8 GB RAM, Black, Mobile Phone](<https://www.reliancedigital.in/product/poco-m8-5g-256-gb-8-gb-ram-black-mobile-phone-mkb4ye-9720939>) | Smartphones | POCO / POCO M8 5G 256 GB, 8 GB RAM, Black, Mobile Phone | 28,999.00 | current_store_listed_price | 2026 | — | Capacity: 256 GB<br>Display size: 17.20 cm<br>Camera: 50 MP | [image](<product_catalog/images/92f6541fc435f9d28d9ca32e.webp>) | [source](<https://www.reliancedigital.in/product/poco-m8-5g-256-gb-8-gb-ram-black-mobile-phone-mkb4ye-9720939>) |
+| 2f6ff648-85e4-5915-98b7-5f88fc7b2bad | [POCO M8 5G 256 GB, 8 GB RAM, Blue, Mobile Phone](<https://www.reliancedigital.in/product/poco-m8-5g-256-gb-8-gb-ram-blue-mobile-phone-mkb4ye-9720944>) | Smartphones | POCO / POCO M8 5G 256 GB, 8 GB RAM, Blue, Mobile Phone | 28,999.00 | current_store_listed_price | 2026 | — | Capacity: 256 GB<br>Display size: 17.20 cm<br>Camera: 50 MP | [image](<product_catalog/images/dd39bc4f7e560eb386d752c0.webp>) | [source](<https://www.reliancedigital.in/product/poco-m8-5g-256-gb-8-gb-ram-blue-mobile-phone-mkb4ye-9720944>) |
+| 5ad3253f-c575-59d4-b86e-684386d234de | [POCO M8 5G 256 GB, 8 GB RAM, Silver, Mobile Phone](<https://www.reliancedigital.in/product/poco-m8-5g-256-gb-8-gb-ram-silver-mobile-phone-mkb4ye-9720943>) | Smartphones | POCO / POCO M8 5G 256 GB, 8 GB RAM, Silver, Mobile Phone | 28,999.00 | current_store_listed_price | 2026 | — | Capacity: 256 GB<br>Display size: 17.20 cm<br>Camera: 50 MP | [image](<product_catalog/images/3b249e902da09850ca8e7634.webp>) | [source](<https://www.reliancedigital.in/product/poco-m8-5g-256-gb-8-gb-ram-silver-mobile-phone-mkb4ye-9720943>) |
+| b769461e-7499-5b7e-a5b8-3fc392e302e2 | [POCO M8x 5G 128 GB, 4 GB RAM, Smartphone, Black](<https://www.reliancedigital.in/product/poco-m8x-5g-128-gb-4-gb-ram-smartphone-black-mt77sg-10555454>) | Smartphones | POCO / POCO M8x 5G 128 GB, 4 GB RAM, Smartphone, Black | 18,299.00 | current_store_listed_price | 2026 | — | Capacity: 128 GB<br>Display size: 17.52 cm<br>Camera: 50 MP | [image](<product_catalog/images/82a8b1ce3b9608dece44b5e8.webp>) | [source](<https://www.reliancedigital.in/product/poco-m8x-5g-128-gb-4-gb-ram-smartphone-black-mt77sg-10555454>) |
+| c82772e2-486f-5188-863e-518af4779f29 | [POCO M8x 5G 128 GB, 4 GB RAM, Smartphone, Blue](<https://www.reliancedigital.in/product/poco-m8x-5g-128-gb-4-gb-ram-smartphone-blue-mt782n-10555462>) | Smartphones | POCO / POCO M8x 5G 128 GB, 4 GB RAM, Smartphone, Blue | 18,299.00 | current_store_listed_price | 2026 | — | Capacity: 128 GB<br>Display size: 17.52 cm<br>Camera: 50 MP | [image](<product_catalog/images/1ed9b97ef1de29275f6d8f15.webp>) | [source](<https://www.reliancedigital.in/product/poco-m8x-5g-128-gb-4-gb-ram-smartphone-blue-mt782n-10555462>) |
+| 063caad4-3e0c-5f93-b090-060eea6faea1 | [POCO M8x 5G 128 GB, 4 GB RAM, Smartphone, Green](<https://www.reliancedigital.in/product/poco-m8x-5g-128-gb-4-gb-ram-smartphone-green-mt77x7-10555458>) | Smartphones | POCO / POCO M8x 5G 128 GB, 4 GB RAM, Smartphone, Green | 18,299.00 | current_store_listed_price | 2026 | — | Capacity: 128 GB<br>Display size: 17.52 cm<br>Camera: 50 MP | [image](<product_catalog/images/9a6b94cefbd96df9bfc1ede6.webp>) | [source](<https://www.reliancedigital.in/product/poco-m8x-5g-128-gb-4-gb-ram-smartphone-green-mt77x7-10555458>) |
+| 1b7898bb-a166-5cd1-863e-1acd671cc1de | [POCO M8x 5G 128 GB, 6 GB RAM, Smartphone, Black](<https://www.reliancedigital.in/product/poco-m8x-5g-128-gb-6-gb-ram-smartphone-black-mt77us-10555456>) | Smartphones | POCO / POCO M8x 5G 128 GB, 6 GB RAM, Smartphone, Black | 20,299.00 | current_store_listed_price | 2026 | — | Capacity: 128 GB<br>Display size: 17.52 cm<br>Camera: 50 MP | [image](<product_catalog/images/82a8b1ce3b9608dece44b5e8.webp>) | [source](<https://www.reliancedigital.in/product/poco-m8x-5g-128-gb-6-gb-ram-smartphone-black-mt77us-10555456>) |
+| 282fe5eb-72be-52ce-9a47-128181c76dca | [POCO M8x 5G 128 GB, 6 GB RAM, Smartphone, Blue](<https://www.reliancedigital.in/product/poco-m8x-5g-128-gb-6-gb-ram-smartphone-blue-mt7855-10555464>) | Smartphones | POCO / POCO M8x 5G 128 GB, 6 GB RAM, Smartphone, Blue | 20,299.00 | current_store_listed_price | 2026 | — | Capacity: 128 GB<br>Display size: 17.52 cm<br>Camera: 50 MP | [image](<product_catalog/images/1ed9b97ef1de29275f6d8f15.webp>) | [source](<https://www.reliancedigital.in/product/poco-m8x-5g-128-gb-6-gb-ram-smartphone-blue-mt7855-10555464>) |
+| 550d38c7-f7d1-5e0f-8911-1601eb8aced9 | [POCO M8x 5G 128 GB, 6 GB RAM, Smartphone, Green](<https://www.reliancedigital.in/product/poco-m8x-5g-128-gb-6-gb-ram-smartphone-green-mt77zq-10555460>) | Smartphones | POCO / POCO M8x 5G 128 GB, 6 GB RAM, Smartphone, Green | 20,299.00 | current_store_listed_price | 2026 | — | Capacity: 128 GB<br>Display size: 17.52 cm<br>Camera: 50 MP | [image](<product_catalog/images/9a6b94cefbd96df9bfc1ede6.webp>) | [source](<https://www.reliancedigital.in/product/poco-m8x-5g-128-gb-6-gb-ram-smartphone-green-mt77zq-10555460>) |
 | 5f090245-7958-573d-9589-7be57820439b | [POCO X7 5G 128 GB, 8 GB RAM, Green, Mobile Phone](<https://www.reliancedigital.in/product/poco-x7-5g-128-gb-8-gb-ram-green-mobile-phone-m5qo3k-8834071>) | Smartphones | POCO / POCO X7 5G 128 GB, 8 GB RAM, Green, Mobile Phone | 17,999.00 | current_store_listed_price | ? | — | Capacity: 128 GB<br>Power: 45 Watts<br>Item Code: 494493810 | [image](<product_catalog/images/66eee33d3c571802b710bd55.webp>) | [source](<https://www.reliancedigital.in/product/poco-x7-5g-128-gb-8-gb-ram-green-mobile-phone-m5qo3k-8834071>) |
 | 0f90d65e-ecf9-5592-b17c-65b65a128b42 | [POCO X7 5G 256 GB, 8 GB RAM, Green, Mobile Phone](<https://www.reliancedigital.in/product/poco-x7-5g-256-gb-8-gb-ram-green-mobile-phone-m5qo3j-8834067>) | Smartphones | POCO / POCO X7 5G 256 GB, 8 GB RAM, Green, Mobile Phone | 19,999.00 | current_store_listed_price | ? | — | Capacity: 256 GB<br>Power: 45 Watts<br>Item Code: 494493813 | [image](<product_catalog/images/66eee33d3c571802b710bd55.webp>) | [source](<https://www.reliancedigital.in/product/poco-x7-5g-256-gb-8-gb-ram-green-mobile-phone-m5qo3j-8834067>) |
 | 959486cf-1ad2-5e39-ab6a-0be05ae9ef54 | [POCO X7 5G 256 GB, 8 GB RAM, Silver, Mobile Phone](<https://www.reliancedigital.in/product/poco-x7-5g-256-gb-8-gb-ram-silver-mobile-phone-m5qo3s-8834077>) | Smartphones | POCO / POCO X7 5G 256 GB, 8 GB RAM, Silver, Mobile Phone | 19,999.00 | current_store_listed_price | ? | — | Capacity: 256 GB<br>Power: 45 Watts<br>Item Code: 494493812 | [image](<product_catalog/images/94c768d6184141f699dc16b9.webp>) | [source](<https://www.reliancedigital.in/product/poco-x7-5g-256-gb-8-gb-ram-silver-mobile-phone-m5qo3s-8834077>) |
@@ -7496,12 +7496,12 @@ One row per catalog record. Product names link to India listings; complete descr
 | 5a3132f5-86b3-5056-92ef-4fadca9a30e2 | [Redmi 15C 5G 128 GB, 8 GB RAM, Dusk Purple, Mobile Phone](<https://www.reliancedigital.in/product/redmi-15c-5g-128-gb-8-gb-ram-dusk-purple-mobile-phone-mix3xv-9673469>) | Smartphones | Xiaomi / Redmi 15C 5G 128 GB, 8 GB RAM, Dusk Purple, Mobile Phone | 22,499.00 | current_store_listed_price | 2025 | — | Capacity: 128 GB<br>Display size: 17.52 cm<br>Camera: 50 MP | [image](<product_catalog/images/720e743a564768492584d1a8.webp>) | [source](<https://www.reliancedigital.in/product/redmi-15c-5g-128-gb-8-gb-ram-dusk-purple-mobile-phone-mix3xv-9673469>) |
 | 6b48c2b1-6cf3-5ac6-80c8-c2493773fdce | [Redmi 15C 5G 128 GB, 8 GB RAM, Midnight Black, Mobile Phone](<https://www.reliancedigital.in/product/redmi-15c-5g-128-gb-8-gb-ram-midnight-black-mobile-phone-mix3xv-9673463>) | Smartphones | Xiaomi / Redmi 15C 5G 128 GB, 8 GB RAM, Midnight Black, Mobile Phone | 22,499.00 | current_store_listed_price | 2025 | — | Capacity: 128 GB<br>Display size: 17.52 cm<br>Camera: 50 MP | [image](<product_catalog/images/95704fa5e366e30739a528a3.webp>) | [source](<https://www.reliancedigital.in/product/redmi-15c-5g-128-gb-8-gb-ram-midnight-black-mobile-phone-mix3xv-9673463>) |
 | 60262ae4-95b1-5e3c-8c50-ab762cd3a48c | [Redmi 15C 5G 128 GB, 8 GB RAM, Moonlight Blue, Mobile Phone](<https://www.reliancedigital.in/product/redmi-15c-5g-128-gb-8-gb-ram-moonlight-blue-mobile-phone-mix3xv-9673467>) | Smartphones | Xiaomi / Redmi 15C 5G 128 GB, 8 GB RAM, Moonlight Blue, Mobile Phone | 22,499.00 | current_store_listed_price | 2025 | — | Capacity: 128 GB<br>Display size: 17.52 cm<br>Camera: 50 MP | [image](<product_catalog/images/97d4a5d7ace45d9c8930243d.webp>) | [source](<https://www.reliancedigital.in/product/redmi-15c-5g-128-gb-8-gb-ram-moonlight-blue-mobile-phone-mix3xv-9673467>) |
-| fb58ad2b-2309-59c0-aa19-fda7a35afe0f | [Redmi 17 5G 128 GB, 6 GB RAM, Absolute Black, Mobile Phone](<https://www.reliancedigital.in/product/redmi-17-5g-128-gb-6-gb-ram-absolute-black-mobile-phone-mvaudm-10783992>) | Smartphones | Xiaomi / Redmi 17 5G 128 GB, 6 GB RAM, Absolute Black, Mobile Phone | 23,999.00 | current_store_listed_price | ? | — | Capacity: 128 GB<br>Item Code: 494832847<br>Brand: Xiaomi | [image](<product_catalog/images/3f509676768fc23e9d080afe.webp>) | [source](<https://www.reliancedigital.in/product/redmi-17-5g-128-gb-6-gb-ram-absolute-black-mobile-phone-mvaudm-10783992>) |
-| b76c8044-d810-530b-a355-c870c48b0a5f | [Redmi 17 5G 128 GB, 6 GB RAM, Endless Blue, Mobile Phone](<https://www.reliancedigital.in/product/redmi-17-5g-128-gb-6-gb-ram-endless-blue-mobile-phone-mvaudl-10783999>) | Smartphones | Xiaomi / Redmi 17 5G 128 GB, 6 GB RAM, Endless Blue, Mobile Phone | 23,999.00 | current_store_listed_price | ? | — | Capacity: 128 GB<br>Item Code: 494832850<br>Brand: Xiaomi | [image](<product_catalog/images/71604a019c15f28d43012d97.webp>) | [source](<https://www.reliancedigital.in/product/redmi-17-5g-128-gb-6-gb-ram-endless-blue-mobile-phone-mvaudl-10783999>) |
-| 3c451351-4afb-5393-be42-bcf113bda265 | [Redmi 17 5G 128 GB, 6 GB RAM, Eternal Orange, Mobile Phone](<https://www.reliancedigital.in/product/redmi-17-5g-128-gb-6-gb-ram-eternal-orange-mobile-phone-mvaudk-10783990>) | Smartphones | Xiaomi / Redmi 17 5G 128 GB, 6 GB RAM, Eternal Orange, Mobile Phone | 23,999.00 | current_store_listed_price | ? | — | Capacity: 128 GB<br>Item Code: 494832848<br>Brand: Xiaomi | [image](<product_catalog/images/02c060238ffc2420d6767187.webp>) | [source](<https://www.reliancedigital.in/product/redmi-17-5g-128-gb-6-gb-ram-eternal-orange-mobile-phone-mvaudk-10783990>) |
-| 14f2550a-7566-5b86-a98e-7acffd874e99 | [Redmi 17 5G 128 GB, 8 GB RAM, Absolute Black, Mobile Phone](<https://www.reliancedigital.in/product/redmi-17-5g-128-gb-8-gb-ram-absolute-black-mobile-phone-mvaudk-10783996>) | Smartphones | Xiaomi / Redmi 17 5G 128 GB, 8 GB RAM, Absolute Black, Mobile Phone | 26,999.00 | current_store_listed_price | ? | — | Capacity: 128 GB<br>Item Code: 494832851<br>Brand: Xiaomi | [image](<product_catalog/images/3f509676768fc23e9d080afe.webp>) | [source](<https://www.reliancedigital.in/product/redmi-17-5g-128-gb-8-gb-ram-absolute-black-mobile-phone-mvaudk-10783996>) |
-| 82f0f84d-7e04-5e0e-b699-06f5f6866be9 | [Redmi 17 5G 128 GB, 8 GB RAM, Endless Blue, Mobile Phone](<https://www.reliancedigital.in/product/redmi-17-5g-128-gb-8-gb-ram-endless-blue-mobile-phone-mvaudl-10783991>) | Smartphones | Xiaomi / Redmi 17 5G 128 GB, 8 GB RAM, Endless Blue, Mobile Phone | 26,999.00 | current_store_listed_price | ? | — | Capacity: 128 GB<br>Item Code: 494832852<br>Brand: Xiaomi | [image](<product_catalog/images/71604a019c15f28d43012d97.webp>) | [source](<https://www.reliancedigital.in/product/redmi-17-5g-128-gb-8-gb-ram-endless-blue-mobile-phone-mvaudl-10783991>) |
-| 6293e9a9-8ecb-57dd-99c4-8d750e33ff2d | [Redmi 17 5G 128 GB, 8 GB RAM, Eternal Orange, Mobile Phone](<https://www.reliancedigital.in/product/redmi-17-5g-128-gb-8-gb-ram-eternal-orange-mobile-phone-mvaudm-10783993>) | Smartphones | Xiaomi / Redmi 17 5G 128 GB, 8 GB RAM, Eternal Orange, Mobile Phone | 26,999.00 | current_store_listed_price | ? | — | Capacity: 128 GB<br>Item Code: 494832849<br>Brand: Xiaomi | [image](<product_catalog/images/02c060238ffc2420d6767187.webp>) | [source](<https://www.reliancedigital.in/product/redmi-17-5g-128-gb-8-gb-ram-eternal-orange-mobile-phone-mvaudm-10783993>) |
+| fb58ad2b-2309-59c0-aa19-fda7a35afe0f | [Redmi 17 5G 128 GB, 6 GB RAM, Absolute Black, Mobile Phone](<https://www.reliancedigital.in/product/redmi-17-5g-128-gb-6-gb-ram-absolute-black-mobile-phone-mvaudm-10783992>) | Smartphones | Xiaomi / Redmi 17 5G 128 GB, 6 GB RAM, Absolute Black, Mobile Phone | 23,999.00 | current_store_listed_price | 2026 | — | Capacity: 128 GB<br>Item Code: 494832847<br>Brand: Xiaomi | [image](<product_catalog/images/3f509676768fc23e9d080afe.webp>) | [source](<https://www.reliancedigital.in/product/redmi-17-5g-128-gb-6-gb-ram-absolute-black-mobile-phone-mvaudm-10783992>) |
+| b76c8044-d810-530b-a355-c870c48b0a5f | [Redmi 17 5G 128 GB, 6 GB RAM, Endless Blue, Mobile Phone](<https://www.reliancedigital.in/product/redmi-17-5g-128-gb-6-gb-ram-endless-blue-mobile-phone-mvaudl-10783999>) | Smartphones | Xiaomi / Redmi 17 5G 128 GB, 6 GB RAM, Endless Blue, Mobile Phone | 23,999.00 | current_store_listed_price | 2026 | — | Capacity: 128 GB<br>Item Code: 494832850<br>Brand: Xiaomi | [image](<product_catalog/images/71604a019c15f28d43012d97.webp>) | [source](<https://www.reliancedigital.in/product/redmi-17-5g-128-gb-6-gb-ram-endless-blue-mobile-phone-mvaudl-10783999>) |
+| 3c451351-4afb-5393-be42-bcf113bda265 | [Redmi 17 5G 128 GB, 6 GB RAM, Eternal Orange, Mobile Phone](<https://www.reliancedigital.in/product/redmi-17-5g-128-gb-6-gb-ram-eternal-orange-mobile-phone-mvaudk-10783990>) | Smartphones | Xiaomi / Redmi 17 5G 128 GB, 6 GB RAM, Eternal Orange, Mobile Phone | 23,999.00 | current_store_listed_price | 2026 | — | Capacity: 128 GB<br>Item Code: 494832848<br>Brand: Xiaomi | [image](<product_catalog/images/02c060238ffc2420d6767187.webp>) | [source](<https://www.reliancedigital.in/product/redmi-17-5g-128-gb-6-gb-ram-eternal-orange-mobile-phone-mvaudk-10783990>) |
+| 14f2550a-7566-5b86-a98e-7acffd874e99 | [Redmi 17 5G 128 GB, 8 GB RAM, Absolute Black, Mobile Phone](<https://www.reliancedigital.in/product/redmi-17-5g-128-gb-8-gb-ram-absolute-black-mobile-phone-mvaudk-10783996>) | Smartphones | Xiaomi / Redmi 17 5G 128 GB, 8 GB RAM, Absolute Black, Mobile Phone | 26,999.00 | current_store_listed_price | 2026 | — | Capacity: 128 GB<br>Item Code: 494832851<br>Brand: Xiaomi | [image](<product_catalog/images/3f509676768fc23e9d080afe.webp>) | [source](<https://www.reliancedigital.in/product/redmi-17-5g-128-gb-8-gb-ram-absolute-black-mobile-phone-mvaudk-10783996>) |
+| 82f0f84d-7e04-5e0e-b699-06f5f6866be9 | [Redmi 17 5G 128 GB, 8 GB RAM, Endless Blue, Mobile Phone](<https://www.reliancedigital.in/product/redmi-17-5g-128-gb-8-gb-ram-endless-blue-mobile-phone-mvaudl-10783991>) | Smartphones | Xiaomi / Redmi 17 5G 128 GB, 8 GB RAM, Endless Blue, Mobile Phone | 26,999.00 | current_store_listed_price | 2026 | — | Capacity: 128 GB<br>Item Code: 494832852<br>Brand: Xiaomi | [image](<product_catalog/images/71604a019c15f28d43012d97.webp>) | [source](<https://www.reliancedigital.in/product/redmi-17-5g-128-gb-8-gb-ram-endless-blue-mobile-phone-mvaudl-10783991>) |
+| 6293e9a9-8ecb-57dd-99c4-8d750e33ff2d | [Redmi 17 5G 128 GB, 8 GB RAM, Eternal Orange, Mobile Phone](<https://www.reliancedigital.in/product/redmi-17-5g-128-gb-8-gb-ram-eternal-orange-mobile-phone-mvaudm-10783993>) | Smartphones | Xiaomi / Redmi 17 5G 128 GB, 8 GB RAM, Eternal Orange, Mobile Phone | 26,999.00 | current_store_listed_price | 2026 | — | Capacity: 128 GB<br>Item Code: 494832849<br>Brand: Xiaomi | [image](<product_catalog/images/02c060238ffc2420d6767187.webp>) | [source](<https://www.reliancedigital.in/product/redmi-17-5g-128-gb-8-gb-ram-eternal-orange-mobile-phone-mvaudm-10783993>) |
 | fc79e2da-cf12-5c70-ad81-494b88751411 | [Redmi 17C 5G 128 GB, 4 GB RAM, Coffee Brew, Mobile Phone](<https://www.reliancedigital.in/product/redmi-17c-5g-128-gb-4-gb-ram-coffee-brew-mobile-phone-mvaudk-10783995>) | Smartphones | Xiaomi / Redmi 17C 5G 128 GB, 4 GB RAM, Coffee Brew, Mobile Phone | 20,999.00 | current_store_listed_price | ? | — | Capacity: 128 GB<br>Item Code: 494833705<br>Brand: Xiaomi | [image](<product_catalog/images/b3bfd5d2f501231c453308fc.webp>) | [source](<https://www.reliancedigital.in/product/redmi-17c-5g-128-gb-4-gb-ram-coffee-brew-mobile-phone-mvaudk-10783995>) |
 | 83ce4f75-b284-58db-9fee-81253cb0351a | [Redmi 17C 5G 128 GB, 4 GB RAM, Dark Night, Mobile Phone](<https://www.reliancedigital.in/product/redmi-17c-5g-128-gb-4-gb-ram-dark-night-mobile-phone-mvaudn-10783994>) | Smartphones | Xiaomi / Redmi 17C 5G 128 GB, 4 GB RAM, Dark Night, Mobile Phone | 20,999.00 | current_store_listed_price | ? | — | Capacity: 128 GB<br>Item Code: 494833704<br>Brand: Xiaomi | [image](<product_catalog/images/caaad15bade490fbcb2e0ec3.webp>) | [source](<https://www.reliancedigital.in/product/redmi-17c-5g-128-gb-4-gb-ram-dark-night-mobile-phone-mvaudn-10783994>) |
 | e6764d57-6afd-52bc-8b47-6a8a44eb4d4a | [Redmi 17C 5G 128 GB, 4 GB RAM, Purple Dawn, Mobile Phone](<https://www.reliancedigital.in/product/redmi-17c-5g-128-gb-4-gb-ram-purple-dawn-mobile-phone-mvaudl-10784000>) | Smartphones | Xiaomi / Redmi 17C 5G 128 GB, 4 GB RAM, Purple Dawn, Mobile Phone | 20,999.00 | current_store_listed_price | ? | — | Capacity: 128 GB<br>Item Code: 494833706<br>Brand: Xiaomi | [image](<product_catalog/images/04936d2b8e5061133d50c088.webp>) | [source](<https://www.reliancedigital.in/product/redmi-17c-5g-128-gb-4-gb-ram-purple-dawn-mobile-phone-mvaudl-10784000>) |
@@ -8085,10 +8085,10 @@ One row per catalog record. Product names link to India listings; complete descr
 | 0f24eefa-f2be-5997-a4d8-e16dc1e324d1 | [Moto Pad 60 Neo 27.94 cm (11 Inch) WiFi + 5G Tablet with Pen, 8 GB RAM, 128 GB, Pantone Bronze Green, ZAGW0005IN](<https://www.reliancedigital.in/product/moto-pad-60-neo-2794-cm-11-inch-wifi-5g-tablet-with-pen-8-gb-ram-128-gb-pantone-bronze-green-zagw0005in-ms4gwm-10327649>) | Tablets | Motorola / ZAGW0005IN / ZAGW0005IN | 29,999.00 | current_store_listed_price | ? | — | Capacity: 8 GB<br>Display size: 27.94 cm<br>Item Code: 494832355 | [image](<product_catalog/images/a001c4188d7c28922c30519a.webp>) | [source](<https://www.reliancedigital.in/product/moto-pad-60-neo-2794-cm-11-inch-wifi-5g-tablet-with-pen-8-gb-ram-128-gb-pantone-bronze-green-zagw0005in-ms4gwm-10327649>) |
 | 5d37f6e6-8c4b-5251-8552-616ef62d0f8e | [Moto Pad 60 Neo 27.94 cm (11 Inch) WiFi Tablet with Pen, 6 GB RAM, 128 GB, Pantone Malibu Blue, ZAGV0013IN](<https://www.reliancedigital.in/product/moto-pad-60-neo-2794-cm-11-inch-wifi-tablet-with-pen-6-gb-ram-128-gb-pantone-malibu-blue-zagv0013in-ms4gwp-10327661>) | Tablets | Motorola / ZAGV0013IN / ZAGV0013IN | 24,999.00 | current_store_listed_price | ? | — | Capacity: 6 GB<br>Display size: 27.94 cm<br>Item Code: 494832352 | [image](<product_catalog/images/5f8749023ed3943231f85975.webp>) | [source](<https://www.reliancedigital.in/product/moto-pad-60-neo-2794-cm-11-inch-wifi-tablet-with-pen-6-gb-ram-128-gb-pantone-malibu-blue-zagv0013in-ms4gwp-10327661>) |
 | 0315e310-2cde-5a5b-b838-dad83662209c | [Moto Pad 60 Neo 27.94 cm (11 Inch) WiFi Tablet with Pen, 8 GB RAM, 128 GB, Pantone Malibu Blue, ZAGV0014IN](<https://www.reliancedigital.in/product/moto-pad-60-neo-2794-cm-11-inch-wifi-tablet-with-pen-8-gb-ram-128-gb-pantone-malibu-blue-zagv0014in-ms4gwo-10327669>) | Tablets | Motorola / ZAGV0014IN / ZAGV0014IN | 26,999.00 | current_store_listed_price | ? | — | Capacity: 8 GB<br>Display size: 27.94 cm<br>Item Code: 494832353 | [image](<product_catalog/images/5f8749023ed3943231f85975.webp>) | [source](<https://www.reliancedigital.in/product/moto-pad-60-neo-2794-cm-11-inch-wifi-tablet-with-pen-8-gb-ram-128-gb-pantone-malibu-blue-zagv0014in-ms4gwo-10327669>) |
-| c8ee9b45-35a6-5a57-b7d3-4f87de93b45c | [Moto Pad 70 Pro 32.25 cm (12.7 Inch) WiFi Tablet with Pen & Keyboard, 8 GB RAM, 128 GB, Pantone Titan, ZAJ70002IN](<https://www.reliancedigital.in/product/moto-pad-70-pro-3225-cm-127-inch-wifi-tablet-with-pen-keyboard-8-gb-ram-128-gb-pantone-titan-zaj70002in-ms4gwm-10327654>) | Tablets | Motorola / ZAJ70002IN / ZAJ70002IN | 48,999.00 | current_store_listed_price | ? | — | Capacity: 8 GB<br>Display size: 32.25 cm<br>Item Code: 494832357 | [image](<product_catalog/images/2845e939ae6c1b037db631ef.webp>) | [source](<https://www.reliancedigital.in/product/moto-pad-70-pro-3225-cm-127-inch-wifi-tablet-with-pen-keyboard-8-gb-ram-128-gb-pantone-titan-zaj70002in-ms4gwm-10327654>) |
-| 7103f00a-e14e-52be-b725-795f6a300901 | [Moto Pad 70 Pro 32.25 cm (12.7 Inch) WiFi Tablet with Pen & Keyboard, 8 GB RAM, 256 GB, Pantone Titan, ZAJ70005IN](<https://www.reliancedigital.in/product/moto-pad-70-pro-3225-cm-127-inch-wifi-tablet-with-pen-keyboard-8-gb-ram-256-gb-pantone-titan-zaj70005in-ms4gwm-10327653>) | Tablets | Motorola / ZAJ70005IN / ZAJ70005IN | 51,999.00 | current_store_listed_price | ? | — | Capacity: 8 GB<br>Display size: 32.25 cm<br>Item Code: 494832359 | [image](<product_catalog/images/2845e939ae6c1b037db631ef.webp>) | [source](<https://www.reliancedigital.in/product/moto-pad-70-pro-3225-cm-127-inch-wifi-tablet-with-pen-keyboard-8-gb-ram-256-gb-pantone-titan-zaj70005in-ms4gwm-10327653>) |
-| 678228e3-192d-5549-824c-87c2011bde68 | [Moto Pad 70 Pro 32.25 cm (12.7 Inch) WiFi Tablet with Pen, 8 GB RAM, 128 GB, Pantone Titan, ZAJ70001IN](<https://www.reliancedigital.in/product/moto-pad-70-pro-3225-cm-127-inch-wifi-tablet-with-pen-8-gb-ram-128-gb-pantone-titan-zaj70001in-ms4gwo-10327651>) | Tablets | Motorola / ZAJ70001IN / ZAJ70001IN | 42,999.00 | current_store_listed_price | ? | — | Capacity: 8 GB<br>Display size: 32.25 cm<br>Item Code: 494832356 | [image](<product_catalog/images/f58e01ee01d1a77087ce92a7.webp>) | [source](<https://www.reliancedigital.in/product/moto-pad-70-pro-3225-cm-127-inch-wifi-tablet-with-pen-8-gb-ram-128-gb-pantone-titan-zaj70001in-ms4gwo-10327651>) |
-| 3429262e-d4a7-520d-b491-1966628bd3be | [Moto Pad 70 Pro 32.25 cm (12.7 Inch) WiFi Tablet with Pen, 8 GB RAM, 256 GB, Pantone Titan, ZAJ70003IN](<https://www.reliancedigital.in/product/moto-pad-70-pro-3225-cm-127-inch-wifi-tablet-with-pen-8-gb-ram-256-gb-pantone-titan-zaj70003in-ms4gwn-10327659>) | Tablets | Motorola / ZAJ70003IN / ZAJ70003IN | 45,999.00 | current_store_listed_price | ? | — | Capacity: 8 GB<br>Display size: 32.25 cm<br>Item Code: 494832358 | [image](<product_catalog/images/f58e01ee01d1a77087ce92a7.webp>) | [source](<https://www.reliancedigital.in/product/moto-pad-70-pro-3225-cm-127-inch-wifi-tablet-with-pen-8-gb-ram-256-gb-pantone-titan-zaj70003in-ms4gwn-10327659>) |
+| c8ee9b45-35a6-5a57-b7d3-4f87de93b45c | [Moto Pad 70 Pro 32.25 cm (12.7 Inch) WiFi Tablet with Pen & Keyboard, 8 GB RAM, 128 GB, Pantone Titan, ZAJ70002IN](<https://www.reliancedigital.in/product/moto-pad-70-pro-3225-cm-127-inch-wifi-tablet-with-pen-keyboard-8-gb-ram-128-gb-pantone-titan-zaj70002in-ms4gwm-10327654>) | Tablets | Motorola / ZAJ70002IN / ZAJ70002IN | 48,999.00 | current_store_listed_price | 2026 | — | Capacity: 8 GB<br>Display size: 32.25 cm<br>Item Code: 494832357 | [image](<product_catalog/images/2845e939ae6c1b037db631ef.webp>) | [source](<https://www.reliancedigital.in/product/moto-pad-70-pro-3225-cm-127-inch-wifi-tablet-with-pen-keyboard-8-gb-ram-128-gb-pantone-titan-zaj70002in-ms4gwm-10327654>) |
+| 7103f00a-e14e-52be-b725-795f6a300901 | [Moto Pad 70 Pro 32.25 cm (12.7 Inch) WiFi Tablet with Pen & Keyboard, 8 GB RAM, 256 GB, Pantone Titan, ZAJ70005IN](<https://www.reliancedigital.in/product/moto-pad-70-pro-3225-cm-127-inch-wifi-tablet-with-pen-keyboard-8-gb-ram-256-gb-pantone-titan-zaj70005in-ms4gwm-10327653>) | Tablets | Motorola / ZAJ70005IN / ZAJ70005IN | 51,999.00 | current_store_listed_price | 2026 | — | Capacity: 8 GB<br>Display size: 32.25 cm<br>Item Code: 494832359 | [image](<product_catalog/images/2845e939ae6c1b037db631ef.webp>) | [source](<https://www.reliancedigital.in/product/moto-pad-70-pro-3225-cm-127-inch-wifi-tablet-with-pen-keyboard-8-gb-ram-256-gb-pantone-titan-zaj70005in-ms4gwm-10327653>) |
+| 678228e3-192d-5549-824c-87c2011bde68 | [Moto Pad 70 Pro 32.25 cm (12.7 Inch) WiFi Tablet with Pen, 8 GB RAM, 128 GB, Pantone Titan, ZAJ70001IN](<https://www.reliancedigital.in/product/moto-pad-70-pro-3225-cm-127-inch-wifi-tablet-with-pen-8-gb-ram-128-gb-pantone-titan-zaj70001in-ms4gwo-10327651>) | Tablets | Motorola / ZAJ70001IN / ZAJ70001IN | 42,999.00 | current_store_listed_price | 2026 | — | Capacity: 8 GB<br>Display size: 32.25 cm<br>Item Code: 494832356 | [image](<product_catalog/images/f58e01ee01d1a77087ce92a7.webp>) | [source](<https://www.reliancedigital.in/product/moto-pad-70-pro-3225-cm-127-inch-wifi-tablet-with-pen-8-gb-ram-128-gb-pantone-titan-zaj70001in-ms4gwo-10327651>) |
+| 3429262e-d4a7-520d-b491-1966628bd3be | [Moto Pad 70 Pro 32.25 cm (12.7 Inch) WiFi Tablet with Pen, 8 GB RAM, 256 GB, Pantone Titan, ZAJ70003IN](<https://www.reliancedigital.in/product/moto-pad-70-pro-3225-cm-127-inch-wifi-tablet-with-pen-8-gb-ram-256-gb-pantone-titan-zaj70003in-ms4gwn-10327659>) | Tablets | Motorola / ZAJ70003IN / ZAJ70003IN | 45,999.00 | current_store_listed_price | 2026 | — | Capacity: 8 GB<br>Display size: 32.25 cm<br>Item Code: 494832358 | [image](<product_catalog/images/f58e01ee01d1a77087ce92a7.webp>) | [source](<https://www.reliancedigital.in/product/moto-pad-70-pro-3225-cm-127-inch-wifi-tablet-with-pen-8-gb-ram-256-gb-pantone-titan-zaj70003in-ms4gwn-10327659>) |
 | a73001fe-d30a-5b97-9968-aa9c22a0a5d0 | [OPPO Pad 5 30.73 cm (12.1 inch) Wi-Fi + 5G Tablet, 256 GB, 8 GB RAM, Black, OPD2503 IN](<https://www.reliancedigital.in/product/oppo-pad-5-3073-cm-121-inch-wi-fi-5g-tablet-256-gb-8-gb-ram-black-opd2503-in-ms7cva-10332163>) | Tablets | OPPO / OPPO Pad 5 30.73 cm (12.1 inch) Wi-Fi + 5G Tablet, 256 GB, 8 GB RAM, Black, OPD2503 IN | 34,999.00 | current_store_listed_price | ? | — | Capacity: 256 GB<br>Power: 33 Watts<br>Display size: 30.73 cm | [image](<product_catalog/images/e05edf207a949950f66d3ed5.webp>) | [source](<https://www.reliancedigital.in/product/oppo-pad-5-3073-cm-121-inch-wi-fi-5g-tablet-256-gb-8-gb-ram-black-opd2503-in-ms7cva-10332163>) |
 | 2497155c-c82a-5689-a1ae-5b29668294b0 | [OPPO Pad 5 30.73 cm (12.1 inch) Wi-Fi + 5G Tablet, 256 GB, 8 GB RAM, Pink, OPD2503 IN](<https://www.reliancedigital.in/product/oppo-pad-5-3073-cm-121-inch-wi-fi-5g-tablet-256-gb-8-gb-ram-pink-opd2503-in-ms7cva-10332164>) | Tablets | OPPO / OPPO Pad 5 30.73 cm (12.1 inch) Wi-Fi + 5G Tablet, 256 GB, 8 GB RAM, Pink, OPD2503 IN | 34,999.00 | current_store_listed_price | ? | — | Capacity: 256 GB<br>Power: 33 Watts<br>Display size: 30.73 cm | [image](<product_catalog/images/4d92fb8c04fb10ea59c51233.webp>) | [source](<https://www.reliancedigital.in/product/oppo-pad-5-3073-cm-121-inch-wi-fi-5g-tablet-256-gb-8-gb-ram-pink-opd2503-in-ms7cva-10332164>) |
 | f9cc5d67-0eb5-5142-bdb4-d4a1540ed131 | [OPPO Pad 5 30.73 cm (12.1 inch) Wi-Fi Tablet, 128 GB, 8 GB RAM, Black, OPD2502 IN](<https://www.reliancedigital.in/product/oppo-pad-5-3073-cm-121-inch-wi-fi-tablet-128-gb-8-gb-ram-black-opd2502-in-ms7cv9-10332161>) | Tablets | OPPO / OPPO Pad 5 30.73 cm (12.1 inch) Wi-Fi Tablet, 128 GB, 8 GB RAM, Black, OPD2502 IN | 29,999.00 | current_store_listed_price | ? | — | Capacity: 128 GB<br>Power: 33 Watts<br>Display size: 30.73 cm | [image](<product_catalog/images/e05edf207a949950f66d3ed5.webp>) | [source](<https://www.reliancedigital.in/product/oppo-pad-5-3073-cm-121-inch-wi-fi-tablet-128-gb-8-gb-ram-black-opd2502-in-ms7cv9-10332161>) |
@@ -8193,14 +8193,14 @@ One row per catalog record. Product names link to India listings; complete descr
 | 7403375d-ab71-51bb-a716-383ac76dd89c | [Samsung Tablet S11 27.94 cm (11 Inch) Wi-Fi Tablet with S-Pen, 12 GB RAM, 256 GB, Silver, SM-X730NZSEINU](<https://www.reliancedigital.in/product/samsung-tablet-s11-2794-cm-11-inch-wi-fi-tablet-with-s-pen-12-gb-ram-256-gb-silver-sm-x730nzseinu-mfqu41-9452423>) | Tablets | Samsung / SM-X730NZSEINU / SM-X730NZSEINU | 99,999.00 | current_store_listed_price | ? | — | Capacity: 12 GB<br>Power: 45 Watts<br>Display size: 27.94 cm | [image](<product_catalog/images/e8be89c455219b90bd462a7c.webp>) | [source](<https://www.reliancedigital.in/product/samsung-tablet-s11-2794-cm-11-inch-wi-fi-tablet-with-s-pen-12-gb-ram-256-gb-silver-sm-x730nzseinu-mfqu41-9452423>) |
 | e5817320-dd9d-55a8-a578-74b0e5603225 | [Samsung Tablet S11 27.94 cm (11 Inch) Wi-Fi Tablet with S-Pen, 12 GB RAM, 512 GB, Gray, SM-X730NZAIINU](<https://www.reliancedigital.in/product/samsung-tablet-s11-2794-cm-11-inch-wi-fi-tablet-with-s-pen-12-gb-ram-512-gb-gray-sm-x730nzaiinu-mfqwb2-9455278>) | Tablets | Samsung / SM-X730NZAIINU / SM-X730NZAIINU | 115,999.00 | current_store_listed_price | ? | — | Capacity: 12 GB<br>Power: 45 Watts<br>Display size: 27.94 cm | [image](<product_catalog/images/dfede674dd0d1f85e9d5343f.webp>) | [source](<https://www.reliancedigital.in/product/samsung-tablet-s11-2794-cm-11-inch-wi-fi-tablet-with-s-pen-12-gb-ram-512-gb-gray-sm-x730nzaiinu-mfqwb2-9455278>) |
 | 468a884c-8a5b-5c88-970f-14895cddcc4b | [Samsung Tablet S11 27.94 cm (11 Inch) Wi-Fi Tablet with S-Pen, 12 GB RAM, 512 GB, Silver, SM-X730NZSIINU](<https://www.reliancedigital.in/product/samsung-tablet-s11-2794-cm-11-inch-wi-fi-tablet-with-s-pen-12-gb-ram-512-gb-silver-sm-x730nzsiinu-mfqu41-9452425>) | Tablets | Samsung / SM-X730NZSIINU / SM-X730NZSIINU | 115,999.00 | current_store_listed_price | ? | — | Capacity: 12 GB<br>Power: 45 Watts<br>Display size: 27.94 cm | [image](<product_catalog/images/e8be89c455219b90bd462a7c.webp>) | [source](<https://www.reliancedigital.in/product/samsung-tablet-s11-2794-cm-11-inch-wi-fi-tablet-with-s-pen-12-gb-ram-512-gb-silver-sm-x730nzsiinu-mfqu41-9452425>) |
-| d4dcb677-0327-5a92-b726-5eb567c08564 | [Samsung Tablet S11 Ultra 37.08 cm (14.6 Inch) Wi-Fi + 5G Tablet with S-Pen, 12 GB RAM, 256 GB, Gray, SM-X936BZAAINU](<https://www.reliancedigital.in/product/samsung-tablet-s11-ultra-3708-cm-146-inch-wi-fi-5g-tablet-with-s-pen-12-gb-ram-256-gb-gray-sm-x936bzaainu-mfqw3h-9454973>) | Tablets | Samsung / SM-X936BZAAINU / SM-X936BZAAINU | 137,999.00 | current_store_listed_price | ? | — | Capacity: 12 GB<br>Power: 45 Watts<br>Display size: 37.08 cm | [image](<product_catalog/images/7333bf83fe0bbcd421ee4548.webp>) | [source](<https://www.reliancedigital.in/product/samsung-tablet-s11-ultra-3708-cm-146-inch-wi-fi-5g-tablet-with-s-pen-12-gb-ram-256-gb-gray-sm-x936bzaainu-mfqw3h-9454973>) |
-| 6f412d2f-ca41-5ac3-a45c-ac2e9041c6c8 | [Samsung Tablet S11 Ultra 37.08 cm (14.6 Inch) Wi-Fi + 5G Tablet with S-Pen, 12 GB RAM, 256 GB, Silver, SM-X936BZSAINU](<https://www.reliancedigital.in/product/samsung-tablet-s11-ultra-3708-cm-146-inch-wi-fi-5g-tablet-with-s-pen-12-gb-ram-256-gb-silver-sm-x936bzsainu-mfqw3h-9454972>) | Tablets | Samsung / SM-X936BZSAINU / SM-X936BZSAINU | 137,999.00 | current_store_listed_price | ? | — | Display diagonal: 37.1 cm (14.6")<br>Panel type: AMOLED<br>Display resolution: 2960 x 1848 pixels | [image](<product_catalog/images/6ff5a7b0f0b0ce290b80ae29.webp>) | [source](<https://www.reliancedigital.in/product/samsung-tablet-s11-ultra-3708-cm-146-inch-wi-fi-5g-tablet-with-s-pen-12-gb-ram-256-gb-silver-sm-x936bzsainu-mfqw3h-9454972>) |
-| ed9b1933-0986-5b8a-ac7f-8dcfd0a7140c | [Samsung Tablet S11 Ultra 37.08 cm (14.6 Inch) Wi-Fi + 5G Tablet with S-Pen, 12 GB RAM, 512 GB, Gray, SM-X936BZAEINU](<https://www.reliancedigital.in/product/samsung-tablet-s11-ultra-3708-cm-146-inch-wi-fi-5g-tablet-with-s-pen-12-gb-ram-512-gb-gray-sm-x936bzaeinu-mfrx62-9462885>) | Tablets | Samsung / SM-X936BZAEINU / SM-X936BZAEINU | 153,999.00 | current_store_listed_price | ? | — | Display diagonal: 37.1 cm (14.6")<br>Panel type: AMOLED<br>Display resolution: 2960 x 1848 pixels | [image](<product_catalog/images/3e552b96bbab8de9bd954605.webp>) | [source](<https://www.reliancedigital.in/product/samsung-tablet-s11-ultra-3708-cm-146-inch-wi-fi-5g-tablet-with-s-pen-12-gb-ram-512-gb-gray-sm-x936bzaeinu-mfrx62-9462885>) |
-| 13c85448-ab61-564b-96a5-cacb8d8ba731 | [Samsung Tablet S11 Ultra 37.08 cm (14.6 Inch) Wi-Fi + 5G Tablet with S-Pen, 12 GB RAM, 512 GB, Silver, SM-X936BZSEINU](<https://www.reliancedigital.in/product/samsung-tablet-s11-ultra-3708-cm-146-inch-wi-fi-5g-tablet-with-s-pen-12-gb-ram-512-gb-silver-sm-x936bzseinu-mfqwb2-9455277>) | Tablets | Samsung / SM-X936BZSEINU / SM-X936BZSEINU | 153,999.00 | current_store_listed_price | ? | — | Display diagonal: 37.1 cm (14.6")<br>Panel type: AMOLED<br>Display resolution: 2960 x 1848 pixels | [image](<product_catalog/images/6ff5a7b0f0b0ce290b80ae29.webp>) | [source](<https://www.reliancedigital.in/product/samsung-tablet-s11-ultra-3708-cm-146-inch-wi-fi-5g-tablet-with-s-pen-12-gb-ram-512-gb-silver-sm-x936bzseinu-mfqwb2-9455277>) |
-| 2c287fd3-c90f-55cf-86f9-dc173d30222c | [Samsung Tablet S11 Ultra 37.08 cm (14.6 Inch) Wi-Fi Tablet with S-Pen, 12 GB RAM, 256 GB, Gray, SM-X930NZAAINU](<https://www.reliancedigital.in/product/samsung-tablet-s11-ultra-3708-cm-146-inch-wi-fi-tablet-with-s-pen-12-gb-ram-256-gb-gray-sm-x930nzaainu-mfqvwi-9454762>) | Tablets | Samsung / SM-X930NZAAINU / SM-X930NZAAINU | 124,999.00 | current_store_listed_price | ? | — | Capacity: 12 GB<br>Power: 45 Watts<br>Display size: 37.08 cm | [image](<product_catalog/images/7333bf83fe0bbcd421ee4548.webp>) | [source](<https://www.reliancedigital.in/product/samsung-tablet-s11-ultra-3708-cm-146-inch-wi-fi-tablet-with-s-pen-12-gb-ram-256-gb-gray-sm-x930nzaainu-mfqvwi-9454762>) |
-| 7caa3d2f-d0af-580d-8162-01c27b718368 | [Samsung Tablet S11 Ultra 37.08 cm (14.6 Inch) Wi-Fi Tablet with S-Pen, 12 GB RAM, 256 GB, Silver, SM-X930NZSAINU](<https://www.reliancedigital.in/product/samsung-tablet-s11-ultra-3708-cm-146-inch-wi-fi-tablet-with-s-pen-12-gb-ram-256-gb-silver-sm-x930nzsainu-mfqvwi-9454764>) | Tablets | Samsung / SM-X930NZSAINU / SM-X930NZSAINU | 124,999.00 | current_store_listed_price | ? | — | Capacity: 12 GB<br>Power: 45 Watts<br>Display size: 37.08 cm | [image](<product_catalog/images/0123142e9fc6070b83c84e33.webp>) | [source](<https://www.reliancedigital.in/product/samsung-tablet-s11-ultra-3708-cm-146-inch-wi-fi-tablet-with-s-pen-12-gb-ram-256-gb-silver-sm-x930nzsainu-mfqvwi-9454764>) |
-| 2f7aa008-d78c-51b6-92e9-654ceb9bd6e6 | [Samsung Tablet S11 Ultra 37.08 cm (14.6 Inch) Wi-Fi Tablet with S-Pen, 12 GB RAM, 512 GB, Gray, SM-X930NZAEINU](<https://www.reliancedigital.in/product/samsung-tablet-s11-ultra-3708-cm-146-inch-wi-fi-tablet-with-s-pen-12-gb-ram-512-gb-gray-sm-x930nzaeinu-mfrx65-9462886>) | Tablets | Samsung / SM-X930NZAEINU / SM-X930NZAEINU | 141,999.00 | current_store_listed_price | ? | — | Capacity: 12 GB<br>Power: 45 Watts<br>Display size: 37.08 cm | [image](<product_catalog/images/7333bf83fe0bbcd421ee4548.webp>) | [source](<https://www.reliancedigital.in/product/samsung-tablet-s11-ultra-3708-cm-146-inch-wi-fi-tablet-with-s-pen-12-gb-ram-512-gb-gray-sm-x930nzaeinu-mfrx65-9462886>) |
-| fd8c3240-d50e-5a6e-86e3-60f7a941524b | [Samsung Tablet S11 Ultra 37.08 cm (14.6 Inch) Wi-Fi Tablet with S-Pen, 12 GB RAM, 512 GB, Silver, SM-X930NZSEINU](<https://www.reliancedigital.in/product/samsung-tablet-s11-ultra-3708-cm-146-inch-wi-fi-tablet-with-s-pen-12-gb-ram-512-gb-silver-sm-x930nzseinu-mfqw3l-9454978>) | Tablets | Samsung / SM-X930NZSEINU / SM-X930NZSEINU | 139,999.00 | current_store_listed_price | ? | — | Capacity: 12 GB<br>Power: 45 Watts<br>Display size: 37.08 cm | [image](<product_catalog/images/0123142e9fc6070b83c84e33.webp>) | [source](<https://www.reliancedigital.in/product/samsung-tablet-s11-ultra-3708-cm-146-inch-wi-fi-tablet-with-s-pen-12-gb-ram-512-gb-silver-sm-x930nzseinu-mfqw3l-9454978>) |
+| d4dcb677-0327-5a92-b726-5eb567c08564 | [Samsung Tablet S11 Ultra 37.08 cm (14.6 Inch) Wi-Fi + 5G Tablet with S-Pen, 12 GB RAM, 256 GB, Gray, SM-X936BZAAINU](<https://www.reliancedigital.in/product/samsung-tablet-s11-ultra-3708-cm-146-inch-wi-fi-5g-tablet-with-s-pen-12-gb-ram-256-gb-gray-sm-x936bzaainu-mfqw3h-9454973>) | Tablets | Samsung / SM-X936BZAAINU / SM-X936BZAAINU | 137,999.00 | current_store_listed_price | 2025 | — | Capacity: 12 GB<br>Power: 45 Watts<br>Display size: 37.08 cm | [image](<product_catalog/images/7333bf83fe0bbcd421ee4548.webp>) | [source](<https://www.reliancedigital.in/product/samsung-tablet-s11-ultra-3708-cm-146-inch-wi-fi-5g-tablet-with-s-pen-12-gb-ram-256-gb-gray-sm-x936bzaainu-mfqw3h-9454973>) |
+| 6f412d2f-ca41-5ac3-a45c-ac2e9041c6c8 | [Samsung Tablet S11 Ultra 37.08 cm (14.6 Inch) Wi-Fi + 5G Tablet with S-Pen, 12 GB RAM, 256 GB, Silver, SM-X936BZSAINU](<https://www.reliancedigital.in/product/samsung-tablet-s11-ultra-3708-cm-146-inch-wi-fi-5g-tablet-with-s-pen-12-gb-ram-256-gb-silver-sm-x936bzsainu-mfqw3h-9454972>) | Tablets | Samsung / SM-X936BZSAINU / SM-X936BZSAINU | 137,999.00 | current_store_listed_price | 2025 | — | Display diagonal: 37.1 cm (14.6")<br>Panel type: AMOLED<br>Display resolution: 2960 x 1848 pixels | [image](<product_catalog/images/6ff5a7b0f0b0ce290b80ae29.webp>) | [source](<https://www.reliancedigital.in/product/samsung-tablet-s11-ultra-3708-cm-146-inch-wi-fi-5g-tablet-with-s-pen-12-gb-ram-256-gb-silver-sm-x936bzsainu-mfqw3h-9454972>) |
+| ed9b1933-0986-5b8a-ac7f-8dcfd0a7140c | [Samsung Tablet S11 Ultra 37.08 cm (14.6 Inch) Wi-Fi + 5G Tablet with S-Pen, 12 GB RAM, 512 GB, Gray, SM-X936BZAEINU](<https://www.reliancedigital.in/product/samsung-tablet-s11-ultra-3708-cm-146-inch-wi-fi-5g-tablet-with-s-pen-12-gb-ram-512-gb-gray-sm-x936bzaeinu-mfrx62-9462885>) | Tablets | Samsung / SM-X936BZAEINU / SM-X936BZAEINU | 153,999.00 | current_store_listed_price | 2025 | — | Display diagonal: 37.1 cm (14.6")<br>Panel type: AMOLED<br>Display resolution: 2960 x 1848 pixels | [image](<product_catalog/images/3e552b96bbab8de9bd954605.webp>) | [source](<https://www.reliancedigital.in/product/samsung-tablet-s11-ultra-3708-cm-146-inch-wi-fi-5g-tablet-with-s-pen-12-gb-ram-512-gb-gray-sm-x936bzaeinu-mfrx62-9462885>) |
+| 13c85448-ab61-564b-96a5-cacb8d8ba731 | [Samsung Tablet S11 Ultra 37.08 cm (14.6 Inch) Wi-Fi + 5G Tablet with S-Pen, 12 GB RAM, 512 GB, Silver, SM-X936BZSEINU](<https://www.reliancedigital.in/product/samsung-tablet-s11-ultra-3708-cm-146-inch-wi-fi-5g-tablet-with-s-pen-12-gb-ram-512-gb-silver-sm-x936bzseinu-mfqwb2-9455277>) | Tablets | Samsung / SM-X936BZSEINU / SM-X936BZSEINU | 153,999.00 | current_store_listed_price | 2025 | — | Display diagonal: 37.1 cm (14.6")<br>Panel type: AMOLED<br>Display resolution: 2960 x 1848 pixels | [image](<product_catalog/images/6ff5a7b0f0b0ce290b80ae29.webp>) | [source](<https://www.reliancedigital.in/product/samsung-tablet-s11-ultra-3708-cm-146-inch-wi-fi-5g-tablet-with-s-pen-12-gb-ram-512-gb-silver-sm-x936bzseinu-mfqwb2-9455277>) |
+| 2c287fd3-c90f-55cf-86f9-dc173d30222c | [Samsung Tablet S11 Ultra 37.08 cm (14.6 Inch) Wi-Fi Tablet with S-Pen, 12 GB RAM, 256 GB, Gray, SM-X930NZAAINU](<https://www.reliancedigital.in/product/samsung-tablet-s11-ultra-3708-cm-146-inch-wi-fi-tablet-with-s-pen-12-gb-ram-256-gb-gray-sm-x930nzaainu-mfqvwi-9454762>) | Tablets | Samsung / SM-X930NZAAINU / SM-X930NZAAINU | 124,999.00 | current_store_listed_price | 2025 | — | Capacity: 12 GB<br>Power: 45 Watts<br>Display size: 37.08 cm | [image](<product_catalog/images/7333bf83fe0bbcd421ee4548.webp>) | [source](<https://www.reliancedigital.in/product/samsung-tablet-s11-ultra-3708-cm-146-inch-wi-fi-tablet-with-s-pen-12-gb-ram-256-gb-gray-sm-x930nzaainu-mfqvwi-9454762>) |
+| 7caa3d2f-d0af-580d-8162-01c27b718368 | [Samsung Tablet S11 Ultra 37.08 cm (14.6 Inch) Wi-Fi Tablet with S-Pen, 12 GB RAM, 256 GB, Silver, SM-X930NZSAINU](<https://www.reliancedigital.in/product/samsung-tablet-s11-ultra-3708-cm-146-inch-wi-fi-tablet-with-s-pen-12-gb-ram-256-gb-silver-sm-x930nzsainu-mfqvwi-9454764>) | Tablets | Samsung / SM-X930NZSAINU / SM-X930NZSAINU | 124,999.00 | current_store_listed_price | 2025 | — | Capacity: 12 GB<br>Power: 45 Watts<br>Display size: 37.08 cm | [image](<product_catalog/images/0123142e9fc6070b83c84e33.webp>) | [source](<https://www.reliancedigital.in/product/samsung-tablet-s11-ultra-3708-cm-146-inch-wi-fi-tablet-with-s-pen-12-gb-ram-256-gb-silver-sm-x930nzsainu-mfqvwi-9454764>) |
+| 2f7aa008-d78c-51b6-92e9-654ceb9bd6e6 | [Samsung Tablet S11 Ultra 37.08 cm (14.6 Inch) Wi-Fi Tablet with S-Pen, 12 GB RAM, 512 GB, Gray, SM-X930NZAEINU](<https://www.reliancedigital.in/product/samsung-tablet-s11-ultra-3708-cm-146-inch-wi-fi-tablet-with-s-pen-12-gb-ram-512-gb-gray-sm-x930nzaeinu-mfrx65-9462886>) | Tablets | Samsung / SM-X930NZAEINU / SM-X930NZAEINU | 141,999.00 | current_store_listed_price | 2025 | — | Capacity: 12 GB<br>Power: 45 Watts<br>Display size: 37.08 cm | [image](<product_catalog/images/7333bf83fe0bbcd421ee4548.webp>) | [source](<https://www.reliancedigital.in/product/samsung-tablet-s11-ultra-3708-cm-146-inch-wi-fi-tablet-with-s-pen-12-gb-ram-512-gb-gray-sm-x930nzaeinu-mfrx65-9462886>) |
+| fd8c3240-d50e-5a6e-86e3-60f7a941524b | [Samsung Tablet S11 Ultra 37.08 cm (14.6 Inch) Wi-Fi Tablet with S-Pen, 12 GB RAM, 512 GB, Silver, SM-X930NZSEINU](<https://www.reliancedigital.in/product/samsung-tablet-s11-ultra-3708-cm-146-inch-wi-fi-tablet-with-s-pen-12-gb-ram-512-gb-silver-sm-x930nzseinu-mfqw3l-9454978>) | Tablets | Samsung / SM-X930NZSEINU / SM-X930NZSEINU | 139,999.00 | current_store_listed_price | 2025 | — | Capacity: 12 GB<br>Power: 45 Watts<br>Display size: 37.08 cm | [image](<product_catalog/images/0123142e9fc6070b83c84e33.webp>) | [source](<https://www.reliancedigital.in/product/samsung-tablet-s11-ultra-3708-cm-146-inch-wi-fi-tablet-with-s-pen-12-gb-ram-512-gb-silver-sm-x930nzseinu-mfqw3l-9454978>) |
 | 642fe79f-11e8-56d9-9bd1-753b30574613 | [Redmi Pad 2 27.94 cm (11 inch) Wi-Fi + LTE Tablet with Pen, 8 GB RAM, 256 GB, Graphite Grey, VHU7293IN](<https://www.reliancedigital.in/product/redmi-pad-2-2794-cm-11-inch-wi-fi-lte-tablet-with-pen-8-gb-ram-256-gb-graphite-grey-vhu7293in-mv7zmn-10780836>) | Tablets | Xiaomi / VHU7293IN / VHU7293IN | 26,999.00 | current_store_listed_price | ? | — | Capacity: 8 GB<br>Display size: 27.94 cm<br>Camera: 5 MP | [image](<product_catalog/images/bea69183c1950acb68dd7e76.webp>) | [source](<https://www.reliancedigital.in/product/redmi-pad-2-2794-cm-11-inch-wi-fi-lte-tablet-with-pen-8-gb-ram-256-gb-graphite-grey-vhu7293in-mv7zmn-10780836>) |
 | ba24b0a8-78a8-5e77-a8a4-09910db09a10 | [Redmi Pad 2 27.94 cm (11 inch) Wi-Fi + LTE Tablet, 4 GB RAM, 128 GB, Graphite Grey, VHU6723IN](<https://www.reliancedigital.in/product/redmi-pad-2-2794-cm-11-inch-wi-fi-lte-tablet-4-gb-ram-128-gb-graphite-grey-vhu6723in-mmj2uk-9979984>) | Tablets | Xiaomi / VHU6723IN / VHU6723IN | 18,999.00 | current_store_listed_price | ? | — | Capacity: 4 GB<br>Display size: 27.94 cm<br>Camera: 8 MP | [image](<product_catalog/images/53f591ca1c73c92ba179774b.webp>) | [source](<https://www.reliancedigital.in/product/redmi-pad-2-2794-cm-11-inch-wi-fi-lte-tablet-4-gb-ram-128-gb-graphite-grey-vhu6723in-mmj2uk-9979984>) |
 | 9a9e388e-87de-5348-978b-35f0a17db517 | [Redmi Pad 2 27.94 cm (11 inch) Wi-Fi + LTE Tablet, 4 GB RAM, 128 GB, Sky Blue, VHU6722IN](<https://www.reliancedigital.in/product/redmi-pad-2-2794-cm-11-inch-wi-fi-lte-tablet-4-gb-ram-128-gb-sky-blue-vhu6722in-mmj2ul-9979985>) | Tablets | Xiaomi / VHU6722IN / VHU6722IN | 18,999.00 | current_store_listed_price | ? | — | Capacity: 4 GB<br>Display size: 27.94 cm<br>Camera: 8 MP | [image](<product_catalog/images/773fb2d388d1115aff933811.webp>) | [source](<https://www.reliancedigital.in/product/redmi-pad-2-2794-cm-11-inch-wi-fi-lte-tablet-4-gb-ram-128-gb-sky-blue-vhu6722in-mmj2ul-9979985>) |
