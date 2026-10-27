@@ -12,7 +12,7 @@
 | Rows with verified image files | 9,195 / 9,195 |
 | Rows with positive INR listed price | 9,195 / 9,195 |
 | Rows with GTIN | 342 / 9,195 |
-| Rows with release year | 3,518 / 9,195 |
+| Rows with release year | 3,574 / 9,195 |
 | New rows with verified year | 33 |
 
 ## Department coverage
