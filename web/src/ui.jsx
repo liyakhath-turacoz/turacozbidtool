@@ -262,23 +262,25 @@ export function KV({ label, value }) {
   );
 }
 
-export function ProductImage({ product, className = 'product-art', iconSize = 42 }) {
-  const [loaded, setLoaded] = useState(false);
-  const [failed, setFailed] = useState(false);
-  useEffect(() => { setLoaded(false); setFailed(false); }, [product.image_url]);
+export function ProductImage({ product, className = 'product-art', iconSize = 42, loading }) {
   const placeholder = '/catalog-placeholder.svg';
-  const source = !product.image_url || failed ? placeholder : productImageUrl(product.image_url);
+  const source = product.image_url ? productImageUrl(product.image_url) : placeholder;
+  const [imageState, setImageState] = useState({ source: '', status: 'loading' });
+  const status = imageState.source === source ? imageState.status : 'loading';
+  const displaySource = source === placeholder || status === 'fallback' || status === 'missing' ? placeholder : source;
+  const loaded = status === 'loaded' || status === 'placeholder';
   return (
     <div className={className}>
-      {!loaded && failed ? <Package size={iconSize} aria-hidden="true" /> : null}
+      {!loaded ? <Package size={iconSize} aria-hidden="true" /> : null}
       <img
-        src={source}
+        key={displaySource}
+        src={displaySource}
         alt=""
-        loading={className === 'product-detail-art' ? 'eager' : 'lazy'}
+        loading={loading || (className === 'product-detail-art' ? 'eager' : 'lazy')}
         className="catalog-product-photo"
         style={{ opacity: loaded ? 1 : 0 }}
-        onLoad={() => setLoaded(true)}
-        onError={() => { if (source !== placeholder) setFailed(true); }}
+        onLoad={() => setImageState({ source, status: displaySource === placeholder ? 'placeholder' : 'loaded' })}
+        onError={() => setImageState({ source, status: displaySource === placeholder ? 'missing' : 'fallback' })}
       />
     </div>
   );

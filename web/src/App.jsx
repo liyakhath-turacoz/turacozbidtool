@@ -1461,8 +1461,8 @@ function BuyerHomePage({ data, setBidProduct, setTab, run, user }) {
           ) : null}
           {catalogLoading && !products.length ? <p role="status" className="muted">Loading products…</p> : null}
           <div className="product-grid buyer-grid">
-            {products.map((product) => (
-              <ProductCard key={product.id} product={product} deals={dealCounts[product.id]} onSelect={() => openProduct(product)} onCart={() => product.variant_count>1 ? openProduct(product) : addToCart(product)} onBid={() => product.variant_count>1 ? openProduct(product) : setBidProduct(product)} />
+            {products.map((product, index) => (
+              <ProductCard key={product.id} product={product} imageLoading={index < 6 ? 'eager' : 'lazy'} deals={dealCounts[product.id]} onSelect={() => openProduct(product)} onCart={() => product.variant_count>1 ? openProduct(product) : addToCart(product)} onBid={() => product.variant_count>1 ? openProduct(product) : setBidProduct(product)} />
             ))}
           </div>
           {!catalogLoading && !catalogError && !products.length ? <Empty title="No products match" hint="Try fewer filters, or describe your exact product so nearby shops can quote." action={<><button type="button" className="primary" onClick={()=>setCustomOpen(true)}>Request a custom product</button><button type="button" onClick={() => { setFilters(emptyCatalogFilters()); setQuery(''); }}>Clear search and filters</button></>} /> : null}
@@ -3266,11 +3266,11 @@ function AdminAccountDetails({ details, role, onClose }) {
   );
 }
 
-function ProductCard({ product, deals = 0, onCart, onBid, onSelect }) {
+function ProductCard({ product, deals = 0, onCart, onBid, onSelect, imageLoading = 'lazy' }) {
   const specs = productSpecs(product);
   return (
     <article className="product-card" onClick={onSelect}>
-      <ProductImage product={product} />
+      <ProductImage product={product} loading={imageLoading} />
       {product.brand ? <span className="product-brand">{product.brand}</span> : null}
       <h3 title={product.name}><button type="button" onClick={(event) => { event.stopPropagation(); onSelect(); }}>{product.variant_count>1 ? product.model_name : product.name}</button></h3>
       <p title={specs}>{product.variant_count>1 ? `${product.variant_count} variants - choose colour and configuration` : specs || 'Standard edition'}</p>
