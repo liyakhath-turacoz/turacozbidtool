@@ -50,8 +50,8 @@ TECH_RESOURCES={'Smartphones':'smartphones','Tablets':'tablets','Laptops':'lapto
 
 def cutoff(today=None):
     today=today or datetime.now(ZoneInfo('Asia/Kolkata')).date()
-    try:return today.replace(year=today.year-3)
-    except ValueError:return today.replace(year=today.year-3,day=28)
+    try:return today.replace(year=today.year-4)
+    except ValueError:return today.replace(year=today.year-4,day=28)
 
 
 def parse_date(value):
@@ -76,7 +76,7 @@ def is_recent(record):
         if released.year<today.year-2:return False,'ambiguous_or_old_release_year'
         if released.year>today.year:return False,'future_release'
     elif released>today:return False,'future_release'
-    elif released<cutoff():return False,'older_than_three_years'
+    elif released<cutoff():return False,'older_than_four_years'
     if record.get('on_market') is False:return False,'discontinued'
     return True,''
 
@@ -242,7 +242,7 @@ def icecat_xml(row,item):
     # Current Icecat exports supply locale/international dates in nested nodes.
     # Prefer those over the legacy attribute; never use Date_Added as release age.
     dates=product.findall('./ReleaseDate/Date')
-    released=next((node.get('Value') for node in dates if node.get('Value')),None) or product.attrib.get('ReleaseDate') or product.findtext('ReleaseDate')
+    released=next((node.get('Value') for node in dates if node.get('Value')),None)
     supplier=product.find('Supplier');brand=supplier.attrib.get('Name','') if supplier is not None else row.get('m_supplier_name','')
     specs={};features=[]
     for feature in product.findall('ProductFeature'):
@@ -669,6 +669,10 @@ class ImportService:
             if not existing:
                 cursor.execute("SELECT p.id,p.deleted_at,p.status FROM products p LEFT JOIN categories sc ON sc.id=p.subcategory_id WHERE p.brand=%s AND p.model=%s AND sc.name=%s AND p.release_year=%s AND (p.mpn IS NULL OR p.mpn='') LIMIT 1 FOR UPDATE",[record['brand'],record.get('model') or record['name'],item,release.year]);existing=cursor.fetchone()
             if existing and (existing['deleted_at'] is not None or existing['status']!='active'):return 'skipped','admin_removed_or_inactive'
+            if existing:
+                cursor.execute('SELECT catalog_visible FROM products WHERE id=%s',[existing['id']])
+                if cursor.fetchone()['catalog_visible']:
+                    return 'skipped','visible_variant_requires_verified_india_ingestion'
             parent=category_id(cursor,catalog.parent_category(item),None)
             cursor.execute('SELECT status,deleted_at FROM categories WHERE id=%s',[parent]);parent_state=cursor.fetchone()
             if parent_state['deleted_at'] is not None or parent_state['status']!='active':return 'skipped','admin_removed_or_inactive_category'
@@ -704,7 +708,9 @@ class ImportService:
                 cursor.execute('UPDATE products SET '+','.join(key+'=%s' for key in fields)+',updated_at=UTC_TIMESTAMP() WHERE id=%s',[*fields.values(),product_id])
             else:
                 source_key=str(record['source_product_id'])
-                fields.update({'id':product_id,'source':source['adapter'],'source_product_id':source_key if len(source_key)<=80 else hashlib.sha256(source_key.encode()).hexdigest(),'price_min':0,'price_max':0,'status':'active'})
+                # Legacy global sources have no India-store listing evidence. Keep new
+                # records hidden; only the India-first pipeline may publish.
+                fields.update({'id':product_id,'source':source['adapter'],'source_product_id':source_key if len(source_key)<=80 else hashlib.sha256(source_key.encode()).hexdigest(),'price_min':0,'price_max':0,'status':'active','catalog_visible':False})
                 cursor.execute('INSERT INTO products ('+','.join(fields)+',created_at,updated_at) VALUES ('+','.join(['%s']*len(fields))+',UTC_TIMESTAMP(),UTC_TIMESTAMP())',list(fields.values()))
             cursor.execute('SELECT id,highlights,technical_specifications,software_specifications,manual_specifications FROM products WHERE id=%s',[product_id]);catalog.index_product(cursor,cursor.fetchone())
             cursor.execute('INSERT INTO product_source_records (source_id,external_key,product_id,content_hash,fetched_at) VALUES (%s,%s,%s,%s,UTC_TIMESTAMP()) ON DUPLICATE KEY UPDATE product_id=VALUES(product_id),content_hash=VALUES(content_hash),fetched_at=VALUES(fetched_at)',[source['id'],external,product_id,digest])

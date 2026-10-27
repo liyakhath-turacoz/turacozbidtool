@@ -1,0 +1,216 @@
+{
+  "version": 1,
+  "policy": "India retailer discovery first; Icecat enriches exact matches only. Sitemap dates and listing dates are never release dates.",
+  "sources": [
+    {
+      "id": "whirlpool",
+      "kind": "vtex",
+      "url": "https://india.whirlpool.in",
+      "api_path": "/api/catalog_system/pub/products/search",
+      "brand": "Whirlpool",
+      "market": "India"
+    },
+    {
+      "id": "reliance",
+      "kind": "sitemap",
+      "url": "https://www.reliancedigital.in/sitemap.xml",
+      "product_path": "/product/",
+      "market": "India"
+    },
+    {
+      "id": "croma",
+      "kind": "sitemap",
+      "url": "https://www.croma.com/sitemap.xml",
+      "product_path": "/p/",
+      "market": "India"
+    },
+    {
+      "id": "vijaysales",
+      "kind": "sitemap",
+      "url": "https://www.vijaysales.com/sitemap-index.xml",
+      "product_path": "/p/",
+      "market": "India"
+    },
+    {
+      "id": "poorvika",
+      "kind": "sitemap",
+      "url": "https://www.poorvika.com/sitemap_product.xml",
+      "product_path": "",
+      "market": "India"
+    },
+    {
+      "id": "sathya",
+      "kind": "sitemap",
+      "url": "https://sathya.in/sitemap.xml",
+      "product_path": "",
+      "market": "India"
+    },
+    {
+      "id": "snehanjali",
+      "kind": "sitemap",
+      "url": "https://snehanjali.in/wp-sitemap.xml",
+      "product_path": "/product/",
+      "market": "India"
+    },
+    {
+      "id": "moglix",
+      "kind": "sitemap",
+      "url": "https://www.moglix.com/sitemap_index.xml",
+      "product_path": "/mp/",
+      "market": "India"
+    },
+    {
+      "id": "industrybuying",
+      "kind": "sitemap",
+      "url": "https://www.industrybuying.com/sitemap_index.xml",
+      "product_path": "",
+      "market": "India"
+    },
+    {
+      "id": "mdcomputers",
+      "kind": "sitemap",
+      "url": "https://mdcomputers.in/sitemap_feed.xml",
+      "product_path": "/product/",
+      "market": "India"
+    },
+    {
+      "id": "pcstudio",
+      "kind": "sitemap",
+      "url": "https://www.pcstudio.in/sitemap.xml",
+      "product_path": "/product/",
+      "market": "India"
+    },
+    {
+      "id": "orient",
+      "kind": "shopify",
+      "url": "https://orientelectric.com",
+      "brand": "Orient Electric",
+      "market": "India"
+    },
+    {
+      "id": "crompton",
+      "kind": "shopify",
+      "url": "https://www.crompton.co.in",
+      "brand": "Crompton",
+      "market": "India"
+    },
+    {
+      "id": "philips",
+      "kind": "shopify",
+      "url": "https://www.domesticappliances.philips.co.in",
+      "brand": "Philips",
+      "market": "India"
+    },
+    {
+      "id": "amkette",
+      "kind": "shopify",
+      "url": "https://www.amkette.com",
+      "brand": "Amkette",
+      "market": "India"
+    },
+    {
+      "id": "sharkninja",
+      "kind": "shopify",
+      "url": "https://sharkninja.in",
+      "brand": "SharkNinja",
+      "market": "India"
+    },
+    {
+      "id": "tpstech",
+      "kind": "shopify",
+      "url": "https://www.tpstech.in",
+      "market": "India"
+    },
+    {
+      "id": "sony",
+      "kind": "shopify",
+      "url": "https://shopatsc.com",
+      "brand": "Sony",
+      "market": "India"
+    },
+    {
+      "id": "boat",
+      "kind": "shopify",
+      "url": "https://www.boat-lifestyle.com",
+      "brand": "boAt",
+      "market": "India"
+    },
+    {
+      "id": "noise",
+      "kind": "shopify",
+      "url": "https://www.gonoise.com",
+      "brand": "Noise",
+      "market": "India"
+    },
+    {
+      "id": "portronics",
+      "kind": "shopify",
+      "url": "https://www.portronics.com",
+      "brand": "Portronics",
+      "market": "India"
+    },
+    {
+      "id": "zebronics",
+      "kind": "shopify",
+      "url": "https://zebronics.com",
+      "brand": "Zebronics",
+      "market": "India"
+    },
+    {
+      "id": "agaro",
+      "kind": "shopify",
+      "url": "https://agarolifestyle.com",
+      "brand": "AGARO",
+      "market": "India"
+    },
+    {
+      "id": "wonderchef",
+      "kind": "shopify",
+      "url": "https://www.wonderchef.com",
+      "brand": "Wonderchef",
+      "market": "India"
+    },
+    {
+      "id": "voltas",
+      "kind": "shopify",
+      "url": "https://www.voltas.com",
+      "brand": "Voltas",
+      "market": "India"
+    },
+    {
+      "id": "imagine",
+      "kind": "shopify",
+      "url": "https://www.imagineonline.store",
+      "brand": "Apple",
+      "market": "India"
+    },
+    {
+      "id": "iplanet",
+      "kind": "shopify",
+      "url": "https://iplanet.one",
+      "market": "India"
+    }
+  ],
+  "enrichment": [
+    {
+      "id": "icecat",
+      "url": "https://data.icecat.biz",
+      "role": "Exact brand/MPN or GTIN content enrichment; it does not establish India-market listing; only explicit nested ReleaseDate nodes qualify."
+    },
+    {
+      "id": "gs1",
+      "url": "https://www.gs1india.org/services/datakart",
+      "role": "GTIN assignment validation; access must be configured before use."
+    },
+    {
+      "id": "bis",
+      "url": "https://www.bis.gov.in/",
+      "role": "Exact-model certification checks only."
+    },
+    {
+      "id": "bee",
+      "url": "https://beestarlabel.com/",
+      "role": "Exact-model energy-label checks only."
+    }
+  ]
+}

@@ -46,6 +46,8 @@ try:
     from . import dealer_catalogue
     from . import promotions
     from . import product_identity
+    from . import catalog_metadata
+    from . import catalog_taxonomy
     from .logging_filters import install_token_filters
 except ImportError:
     import catalog_filters
@@ -61,6 +63,8 @@ except ImportError:
     import dealer_catalogue
     import promotions
     import product_identity
+    import catalog_metadata
+    import catalog_taxonomy
     from logging_filters import install_token_filters
 
 
@@ -588,7 +592,7 @@ def ensure_runtime_schema() -> None:
             # Archived product snapshots are visible only to bid/cart history queries.
             cursor.execute("CREATE TABLE IF NOT EXISTS product_reference_snapshots LIKE products")
             cursor.execute("""CREATE OR REPLACE VIEW product_reference_catalog AS
-                SELECT p.* FROM products p WHERE (p.catalog_visible=TRUE AND p.deleted_at IS NULL)
+                SELECT p.* FROM products p WHERE ((p.catalog_visible=TRUE OR p.source='custom_request') AND p.deleted_at IS NULL)
                   OR EXISTS (SELECT 1 FROM bid_requests br WHERE br.product_id=p.id)
                   OR EXISTS (SELECT 1 FROM cart_items ci WHERE ci.product_id=p.id)
                 UNION ALL
@@ -870,7 +874,7 @@ class CatalogRepository:
                 SELECT p.id, p.name, c.name AS category, sc.name AS item, p.brand, p.model,
                        p.price_min, p.price_max, CONCAT(l.city, ', ', l.state) AS location,
                        p.status, p.description, p.summary_description, p.image_url,
-                       p.release_year, p.source, p.source_product_id, p.mpn, p.gtin,
+                       p.release_year, p.release_date, p.source, p.source_product_id, p.mpn, p.gtin,
                        p.highlights AS specifications
                 FROM products p
                 JOIN categories c ON c.id = p.category_id
@@ -920,6 +924,8 @@ class CatalogRepository:
             if not include_inactive:
                 for row in rows:
                     row["specifications"] = catalog_filters.public_catalog_data(row.get("specifications"))
+            catalog_metadata.attach(cursor,rows)
+            for row in rows:catalog_metadata.hide_release_dates(row,admin=include_inactive)
             return rows
 
     @staticmethod
@@ -938,7 +944,7 @@ class CatalogRepository:
         for row in rows:
             row["specifications"] = {**(row.get("specifications") or {}), **by_product.get(row["id"], {})}
 
-    def product_detail(self, product_id: str, include_inactive: bool = False, include_sources: bool = False) -> dict[str, Any]:
+    def product_detail(self, product_id: str, include_inactive: bool = False, include_sources: bool = False, owner_id: str | None = None) -> dict[str, Any]:
         with db() as conn, conn.cursor() as cursor:
             cursor.execute(
                 """
@@ -949,11 +955,11 @@ class CatalogRepository:
                 LEFT JOIN categories sc ON sc.id=p.subcategory_id
                 LEFT JOIN locations l ON l.id=p.location_id
                 WHERE p.id=%s AND p.deleted_at IS NULL
-                  AND p.catalog_visible=TRUE
+                  AND (p.catalog_visible=TRUE OR (p.source='custom_request' AND p.created_by=%s))
                   AND (%s=TRUE OR p.status='active')
                   AND (%s=TRUE OR (c.status='active' AND c.deleted_at IS NULL AND (p.subcategory_id IS NULL OR (sc.status='active' AND sc.deleted_at IS NULL))))
                 """,
-                [product_id, include_inactive, include_inactive],
+                [product_id, owner_id, include_inactive, include_inactive],
             )
             row = cursor.fetchone()
             if not row:
@@ -989,11 +995,14 @@ class CatalogRepository:
                 [product_id],
             )
             row["assets"] = cursor.fetchall()
+            catalog_metadata.attach(cursor,[row])
+            row['variant_options']=catalog_metadata.variants(cursor,product_id)
             if not include_sources:
                 for field in ("source", "source_product_id", "source_url", "product_url", "price_source_url", "source_attribution", "verification_status", "catalog_notes", "mpn", "gtin", "catalog_added_at", "release_date_basis", "release_date_precision"):
                     row.pop(field, None)
                 for field in ("specifications", "technical_specifications", "software_specifications"):
                     row[field] = catalog_filters.public_catalog_data(row.get(field))
+            catalog_metadata.hide_release_dates(row,admin=include_sources)
             return row
 
     def create_product(self, draft: "ProductIn", admin_id: str) -> str:
@@ -1901,7 +1910,7 @@ class CartRepository:
             expiry_minutes = int(expiry_minutes if expiry_minutes is not None else round(float(rules["expiry_hours"]) * 60))
             if not float(rules["min_time_hours"]) * 60 - 1e-9 <= expiry_minutes <= float(rules["max_time_hours"]) * 60 + 1e-9:
                 raise HTTPException(status_code=400, detail="Request duration is outside the configured bidding limits")
-            cursor.execute("SELECT p.id FROM products p JOIN categories c ON c.id=p.category_id LEFT JOIN categories sc ON sc.id=p.subcategory_id WHERE p.id=%s AND p.status='active' AND p.deleted_at IS NULL AND p.catalog_visible=TRUE AND c.status='active' AND c.deleted_at IS NULL AND (p.subcategory_id IS NULL OR (sc.status='active' AND sc.deleted_at IS NULL)) FOR UPDATE", [product_id])
+            cursor.execute("SELECT p.id FROM products p JOIN categories c ON c.id=p.category_id LEFT JOIN categories sc ON sc.id=p.subcategory_id WHERE p.id=%s AND p.status='active' AND p.deleted_at IS NULL AND (p.catalog_visible=TRUE OR (p.source='custom_request' AND p.created_by=%s)) AND c.status='active' AND c.deleted_at IS NULL AND (p.subcategory_id IS NULL OR (sc.status='active' AND sc.deleted_at IS NULL)) FOR UPDATE", [product_id,buyer_id])
             if not cursor.fetchone():
                 raise HTTPException(status_code=404, detail="Active product not found")
             if not location_id:
@@ -1942,7 +1951,9 @@ class CartRepository:
             skip_flagged_dealers = True
 
             eligible = dealer_ops.matching_dealer_ids(cursor, product_id, location_id, buyer_radius_km, skip_flagged_dealers)
-            if not eligible:
+            cursor.execute("SELECT source FROM products WHERE id=%s",[product_id])
+            is_custom=(cursor.fetchone() or {}).get('source')=='custom_request'
+            if not eligible and not is_custom:
                 raise HTTPException(
                     status_code=400,
                     detail="No active, subscribed shop deals in this product and covers your saved location yet. Try another product or saved location.",
@@ -1997,7 +2008,7 @@ class CartRepository:
                 """,
                 [
                     new_id(), buyer_id,
-                    f"Your bid request for {prod_name} has been broadcasted. {notified_count} subscribed dealer(s) notified. You will receive offers soon.",
+                    (f"Your request for {prod_name} is active. {notified_count} subscribed dealer(s) notified." if notified_count else f"Your request for {prod_name} is active and waiting for a matching shop in your service area."),
                     request_id,
                 ]
             )
@@ -2266,7 +2277,7 @@ class DealerOpsRepository:
                 chosen_companies = dynamic.get("brands", []) if isinstance(dynamic, dict) else []
             except (json.JSONDecodeError, TypeError, AttributeError):
                 chosen_companies = []
-            if not lists_it and not company_preference_matches(chosen_companies, product.get("manufacturer"), product.get("brand")):
+            if not lists_it and (product.get("manufacturer") or product.get("brand")) and not company_preference_matches(chosen_companies, product.get("manufacturer"), product.get("brand")):
                 continue
             if row.get("country") and normalize_place(row["country"]) != normalize_place(origin["country"]):
                 continue
@@ -2343,9 +2354,34 @@ class DealerOpsRepository:
         logger.debug("matching_dealer_ids: %d matched out of %d candidates", len(matched), len(candidates))
         return list(dict.fromkeys(dealer for _, dealer in sorted(matched)))
 
+    _custom_invite_positions = {}
+    _custom_invite_checks = {}
+    _custom_invite_lock = threading.Lock()
+
+    def refresh_custom_invites(self,cursor,dealer_id):
+        # A waiting request remains discoverable when a shop joins or changes
+        # coverage. Keyset batches bound each poll; invitations are idempotent.
+        with self._custom_invite_lock:
+            if time.monotonic()-self._custom_invite_checks.get(dealer_id,0)<30:return
+            self._custom_invite_checks[dealer_id]=time.monotonic()
+            after=self._custom_invite_positions.get(dealer_id,'')
+        cursor.execute('''SELECT br.id,br.product_id,br.location_id,br.radius_km,br.skip_flagged_dealers
+            FROM bid_requests br JOIN products p ON p.id=br.product_id
+            WHERE br.id>%s AND p.source='custom_request' AND p.deleted_at IS NULL
+              AND br.status='active' AND br.expires_at>NOW() AND br.deleted_at IS NULL
+              AND NOT EXISTS(SELECT 1 FROM bid_request_dealers d WHERE d.bid_request_id=br.id AND d.dealer_id=%s)
+            ORDER BY br.id LIMIT 20''',[after,dealer_id])
+        rows=cursor.fetchall()
+        for request in rows:
+            if dealer_id in self.matching_dealer_ids(cursor,request['product_id'],request['location_id'],0,True,dealer_id):
+                cursor.execute("INSERT IGNORE INTO bid_request_dealers(bid_request_id,dealer_id,notified_at,status) SELECT id,%s,NOW(),'notified' FROM bid_requests WHERE id=%s AND status='active' AND expires_at>NOW() AND deleted_at IS NULL",[dealer_id,request['id']])
+        with self._custom_invite_lock:
+            self._custom_invite_positions[dealer_id]=rows[-1]['id'] if len(rows)==20 else ''
+
     def incoming_requests(self, dealer_id: str) -> list[dict[str, Any]]:
         with db() as conn, conn.cursor() as cursor:
             expire_due_bid_requests(cursor)
+            self.refresh_custom_invites(cursor,dealer_id)
             cursor.execute(
                 """
                 SELECT br.id, br.product_id, br.location_id, br.skip_flagged_dealers, p.name AS product, p.brand, p.model, p.image_url,
@@ -3256,11 +3292,15 @@ async def lifespan(app_instance: FastAPI):
     check_database_storage()
     execute_sql_file()
     ensure_runtime_schema()
+    catalog_filters.ensure_schema(db)
+    catalog_metadata.ensure_schema(db)
     seed_database()
     if os.getenv("TURACOZ_IMPORT_PRODUCTS_ON_STARTUP", "false").lower() in {"1", "true", "yes", "on"}:
         import_result = import_bundle_if_needed(ROOT.parent / "products")
         logger.info("Product catalog startup import: %s", import_result)
     check_database_storage()
+    from .tantivy_search import engine as open_search_index
+    await asyncio.to_thread(open_search_index,db)
     schedule_existing_bid_expiries()
     product_imports.initialize()
     import_scheduler = asyncio.create_task(product_imports.scheduler())
@@ -4245,11 +4285,28 @@ def parse_catalog_specs(value):
 
 
 @app.get('/catalog/search')
-def catalog_search(q:str='',category:str='',product_type:str='',categories:list[str]=Query(default=[]),product_types:list[str]=Query(default=[]),brands:list[str]=Query(default=[]),years:list[str]=Query(default=[]),specs:str='{}',status:str='',minimum:float|None=Query(default=None,ge=0),maximum:float|None=Query(default=None,ge=0),sort:str='Newest',limit:int=Query(default=50,ge=1,le=250),offset:int=Query(default=0,ge=0),include_facets:bool=True,user:dict=Depends(current_user)):
+def catalog_search(q:str='',category:str='',product_type:str='',type_id:str='',canonical_types:list[str]=Query(default=[]),categories:list[str]=Query(default=[]),product_types:list[str]=Query(default=[]),brands:list[str]=Query(default=[]),years:list[str]=Query(default=[]),specs:str='{}',status:str='',minimum:float|None=Query(default=None,ge=0),maximum:float|None=Query(default=None,ge=0),sort:str='Newest',limit:int=Query(default=50,ge=1,le=250),offset:int=Query(default=0,ge=0),include_facets:bool=True,group_models:bool=False,user:dict=Depends(current_user)):
     if len(q)>160:raise HTTPException(status_code=400,detail='Search text must be 160 characters or fewer')
     if minimum is not None and maximum is not None and minimum>maximum:raise HTTPException(status_code=400,detail='Minimum price must not exceed maximum price')
     if any(year!='unknown' and (not year.isdigit() or not 1900<=int(year)<=2200) for year in years):raise HTTPException(status_code=400,detail='Invalid release year')
-    return catalog_filters.search(db,{'q':q,'category':category,'product_type':product_type,'categories':categories,'product_types':product_types,'brands':brands,'years':years,'specs':parse_catalog_specs(specs),'status':status,'minimum':minimum,'maximum':maximum,'sort':sort,'limit':limit,'offset':offset},admin=user['role']=='admin',include_facets=include_facets)
+    if type_id and type_id not in {*catalog_taxonomy.TYPES,'unclassified'}:raise HTTPException(status_code=400,detail='Unknown product type')
+    if len(canonical_types)>len(catalog_taxonomy.TYPES)+1 or any(t not in {*catalog_taxonomy.TYPES,'unclassified'} for t in canonical_types):raise HTTPException(status_code=400,detail='Unknown product type')
+    return catalog_filters.search(db,{'q':q,'category':category,'product_type':product_type,'type_id':type_id,'canonical_types':canonical_types,'categories':categories,'product_types':product_types,'brands':brands,'years':years,'specs':parse_catalog_specs(specs),'status':status,'minimum':minimum,'maximum':maximum,'sort':sort,'limit':limit,'offset':offset,'group_models':group_models},admin=user['role']=='admin',include_facets=include_facets)
+
+
+@app.get('/catalog/taxonomy')
+def catalog_taxonomy_tree(user:dict=Depends(current_user)):
+    with db() as conn,conn.cursor() as cursor:return catalog_metadata.taxonomy_tree(cursor)
+
+
+@app.get('/admin/catalog-ingestion')
+def catalog_ingestion_status(user:dict=Depends(require_role('admin'))):
+    with db() as conn,conn.cursor() as cursor:
+        if not catalog_metadata.table_exists(cursor,'catalog_ingestion_runs'):return {'runs':[],'states':[]}
+        cursor.execute('SELECT id,started_at,completed_at,status,report_json FROM catalog_ingestion_runs ORDER BY started_at DESC LIMIT 10');runs=cursor.fetchall()
+        for run in runs:run['report']=json.loads(run.pop('report_json') or '{}')
+        cursor.execute('SELECT source_id,state,COUNT(*) count FROM catalog_ingestion_candidates GROUP BY source_id,state');states=cursor.fetchall()
+        return {'runs':runs,'states':states}
 
 
 @app.get('/admin/product-statistics')
@@ -4285,6 +4342,38 @@ def admin_fetch_products(source_id:str,user:dict=Depends(require_role('admin')))
     except ValueError as error:raise HTTPException(status_code=409,detail=str(error))
 
 
+class CustomProductIn(BaseModel):
+    name: str = Field(min_length=3,max_length=255)
+    type_id: str = Field(min_length=1,max_length=60)
+    brand: str = Field(default='',max_length=190)
+    details: str = Field(min_length=5,max_length=3000)
+
+
+@app.post('/buyer/custom-products')
+def create_custom_product(payload:CustomProductIn,user:dict=Depends(require_role('buyer'))):
+    if payload.type_id not in catalog_taxonomy.TYPES:
+        raise HTTPException(status_code=400,detail='Choose a product type')
+    name=payload.name.strip();details=payload.details.strip();brand=payload.brand.strip()
+    if len(name)<3 or len(details)<5:
+        raise HTTPException(status_code=400,detail='Enter the product name and the exact configuration you want')
+    taxon=catalog_taxonomy.TYPES[payload.type_id]
+    with (Path(__file__).resolve().parent.parent/'product_catalog'/'category_plan.csv').open(encoding='utf-8-sig') as stream:
+        department=next(r['department'] for r in csv.DictReader(stream) if r['department_code']==taxon['legacy_code'])
+    pid=new_id();specs={'Requested configuration':details}
+    with db() as conn,conn.cursor() as cursor:
+        cursor.execute('SELECT id FROM users WHERE id=%s AND deleted_at IS NULL FOR UPDATE',[user['sub']])
+        if not cursor.fetchone():raise HTTPException(status_code=404,detail='Buyer not found')
+        cursor.execute("SELECT COUNT(*) n FROM products WHERE created_by=%s AND source='custom_request' AND created_at>DATE_SUB(NOW(),INTERVAL 1 DAY)",[user['sub']])
+        if cursor.fetchone()['n']>=20:raise HTTPException(status_code=429,detail='You can create up to 20 custom product descriptions per day')
+        category,subcategory=resolve_category_ids(cursor,department,taxon['path'][-1])
+        cursor.execute('''INSERT INTO products(id,category_id,subcategory_id,name,brand,model,source,catalog_visible,created_by,highlights,manual_specifications,created_at,updated_at)
+            VALUES (%s,%s,%s,%s,%s,%s,'custom_request',FALSE,%s,%s,%s,NOW(),NOW())''',
+            [pid,category,subcategory,name,brand,name[:190],user['sub'],json.dumps(specs),json.dumps(specs)])
+        audit(cursor,user['sub'],'custom_product.created','products',pid,{'type_id':payload.type_id})
+    return {'id':pid,'name':name,'brand':brand,'model':name[:190],'category':department,'subcategory':taxon['path'][-1],
+        'status':'active','specifications':specs,'source':'custom_request','variant_id':pid,'variant_count':1}
+
+
 @app.get("/products")
 def products(
     q: str = "",
@@ -4307,24 +4396,30 @@ def products(
 @app.get("/products/{product_id}")
 def product_detail(product_id: str, user: dict[str, Any] = Depends(current_user)) -> dict[str, Any]:
     is_admin=user["role"] == "admin"
-    return catalog_repo.product_detail(product_id, include_inactive=is_admin, include_sources=is_admin)
+    return catalog_repo.product_detail(product_id, include_inactive=is_admin, include_sources=is_admin, owner_id=user['sub'] if user['role']=='buyer' else None)
 
 
 @app.post("/products")
 def create_product(payload: ProductIn, user: dict[str, Any] = Depends(require_role("admin"))) -> dict[str, str]:
     product_id = catalog_repo.create_product(payload, user["sub"])
+    from .tantivy_search import invalidate
+    invalidate()
     return {"id": product_id, "status": "created"}
 
 
 @app.put("/products/{product_id}")
 def update_product(product_id: str, payload: ProductIn, user: dict[str, Any] = Depends(require_role("admin"))) -> dict[str, str]:
     catalog_repo.update_product(product_id, payload, user["sub"])
+    from .tantivy_search import invalidate
+    invalidate()
     return {"status": "updated"}
 
 
 @app.delete("/products/{product_id}")
 def delete_product(product_id: str, user: dict[str, Any] = Depends(require_role("admin"))) -> dict[str, str]:
     catalog_repo.soft_delete_product(product_id, user["sub"])
+    from .tantivy_search import invalidate
+    invalidate()
     return {"status": "deleted"}
 
 

@@ -88,8 +88,6 @@ class ApiClient {
   ) async {
     final query = <String, dynamic>{};
     for (final entry in filters.entries) {
-      if (['specs', 'minimum', 'maximum', 'status'].contains(entry.key))
-        continue;
       if (entry.value == null || entry.value == '') continue;
       query[entry.key] = entry.key == 'specs'
           ? jsonEncode(entry.value)
@@ -456,6 +454,21 @@ class ApiClient {
       headers: _headers(token),
     );
     _throwIfBad(response);
+  }
+
+  Future<ProductItem> createCustomProduct(
+    String token,
+    Map<String, dynamic> draft,
+  ) async {
+    final response = await _http.post(
+      Uri.parse('$apiBaseUrl/buyer/custom-products'),
+      headers: _headers(token),
+      body: jsonEncode(draft),
+    );
+    _throwIfBad(response);
+    return ProductItem.fromJson(
+      Map<String, dynamic>.from(jsonDecode(response.body)),
+    );
   }
 
   Future<void> startBid(

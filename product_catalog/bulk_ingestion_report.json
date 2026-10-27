@@ -1,0 +1,1399 @@
+{
+  "generated_at": "2026-10-26T09:20:35",
+  "candidates": 40658,
+  "states": {
+    "eligible": 65,
+    "pending": 37930,
+    "published": 2158,
+    "rejected": 505
+  },
+  "india_market_listings": 40658,
+  "live_catalog": {
+    "total": 3164,
+    "bulk_variants": 1677,
+    "with_release_date": 1413,
+    "with_release_year": 1834,
+    "year_only_release": 421,
+    "with_verified_release_year": 1834,
+    "with_gtin": 91
+  },
+  "existing_catalog_audit": {
+    "as_of": "2026-10-26",
+    "visible_products": 3164,
+    "issues": {
+      "missing_gtin": 3073,
+      "missing_verified_release_date": 1330,
+      "missing_type_attributes": 753,
+      "duplicate_existing_variant_url": 104,
+      "unmapped_product_type": 37
+    },
+    "visibility_changed": false
+  },
+  "source_access_results": {
+    "industrybuying": {
+      "pages": {
+        "error": "OperationalError",
+        "reason": "Source unavailable; see source access report"
+      }
+    },
+    "sathya": {
+      "pages": {
+        "urls_attempted": 300,
+        "variants_parsed": 0
+      }
+    },
+    "mdcomputers": {
+      "pages": {
+        "urls_attempted": 300,
+        "variants_parsed": 300
+      }
+    },
+    "reliance": {
+      "pages": {
+        "urls_attempted": 300,
+        "variants_parsed": 298
+      }
+    },
+    "poorvika": {
+      "pages": {
+        "urls_attempted": 300,
+        "variants_parsed": 248
+      }
+    },
+    "snehanjali": {
+      "pages": {
+        "urls_attempted": 300,
+        "variants_parsed": 298
+      }
+    },
+    "pcstudio": {
+      "pages": {
+        "urls_attempted": 300,
+        "variants_parsed": 594
+      }
+    },
+    "vijaysales": {
+      "pages": {
+        "urls_attempted": 300,
+        "variants_parsed": 239
+      }
+    },
+    "sharkninja": {
+      "collect": {
+        "parents": 19,
+        "variants": 30,
+        "page_limit_reached": false
+      }
+    },
+    "whirlpool": {
+      "collect": {
+        "parents": 467,
+        "variants": 508,
+        "reported_total": null,
+        "next_offset": 467,
+        "errors": []
+      }
+    },
+    "amkette": {
+      "collect": {
+        "parents": 337,
+        "variants": 420,
+        "page_limit_reached": false
+      }
+    },
+    "sony": {
+      "collect": {
+        "parents": 407,
+        "variants": 474,
+        "page_limit_reached": false
+      }
+    },
+    "philips": {
+      "collect": {
+        "parents": 627,
+        "variants": 627,
+        "page_limit_reached": false
+      }
+    },
+    "tpstech": {
+      "collect": {
+        "parents": 750,
+        "variants": 789,
+        "page_limit_reached": true
+      }
+    },
+    "orient": {
+      "collect": {
+        "parents": 322,
+        "variants": 1355,
+        "page_limit_reached": false
+      }
+    },
+    "crompton": {
+      "collect": {
+        "parents": 750,
+        "variants": 1431,
+        "page_limit_reached": true
+      }
+    },
+    "voltas": {
+      "collect": {
+        "parents": 249,
+        "variants": 249,
+        "page_limit_reached": false
+      }
+    },
+    "agaro": {
+      "collect": {
+        "parents": 667,
+        "variants": 691,
+        "page_limit_reached": false
+      }
+    },
+    "zebronics": {
+      "collect": {
+        "parents": 750,
+        "variants": 991,
+        "page_limit_reached": true
+      }
+    },
+    "portronics": {
+      "collect": {
+        "parents": 750,
+        "variants": 1042,
+        "page_limit_reached": true
+      }
+    },
+    "boat": {
+      "collect": {
+        "parents": 750,
+        "variants": 2063,
+        "page_limit_reached": true
+      }
+    },
+    "wonderchef": {
+      "collect": {
+        "parents": 750,
+        "variants": 781,
+        "page_limit_reached": true
+      }
+    },
+    "imagine": {
+      "collect": {
+        "parents": 750,
+        "variants": 750,
+        "page_limit_reached": true
+      }
+    },
+    "iplanet": {
+      "collect": {
+        "parents": 750,
+        "variants": 750,
+        "page_limit_reached": true
+      }
+    },
+    "noise": {
+      "collect": {
+        "parents": 750,
+        "variants": 2685,
+        "page_limit_reached": true
+      }
+    }
+  },
+  "coverage_by_type": [
+    {
+      "id": "usb_drives",
+      "path": [
+        "Computing",
+        "Storage",
+        "USB flash drives"
+      ],
+      "live": 0,
+      "staged": 56
+    },
+    {
+      "id": "memory_cards",
+      "path": [
+        "Computing",
+        "Storage",
+        "Memory cards"
+      ],
+      "live": 8,
+      "staged": 60
+    },
+    {
+      "id": "hard_drives",
+      "path": [
+        "Computing",
+        "Storage",
+        "Hard disk drives"
+      ],
+      "live": 1,
+      "staged": 323
+    },
+    {
+      "id": "ssds",
+      "path": [
+        "Computing",
+        "Storage",
+        "SSDs"
+      ],
+      "live": 74,
+      "staged": 563
+    },
+    {
+      "id": "power_banks",
+      "path": [
+        "Mobile & charging",
+        "Portable power",
+        "Power banks"
+      ],
+      "live": 39,
+      "staged": 240
+    },
+    {
+      "id": "led_bulbs",
+      "path": [
+        "Lighting",
+        "Lamps",
+        "LED bulbs"
+      ],
+      "live": 0,
+      "staged": 86
+    },
+    {
+      "id": "smart_plugs",
+      "path": [
+        "Smart home",
+        "Power control",
+        "Smart plugs"
+      ],
+      "live": 1,
+      "staged": 5
+    },
+    {
+      "id": "switches",
+      "path": [
+        "Electrical installation",
+        "Controls",
+        "Switches"
+      ],
+      "live": 0,
+      "staged": 3
+    },
+    {
+      "id": "multimeters",
+      "path": [
+        "Test & measurement",
+        "Electrical meters",
+        "Multimeters"
+      ],
+      "live": 0,
+      "staged": 0
+    },
+    {
+      "id": "ups",
+      "path": [
+        "Power systems",
+        "Backup power",
+        "UPS"
+      ],
+      "live": 25,
+      "staged": 55
+    },
+    {
+      "id": "water_heaters",
+      "path": [
+        "Home appliances",
+        "Water heating",
+        "Water heaters"
+      ],
+      "live": 4,
+      "staged": 146
+    },
+    {
+      "id": "microwaves",
+      "path": [
+        "Kitchen appliances",
+        "Ovens",
+        "Microwave ovens"
+      ],
+      "live": 2,
+      "staged": 152
+    },
+    {
+      "id": "ovens",
+      "path": [
+        "Kitchen appliances",
+        "Ovens",
+        "OTG ovens"
+      ],
+      "live": 5,
+      "staged": 21
+    },
+    {
+      "id": "refrigerators",
+      "path": [
+        "Home appliances",
+        "Refrigeration",
+        "Refrigerators"
+      ],
+      "live": 283,
+      "staged": 776
+    },
+    {
+      "id": "freezers",
+      "path": [
+        "Home appliances",
+        "Refrigeration",
+        "Freezers"
+      ],
+      "live": 5,
+      "staged": 51
+    },
+    {
+      "id": "washers",
+      "path": [
+        "Home appliances",
+        "Laundry",
+        "Washing machines"
+      ],
+      "live": 55,
+      "staged": 404
+    },
+    {
+      "id": "dishwashers",
+      "path": [
+        "Kitchen appliances",
+        "Dish care",
+        "Dishwashers"
+      ],
+      "live": 4,
+      "staged": 60
+    },
+    {
+      "id": "air_conditioners",
+      "path": [
+        "Climate & air care",
+        "Cooling",
+        "Air conditioners"
+      ],
+      "live": 168,
+      "staged": 387
+    },
+    {
+      "id": "air_coolers",
+      "path": [
+        "Climate & air care",
+        "Cooling",
+        "Air coolers"
+      ],
+      "live": 6,
+      "staged": 137
+    },
+    {
+      "id": "air_purifiers",
+      "path": [
+        "Climate & air care",
+        "Air treatment",
+        "Air purifiers"
+      ],
+      "live": 5,
+      "staged": 92
+    },
+    {
+      "id": "fans",
+      "path": [
+        "Climate & air care",
+        "Air circulation",
+        "Fans"
+      ],
+      "live": 38,
+      "staged": 574
+    },
+    {
+      "id": "vacuum_cleaners",
+      "path": [
+        "Home care",
+        "Floor care",
+        "Vacuum cleaners"
+      ],
+      "live": 7,
+      "staged": 154
+    },
+    {
+      "id": "garment_steamers",
+      "path": [
+        "Home care",
+        "Garment care",
+        "Garment steamers"
+      ],
+      "live": 6,
+      "staged": 44
+    },
+    {
+      "id": "air_fryers",
+      "path": [
+        "Kitchen appliances",
+        "Cooking",
+        "Air fryers"
+      ],
+      "live": 5,
+      "staged": 75
+    },
+    {
+      "id": "multi_cookers",
+      "path": [
+        "Kitchen appliances",
+        "Cooking",
+        "Multi-cookers"
+      ],
+      "live": 2,
+      "staged": 1
+    },
+    {
+      "id": "mixers",
+      "path": [
+        "Kitchen appliances",
+        "Food preparation",
+        "Mixer grinders"
+      ],
+      "live": 9,
+      "staged": 152
+    },
+    {
+      "id": "blenders",
+      "path": [
+        "Kitchen appliances",
+        "Food preparation",
+        "Blenders"
+      ],
+      "live": 5,
+      "staged": 39
+    },
+    {
+      "id": "choppers",
+      "path": [
+        "Kitchen appliances",
+        "Food preparation",
+        "Choppers"
+      ],
+      "live": 2,
+      "staged": 6
+    },
+    {
+      "id": "juicers",
+      "path": [
+        "Kitchen appliances",
+        "Food preparation",
+        "Juicers"
+      ],
+      "live": 1,
+      "staged": 33
+    },
+    {
+      "id": "kettles",
+      "path": [
+        "Kitchen appliances",
+        "Beverage preparation",
+        "Electric kettles"
+      ],
+      "live": 1,
+      "staged": 37
+    },
+    {
+      "id": "coffee_machines",
+      "path": [
+        "Kitchen appliances",
+        "Beverage preparation",
+        "Coffee machines"
+      ],
+      "live": 0,
+      "staged": 21
+    },
+    {
+      "id": "smartphones",
+      "path": [
+        "Phones & tablets",
+        "Mobile phones",
+        "Smartphones"
+      ],
+      "live": 606,
+      "staged": 1896
+    },
+    {
+      "id": "tablets",
+      "path": [
+        "Phones & tablets",
+        "Tablets",
+        "Tablets"
+      ],
+      "live": 524,
+      "staged": 1478
+    },
+    {
+      "id": "laptops",
+      "path": [
+        "Computing",
+        "Computers",
+        "Laptops"
+      ],
+      "live": 148,
+      "staged": 1795
+    },
+    {
+      "id": "desktops",
+      "path": [
+        "Computing",
+        "Computers",
+        "Desktop computers"
+      ],
+      "live": 18,
+      "staged": 243
+    },
+    {
+      "id": "monitors",
+      "path": [
+        "Computing",
+        "Displays",
+        "Monitors"
+      ],
+      "live": 125,
+      "staged": 693
+    },
+    {
+      "id": "motherboards",
+      "path": [
+        "Computing",
+        "Components",
+        "Motherboards"
+      ],
+      "live": 19,
+      "staged": 399
+    },
+    {
+      "id": "graphics_cards",
+      "path": [
+        "Computing",
+        "Components",
+        "Graphics cards"
+      ],
+      "live": 4,
+      "staged": 357
+    },
+    {
+      "id": "processors",
+      "path": [
+        "Computing",
+        "Components",
+        "Processors"
+      ],
+      "live": 3,
+      "staged": 286
+    },
+    {
+      "id": "ram",
+      "path": [
+        "Computing",
+        "Components",
+        "RAM"
+      ],
+      "live": 37,
+      "staged": 772
+    },
+    {
+      "id": "pc_cases",
+      "path": [
+        "Computing",
+        "Components",
+        "PC cases"
+      ],
+      "live": 5,
+      "staged": 114
+    },
+    {
+      "id": "routers",
+      "path": [
+        "Networking",
+        "Wireless networking",
+        "Routers"
+      ],
+      "live": 3,
+      "staged": 144
+    },
+    {
+      "id": "network_switches",
+      "path": [
+        "Networking",
+        "Wired networking",
+        "Network switches"
+      ],
+      "live": 44,
+      "staged": 118
+    },
+    {
+      "id": "televisions",
+      "path": [
+        "TV & entertainment",
+        "Displays",
+        "Televisions"
+      ],
+      "live": 77,
+      "staged": 478
+    },
+    {
+      "id": "cameras",
+      "path": [
+        "Photography",
+        "Cameras",
+        "Cameras"
+      ],
+      "live": 13,
+      "staged": 35
+    },
+    {
+      "id": "camera_lenses",
+      "path": [
+        "Photography",
+        "Lenses",
+        "Camera lenses"
+      ],
+      "live": 2,
+      "staged": 112
+    },
+    {
+      "id": "game_controllers",
+      "path": [
+        "Gaming",
+        "Controllers",
+        "Game controllers"
+      ],
+      "live": 3,
+      "staged": 65
+    },
+    {
+      "id": "gaming_headsets",
+      "path": [
+        "Gaming",
+        "Audio",
+        "Gaming headsets"
+      ],
+      "live": 2,
+      "staged": 59
+    },
+    {
+      "id": "gaming_keyboards",
+      "path": [
+        "Gaming",
+        "Peripherals",
+        "Gaming keyboards"
+      ],
+      "live": 3,
+      "staged": 98
+    },
+    {
+      "id": "headphones",
+      "path": [
+        "Audio",
+        "Personal audio",
+        "Headphones"
+      ],
+      "live": 25,
+      "staged": 918
+    },
+    {
+      "id": "earbuds",
+      "path": [
+        "Audio",
+        "Personal audio",
+        "Earbuds"
+      ],
+      "live": 22,
+      "staged": 1674
+    },
+    {
+      "id": "earphones",
+      "path": [
+        "Audio",
+        "Personal audio",
+        "Earphones"
+      ],
+      "live": 21,
+      "staged": 418
+    },
+    {
+      "id": "speakers",
+      "path": [
+        "Audio",
+        "Speakers",
+        "Speakers"
+      ],
+      "live": 119,
+      "staged": 473
+    },
+    {
+      "id": "smartwatches",
+      "path": [
+        "Wearables",
+        "Watches",
+        "Smartwatches"
+      ],
+      "live": 19,
+      "staged": 3335
+    },
+    {
+      "id": "hair_dryers",
+      "path": [
+        "Personal care",
+        "Hair care",
+        "Hair dryers"
+      ],
+      "live": 2,
+      "staged": 48
+    },
+    {
+      "id": "hair_stylers",
+      "path": [
+        "Personal care",
+        "Hair care",
+        "Hair stylers"
+      ],
+      "live": 3,
+      "staged": 17
+    },
+    {
+      "id": "toothbrushes",
+      "path": [
+        "Personal care",
+        "Oral care",
+        "Electric toothbrushes"
+      ],
+      "live": 4,
+      "staged": 16
+    },
+    {
+      "id": "shavers",
+      "path": [
+        "Personal care",
+        "Grooming",
+        "Electric shavers"
+      ],
+      "live": 1,
+      "staged": 2
+    },
+    {
+      "id": "printers",
+      "path": [
+        "Office",
+        "Printing",
+        "Printers"
+      ],
+      "live": 81,
+      "staged": 434
+    },
+    {
+      "id": "scanners",
+      "path": [
+        "Office",
+        "Imaging",
+        "Scanners"
+      ],
+      "live": 16,
+      "staged": 98
+    },
+    {
+      "id": "security_cameras",
+      "path": [
+        "Security",
+        "Surveillance",
+        "Security cameras"
+      ],
+      "live": 61,
+      "staged": 168
+    },
+    {
+      "id": "security_recorders",
+      "path": [
+        "Security",
+        "Surveillance",
+        "Security video recorders"
+      ],
+      "live": 22,
+      "staged": 33
+    },
+    {
+      "id": "chargers",
+      "path": [
+        "Mobile & charging",
+        "Charging",
+        "Chargers"
+      ],
+      "live": 57,
+      "staged": 324
+    },
+    {
+      "id": "soundbars",
+      "path": [
+        "Audio",
+        "Home audio",
+        "Soundbars"
+      ],
+      "live": 40,
+      "staged": 335
+    },
+    {
+      "id": "mice",
+      "path": [
+        "Computing",
+        "Peripherals",
+        "Mice"
+      ],
+      "live": 30,
+      "staged": 625
+    },
+    {
+      "id": "gaming_mice",
+      "path": [
+        "Gaming",
+        "Peripherals",
+        "Gaming mice"
+      ],
+      "live": 15,
+      "staged": 172
+    },
+    {
+      "id": "keyboards",
+      "path": [
+        "Computing",
+        "Peripherals",
+        "Keyboards"
+      ],
+      "live": 22,
+      "staged": 178
+    },
+    {
+      "id": "microphones",
+      "path": [
+        "Audio",
+        "Recording",
+        "Microphones"
+      ],
+      "live": 13,
+      "staged": 39
+    },
+    {
+      "id": "usb_hubs",
+      "path": [
+        "Computing",
+        "Connectivity",
+        "USB hubs and docks"
+      ],
+      "live": 24,
+      "staged": 202
+    },
+    {
+      "id": "nas",
+      "path": [
+        "Computing",
+        "Storage",
+        "NAS and storage servers"
+      ],
+      "live": 21,
+      "staged": 125
+    },
+    {
+      "id": "projectors",
+      "path": [
+        "TV & entertainment",
+        "Projection",
+        "Projectors"
+      ],
+      "live": 25,
+      "staged": 125
+    },
+    {
+      "id": "network_adapters",
+      "path": [
+        "Networking",
+        "Connectivity",
+        "Network adapters"
+      ],
+      "live": 22,
+      "staged": 66
+    },
+    {
+      "id": "voip_phones",
+      "path": [
+        "Networking",
+        "Telephony",
+        "VoIP phones and adapters"
+      ],
+      "live": 13,
+      "staged": 70
+    },
+    {
+      "id": "massagers",
+      "path": [
+        "Personal care",
+        "Wellness",
+        "Massagers"
+      ],
+      "live": 16,
+      "staged": 45
+    },
+    {
+      "id": "trimmers",
+      "path": [
+        "Personal care",
+        "Grooming",
+        "Trimmers"
+      ],
+      "live": 15,
+      "staged": 43
+    },
+    {
+      "id": "irons",
+      "path": [
+        "Home care",
+        "Garment care",
+        "Irons"
+      ],
+      "live": 7,
+      "staged": 108
+    },
+    {
+      "id": "power_strips",
+      "path": [
+        "Electrical installation",
+        "Power distribution",
+        "Power strips"
+      ],
+      "live": 9,
+      "staged": 72
+    },
+    {
+      "id": "pc_cooling",
+      "path": [
+        "Computing",
+        "Components",
+        "PC cooling"
+      ],
+      "live": 11,
+      "staged": 301
+    },
+    {
+      "id": "writing_tablets",
+      "path": [
+        "Office",
+        "Writing",
+        "Writing tablets"
+      ],
+      "live": 7,
+      "staged": 24
+    },
+    {
+      "id": "sandwich_makers",
+      "path": [
+        "Kitchen appliances",
+        "Cooking",
+        "Sandwich makers"
+      ],
+      "live": 4,
+      "staged": 19
+    },
+    {
+      "id": "humidifiers",
+      "path": [
+        "Climate & air care",
+        "Air treatment",
+        "Humidifiers"
+      ],
+      "live": 4,
+      "staged": 10
+    },
+    {
+      "id": "cooktops",
+      "path": [
+        "Kitchen appliances",
+        "Cooking",
+        "Cooktops"
+      ],
+      "live": 3,
+      "staged": 80
+    },
+    {
+      "id": "chimneys",
+      "path": [
+        "Kitchen appliances",
+        "Ventilation",
+        "Chimneys"
+      ],
+      "live": 2,
+      "staged": 50
+    }
+  ],
+  "candidates_with_explicit_date": 2735,
+  "candidates_with_release_year": 3093,
+  "candidates_with_verified_release_year": 3090,
+  "candidates_with_valid_gtin": 3289,
+  "source_documents": [
+    {
+      "source_id": "agaro",
+      "n": 667
+    },
+    {
+      "source_id": "amkette",
+      "n": 337
+    },
+    {
+      "source_id": "boat",
+      "n": 1014
+    },
+    {
+      "source_id": "crompton",
+      "n": 838
+    },
+    {
+      "source_id": "imagine",
+      "n": 3157
+    },
+    {
+      "source_id": "industrybuying",
+      "n": 144
+    },
+    {
+      "source_id": "iplanet",
+      "n": 3428
+    },
+    {
+      "source_id": "mdcomputers",
+      "n": 501
+    },
+    {
+      "source_id": "noise",
+      "n": 938
+    },
+    {
+      "source_id": "orient",
+      "n": 322
+    },
+    {
+      "source_id": "pcstudio",
+      "n": 426
+    },
+    {
+      "source_id": "philips",
+      "n": 627
+    },
+    {
+      "source_id": "poorvika",
+      "n": 3296
+    },
+    {
+      "source_id": "portronics",
+      "n": 759
+    },
+    {
+      "source_id": "reliance",
+      "n": 4104
+    },
+    {
+      "source_id": "sathya",
+      "n": 505
+    },
+    {
+      "source_id": "sharkninja",
+      "n": 19
+    },
+    {
+      "source_id": "snehanjali",
+      "n": 298
+    },
+    {
+      "source_id": "sony",
+      "n": 407
+    },
+    {
+      "source_id": "tpstech",
+      "n": 8355
+    },
+    {
+      "source_id": "vijaysales",
+      "n": 996
+    },
+    {
+      "source_id": "voltas",
+      "n": 249
+    },
+    {
+      "source_id": "whirlpool",
+      "n": 467
+    },
+    {
+      "source_id": "wonderchef",
+      "n": 750
+    },
+    {
+      "source_id": "zebronics",
+      "n": 1809
+    }
+  ],
+  "discovery_urls": [
+    {
+      "source_id": "industrybuying",
+      "state": "discovered",
+      "n": 359858
+    },
+    {
+      "source_id": "industrybuying",
+      "state": "parsed",
+      "n": 141
+    },
+    {
+      "source_id": "industrybuying",
+      "state": "unavailable",
+      "n": 1
+    },
+    {
+      "source_id": "mdcomputers",
+      "state": "discovered",
+      "n": 11940
+    },
+    {
+      "source_id": "mdcomputers",
+      "state": "parsed",
+      "n": 498
+    },
+    {
+      "source_id": "pcstudio",
+      "state": "discovered",
+      "n": 7871
+    },
+    {
+      "source_id": "pcstudio",
+      "state": "parsed",
+      "n": 426
+    },
+    {
+      "source_id": "pcstudio",
+      "state": "unavailable",
+      "n": 9
+    },
+    {
+      "source_id": "poorvika",
+      "state": "discovered",
+      "n": 6859
+    },
+    {
+      "source_id": "poorvika",
+      "state": "needs_adapter",
+      "n": 442
+    },
+    {
+      "source_id": "poorvika",
+      "state": "parsed",
+      "n": 2852
+    },
+    {
+      "source_id": "poorvika",
+      "state": "unavailable",
+      "n": 26
+    },
+    {
+      "source_id": "reliance",
+      "state": "discovered",
+      "n": 4136
+    },
+    {
+      "source_id": "reliance",
+      "state": "needs_adapter",
+      "n": 11
+    },
+    {
+      "source_id": "reliance",
+      "state": "parsed",
+      "n": 4093
+    },
+    {
+      "source_id": "reliance",
+      "state": "unavailable",
+      "n": 24
+    },
+    {
+      "source_id": "sathya",
+      "state": "discovered",
+      "n": 990
+    },
+    {
+      "source_id": "sathya",
+      "state": "needs_adapter",
+      "n": 504
+    },
+    {
+      "source_id": "sathya",
+      "state": "unavailable",
+      "n": 38
+    },
+    {
+      "source_id": "snehanjali",
+      "state": "discovered",
+      "n": 144
+    },
+    {
+      "source_id": "snehanjali",
+      "state": "parsed",
+      "n": 298
+    },
+    {
+      "source_id": "snehanjali",
+      "state": "unavailable",
+      "n": 2
+    },
+    {
+      "source_id": "vijaysales",
+      "state": "discovered",
+      "n": 4961
+    },
+    {
+      "source_id": "vijaysales",
+      "state": "needs_adapter",
+      "n": 575
+    },
+    {
+      "source_id": "vijaysales",
+      "state": "parsed",
+      "n": 421
+    },
+    {
+      "source_id": "vijaysales",
+      "state": "unavailable",
+      "n": 1
+    }
+  ],
+  "product_types": {
+    "smartwatches": 3335,
+    "desktops": 243,
+    "washers": 404,
+    "unclassified": 16116,
+    "fans": 574,
+    "hard_drives": 323,
+    "nas": 125,
+    "water_heaters": 146,
+    "earbuds": 1674,
+    "speakers": 473,
+    "monitors": 693,
+    "air_conditioners": 387,
+    "gaming_keyboards": 98,
+    "refrigerators": 776,
+    "processors": 286,
+    "security_cameras": 168,
+    "smartphones": 1896,
+    "tablets": 1478,
+    "laptops": 1795,
+    "headphones": 918,
+    "soundbars": 335,
+    "ssds": 563,
+    "ram": 772,
+    "pc_cooling": 301,
+    "chargers": 324,
+    "game_controllers": 65,
+    "keyboards": 178,
+    "power_strips": 72,
+    "televisions": 478,
+    "mice": 625,
+    "air_purifiers": 92,
+    "freezers": 51,
+    "irons": 108,
+    "motherboards": 399,
+    "gaming_mice": 172,
+    "usb_hubs": 202,
+    "earphones": 418,
+    "trimmers": 43,
+    "garment_steamers": 44,
+    "projectors": 125,
+    "power_banks": 240,
+    "printers": 434,
+    "routers": 144,
+    "voip_phones": 70,
+    "graphics_cards": 357,
+    "vacuum_cleaners": 154,
+    "network_adapters": 66,
+    "microwaves": 152,
+    "pc_cases": 114,
+    "massagers": 45,
+    "dishwashers": 60,
+    "kettles": 37,
+    "led_bulbs": 86,
+    "blenders": 39,
+    "mixers": 152,
+    "network_switches": 118,
+    "gaming_headsets": 59,
+    "air_coolers": 137,
+    "security_recorders": 33,
+    "microphones": 39,
+    "camera_lenses": 112,
+    "usb_drives": 56,
+    "writing_tablets": 24,
+    "hair_dryers": 48,
+    "air_fryers": 75,
+    "cooktops": 80,
+    "chimneys": 50,
+    "ups": 55,
+    "scanners": 98,
+    "ovens": 21,
+    "coffee_machines": 21,
+    "memory_cards": 60,
+    "cameras": 35,
+    "switches": 3,
+    "sandwich_makers": 19,
+    "hair_stylers": 17,
+    "humidifiers": 10,
+    "toothbrushes": 16,
+    "juicers": 33,
+    "multi_cookers": 1,
+    "smart_plugs": 5,
+    "choppers": 6,
+    "shavers": 2
+  },
+  "pending_issues": {
+    "needs_manufacturer_identifier": 28217,
+    "missing_verified_release_date": 37478,
+    "missing_type_attributes": 13472,
+    "unknown_condition": 4010,
+    "unmapped_product_type": 16116,
+    "non_product_accessory": 7619,
+    "missing_variant_image": 394,
+    "ambiguous_variant_image": 353,
+    "invalid_price": 335,
+    "restricted_offer": 106,
+    "not_new_condition": 440,
+    "missing_brand": 430,
+    "older_than_four_years": 45,
+    "product_type_mismatch": 24,
+    "demonstration_unit": 20,
+    "release_window_uncertain": 2,
+    "conflicting_variant_specifications": 1
+  },
+  "rolling_cutoff": "2022-10-26",
+  "limitations": [
+    "Discovery URLs alone are not India product-page evidence.",
+    "An India-market product page is sufficient; stock status is neither collected nor used.",
+    "Pending candidates are not visible products.",
+    "A valid GTIN checksum alone does not establish assignment.",
+    "ReleaseDate attributes, listing dates and sitemap dates are never used as release evidence."
+  ],
+  "operation": "audit",
+  "run_id": "29702306-40ea-4d21-bf01-eafa6cda504e",
+  "source_results": {
+    "as_of": "2026-10-26",
+    "visible_products": 3164,
+    "issues": {
+      "missing_gtin": 3073,
+      "missing_verified_release_date": 1330,
+      "missing_type_attributes": 753,
+      "duplicate_existing_variant_url": 104,
+      "unmapped_product_type": 37
+    },
+    "visibility_changed": false
+  }
+}

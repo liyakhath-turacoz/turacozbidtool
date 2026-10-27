@@ -1341,13 +1341,14 @@ function BuyerHomePage({ data, setBidProduct, setTab, run, user }) {
   const [catalogError, setCatalogError] = useState('');
   const [selected, setSelected] = useState(null);
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [customOpen,setCustomOpen] = useState(false);
   const [howItWorks, setHowItWorks] = useState(() => {
     try { return localStorage.getItem('bidtool_how_it_works_seen') !== '1'; } catch { return true; }
   });
   const requestVersion = useRef(0);
   const detailVersion = useRef(0);
   const [refreshKey, setRefreshKey] = useState(0);
-  const activeFilters = ['categories', 'product_types', 'brands', 'years'].reduce((sum, key) => sum + list(filters[key]).length, 0);
+  const activeFilters = ['categories', 'product_types', 'canonical_types', 'brands', 'years'].reduce((sum, key) => sum + list(filters[key]).length, 0) + Object.values(filters.specs||{}).reduce((sum,values)=>sum+list(values).length,0);
   const search = () => setAppliedQuery(query.trim());
 
   useEffect(() => {
@@ -1361,7 +1362,7 @@ function BuyerHomePage({ data, setBidProduct, setTab, run, user }) {
     const version = ++requestVersion.current;
     setCatalogLoading(true);
     setCatalogError('');
-    api.catalogSearch(user.access_token, catalogParams(filters, { q: appliedQuery, limit: 50, offset: 0 }))
+    api.catalogSearch(user.access_token, catalogParams(filters, { q: appliedQuery, group_models:true, limit: 50, offset: 0 }))
       .then((result) => {
         if (version !== requestVersion.current) return;
         setProducts(result.items);
@@ -1378,7 +1379,7 @@ function BuyerHomePage({ data, setBidProduct, setTab, run, user }) {
     const version = requestVersion.current;
     setCatalogLoading(true);
     try {
-      const result = await api.catalogSearch(user.access_token, catalogParams(filters, { q: appliedQuery, limit: 50, offset: products.length, include_facets: false }));
+      const result = await api.catalogSearch(user.access_token, catalogParams(filters, { q: appliedQuery, group_models:true, limit: 50, offset: products.length, include_facets: false }));
       if (version === requestVersion.current) setProducts((old) => [...old, ...result.items.filter((row) => !old.some((item) => item.id === row.id))]);
     } catch (error) {
       setCatalogError(friendlyErrorMessage(error));
@@ -1432,6 +1433,7 @@ function BuyerHomePage({ data, setBidProduct, setTab, run, user }) {
         <button type="button" className="primary" disabled={catalogLoading} onClick={search}>Search</button>
         <button type="button" className="filter-toggle" aria-expanded={filtersOpen} onClick={() => setFiltersOpen((open) => !open)}>Filters{activeFilters ? ` (${activeFilters})` : ''}</button>
       </div>
+      <button type="button" className="link-button" onClick={()=>setCustomOpen(true)}>Cannot find it? Request a custom product</button>
       <div className="buyer-catalog-layout">
         <aside className={`filter-panel ${filtersOpen ? 'open' : ''}`} aria-label="Product filters">
           <div>
@@ -1460,16 +1462,33 @@ function BuyerHomePage({ data, setBidProduct, setTab, run, user }) {
           {catalogLoading && !products.length ? <p role="status" className="muted">Loading products…</p> : null}
           <div className="product-grid buyer-grid">
             {products.map((product) => (
-              <ProductCard key={product.id} product={product} deals={dealCounts[product.id]} onSelect={() => openProduct(product)} onCart={() => addToCart(product)} onBid={() => setBidProduct(product)} />
+              <ProductCard key={product.id} product={product} deals={dealCounts[product.id]} onSelect={() => openProduct(product)} onCart={() => product.variant_count>1 ? openProduct(product) : addToCart(product)} onBid={() => product.variant_count>1 ? openProduct(product) : setBidProduct(product)} />
             ))}
           </div>
-          {!catalogLoading && !catalogError && !products.length ? <Empty title="No products match" hint="Try fewer filters or a shorter search." action={<button type="button" onClick={() => { setFilters(emptyCatalogFilters()); setQuery(''); }}>Clear search and filters</button>} /> : null}
+          {!catalogLoading && !catalogError && !products.length ? <Empty title="No products match" hint="Try fewer filters, or describe your exact product so nearby shops can quote." action={<><button type="button" className="primary" onClick={()=>setCustomOpen(true)}>Request a custom product</button><button type="button" onClick={() => { setFilters(emptyCatalogFilters()); setQuery(''); }}>Clear search and filters</button></>} /> : null}
           {products.length < total ? <button type="button" disabled={catalogLoading} onClick={loadMore}>{catalogLoading ? 'Loading…' : 'Show more products'}</button> : null}
         </section>
       </div>
-      {selected ? <ProductDetailsModal product={selected} token={user.access_token} onClose={closeProduct} onCart={() => addToCart(selected)} onBid={() => { const product = selected; closeProduct(); setBidProduct(product); }} /> : null}
+      {customOpen && <CustomProductModal token={user.access_token} initialName={query} onClose={()=>setCustomOpen(false)} onCreated={product=>{setCustomOpen(false);setBidProduct(product);}}/>}
+      {selected ? <ProductDetailsModal product={selected} token={user.access_token} onSelectVariant={openProduct} onClose={closeProduct} onCart={() => addToCart(selected)} onBid={() => { const product = selected; closeProduct(); setBidProduct(product); }} /> : null}
     </Page>
   );
+}
+
+function CustomProductModal({token,initialName,onClose,onCreated}) {
+  const [types,setTypes]=useState([]);
+  const [draft,setDraft]=useState({name:initialName,type_id:'',brand:'',details:''});
+  const [error,setError]=useState('');const [busy,setBusy]=useState(false);
+  useEffect(()=>{let live=true;api.catalogTaxonomy(token).then(data=>{if(live)setTypes(data.types);}).catch(err=>{if(live)setError(friendlyErrorMessage(err));});return()=>{live=false;};},[token]);
+  return <Modal title="Request a custom product" onClose={onClose} persistent={busy}><p>Describe the exact model, capacity and colour. Matching shops can send bids for this request.</p>
+    <form onSubmit={async event=>{event.preventDefault();setBusy(true);setError('');try{onCreated(await api.createCustomProduct(token,draft));}catch(err){setError(friendlyErrorMessage(err));}finally{setBusy(false);}}}>
+      <label>Product name<input required minLength={3} maxLength={255} value={draft.name} onChange={e=>setDraft({...draft,name:e.target.value})}/></label>
+      <label>Product type<select required value={draft.type_id} onChange={e=>setDraft({...draft,type_id:e.target.value})}><option value="">Choose a type</option>{types.map(type=><option key={type.id} value={type.id}>{type.path.join(' / ')}</option>)}</select></label>
+      <label>Brand (optional)<input maxLength={190} value={draft.brand} onChange={e=>setDraft({...draft,brand:e.target.value})}/></label>
+      <label>Model and configuration<textarea required minLength={5} maxLength={3000} value={draft.details} onChange={e=>setDraft({...draft,details:e.target.value})} placeholder="Model, storage or capacity, colour and any required features"/></label>
+      {error&&<p role="alert">{error}</p>}<button className="primary" disabled={busy||!types.length}>{busy?'Saving...':'Continue to bid setup'}</button>
+    </form>
+  </Modal>;
 }
 
 function OrdersHistoryPage({ user, data, setReportBid, setBidProduct, run }) {
@@ -2353,7 +2372,7 @@ function ComparisonPanel({ title, rows = [] }) {
   );
 }
 
-function ProductDetailsModal({ product, token, onClose, onCart, onBid }) {
+function ProductDetailsModal({ product, token, onClose, onCart, onBid, onSelectVariant }) {
   const specs = Object.entries(product.specifications || {});
   const technicalGroups = list(product.technical_specifications);
   const softwareGroups = list(product.software_specifications);
@@ -2363,14 +2382,21 @@ function ProductDetailsModal({ product, token, onClose, onCart, onBid }) {
         <ProductImage key={product.image_url||'none'} product={product} className="product-detail-art" iconSize={72}/>
         <div className="product-detail-info">
           <span className="eyebrow">{product.category}{product.subcategory || product.item ? ` / ${product.subcategory || product.item}` : ''}</span>
+          {product.taxonomy_path?.length ? <p>{product.taxonomy_path.join(' / ')}</p> : null}
           <h2>{product.brand} {product.model}</h2>
           <strong>Price discovered through dealer bidding</strong>
           <Status text={product.status || 'active'} />
           <div className="details-grid">
             <KV label="Brand" value={product.brand} />
             <KV label="Model" value={product.model} />
-            <KV label="Release year" value={product.release_year} />
+            <KV label={product.release_year_verified ? "Release year" : "Reported release year"} value={product.release_year} />
+            {product.release_date ? <KV label="Release date" value={product.release_date} /> : null}
           </div>
+          {product.variant_options?.length > 1 ? <label>Choose variant
+            <select value={product.id} onChange={event => { const variant = product.variant_options.find(item => item.id === event.target.value); if (variant && onSelectVariant) onSelectVariant(variant); }}>
+              {product.variant_options.map(variant => <option key={variant.id} value={variant.id}>{variant.name}</option>)}
+            </select>
+          </label> : null}
           {product.description || product.summary_description ? <p>{product.description || product.summary_description}</p> : null}
         </div>
       </div>
@@ -3246,10 +3272,10 @@ function ProductCard({ product, deals = 0, onCart, onBid, onSelect }) {
     <article className="product-card" onClick={onSelect}>
       <ProductImage product={product} />
       {product.brand ? <span className="product-brand">{product.brand}</span> : null}
-      <h3 title={product.name}><button type="button" onClick={(event) => { event.stopPropagation(); onSelect(); }}>{product.name}</button></h3>
-      <p title={specs}>{specs || 'Standard edition'}</p>
+      <h3 title={product.name}><button type="button" onClick={(event) => { event.stopPropagation(); onSelect(); }}>{product.variant_count>1 ? product.model_name : product.name}</button></h3>
+      <p title={specs}>{product.variant_count>1 ? `${product.variant_count} variants - choose colour and configuration` : specs || 'Standard edition'}</p>
       {deals ? <span className="deal-badge"><Tag size={12} aria-hidden="true" /> {plural(deals, 'offer')}</span> : null}
-      {product.release_year ? <span className="product-year">{product.release_date_basis === 'legacy_reported_year' ? 'Reported ' : 'Released '}{product.release_year}</span> : null}
+      {product.release_year ? <span className="product-year">{product.release_year_verified ? 'Released ' : 'Reported '}{product.release_year}</span> : null}
       <div className="product-actions">
         <button type="button" className="primary" onClick={(event) => { event.stopPropagation(); onBid(); }}>Start bid</button>
         <button type="button" className="icon-outline" aria-label={`Add ${product.name} to cart`} title="Add to cart" onClick={(event) => { event.stopPropagation(); onCart(); }}><ShoppingCart size={17} aria-hidden="true" /></button>

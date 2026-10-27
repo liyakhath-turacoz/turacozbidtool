@@ -3007,8 +3007,7 @@ class BuyerHomePage extends StatefulWidget {
 
 class _BuyerHomePageState extends State<BuyerHomePage> {
   final _search = TextEditingController();
-  final _minPrice = TextEditingController();
-  final _maxPrice = TextEditingController();
+  Timer? _searchTimer;
 
   List<ProductItem> _allItems = [];
   bool _loading = false;
@@ -3016,10 +3015,6 @@ class _BuyerHomePageState extends State<BuyerHomePage> {
   int _total = 0, _fetchVersion = 0;
   String? _catalogError;
 
-  final Set<String> _selectedCategories = {};
-  final Set<String> _selectedSubcategories = {};
-  final Set<String> _selectedBrands = {};
-  bool _onlyAvailable = false;
   String _sortMode = 'Newest';
 
   @override
@@ -3046,6 +3041,7 @@ class _BuyerHomePageState extends State<BuyerHomePage> {
         'limit': 50,
         'offset': append ? _allItems.length : 0,
         'include_facets': !append,
+        'group_models': true,
       });
       if (mounted && version == _fetchVersion)
         setState(() {
@@ -3068,11 +3064,297 @@ class _BuyerHomePageState extends State<BuyerHomePage> {
     }
   }
 
+  @override
+  void dispose() {
+    _searchTimer?.cancel();
+    _search.dispose();
+    super.dispose();
+  }
+
+  Future<void> _variantAction(
+    ProductItem product,
+    Future<void> Function(ProductItem) action, {
+    bool details = false,
+  }) async {
+    try {
+      if (product.variantCount <= 1 && !details) {
+        await action(product);
+        return;
+      }
+      var full = await widget.api.getMap(
+        '/products/${product.id}',
+        widget.token,
+      );
+      if (!mounted) return;
+      final choices = List<Map<String, dynamic>>.from(
+        full['variant_options'] ?? [],
+      );
+      var version = 0;
+      var busy = false;
+      String? variantError;
+      final selected = await showModalBottomSheet<ProductItem>(
+        context: context,
+        isScrollControlled: true,
+        builder: (sheet) => StatefulBuilder(
+          builder: (sheet, update) => SafeArea(
+            child: SizedBox(
+              height: MediaQuery.of(sheet).size.height * 0.85,
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      full['model_name']?.toString() ?? product.name,
+                      style: Theme.of(sheet).textTheme.titleLarge,
+                    ),
+                    if (choices.length > 1)
+                      DropdownButtonFormField<String>(
+                        initialValue: full['id'].toString(),
+                        isExpanded: true,
+                        decoration: const InputDecoration(
+                          labelText: 'Choose variant',
+                        ),
+                        items: choices
+                            .map(
+                              (v) => DropdownMenuItem(
+                                value: v['id'].toString(),
+                                child: Text(
+                                  v['name'].toString(),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            )
+                            .toList(),
+                        onChanged: (id) async {
+                          if (id == null) return;
+                          final current = ++version;
+                          update(() {
+                            busy = true;
+                            variantError = null;
+                          });
+                          try {
+                            final next = await widget.api.getMap(
+                              '/products/$id',
+                              widget.token,
+                            );
+                            if (sheet.mounted && current == version) {
+                              update(() {
+                                full = next;
+                                busy = false;
+                              });
+                            }
+                          } catch (e) {
+                            if (sheet.mounted && current == version) {
+                              update(() {
+                                busy = false;
+                                variantError =
+                                    'Could not load this variant. Choose it again to retry.';
+                              });
+                            }
+                          }
+                        },
+                      ),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(full['name'].toString()),
+                            if ((full['image_url'] ?? '').toString().isNotEmpty)
+                              Image.network(
+                                full['image_url'].toString().startsWith('/')
+                                    ? '$apiBaseUrl${full['image_url']}'
+                                    : full['image_url'].toString(),
+                                height: 160,
+                                errorBuilder: (_, __, ___) =>
+                                    const Icon(Icons.image_not_supported),
+                              ),
+                            for (final e in Map<String, dynamic>.from(
+                              full['specifications'] ?? {},
+                            ).entries)
+                              ListTile(
+                                dense: true,
+                                title: Text(e.key),
+                                subtitle: Text(e.value.toString()),
+                              ),
+                            for (final field in [
+                              'technical_specifications',
+                              'software_specifications',
+                            ])
+                              for (final group
+                                  in List<Map<String, dynamic>>.from(
+                                    full[field] ?? [],
+                                  )) ...[
+                                Text(
+                                  (group['name'] ??
+                                          group['group'] ??
+                                          'Specifications')
+                                      .toString(),
+                                ),
+                                for (final feature
+                                    in List<Map<String, dynamic>>.from(
+                                      group['features'] ?? [],
+                                    ))
+                                  ListTile(
+                                    dense: true,
+                                    title: Text(
+                                      (feature['name'] ?? '').toString(),
+                                    ),
+                                    subtitle: Text(
+                                      (feature['value'] ?? '').toString(),
+                                    ),
+                                  ),
+                              ],
+                          ],
+                        ),
+                      ),
+                    ),
+                    if (variantError != null)
+                      Text(
+                        variantError!,
+                        style: const TextStyle(color: Colors.red),
+                      ),
+                    FilledButton(
+                      onPressed: busy || variantError != null
+                          ? null
+                          : () => Navigator.pop(
+                              sheet,
+                              ProductItem.fromJson(full),
+                            ),
+                      child: Text(busy ? 'Loading...' : 'Select this variant'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      if (selected != null) await action(selected);
+    } catch (e) {
+      if (mounted)
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Could not load product: $e')));
+    }
+  }
+
+  Future<void> _customRequest() async {
+    final name = TextEditingController(text: _search.text),
+        details = TextEditingController(),
+        brand = TextEditingController();
+    try {
+      final taxonomy = await widget.api.getMap(
+        '/catalog/taxonomy',
+        widget.token,
+      );
+      if (!mounted) return;
+      String? type;
+      String? error;
+      final draft = await showDialog<Map<String, dynamic>>(
+        context: context,
+        builder: (dialog) => StatefulBuilder(
+          builder: (dialog, update) => AlertDialog(
+            title: const Text('Request a custom product'),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextField(
+                    controller: name,
+                    maxLength: 255,
+                    decoration: const InputDecoration(
+                      labelText: 'Product name',
+                    ),
+                  ),
+                  DropdownButtonFormField<String>(
+                    isExpanded: true,
+                    decoration: const InputDecoration(
+                      labelText: 'Product type',
+                    ),
+                    items: List<Map<String, dynamic>>.from(taxonomy['types'])
+                        .map(
+                          (t) => DropdownMenuItem(
+                            value: t['id'].toString(),
+                            child: Text((t['path'] as List).last.toString()),
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (v) => type = v,
+                  ),
+                  TextField(
+                    controller: brand,
+                    maxLength: 190,
+                    decoration: const InputDecoration(
+                      labelText: 'Brand (optional)',
+                    ),
+                  ),
+                  TextField(
+                    controller: details,
+                    maxLength: 3000,
+                    maxLines: 4,
+                    decoration: const InputDecoration(
+                      labelText: 'Exact model, capacity, colour and features',
+                    ),
+                  ),
+                  if (error != null)
+                    Text(error!, style: const TextStyle(color: Colors.red)),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(dialog),
+                child: const Text('Cancel'),
+              ),
+              FilledButton(
+                onPressed: () {
+                  if (type == null ||
+                      name.text.trim().length < 3 ||
+                      details.text.trim().length < 5) {
+                    update(
+                      () => error =
+                          'Choose a type and describe your exact product.',
+                    );
+                    return;
+                  }
+                  Navigator.pop(dialog, {
+                    'name': name.text.trim(),
+                    'brand': brand.text.trim(),
+                    'details': details.text.trim(),
+                    'type_id': type,
+                  });
+                },
+                child: const Text('Continue to bid setup'),
+              ),
+            ],
+          ),
+        ),
+      );
+      if (draft != null) {
+        final product = await widget.api.createCustomProduct(
+          widget.token,
+          draft,
+        );
+        if (mounted) await widget.onBid(product);
+      }
+    } catch (e) {
+      if (mounted)
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Could not save request: $e')));
+    } finally {
+      name.dispose();
+      details.dispose();
+      brand.dispose();
+    }
+  }
+
   void _clearFilters() {
     setState(() {
       _catalogFilters = emptyCatalogFilters();
-      _minPrice.clear();
-      _maxPrice.clear();
     });
     _fetchProducts();
   }
@@ -3120,31 +3402,6 @@ class _BuyerHomePageState extends State<BuyerHomePage> {
     final filtered = _getFilteredProducts();
     final recommendations = _getRecommendations();
 
-    final allSubcategories = _selectedCategories.isEmpty
-        ? <String>[]
-        : _allItems
-              .where((p) => _selectedCategories.contains(p.category))
-              .map((p) => p.subcategory)
-              .where((s) => s.isNotEmpty)
-              .toSet()
-              .toList();
-
-    final allBrands = _selectedSubcategories.isNotEmpty
-        ? _allItems
-              .where((p) => _selectedSubcategories.contains(p.subcategory))
-              .map((p) => p.brand)
-              .where((b) => b.isNotEmpty)
-              .toSet()
-              .toList()
-        : (_selectedCategories.isNotEmpty
-              ? _allItems
-                    .where((p) => _selectedCategories.contains(p.category))
-                    .map((p) => p.brand)
-                    .where((b) => b.isNotEmpty)
-                    .toSet()
-                    .toList()
-              : <String>[]);
-
     final screenWidth = MediaQuery.of(context).size.width;
     final isDesktop = screenWidth >= 1000;
 
@@ -3172,6 +3429,13 @@ class _BuyerHomePageState extends State<BuyerHomePage> {
       scrollable: false,
       child: Column(
         children: [
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton(
+              onPressed: _customRequest,
+              child: const Text('Cannot find it? Request a custom product'),
+            ),
+          ),
           Row(
             children: [
               Expanded(
@@ -3181,6 +3445,13 @@ class _BuyerHomePageState extends State<BuyerHomePage> {
                     hintText: 'Search brand, model, specifications...',
                     prefixIcon: Icon(Icons.search),
                   ),
+                  onChanged: (_) {
+                    _searchTimer?.cancel();
+                    _searchTimer = Timer(
+                      const Duration(milliseconds: 300),
+                      _fetchProducts,
+                    );
+                  },
                   onSubmitted: (_) => _fetchProducts(),
                 ),
               ),
@@ -3287,9 +3558,16 @@ class _BuyerHomePageState extends State<BuyerHomePage> {
                                 children: [
                                   ProductList(
                                     products: filtered,
-                                    onCart: widget.onCart,
-                                    onBid: widget.onBid,
-                                    onSelect: widget.onSelect,
+                                    onCart: (p) =>
+                                        _variantAction(p, widget.onCart),
+                                    onBid: (p) =>
+                                        _variantAction(p, widget.onBid),
+                                    onSelect: (p) => _variantAction(
+                                      p,
+                                      (selected) async =>
+                                          widget.onSelect(selected),
+                                      details: true,
+                                    ),
                                     grid: true,
                                   ),
                                   if (_catalogError != null)
@@ -3329,9 +3607,16 @@ class _BuyerHomePageState extends State<BuyerHomePage> {
                                     ),
                                     ProductList(
                                       products: recommendations,
-                                      onCart: widget.onCart,
-                                      onBid: widget.onBid,
-                                      onSelect: widget.onSelect,
+                                      onCart: (p) =>
+                                          _variantAction(p, widget.onCart),
+                                      onBid: (p) =>
+                                          _variantAction(p, widget.onBid),
+                                      onSelect: (p) => _variantAction(
+                                        p,
+                                        (selected) async =>
+                                            widget.onSelect(selected),
+                                        details: true,
+                                      ),
                                       grid: true,
                                     ),
                                   ],
@@ -9715,10 +10000,14 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
     final scopes = <Map<String, dynamic>>[];
     for (final parent in _categoryTree) {
       final parentId = parent['id']?.toString() ?? '';
-      final children = List<Map<String, dynamic>>.from(parent['items'] ?? const []);
-      final selectedChildren = children.where((item) =>
-        _selectedItems.contains(item['id']?.toString() ?? ''),
-      ).toList();
+      final children = List<Map<String, dynamic>>.from(
+        parent['items'] ?? const [],
+      );
+      final selectedChildren = children
+          .where(
+            (item) => _selectedItems.contains(item['id']?.toString() ?? ''),
+          )
+          .toList();
       if (!_selectedCategories.contains(parentId) && selectedChildren.isEmpty) {
         continue;
       }
@@ -9749,39 +10038,52 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
       _companyOptionsLoading = true;
     });
     try {
-      final allProductTypesSelected = scopes.every((scope) =>
-        (scope['product_types'] as List).isEmpty,
+      final allProductTypesSelected = scopes.every(
+        (scope) => (scope['product_types'] as List).isEmpty,
       );
-      final allProductTypesRestricted = scopes.every((scope) =>
-        (scope['product_types'] as List).isNotEmpty,
+      final allProductTypesRestricted = scopes.every(
+        (scope) => (scope['product_types'] as List).isNotEmpty,
       );
       final catalogScopes = allProductTypesSelected || allProductTypesRestricted
           ? <Map<String, dynamic>>[
               {
-                'categories': scopes.expand((scope) => scope['categories'] as List).toSet().toList(),
+                'categories': scopes
+                    .expand((scope) => scope['categories'] as List)
+                    .toSet()
+                    .toList(),
                 'product_types': allProductTypesRestricted
-                    ? scopes.expand((scope) => scope['product_types'] as List).toSet().toList()
+                    ? scopes
+                          .expand((scope) => scope['product_types'] as List)
+                          .toSet()
+                          .toList()
                     : <String>[],
               },
             ]
           : scopes;
       // Keep mixed full-category and product-type scopes separate so their
       // results combine as an OR, not one overly narrow global filter.
-      final results = await Future.wait(catalogScopes.map((scope) =>
-        ApiClient().catalogSearch(widget.user.accessToken, {
-          ...scope,
-          'limit': 1,
-          'offset': 0,
-          'include_facets': true,
-        }),
-      ));
+      final results = await Future.wait(
+        catalogScopes.map(
+          (scope) => ApiClient().catalogSearch(widget.user.accessToken, {
+            ...scope,
+            'limit': 1,
+            'offset': 0,
+            'include_facets': true,
+          }),
+        ),
+      );
       if (!mounted || version != _companyScopeVersion) return;
       final byKey = <String, String>{};
       for (final result in results) {
         final facets = Map<String, dynamic>.from(result['facets'] ?? {});
         for (final row in facets['brands'] as List? ?? const []) {
-          final value = Map<String, dynamic>.from(row as Map)['value']?.toString().trim() ?? '';
-          if (value.isNotEmpty) byKey.putIfAbsent(value.toLowerCase(), () => value);
+          final value =
+              Map<String, dynamic>.from(
+                row as Map,
+              )['value']?.toString().trim() ??
+              '';
+          if (value.isNotEmpty)
+            byKey.putIfAbsent(value.toLowerCase(), () => value);
         }
       }
       final companies = byKey.values.toList()
@@ -9789,7 +10091,9 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
       final inScope = companies.map((value) => value.toLowerCase()).toSet();
       setState(() {
         _companyOptions = companies;
-        _selectedBrands.removeWhere((brand) => !inScope.contains(brand.toLowerCase()));
+        _selectedBrands.removeWhere(
+          (brand) => !inScope.contains(brand.toLowerCase()),
+        );
         _companyOptionsLoading = false;
       });
     } catch (_) {
@@ -9820,7 +10124,9 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
     setState(() {
       final children = _dynamicItemsFor(category);
       final current = children.where(_selectedItems.contains).toSet();
-      final isAll = _selectedCategories.contains(category) && (current.isEmpty || current.length == children.length);
+      final isAll =
+          _selectedCategories.contains(category) &&
+          (current.isEmpty || current.length == children.length);
       final next = isAll ? children.toSet() : current;
       if (checked) {
         next.add(item);
@@ -9949,7 +10255,9 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
       );
     }
     final companyScopes = _dealerCompanyScopes();
-    final availableCompanies = _companyOptions.map((value) => value.toLowerCase()).toSet();
+    final availableCompanies = _companyOptions
+        .map((value) => value.toLowerCase())
+        .toSet();
     final selectedCompaniesOutsideScope = _selectedBrands
         .where((value) => !availableCompanies.contains(value.toLowerCase()))
         .toList();
@@ -10148,21 +10456,35 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
                 DataPanel(
                   title: 'Product Offerings & Categories',
                   children: [
-                    const Text('Choose whole categories or specific product types. Manufacturer choices are limited to the selected categories and product types.'),
+                    const Text(
+                      'Choose whole categories or specific product types. Manufacturer choices are limited to the selected categories and product types.',
+                    ),
                     ..._categoryTree.map((parent) {
                       final category = parent['id'].toString();
                       final children = _dynamicItemsFor(category);
-                      final selectedChildren = children.where(_selectedItems.contains).toList();
-                      final all = _selectedCategories.contains(category) && (selectedChildren.isEmpty || selectedChildren.length == children.length);
+                      final selectedChildren = children
+                          .where(_selectedItems.contains)
+                          .toList();
+                      final all =
+                          _selectedCategories.contains(category) &&
+                          (selectedChildren.isEmpty ||
+                              selectedChildren.length == children.length);
                       return ExpansionTile(
                         tilePadding: EdgeInsets.zero,
                         title: CheckboxListTile(
                           contentPadding: EdgeInsets.zero,
                           controlAffinity: ListTileControlAffinity.leading,
                           title: Text(parent['name']?.toString() ?? ''),
-                          subtitle: Text(all ? 'All product types' : selectedChildren.isEmpty ? 'None selected' : '${selectedChildren.length} selected'),
+                          subtitle: Text(
+                            all
+                                ? 'All product types'
+                                : selectedChildren.isEmpty
+                                ? 'None selected'
+                                : '${selectedChildren.length} selected',
+                          ),
                           value: all,
-                          onChanged: (value) => _setCategoryAll(category, value ?? false),
+                          onChanged: (value) =>
+                              _setCategoryAll(category, value ?? false),
                         ),
                         children: children.map((item) {
                           return CheckboxListTile(
@@ -10171,7 +10493,11 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
                             controlAffinity: ListTileControlAffinity.leading,
                             title: Text(_categoryLabel(item)),
                             value: all || _selectedItems.contains(item),
-                            onChanged: (value) => _toggleCategoryItem(category, item, value ?? false),
+                            onChanged: (value) => _toggleCategoryItem(
+                              category,
+                              item,
+                              value ?? false,
+                            ),
                           );
                         }).toList(),
                       );
@@ -10180,44 +10506,85 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
                     if (companyScopes.isNotEmpty) ...[
                       TextField(
                         controller: _brandInputController,
-                        decoration: const InputDecoration(labelText: 'Search companies in selected categories'),
+                        decoration: const InputDecoration(
+                          labelText: 'Search companies in selected categories',
+                        ),
                         onChanged: (_) => setState(() {}),
                       ),
-                      const Text('Leave companies unchecked to accept every manufacturer within the selected product scope. Changing the scope removes companies that are unavailable in it.'),
-                      if (_companyOptionsLoading) const LinearProgressIndicator(),
+                      const Text(
+                        'Leave companies unchecked to accept every manufacturer within the selected product scope. Changing the scope removes companies that are unavailable in it.',
+                      ),
+                      if (_companyOptionsLoading)
+                        const LinearProgressIndicator(),
                       SizedBox(
                         height: 220,
                         child: _companyOptionsLoading
                             ? const Center(child: CircularProgressIndicator())
                             : ListView(
                                 children: _companyOptions
-                                    .where((company) => company.toLowerCase().contains(_brandInputController.text.toLowerCase()))
-                                    .map((company) => CheckboxListTile(
-                                      dense: true,
-                                      contentPadding: EdgeInsets.zero,
-                                      controlAffinity: ListTileControlAffinity.leading,
-                                      title: Text(company),
-                                      value: _selectedBrands.any((value) => value.toLowerCase() == company.toLowerCase()),
-                                      onChanged: (checked) => setState(() {
-                                        _selectedBrands.removeWhere((value) => value.toLowerCase() == company.toLowerCase());
-                                        if (checked == true) _selectedBrands.add(company);
-                                      }),
-                                    )).toList(),
+                                    .where(
+                                      (company) =>
+                                          company.toLowerCase().contains(
+                                            _brandInputController.text
+                                                .toLowerCase(),
+                                          ),
+                                    )
+                                    .map(
+                                      (company) => CheckboxListTile(
+                                        dense: true,
+                                        contentPadding: EdgeInsets.zero,
+                                        controlAffinity:
+                                            ListTileControlAffinity.leading,
+                                        title: Text(company),
+                                        value: _selectedBrands.any(
+                                          (value) =>
+                                              value.toLowerCase() ==
+                                              company.toLowerCase(),
+                                        ),
+                                        onChanged: (checked) => setState(() {
+                                          _selectedBrands.removeWhere(
+                                            (value) =>
+                                                value.toLowerCase() ==
+                                                company.toLowerCase(),
+                                          );
+                                          if (checked == true)
+                                            _selectedBrands.add(company);
+                                        }),
+                                      ),
+                                    )
+                                    .toList(),
                               ),
                       ),
                       if (!_companyOptionsLoading && _companyOptions.isEmpty)
-                        const Text('No manufacturers were found for this selection.'),
+                        const Text(
+                          'No manufacturers were found for this selection.',
+                        ),
                     ] else ...[
-                      const Text('Select a category or product type to see only the manufacturers available within it.'),
+                      const Text(
+                        'Select a category or product type to see only the manufacturers available within it.',
+                      ),
                     ],
-                    if (!_companyOptionsLoading && selectedCompaniesOutsideScope.isNotEmpty) ...[
-                      const Text('Saved company restrictions outside the current selection:'),
+                    if (!_companyOptionsLoading &&
+                        selectedCompaniesOutsideScope.isNotEmpty) ...[
+                      const Text(
+                        'Saved company restrictions outside the current selection:',
+                      ),
                       Wrap(
                         spacing: 8,
-                        children: selectedCompaniesOutsideScope.map((company) => InputChip(
-                          label: Text(company),
-                          onDeleted: () => setState(() => _selectedBrands.removeWhere((value) => value.toLowerCase() == company.toLowerCase())),
-                        )).toList(),
+                        children: selectedCompaniesOutsideScope
+                            .map(
+                              (company) => InputChip(
+                                label: Text(company),
+                                onDeleted: () => setState(
+                                  () => _selectedBrands.removeWhere(
+                                    (value) =>
+                                        value.toLowerCase() ==
+                                        company.toLowerCase(),
+                                  ),
+                                ),
+                              ),
+                            )
+                            .toList(),
                       ),
                     ],
                   ],

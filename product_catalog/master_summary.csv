@@ -1,17 +1,17 @@
 ﻿category_code,department,products,brands,status
-A,Mobile Phones & Tablets,80,2,VERIFIED_SUBSET
-B,"Computers, Laptops & IT Equipment",415,48,VERIFIED_SUBSET
-C,"TVs, Video & Home Entertainment",74,8,VERIFIED_SUBSET
-D,"Audio, Headphones & Speakers",231,11,VERIFIED_SUBSET
-E,Large Home Appliances,62,4,VERIFIED_SUBSET
-F,Kitchen Appliances,40,6,VERIFIED_SUBSET
-G,"Cleaning, Laundry & Floor Care",22,3,VERIFIED_SUBSET
-H,"Air Conditioning, Cooling & Air Quality",95,5,VERIFIED_SUBSET
-I,Personal Care & Grooming Appliances,40,3,VERIFIED_SUBSET
-J,"Cameras, Photography & Imaging",11,3,VERIFIED_SUBSET
-K,Gaming & Virtual Reality,20,3,VERIFIED_SUBSET
-L,Wearables & Smart Devices,7,3,VERIFIED_SUBSET
+A,Mobile Phones & Tablets,1130,10,VERIFIED_SUBSET
+B,"Computers, Laptops & IT Equipment",551,48,VERIFIED_SUBSET
+C,"TVs, Video & Home Entertainment",102,11,VERIFIED_SUBSET
+D,"Audio, Headphones & Speakers",241,12,VERIFIED_SUBSET
+E,Large Home Appliances,354,8,VERIFIED_SUBSET
+F,Kitchen Appliances,46,9,VERIFIED_SUBSET
+G,"Cleaning, Laundry & Floor Care",21,4,VERIFIED_SUBSET
+H,"Air Conditioning, Cooling & Air Quality",222,25,VERIFIED_SUBSET
+I,Personal Care & Grooming Appliances,41,4,VERIFIED_SUBSET
+J,"Cameras, Photography & Imaging",15,6,VERIFIED_SUBSET
+K,Gaming & Virtual Reality,23,5,VERIFIED_SUBSET
+L,Wearables & Smart Devices,19,5,VERIFIED_SUBSET
 M,"Smart Home, Security & Surveillance",83,5,VERIFIED_SUBSET
-N,"Networking, GPS & Communication",81,9,VERIFIED_SUBSET
-O,"Printers, Scanners & Office Electronics",88,8,VERIFIED_SUBSET
+N,"Networking, GPS & Communication",82,9,VERIFIED_SUBSET
+O,"Printers, Scanners & Office Electronics",104,9,VERIFIED_SUBSET
 P,"Power Backup, Batteries & Electrical Equipment",130,8,VERIFIED_SUBSET

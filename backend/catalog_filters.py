@@ -10,12 +10,12 @@ from datetime import date,datetime
 from zoneinfo import ZoneInfo
 
 try:
-    from .catalog_search_engine import rank_catalog_rows
+    from .catalog_metadata import hide_release_dates, attach as attach_catalog_metadata, taxonomy_facets
 except ImportError:
-    from catalog_search_engine import rank_catalog_rows
+    from catalog_metadata import hide_release_dates, attach as attach_catalog_metadata, taxonomy_facets
 
 SPEC_DEFINITIONS = {
-    'ram': ('RAM', ['RAM capacity', 'Installed RAM', 'System RAM', 'Memory (RAM)', 'RAM']),
+    'ram': ('RAM', ['RAM capacity', 'Installed RAM', 'System RAM', 'Memory (RAM)', 'Unified memory', 'RAM']),
     'storage': ('Storage', ['Internal storage capacity', 'Total storage capacity', 'SSD capacity', 'Storage capacity', 'Internal memory', 'Memory capacity', 'Storage']),
     'processor': ('Processor', ['Processor model', 'Chipset', 'Processor', 'Processor family', 'SoC']),
     'display_size': ('Display size', ['Display diagonal', 'Display size', 'Screen size', 'Size']),
@@ -100,8 +100,14 @@ def normalized_specs(record):
                 if key and val: values[key]=val
     manual={str(key).casefold():str(value) for key,value in decode(record.get('manual_specifications'),{}).items()}
     values.update(manual)
+    kind=str(record.get('type_id') or record.get('product_type_id') or record.get('subcategory') or record.get('item') or '').casefold()
+    storage_kind=kind in {'smartphones','tablets','laptops','desktops','ssds','memory_cards','usb_drives','hard_drives'} or bool(re.search(r'smartphone|tablet|laptop|desktop|ssd|memory card|flash drive|hard disk',kind))
+    capacity=values.get('capacity','')
+    storage_capacity=storage_kind and bool(re.fullmatch(r'\d+(?:\.\d+)?\s*(?:GB|TB|MB)',capacity,re.I))
+    if storage_capacity:values.setdefault('storage capacity',capacity)
     result=[]
     for key,(_,aliases) in SPEC_DEFINITIONS.items():
+        if key=='capacity' and storage_capacity:continue
         raw=next((manual[a.casefold()] for a in aliases if manual.get(a.casefold())),None) or next((values[a.casefold()] for a in aliases if values.get(a.casefold())),None)
         if not raw: continue
         if key=='ram' and re.search(r'(graphics card|motherboard|processor|ssd)',str(record.get('item') or record.get('subcategory') or ''),re.I): continue
@@ -215,6 +221,13 @@ def conditions(filters, admin=False, facets=False):
     if filters.get('category'):
         where.append('(c.name=%s OR sc.name=%s)');args += [filters['category']]*2
     if filters.get('product_type'): where.append('sc.name=%s');args.append(filters['product_type'])
+    if filters.get('type_id'):
+        where.append('EXISTS (SELECT 1 FROM catalog_type_assignments ta WHERE ta.product_id=p.id AND ta.type_id=%s)')
+        args.append(filters['type_id'])
+    if filters.get('canonical_types'):
+        types=filters['canonical_types']
+        where.append('EXISTS (SELECT 1 FROM catalog_type_assignments ta WHERE ta.product_id=p.id AND ta.type_id IN ('+','.join(['%s']*len(types))+'))')
+        args.extend(types)
     if not facets:
         brands=filters.get('brands') or ([filters['brand']] if filters.get('brand') else [])
         if brands:
@@ -254,11 +267,22 @@ def explicit_ram_capacity(value):
     query=str(value or '').casefold()
     if not re.search(r'\bram\b',query):
         return None
-    match=re.search(r'(?<![\w.])(\d+(?:\.\d+)?)\s*(tb|gb|mb)\b',query)
+    match=re.search(r'(?<![\w.])(\d+(?:\.\d+)?)\s*(tb|gb|mb)\s*ram\b',query) or re.search(r'\bram\s*[:=-]?\s*(\d+(?:\.\d+)?)\s*(tb|gb|mb)\b',query)
     return (match.group(1),match.group(2)) if match else None
 
 
 SEARCH_SYNONYMS={
+    'pendrive':('pendrive','pen drive','usb flash drive','usb drive'),
+    'pendrives':('pendrives','pen drives','usb flash drives','usb drives'),
+    'flash':('flash','pen','usb'),
+    'hdd':('hdd','hard disk','hard drive'),
+    'harddisk':('harddisk','hard disk','hard drive','hdd'),
+    'microsd':('microsd','micro sd','memory card'),
+    'sdcard':('sdcard','sd card','memory card'),
+    'geyser':('geyser','water heater'),
+    'geysers':('geysers','water heaters'),
+    'powerbank':('powerbank','power bank'),
+    'powerbanks':('powerbanks','power banks'),
     'phone':('phone','smartphone','telephone','mobile'),
     'phones':('phones','smartphones','telephones','mobiles'),
     'mobile':('mobile','phone','smartphone'),
@@ -324,90 +348,6 @@ def relevance_order(value):
     return score+' + '+' + '.join(token_scores),args
 
 
-def search(db,filters,admin=False,include_facets=True):
-    where,args=conditions(filters,admin)
-    sort={'Newest':'p.created_at DESC,p.id DESC','Year':'p.release_year DESC,p.id','Name':'p.name,p.id','A-Z':'p.name,p.id','Lowest Price':'p.price_min,p.id','Highest Price':'p.price_max DESC,p.id'}.get(filters.get('sort'),'p.created_at DESC,p.id DESC')
-    relevance,relevance_args=relevance_order(filters.get('q'))
-    order=(relevance+' DESC, ' if relevance else '')+sort
-    with db() as conn,conn.cursor() as cursor:
-        cursor.execute(f'SELECT COUNT(*) total {JOINS} WHERE {where}',args);total=cursor.fetchone()['total']
-        query=str(filters.get('q') or '').strip()
-        # Exact/prefix search stays in MariaDB. Only a no-hit query is expanded
-        # to fuzzy and category-alias matching, while all user filters stay SQL.
-        if total==0 and query and not explicit_ram_capacity(query):
-            fallback_where,fallback_args=conditions({**filters,'q':''},admin)
-            cursor.execute(f"""SELECT p.id,p.name,p.brand,p.manufacturer,p.model,p.release_year,c.name category,sc.name item,
-                p.highlights specifications,
-                (SELECT GROUP_CONCAT(CONCAT(f.spec_key,' ',f.spec_value) SEPARATOR ' ') FROM product_filter_values f WHERE f.product_id=p.id) searchable_facets
-                {JOINS} WHERE {fallback_where} ORDER BY {sort}""",fallback_args)
-            candidates=cursor.fetchall()
-            for row in candidates:
-                row['searchable_specs']=' '.join(filter(None,(
-                    _searchable_text(row.get('specifications')),
-                    _searchable_text(row.get('searchable_facets')),
-                )))
-            ranked=rank_catalog_rows(query,candidates)
-            total=len(ranked)
-            matched_rows=[row for row,_score in ranked]
-            offset=max(0,int(filters.get('offset') or 0))
-            limit=min(250,int(filters.get('limit') or 50))
-            page=ranked[offset:offset+limit]
-            facets={}
-            if include_facets:
-                counters={key:Counter() for key in ('categories','product_types','brands','years')}
-                for row in matched_rows:
-                    if row.get('category'): counters['categories'][row['category']]+=1
-                    if row.get('item'): counters['product_types'][row['item']]+=1
-                    brand=row.get('manufacturer') or row.get('brand')
-                    if brand: counters['brands'][brand]+=1
-                    counters['years'][str(row['release_year']) if row.get('release_year') is not None else 'unknown']+=1
-                facets={key:[{'value':value,'count':count} for value,count in sorted(values.items(),key=lambda pair:str(pair[0]).casefold())] for key,values in counters.items()}
-            provenance=',p.source,p.source_url' if admin else ''
-            page_ids=[row['id'] for row,_score in page]
-            page_items=[]
-            if page_ids:
-                placeholders=','.join(['%s']*len(page_ids))
-                cursor.execute(f"""SELECT p.id,p.name,p.brand,p.model,p.price_min,p.price_max,p.status,p.created_at,p.image_url{provenance},
-                    p.release_year,p.release_date,p.release_date_basis,c.name category,sc.name item,sc.name subcategory,
-                    CONCAT(l.city,', ',l.state) location,p.highlights specifications,
-                    EXISTS(SELECT 1 FROM bid_requests br WHERE br.product_id=p.id) has_bid_history
-                    {JOINS} WHERE p.id IN ({placeholders})""",page_ids)
-                found={row['id']:row for row in cursor.fetchall()}
-                page_items=[found[record_id] for record_id in page_ids if record_id in found]
-                for row in page_items:
-                    row['specifications']=decode(row.get('specifications'),{})
-                    if not admin:
-                        row['specifications']=public_catalog_data(row['specifications'])
-                        row.pop('release_date_basis',None)
-            cursor.execute('SELECT COUNT(*) total FROM products WHERE deleted_at IS NULL AND catalog_visible=TRUE')
-            catalog_total=cursor.fetchone()['total']
-            return {'items':page_items,'total':total,'catalog_total':catalog_total,'facets':facets,'brands':[row['value'] for row in facets.get('brands',[])],'search_mode':'related' if total else 'exact'}
-        provenance=',p.source,p.source_url' if admin else ''
-        cursor.execute(f"""SELECT p.id,p.name,p.brand,p.model,p.price_min,p.price_max,p.status,p.created_at,p.image_url{provenance},p.release_year,p.release_date,p.release_date_basis,
-            c.name category,sc.name item,sc.name subcategory,CONCAT(l.city,', ',l.state) location,p.highlights specifications,
-            EXISTS(SELECT 1 FROM bid_requests br WHERE br.product_id=p.id) has_bid_history
-            {JOINS} WHERE {where} ORDER BY {order} LIMIT %s OFFSET %s""",args+relevance_args+[min(250,int(filters.get('limit') or 50)),max(0,int(filters.get('offset') or 0))])
-        items=cursor.fetchall()
-        for row in items:
-            row['specifications']=decode(row['specifications'],{})
-            if not admin:
-                row['specifications']=public_catalog_data(row['specifications'])
-                row.pop('release_date_basis',None)
-        cursor.execute('SELECT COUNT(*) total FROM products WHERE deleted_at IS NULL AND catalog_visible=TRUE');catalog_total=cursor.fetchone()['total']
-        facets={}
-        if include_facets:
-            scope,scope_args=conditions(filters,admin,facets=True)
-            for key,column in [('categories','c.name'),('product_types','sc.name'),('brands',"COALESCE(NULLIF(p.manufacturer,''),p.brand)"),('years',"COALESCE(CAST(p.release_year AS CHAR),'unknown')")]:
-                facet_scope,facet_args=scope,scope_args
-                if key=='categories':
-                    facet_scope,facet_args=conditions({**filters,'category':'','categories':[],'product_type':'','product_types':[]},admin,facets=True)
-                elif key=='product_types':
-                    facet_scope,facet_args=conditions({**filters,'product_type':'','product_types':[]},admin,facets=True)
-                cursor.execute(f'SELECT {column} value,COUNT(*) count {JOINS} WHERE {facet_scope} AND {column} IS NOT NULL GROUP BY {column} ORDER BY {column}',facet_args)
-                facets[key]=cursor.fetchall()
-        return {'items':items,'total':total,'catalog_total':catalog_total,'facets':facets,'brands':[row['value'] for row in facets.get('brands',[])]}
-
-
 def _searchable_text(value):
     if value is None:
         return ''
@@ -469,3 +409,8 @@ def statistics_csv(report):
             values=[key,row.get('category',''),row.get('product_type',''),row.get('brand',''),row.get('release_year',''),row['count'],row.get('model_codes',''),row.get('verified_records','')]
             writer.writerow(["'"+val if isinstance(val,str) and val.startswith(('=','+','-','@')) else val for val in values])
     return '\ufeff'+output.getvalue()
+
+
+def search(db,filters,admin=False,include_facets=True):
+    from .tantivy_search import search as indexed_search
+    return indexed_search(db,filters,admin,include_facets)

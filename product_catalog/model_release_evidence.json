@@ -1,0 +1,4006 @@
+{
+  "version": 1,
+  "policy": "Reviewed manufacturer launch evidence. Match brand, exact MPN generation and product type together. A launch never establishes an India-market product listing. Do not extend rules to other generations or capacities.",
+  "rules": [
+    {
+      "brand": "Samsung",
+      "type_id": "televisions",
+      "name_pattern": "(?:\\bQN80H\\b|\\bQN\\d{2}QN80H)",
+      "release_date": "2026-05-26",
+      "url": "https://news.samsung.com/in/samsung-brings-2026-vision-ai-tv-lineup-in-india-launches-72-models-across-micro-rgb-oled-neo-qled-the-frame-mini-led-and-uhd-tvs",
+      "scope": "Samsung India states its 2026 Vision AI TV lineup, including Neo QLED QN80H, launches in India on 26 May 2026. Match the named model or its Samsung QA/QN product code only.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "Samsung QN80H Neo QLED TV",
+        "family": "Samsung Neo QLED TV"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "televisions",
+      "name_pattern": "(?:\\bLS03H\\b|\\bQA\\d{2}LS03H)",
+      "release_date": "2026-05-26",
+      "url": "https://news.samsung.com/in/samsung-brings-2026-vision-ai-tv-lineup-in-india-launches-72-models-across-micro-rgb-oled-neo-qled-the-frame-mini-led-and-uhd-tvs",
+      "scope": "Samsung India states its 2026 Vision AI TV lineup, including The Frame LS03H series, launches in India on 26 May 2026. Match the named model or its Samsung QA product code only.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "Samsung The Frame LS03H",
+        "family": "Samsung The Frame"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "televisions",
+      "name_pattern": "(?:\\bS95H\\b|\\bQA\\d{2}S95H)",
+      "release_date": "2026-05-26",
+      "url": "https://news.samsung.com/in/samsung-brings-2026-vision-ai-tv-lineup-in-india-launches-72-models-across-micro-rgb-oled-neo-qled-the-frame-mini-led-and-uhd-tvs",
+      "scope": "Samsung India states its 2026 Vision AI TV lineup, including the OLED S95H series, launches in India on 26 May 2026. Match the named model or its Samsung QA product code only.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "Samsung S95H OLED TV",
+        "family": "Samsung OLED TV"
+      }
+    },
+    {
+      "brand": "Apple",
+      "type_id": "smartphones",
+      "name_pattern": "^(?:Apple )?iPhone 18 Pro(?! Max)\\b",
+      "release_date": "2026-09-18",
+      "url": "https://www.apple.com/in/newsroom/2026/09/get-ready-to-experience-iphone-18-pro-the-new-apple-watch-lineup-and-airpods-5/",
+      "scope": "Exact iPhone 18 Pro model; Apple India confirms worldwide store availability on this date. Does not cover iPhone Duo or accessories.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "iPhone 18 Pro",
+        "family": "iPhone 18"
+      },
+      "specifications_url": "https://support.apple.com/en-euro/148590",
+      "model_specifications": {
+        "Processor": "Apple A20 Pro",
+        "CPU cores": "6-core (2 super cores and 4 efficiency cores)",
+        "GPU cores": "7-core GPU with Neural Accelerators",
+        "Neural Engine": "Dual 16-core Neural Engine",
+        "Display size": "6.3 inches",
+        "Display technology": "Super Retina XDR OLED",
+        "Resolution": "2622 x 1206 pixels, 460 ppi",
+        "Refresh rate": "Adaptive ProMotion up to 120 Hz",
+        "Main camera": "48 MP Fusion Main with variable aperture",
+        "Ultra-wide camera": "48 MP Fusion Ultra Wide",
+        "Telephoto camera": "48 MP Fusion Telephoto",
+        "Front camera": "18 MP Center Stage with autofocus",
+        "Water resistance": "IP68, up to 6 metres for 30 minutes",
+        "Wireless connectivity": "Wi-Fi 7, 5G",
+        "Bluetooth version": "Bluetooth 6",
+        "Connector": "USB-C with USB 3 up to 10 Gb/s",
+        "Video playback": "Up to 36 hours",
+        "Weight": "211 g"
+      },
+      "family_key": "apple-iphone-18",
+      "family_name": "iPhone 18",
+      "model_name": "iPhone 18 Pro"
+    },
+    {
+      "brand": "Apple",
+      "type_id": "smartphones",
+      "name_pattern": "^(?:Apple )?iPhone 18 Pro Max\\b",
+      "release_date": "2026-09-18",
+      "url": "https://www.apple.com/in/newsroom/2026/09/get-ready-to-experience-iphone-18-pro-the-new-apple-watch-lineup-and-airpods-5/",
+      "scope": "Exact iPhone 18 Pro Max model; Apple India confirms worldwide store availability on this date. Does not cover iPhone Duo or accessories.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "iPhone 18 Pro Max",
+        "family": "iPhone 18"
+      },
+      "specifications_url": "https://support.apple.com/en-lamr/148591",
+      "model_specifications": {
+        "Processor": "Apple A20 Pro",
+        "CPU cores": "6-core (2 super cores and 4 efficiency cores)",
+        "GPU cores": "7-core GPU with Neural Accelerators",
+        "Neural Engine": "Dual 16-core Neural Engine",
+        "Display size": "6.9 inches",
+        "Display technology": "Super Retina XDR OLED",
+        "Resolution": "2868 x 1320 pixels, 460 ppi",
+        "Refresh rate": "Adaptive ProMotion up to 120 Hz",
+        "Main camera": "48 MP Fusion Main with variable aperture",
+        "Ultra-wide camera": "48 MP Fusion Ultra Wide",
+        "Telephoto camera": "48 MP Fusion Telephoto",
+        "Front camera": "18 MP Center Stage with autofocus",
+        "Water resistance": "IP68, up to 6 metres for 30 minutes",
+        "Wireless connectivity": "Wi-Fi 7, 5G",
+        "Bluetooth version": "Bluetooth 6",
+        "Connector": "USB-C with USB 3 up to 10 Gb/s",
+        "Video playback": "Up to 45 hours",
+        "Weight": "249 g"
+      },
+      "family_key": "apple-iphone-18",
+      "family_name": "iPhone 18",
+      "model_name": "iPhone 18 Pro Max"
+    },
+    {
+      "brand": "Apple",
+      "type_id": "smartphones",
+      "name_pattern": "^(?:Apple )?iPhone Duo\\b",
+      "release_date": "2026-10-23",
+      "url": "https://images.apple.com/in/newsroom/2026/09/apple-unveils-iphone-duo/",
+      "scope": "Exact iPhone Duo model; Apple lists India among regions available from this date. Does not cover iPhone 18 Pro or accessories.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "iPhone Duo",
+        "family": "iPhone Duo"
+      },
+      "specifications_url": "https://support.apple.com/en-ke/148588",
+      "model_specifications": {
+        "Processor": "Apple A20 Pro",
+        "CPU cores": "6-core (2 super cores and 4 efficiency cores)",
+        "GPU cores": "7-core GPU with Neural Accelerators",
+        "Neural Engine": "Dual 16-core Neural Engine",
+        "Inner display": "7.6-inch foldable Super Retina XDR OLED, 1878 x 2670 pixels",
+        "Outer display": "5.4-inch Super Retina XDR OLED, 1398 x 2034 pixels",
+        "Refresh rate": "Adaptive ProMotion up to 120 Hz",
+        "Main camera": "48 MP Dual Fusion system: Main and Ultra Wide",
+        "Water resistance": "IP68, up to 6 metres for 30 minutes",
+        "Wireless connectivity": "Wi-Fi 7, 5G",
+        "Bluetooth version": "Bluetooth 6",
+        "Connector": "USB-C",
+        "Weight": "254 g"
+      }
+    },
+    {
+      "brand": "Apple",
+      "type_id": "smartwatches",
+      "name_pattern": "^Apple Watch Series 12\\b",
+      "release_date": "2026-09-18",
+      "url": "https://images.apple.com/in/newsroom/2026/09/introducing-apple-watch-series-12-with-the-all-new-health-sensing-system/",
+      "scope": "All Apple Watch Series 12 case, size and connectivity variants; Apple lists India availability beginning on this date.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "Apple Watch Series 12",
+        "family": "Apple Watch Series 12"
+      },
+      "specifications_url": "https://support.apple.com/en-us/148589",
+      "model_specifications": {
+        "Display": "Always-On Retina display",
+        "Chip": "Apple S11 dual-core 64-bit processor",
+        "Neural Engine": "4-core Neural Engine",
+        "Health sensors": "Electrical and optical heart sensors, blood oxygen sensor and temperature sensor",
+        "Water resistance": "50 metres (ISO 22810:2010); IP6X dust resistance",
+        "Battery life": "Up to 24 hours standard use; up to 38 hours Low Power Mode"
+      }
+    },
+    {
+      "brand": "Apple",
+      "type_id": "smartwatches",
+      "name_pattern": "^Apple Watch Ultra 4\\b",
+      "release_date": "2026-09-18",
+      "url": "https://www.apple.com/in/newsroom/2026/09/get-ready-to-experience-iphone-18-pro-the-new-apple-watch-lineup-and-airpods-5/",
+      "scope": "Exact Apple Watch Ultra 4 generation; Apple states the new watch lineup is available in stores from this date.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "Apple Watch Ultra 4",
+        "family": "Apple Watch Ultra 4"
+      }
+    },
+    {
+      "brand": "Apple",
+      "type_id": "earbuds",
+      "name_pattern": "^AirPods 5\\b",
+      "release_date": "2026-09-18",
+      "url": "https://images.apple.com/in/newsroom/2026/09/apple-introduces-airpods-5-with-best-in-class-open-ear-active-noise-cancellation/",
+      "scope": "AirPods 5 and AirPods 5 with Wireless Charging Case; Apple lists India availability from this date.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "AirPods 5",
+        "family": "AirPods 5"
+      },
+      "specifications_url": "https://support.apple.com/en-euro/148759",
+      "model_specifications": {
+        "Audio driver": "Custom high-excursion Apple driver",
+        "Amplifier": "Custom high dynamic range amplifier",
+        "Processor": "Apple H2 headphone chip",
+        "Noise cancellation": "Active Noise Cancellation, Adaptive Audio, Transparency and Conversation Awareness",
+        "Spatial audio": "Personalised Spatial Audio with dynamic head tracking",
+        "Wireless connectivity": "Bluetooth wireless technology",
+        "Water resistance": "IP57 dust, sweat and water resistance",
+        "Microphones": "Dual beamforming microphones and inward-facing microphone",
+        "Sensors": "Optical in-ear, motion-detecting accelerometer, speech-detecting accelerometer and force sensor"
+      }
+    },
+    {
+      "brand": "Apple",
+      "type_id": "smartwatches",
+      "name_pattern": "^Apple Watch Series 11\\b",
+      "release_date": "2025-09-19",
+      "url": "https://www.apple.com/in/newsroom/2025/09/the-latest-iphone-apple-watch-and-airpods-arrive-in-apple-store-locations/",
+      "scope": "All Apple Watch Series 11 case, size and connectivity variants; exact generation only.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "Apple Watch Series 11",
+        "family": "Apple Watch Series 11"
+      }
+    },
+    {
+      "brand": "Apple",
+      "type_id": "smartwatches",
+      "name_pattern": "^Apple Watch Ultra 3\\b",
+      "release_date": "2025-09-19",
+      "url": "https://www.apple.com/in/newsroom/2025/09/the-latest-iphone-apple-watch-and-airpods-arrive-in-apple-store-locations/",
+      "scope": "Exact Apple Watch Ultra 3 generation; Apple reports it arrived at Apple Stores on this date.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "Apple Watch Ultra 3",
+        "family": "Apple Watch Ultra 3"
+      }
+    },
+    {
+      "brand": "Apple",
+      "type_id": "earbuds",
+      "name_pattern": "^AirPods Pro 3\\b",
+      "release_date": "2025-09-19",
+      "url": "https://www.apple.com/in/newsroom/2025/09/the-latest-iphone-apple-watch-and-airpods-arrive-in-apple-store-locations/",
+      "scope": "Exact AirPods Pro 3 generation; Apple reports it arrived at Apple Stores on this date.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "AirPods Pro 3",
+        "family": "AirPods Pro 3"
+      }
+    },
+    {
+      "brand": "Apple",
+      "type_id": "tablets",
+      "name_pattern": "^.*iPad Pro.*\\bM5\\b.*",
+      "release_date": "2025-10-22",
+      "url": "https://www.apple.com/in/newsroom/2025/10/apple-introduces-the-powerful-new-ipad-pro-with-the-m5-chip/",
+      "scope": "iPad Pro M5 11-inch and 13-inch models only; Apple India says store and reseller availability starts on this date.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "iPad Pro M5",
+        "family": "iPad Pro M5"
+      },
+      "specifications_url": "https://support.apple.com/en-in/125406",
+      "model_specifications": {
+        "Processor": "Apple M5",
+        "GPU": "10-core GPU with Neural Accelerators and hardware ray tracing",
+        "Neural Engine": "16-core Neural Engine",
+        "Memory bandwidth": "153 GB/s",
+        "Display technology": "Ultra Retina XDR tandem OLED",
+        "Refresh rate": "ProMotion adaptive 10 to 120 Hz",
+        "Rear camera": "12 MP Wide with LiDAR Scanner and Adaptive True Tone flash",
+        "Audio": "Four-speaker audio",
+        "Wireless connectivity": "Wi-Fi 7, Bluetooth 6; 5G on cellular models",
+        "Connector": "Thunderbolt / USB 4",
+        "Biometrics": "Face ID"
+      }
+    },
+    {
+      "brand": "Apple",
+      "type_id": "tablets",
+      "name_pattern": "^.*iPad Air.*\\bM4\\b.*",
+      "release_date": "2026-03-11",
+      "url": "https://www.apple.com/in/newsroom/2026/03/macbook-neo-iphone-17e-ipad-air-with-m4-and-more-are-now-available/",
+      "scope": "iPad Air M4 11-inch and 13-inch models only; Apple states availability on Apple India stores begins this date.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "iPad Air M4",
+        "family": "iPad Air M4"
+      },
+      "specifications_url": "https://support.apple.com/en-in/126472",
+      "model_specifications": {
+        "Processor": "Apple M4",
+        "CPU cores": "8-core CPU (3 performance and 5 efficiency cores)",
+        "GPU cores": "9-core GPU with hardware ray tracing",
+        "Neural Engine": "16-core Neural Engine",
+        "Unified memory": "12 GB",
+        "Display technology": "Liquid Retina LED-backlit IPS",
+        "Wireless connectivity": "Wi-Fi 7, Bluetooth 6; 5G on cellular models",
+        "Connector": "USB-C with USB 3 up to 10 Gb/s",
+        "Audio": "Landscape stereo speakers",
+        "Biometrics": "Touch ID",
+        "Battery life": "Up to 10 hours Wi-Fi web or video use"
+      }
+    },
+    {
+      "brand": "Apple",
+      "type_id": "laptops",
+      "release_date": "2025-10-22",
+      "url": "https://www.apple.com/in/newsroom/2025/10/apple-unveils-new-14-inch-macbook-pro-powered-by-the-m5-chip/",
+      "scope": "Base 14-inch MacBook Pro with M5; Apple India says availability begins 22 October 2025. Excludes M5 Pro and M5 Max models.",
+      "reviewed_on": "2026-10-26",
+      "name_pattern": "^.*\\bMacBook Pro\\b.*\\bM5\\b(?!\\s+(?:Pro|Max))\\b.*",
+      "verified_model": {
+        "name": "MacBook Pro M5",
+        "family": "MacBook Pro"
+      },
+      "family_key": "apple-macbook-pro",
+      "family_name": "MacBook Pro",
+      "model_name": "MacBook Pro M5"
+    },
+    {
+      "brand": "Apple",
+      "type_id": "laptops",
+      "release_date": "2026-03-11",
+      "url": "https://www.apple.com/in/newsroom/2026/03/macbook-neo-iphone-17e-ipad-air-with-m4-and-more-are-now-available/",
+      "scope": "MacBook Pro M5, M5 Pro and M5 Max generations only; Apple India confirms availability on this date.",
+      "reviewed_on": "2026-10-24",
+      "name_pattern": "^.*\\bMacBook Pro\\b.*\\bM5 Pro\\b.*",
+      "verified_model": {
+        "name": "MacBook Pro M5 Pro",
+        "family": "MacBook Pro"
+      },
+      "family_key": "apple-macbook-pro",
+      "family_name": "MacBook Pro",
+      "model_name": "MacBook Pro M5 Pro"
+    },
+    {
+      "brand": "Apple",
+      "type_id": "laptops",
+      "release_date": "2026-03-11",
+      "url": "https://www.apple.com/in/newsroom/2026/03/macbook-neo-iphone-17e-ipad-air-with-m4-and-more-are-now-available/",
+      "scope": "MacBook Pro M5, M5 Pro and M5 Max generations only; Apple India confirms availability on this date.",
+      "reviewed_on": "2026-10-24",
+      "name_pattern": "^.*\\bMacBook Pro\\b.*\\bM5 Max\\b.*",
+      "verified_model": {
+        "name": "MacBook Pro M5 Max",
+        "family": "MacBook Pro"
+      },
+      "family_key": "apple-macbook-pro",
+      "family_name": "MacBook Pro",
+      "model_name": "MacBook Pro M5 Max"
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "smartphones",
+      "name_pattern": "^(?:Samsung )?Galaxy S26(?: Ultra| Plus|\\+)?(?!\\s+FE\\b)(?:\\s|$)",
+      "release_date": "2026-03-11",
+      "url": "https://news.samsung.com/in/samsung-galaxy-s26-series-and-galaxy-buds4-series-now-available-worldwide",
+      "scope": "Galaxy S26, S26+ and S26 Ultra series variants; Samsung says worldwide availability starts on this date.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "Galaxy S26 series",
+        "family": "Galaxy S26"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "smartphones",
+      "name_pattern": "^(?:Samsung )?Galaxy S26 FE\\b",
+      "release_date": "2026-09-14",
+      "url": "https://news.samsung.com/in/samsung-launches-galaxy-s26-fe-in-india-bringing-flagship-camera-galaxy-ai-and-powerful-performance",
+      "scope": "Exact Galaxy S26 FE model; Samsung India launch announcement dated this day.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "Galaxy S26 FE",
+        "family": "Galaxy S26"
+      }
+    },
+    {
+      "brand": "Crucial",
+      "type_id": "ssds",
+      "mpn_pattern": "CT(?:1000|2000)P310SSD2",
+      "family_key": "crucial-p310-2230",
+      "family_name": "Crucial P310 2230 SSD",
+      "name_pattern": "P310.*2230",
+      "release_date": "2024-07-17",
+      "url": "https://investors.micron.com/news/press-release/2024/Micron-Unveils-Industrys-Fastest-2230-Gen4-Consumer-SSD-the-Crucial-P310-to-Accelerate-Handheld-Gaming-Ultrathin-Laptops-and-Mini-PCs-07-17-2024/default.aspx",
+      "scope": "Global launch; 2230 1TB and 2TB only. Excludes later 2280 models.",
+      "reviewed_on": "2026-10-23"
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "memory_cards",
+      "mpn_pattern": "MBMC512SA(?:APC)?",
+      "family_key": "samsung-evo-plus-microsd-sa-2024",
+      "family_name": "Samsung EVO Plus microSD SA generation (2024)",
+      "name_pattern": "EVO Plus.*512GB.*microSD",
+      "release_date": "2024-04-08",
+      "url": "https://news.samsung.com/us/samsung-announces-new-evo-select-evo-plus-microsd-cards-improved-speeds/",
+      "scope": "2024 SA generation EVO Plus 512GB; not earlier KA generations or SD cards.",
+      "reviewed_on": "2026-10-23"
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "memory_cards",
+      "mpn_pattern": "MBMC1T0SA(?:APC)?",
+      "family_key": "samsung-evo-plus-microsd-sa-2024",
+      "family_name": "Samsung EVO Plus microSD SA generation (2024)",
+      "name_pattern": "EVO Plus.*1TB.*microSD",
+      "release_date": "2024-07-31",
+      "url": "https://semiconductor.samsung.com/news-events/news/samsung-electronics-launches-enhanced-1tb-microsd-cards-with-improved-performance-and-higher-capacity/",
+      "scope": "Global 1TB EVO Plus launch; not earlier lower capacities.",
+      "reviewed_on": "2026-10-23"
+    },
+    {
+      "brand": "boAt",
+      "type_id": "earbuds",
+      "name_pattern": "^boAt\\s+Airdopes\\ Prime\\ 800D(?:\\s*[|\\u2014]|\\s*$)",
+      "release_year": 2026,
+      "url": "https://www.boat-lifestyle.com/blogs/blog/boat-new-launch-earbuds-2026-which-one-should-you-buy",
+      "scope": "Manufacturer explicitly identifies these three models as new launches in 2026. Exact launch day is not stated.",
+      "reviewed_on": "2026-10-23",
+      "verified_model": {
+        "name": "Airdopes Prime 800D",
+        "family": "Airdopes Prime 800D"
+      },
+      "family_key": "boat-airdopes-prime-800d",
+      "family_name": "Airdopes Prime 800D"
+    },
+    {
+      "brand": "boAt",
+      "type_id": "earbuds",
+      "name_pattern": "^boAt\\s+Airdopes\\ Plus\\ 223(?:\\s*[|\\u2014]|\\s*$)",
+      "release_year": 2026,
+      "url": "https://www.boat-lifestyle.com/blogs/blog/boat-new-launch-earbuds-2026-which-one-should-you-buy",
+      "scope": "Manufacturer explicitly identifies these three models as new launches in 2026. Exact launch day is not stated.",
+      "reviewed_on": "2026-10-23",
+      "verified_model": {
+        "name": "Airdopes Plus 223",
+        "family": "Airdopes Plus 223"
+      },
+      "family_key": "boat-airdopes-plus-223",
+      "family_name": "Airdopes Plus 223"
+    },
+    {
+      "brand": "boAt",
+      "type_id": "earbuds",
+      "name_pattern": "^boAt\\s+Airdopes\\ Prime\\ Supreme(?:\\s*[|\\u2014]|\\s*$)",
+      "release_year": 2026,
+      "url": "https://www.boat-lifestyle.com/blogs/blog/boat-new-launch-earbuds-2026-which-one-should-you-buy",
+      "scope": "Manufacturer explicitly identifies these three models as new launches in 2026. Exact launch day is not stated.",
+      "reviewed_on": "2026-10-23",
+      "verified_model": {
+        "name": "Airdopes Prime Supreme",
+        "family": "Airdopes Prime Supreme"
+      },
+      "family_key": "boat-airdopes-prime-supreme",
+      "family_name": "Airdopes Prime Supreme"
+    },
+    {
+      "brand": "Apple",
+      "type_id": "smartphones",
+      "name_pattern": "^(?:Apple )?iPhone 16(?:\\s+(?!Pro|Plus)|$)",
+      "release_date": "2024-09-20",
+      "url": "https://www.apple.com/in/newsroom/2024/09/apple-introduces-iphone-16-and-iphone-16-plus/",
+      "scope": "Exact named manufacturer model, India availability start. Accessories, other generations and unmatched configurations excluded.",
+      "reviewed_on": "2026-10-23",
+      "verified_model": {
+        "name": "iPhone 16",
+        "family": "iPhone 16"
+      }
+    },
+    {
+      "brand": "Apple",
+      "type_id": "smartphones",
+      "name_pattern": "^(?:Apple )?iPhone 16 Plus\\b",
+      "release_date": "2024-09-20",
+      "url": "https://www.apple.com/in/newsroom/2024/09/apple-introduces-iphone-16-and-iphone-16-plus/",
+      "scope": "Exact named manufacturer model, India availability start. Accessories, other generations and unmatched configurations excluded.",
+      "reviewed_on": "2026-10-23",
+      "verified_model": {
+        "name": "iPhone 16 Plus",
+        "family": "iPhone 16"
+      }
+    },
+    {
+      "brand": "Apple",
+      "type_id": "smartphones",
+      "name_pattern": "^(?:Apple )?iPhone 16 Pro(?! Max)\\b",
+      "release_date": "2024-09-20",
+      "url": "https://www.apple.com/in/newsroom/2024/09/apple-debuts-iphone-16-pro-and-iphone-16-pro-max/",
+      "scope": "Exact named manufacturer model, India availability start. Accessories, other generations and unmatched configurations excluded.",
+      "reviewed_on": "2026-10-23",
+      "verified_model": {
+        "name": "iPhone 16 Pro",
+        "family": "iPhone 16"
+      }
+    },
+    {
+      "brand": "Apple",
+      "type_id": "smartphones",
+      "name_pattern": "^(?:Apple )?iPhone 16 Pro Max\\b",
+      "release_date": "2024-09-20",
+      "url": "https://www.apple.com/in/newsroom/2024/09/apple-debuts-iphone-16-pro-and-iphone-16-pro-max/",
+      "scope": "Exact named manufacturer model, India availability start. Accessories, other generations and unmatched configurations excluded.",
+      "reviewed_on": "2026-10-23",
+      "verified_model": {
+        "name": "iPhone 16 Pro Max",
+        "family": "iPhone 16"
+      }
+    },
+    {
+      "brand": "Apple",
+      "type_id": "smartphones",
+      "name_pattern": "^(?:Apple )?iPhone 16e\\b",
+      "release_date": "2025-02-28",
+      "url": "https://www.apple.com/in/newsroom/2025/02/apple-debuts-iphone-16e-a-powerful-new-member-of-the-iphone-16-family/",
+      "scope": "Exact named manufacturer model, India availability start. Accessories, other generations and unmatched configurations excluded.",
+      "reviewed_on": "2026-10-23",
+      "verified_model": {
+        "name": "iPhone 16e",
+        "family": "iPhone 16"
+      }
+    },
+    {
+      "brand": "Apple",
+      "type_id": "smartphones",
+      "name_pattern": "^(?:Apple )?iPhone 17 Pro(?! Max)\\b",
+      "release_date": "2025-09-19",
+      "url": "https://www.apple.com/in/newsroom/2025/09/apple-unveils-iphone-17-pro-and-iphone-17-pro-max-the-most-powerful-and-advanced-pro-models-ever/",
+      "scope": "Exact named manufacturer model, India availability start. Accessories, other generations and unmatched configurations excluded.",
+      "reviewed_on": "2026-10-23",
+      "verified_model": {
+        "name": "iPhone 17 Pro",
+        "family": "iPhone 17"
+      },
+      "specifications_url": "https://support.apple.com/en-in/125090",
+      "model_specifications": {
+        "Processor": "Apple A19 Pro",
+        "Processor cores": "6 (2 performance and 4 efficiency)",
+        "Graphics processor": "6-core Apple GPU with Neural Accelerators",
+        "Neural engine": "16-core",
+        "Display size": "6.3 inches",
+        "Display technology": "Super Retina XDR OLED",
+        "Resolution": "2622 x 1206 pixels",
+        "Refresh rate": "Adaptive ProMotion, up to 120 Hz",
+        "Pixel density": "460 ppi",
+        "Outdoor peak brightness": "3000 nits",
+        "Main camera": "48 MP Fusion Main",
+        "Ultra wide camera": "48 MP Fusion Ultra Wide",
+        "Telephoto camera": "48 MP Fusion Telephoto, 4x optical and 8x optical-quality zoom",
+        "Front camera": "18 MP Center Stage with autofocus",
+        "Water resistance": "IP68, maximum 6 metres for 30 minutes",
+        "Wi-Fi standards": "Wi-Fi 7 (802.11be), 2x2 MIMO",
+        "Bluetooth version": "Bluetooth 6",
+        "Biometrics": "Face ID",
+        "Connector": "USB-C",
+        "Weight": "204 g"
+      }
+    },
+    {
+      "brand": "Apple",
+      "type_id": "smartphones",
+      "name_pattern": "^(?:Apple )?iPhone 17 Pro Max\\b",
+      "release_date": "2025-09-19",
+      "url": "https://www.apple.com/in/newsroom/2025/09/apple-unveils-iphone-17-pro-and-iphone-17-pro-max-the-most-powerful-and-advanced-pro-models-ever/",
+      "scope": "Exact named manufacturer model, India availability start. Accessories, other generations and unmatched configurations excluded.",
+      "reviewed_on": "2026-10-23",
+      "verified_model": {
+        "name": "iPhone 17 Pro Max",
+        "family": "iPhone 17"
+      },
+      "specifications_url": "https://support.apple.com/en-in/125091",
+      "model_specifications": {
+        "Processor": "Apple A19 Pro",
+        "Processor cores": "6 (2 performance and 4 efficiency)",
+        "Graphics processor": "6-core Apple GPU with Neural Accelerators",
+        "Neural engine": "16-core",
+        "Display size": "6.9 inches",
+        "Display technology": "Super Retina XDR OLED",
+        "Resolution": "2868 x 1320 pixels",
+        "Refresh rate": "Adaptive ProMotion, up to 120 Hz",
+        "Pixel density": "460 ppi",
+        "Outdoor peak brightness": "3000 nits",
+        "Main camera": "48 MP Fusion Main",
+        "Ultra wide camera": "48 MP Fusion Ultra Wide",
+        "Telephoto camera": "48 MP Fusion Telephoto, 4x optical and 8x optical-quality zoom",
+        "Front camera": "18 MP Center Stage with autofocus",
+        "Water resistance": "IP68, maximum 6 metres for 30 minutes",
+        "Wi-Fi standards": "Wi-Fi 7 (802.11be), 2x2 MIMO",
+        "Bluetooth version": "Bluetooth 6",
+        "Biometrics": "Face ID",
+        "Connector": "USB-C",
+        "Weight": "231 g"
+      }
+    },
+    {
+      "brand": "Apple",
+      "type_id": "laptops",
+      "name_pattern": "\\bMacBook Neo\\b",
+      "release_date": "2026-03-11",
+      "url": "https://www.apple.com/in/newsroom/2026/03/say-hello-to-macbook-neo/",
+      "scope": "Exact named manufacturer model, India availability start. Accessories, other generations and unmatched configurations excluded.",
+      "reviewed_on": "2026-10-23",
+      "verified_model": {
+        "name": "MacBook Neo",
+        "family": "MacBook Neo"
+      },
+      "specifications_url": "https://support.apple.com/en-in/126322",
+      "model_specifications": {
+        "Processor": "Apple A18 Pro",
+        "RAM": "8 GB",
+        "Display size": "13 inches",
+        "Display technology": "LED-backlit IPS Liquid Retina",
+        "Resolution": "2408 x 1506 pixels",
+        "Pixel density": "219 ppi"
+      }
+    },
+    {
+      "brand": "Apple",
+      "type_id": "laptops",
+      "name_pattern": "\\bMacBook Air\\b(?=.*\\bM5\\b)",
+      "release_date": "2026-03-11",
+      "url": "https://www.apple.com/in/newsroom/2026/03/apple-introduces-the-new-macbook-air-with-m5/",
+      "scope": "Exact named manufacturer model, India availability start. Accessories, other generations and unmatched configurations excluded.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "MacBook Air M5",
+        "family": "MacBook Air M5"
+      },
+      "model_specifications": {
+        "Processor": "Apple M5 chip; 10-core CPU with 4 super cores and 6 efficiency cores",
+        "Neural Engine": "16-core Neural Engine",
+        "Memory bandwidth": "153 GB/s",
+        "Media Engine": "Hardware-accelerated H.264, HEVC, ProRes and ProRes RAW; AV1 decode",
+        "Display technology": "Liquid Retina display with LED-backlit IPS technology",
+        "Display brightness": "500 nits",
+        "Battery life": "Up to 18 hours video streaming; up to 15 hours wireless web",
+        "Ports": "MagSafe 3; two Thunderbolt 4 (USB-C) ports with charging, DisplayPort and USB 4; 3.5 mm headphone jack",
+        "External display support": "Up to two external displays; supports up to 6K at 60 Hz or 4K at 144 Hz",
+        "Wireless connectivity": "Apple N1 wireless chip; Wi-Fi 7 (802.11be), Bluetooth 6 and Thread",
+        "Camera": "12 MP Center Stage camera; 1080p HD video recording",
+        "Keyboard": "Backlit Magic Keyboard with Touch ID and ambient light sensor",
+        "Trackpad": "Force Touch trackpad with Multi-Touch gestures",
+        "Audio formats": "AAC, MP3, Apple Lossless, FLAC, Dolby Digital, Dolby Digital Plus and Dolby Atmos",
+        "Display gamut and tone": "1 billion colours, wide colour (P3) and True Tone"
+      },
+      "specifications_url": "https://www.apple.com/in/macbook-air/specs/",
+      "family_key": "apple-macbook-air",
+      "family_name": "MacBook Air",
+      "model_name": "MacBook Air M5"
+    },
+    {
+      "brand": "Voltas",
+      "type_id": "air_conditioners",
+      "mpn_pattern": "(?:123|125|183|185)INV",
+      "name_pattern": "\\bVertis AI\\b",
+      "release_year": 2026,
+      "url": "https://www.voltas.com/blogs/articles/meet-the-new-voltas-vertis-ai-the-ac-that-thinks-learns-and-cools-smarter",
+      "scope": "Exact 123INV, 125INV, 183INV and 185INV Vertis AI inverter AC models only. Voltas identifies Vertis AI as part of its 2026 split inverter AC portfolio; the live official product pages establish current India availability. Year precision only.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "Voltas Vertis AI",
+        "family": "Vertis AI"
+      }
+    },
+    {
+      "brand": "Sony",
+      "type_id": "televisions",
+      "mpn_pattern": "K\\d{2,3}XR55A",
+      "name_pattern": "\\bBRAVIA\\s+5\\b",
+      "release_year": 2025,
+      "url": "https://www.sony.co.in/electronics/support/televisions-projectors-lcd-tvs-android-/k-55xr55a/specifications",
+      "scope": "Sony India support lists model year 2025 for K-55XR55A; exact XR55A model codes only. Year precision.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "Sony BRAVIA 5",
+        "family": "BRAVIA 5"
+      }
+    },
+    {
+      "brand": "Sony",
+      "type_id": "televisions",
+      "mpn_pattern": "K\\d{2,3}S22M2",
+      "name_pattern": "\\bBRAVIA\\s+2\\s*II\\b",
+      "release_year": 2025,
+      "url": "https://www.sony.co.in/electronics/support/televisions-projectors-lcd-tvs-android-/k-50s22m2/specifications",
+      "scope": "Sony India support lists model year 2025 for K-50S22M2; exact S22M2 model codes only. Year precision.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "Sony BRAVIA 2 II S22M2",
+        "family": "BRAVIA 2 II"
+      }
+    },
+    {
+      "brand": "Sony",
+      "type_id": "televisions",
+      "mpn_pattern": "K\\d{2,3}S25M2",
+      "name_pattern": "\\bBRAVIA\\s+2\\s*II\\b",
+      "release_year": 2025,
+      "url": "https://www.sony.co.in/electronics/support/televisions-projectors-lcd-tvs-android-/k-55s25m2/specifications",
+      "scope": "Sony India support lists model year 2025 for K-55S25M2; exact S25M2 model codes only. Year precision.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "Sony BRAVIA 2 II S25M2",
+        "family": "BRAVIA 2 II"
+      }
+    },
+    {
+      "brand": "Sony",
+      "type_id": "televisions",
+      "mpn_pattern": "K\\d{2,3}XR80M2",
+      "name_pattern": "\\bBRAVIA\\s+8\\s*II\\b",
+      "release_year": 2025,
+      "url": "https://www.sony.co.in/electronics/support/televisions-projectors-oled-tvs-android-/k-55xr80m2-in/specifications",
+      "scope": "Sony India support lists model year 2025 for K-55XR80M2 IN; exact XR80M2 model codes only. Year precision.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "Sony BRAVIA 8 II",
+        "family": "BRAVIA 8 II"
+      }
+    },
+    {
+      "brand": "Sony",
+      "type_id": "televisions",
+      "mpn_pattern": "K\\d{2,3}XR(?:30|35)M2",
+      "name_pattern": "\\bBRAVIA\\s+3\\s*II\\b",
+      "release_year": 2026,
+      "url": "https://www.sony.co.in/pressrelease?prName=sony-introduces-bravia-3ii-with-xr-processor-and-120hz-refresh-rate-elevating-the-bravia-3-series-into-a-new-era-of-intelligent-picture-performance",
+      "scope": "Sony India announced BRAVIA 3 II in May 2026 and its India rollout during 2026; exact XR30M2/XR35M2 model codes only. Year precision because screen-size availability is staggered.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "Sony BRAVIA 3 II",
+        "family": "BRAVIA 3 II"
+      }
+    },
+    {
+      "brand": "Sony",
+      "type_id": "televisions",
+      "mpn_pattern": "K\\d{2,3}XR70M2",
+      "name_pattern": "\\bBRAVIA\\s+7\\s*II\\b",
+      "release_year": 2026,
+      "url": "https://www.sony.co.in/pressrelease?prName=the-future-of-colour-is-here-sony-introduces-its-true-rgb-tvs-powered-by-rgb-backlight-master-drive-pro-with-bravia-7ii-across-india",
+      "scope": "Sony India announced and scheduled the BRAVIA 7 II India rollout across 2026; exact XR70M2 model codes only. Year precision because screen-size availability is staggered.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "Sony BRAVIA 7 II",
+        "family": "BRAVIA 7 II"
+      }
+    },
+    {
+      "brand": "Sony",
+      "type_id": "televisions",
+      "mpn_pattern": "K(?:75|85)XR90M2",
+      "name_pattern": "\\bBRAVIA\\s+9\\s*II\\b",
+      "release_date": "2026-07-29",
+      "url": "https://www.sony.co.in/pressrelease?prName=sony-introduces-true-rgb-technology-backed-by-rgb-backlight-master-drive-pro-in-india-with-launch-of-bravia-9ii-and-bravia-7ii",
+      "scope": "Sony India announced BRAVIA 9 II on 29 July 2026 and stated that the 75- and 85-inch models were available in India; exact K-75/K-85 XR90M2 codes only.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "Sony BRAVIA 9 II",
+        "family": "BRAVIA 9 II"
+      }
+    },
+    {
+      "brand": "Sony",
+      "type_id": "televisions",
+      "mpn_pattern": "K115XR90M2",
+      "name_pattern": "\\bBRAVIA\\s+9\\s*II\\b",
+      "release_date": "2026-08-03",
+      "url": "https://www.sony.co.in/pressrelease?prName=sony-india-transforms-cinema-experience-for-indian-customers-by-launching-its-115-292-cm-true-rgb-television",
+      "scope": "Sony India announced the exact 115-inch BRAVIA 9 II model on 3 August 2026; K-115XR90M2 only.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "Sony BRAVIA 9 II 115-inch",
+        "family": "BRAVIA 9 II"
+      }
+    },
+    {
+      "brand": "Dell",
+      "type_id": "monitors",
+      "mpn_pattern": ".*(?:S2425HSM|S2725HSM|S2725DSM|S2725DC).*",
+      "name_pattern": "\\b(?:S2425HSM|S2725HSM|S2725DSM|S2725DC)\\b",
+      "release_date": "2025-09-02",
+      "url": "https://www.dell.com/ja-jp/blog/new-dell-plus-monitor/",
+      "scope": "Dell's official launch notice names the exact four S2425HSM/S2725HSM/S2725DSM/S2725DC models and states Japan sales began 2 September 2025. Exact named codes only.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "Dell Plus Monitor",
+        "family": "Dell Plus Monitor 2025"
+      }
+    },
+    {
+      "brand": "BenQ",
+      "type_id": "monitors",
+      "mpn_pattern": "RD280UG",
+      "name_pattern": "\\bRD280UG\\b",
+      "release_date": "2026-01-21",
+      "url": "https://www.benq.com/en-us/news/monitor/best-coding-monitor-for-programmers.html",
+      "scope": "BenQ's official announcement names the RD280UG and is dated 21 January 2026. Exact model code only.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "BenQ RD280UG",
+        "family": "RD280UG"
+      }
+    },
+    {
+      "brand": "MSI",
+      "type_id": "monitors",
+      "mpn_pattern": "MAG275UPDE14",
+      "name_pattern": "\\bMAG\\s+275UPD\\s+E14\\b",
+      "release_date": "2026-03-19",
+      "url": "https://jp.msi.com/news/detail/%E3%83%87%E3%83%A5%E3%82%A2%E3%83%AB%E3%83%A2%E3%83%BC%E3%83%89%E6%90%AD%E8%BC%89%E3%81%A74K---144Hz-%E3%83%95%E3%83%ABHD---288Hz%E3%82%92%E8%87%AA%E7%94%B1%E3%81%AB%E3%83%81%E3%82%A7%E3%83%B3%E3%82%B8-%E3%82%B9%E3%83%94%E3%83%BC%E3%82%AB%E3%83%BC%E3%82%84-%E9%AB%98%E6%80%A7%E8%83%BD%E3%82%B9%E3%82%BF%E3%83%B3%E3%83%89%E3%81%AA%E3%81%A9%E6%A9%9F%E8%83%BD%E3%81%8C%E5%85%85%E5%AE%9F%E3%81%97%E3%81%9F%E3%83%8F%E3%82%A4%E3%82%B9%E3%83%9A%E3%83%83%E3%82%AF%E3%83%A2%E3%83%87%E3%83%AB--MAG-275UPD-E14-%E7%99%BA%E5%A3%B2-148131",
+      "scope": "MSI Japan's official announcement states MAG 275UPD E14 launch sales begin 19 March 2026. Exact model code only.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "MSI MAG 275UPD E14",
+        "family": "MAG 275UPD E14"
+      }
+    },
+    {
+      "brand": "Apple",
+      "type_id": "tablets",
+      "name_pattern": "^.*\\biPad\\b.*\\bA16\\b.*",
+      "release_date": "2025-03-12",
+      "url": "https://www.apple.com/in/newsroom/2025/03/apple-introduces-ipad-air-with-powerful-m3-chip-and-new-magic-keyboard/",
+      "scope": "All storage, finish and connectivity variants of iPad (A16); Apple India says availability begins 2025-03-12.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "iPad (A16)",
+        "family": "iPad"
+      }
+    },
+    {
+      "brand": "Apple",
+      "type_id": "tablets",
+      "name_pattern": "^.*\\biPad Air\\b.*\\bM2\\b.*",
+      "release_date": "2024-05-15",
+      "url": "https://www.apple.com/in/newsroom/2024/05/apple-unveils-the-redesigned-11-inch-and-all-new-13-inch-ipad-air-with-m2/",
+      "scope": "All 11-inch and 13-inch iPad Air (M2) storage, finish and connectivity variants; Apple India says availability begins 2024-05-15.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "iPad Air (M2)",
+        "family": "iPad Air"
+      }
+    },
+    {
+      "brand": "Apple",
+      "type_id": "tablets",
+      "name_pattern": "^.*\\biPad Air\\b.*\\bM3\\b.*",
+      "release_date": "2025-03-12",
+      "url": "https://www.apple.com/in/newsroom/2025/03/apple-introduces-ipad-air-with-powerful-m3-chip-and-new-magic-keyboard/",
+      "scope": "All 11-inch and 13-inch iPad Air (M3) storage, finish and connectivity variants; Apple India says availability begins 2025-03-12.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "iPad Air (M3)",
+        "family": "iPad Air"
+      }
+    },
+    {
+      "brand": "Apple",
+      "type_id": "laptops",
+      "name_pattern": "^.*\\bMacBook Air\\b.*\\bM3\\b.*",
+      "release_date": "2024-03-08",
+      "url": "https://www.apple.com/in/newsroom/2024/03/apple-unveils-the-new-13-and-15-inch-macbook-air-with-the-powerful-m3-chip/",
+      "scope": "13-inch and 15-inch MacBook Air (M3) configurations; Apple India says store and authorised reseller availability begins 2024-03-08.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "MacBook Air (M3)",
+        "family": "MacBook Air"
+      },
+      "family_key": "apple-macbook-air",
+      "family_name": "MacBook Air",
+      "model_name": "MacBook Air M3"
+    },
+    {
+      "brand": "Apple",
+      "type_id": "laptops",
+      "name_pattern": "^.*\\bMacBook Air\\b.*\\bM4\\b.*",
+      "release_date": "2025-03-12",
+      "url": "https://www.apple.com/in/newsroom/2025/03/apple-introduces-the-new-macbook-air-with-the-m4-chip-and-a-sky-blue-color/",
+      "scope": "13-inch and 15-inch MacBook Air (M4) configurations; Apple India says availability begins 2025-03-12.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "MacBook Air (M4)",
+        "family": "MacBook Air"
+      },
+      "family_key": "apple-macbook-air",
+      "family_name": "MacBook Air",
+      "model_name": "MacBook Air M4"
+    },
+    {
+      "brand": "Apple",
+      "type_id": "laptops",
+      "name_pattern": "^.*\\bMacBook Pro\\b.*\\bM4(?: Pro| Max)?\\b.*",
+      "release_date": "2024-11-08",
+      "url": "https://www.apple.com/in/newsroom/2024/10/new-macbook-pro-features-m4-family-of-chips-and-apple-intelligence/",
+      "scope": "MacBook Pro configurations with M4, M4 Pro or M4 Max from the October 2024 generation; Apple India says availability begins 2024-11-08.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "MacBook Pro (M4 family)",
+        "family": "MacBook Pro"
+      }
+    },
+    {
+      "brand": "Apple",
+      "type_id": "desktops",
+      "name_pattern": "^.*\\bMac mini\\b.*\\bM4(?: Pro)?\\b.*",
+      "release_date": "2024-11-08",
+      "url": "https://www.apple.com/in/newsroom/2024/10/apples-new-mac-mini-is-more-mighty-more-mini-and-built-for-apple-intelligence/",
+      "scope": "Mac mini configurations with M4 or M4 Pro from the October 2024 generation; Apple India says availability begins 2024-11-08.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "Mac mini (M4 family)",
+        "family": "Mac mini"
+      }
+    },
+    {
+      "brand": "Apple",
+      "type_id": "desktops",
+      "name_pattern": "^.*\\biMac\\b.*\\bM4\\b.*",
+      "release_date": "2024-11-08",
+      "url": "https://www.apple.com/in/newsroom/2024/10/apple-introduces-new-imac-supercharged-by-m4-and-apple-intelligence/",
+      "scope": "iMac M4 configurations from the October 2024 generation; Apple India says availability begins 2024-11-08.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "iMac (M4)",
+        "family": "iMac"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "televisions",
+      "name_pattern": "\\b43M71H\\b",
+      "mpn_pattern": "UA43M71HAULXL",
+      "release_date": "2026-04-30",
+      "url": "https://www.samsung.com/in/tvs/mini-led-tv/m71h-43-inch-4k-smart-tv-ua43m71haulxl/",
+      "scope": "Exact India model UA43M71HAULXL (43-inch M71H); Samsung India product page gives launch date 2026-04-30.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "Samsung M71H 43-inch",
+        "family": "Samsung M71H"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "televisions",
+      "name_pattern": "\\b55M70H\\b",
+      "mpn_pattern": "UA55M70HAULXL",
+      "release_date": "2026-04-30",
+      "url": "https://www.samsung.com/in/tvs/mini-led-tv/m70h-55-inch-4k-smart-tv-ua55m70haulxl/",
+      "scope": "Exact India model UA55M70HAULXL (55-inch M70H); Samsung India product page gives launch date 2026-04-30.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "Samsung M70H Mini LED 4K Smart TV",
+        "family": "Samsung M70H Mini LED"
+      },
+      "family_key": "samsung-m70h-mini-led",
+      "family_name": "Samsung M70H Mini LED",
+      "model_name": "Samsung M70H Mini LED 4K Smart TV"
+    },
+    {
+      "brand": "LG",
+      "type_id": "televisions",
+      "name_pattern": "\\b55QNED82BXA\\b",
+      "mpn_pattern": "55QNED82BXA",
+      "release_year": 2026,
+      "url": "https://www.lg.com/in/tv-soundbars/qned-evo/55qned82bxa/",
+      "scope": "Exact India model 55QNED82BXA; LG India product page names this 55-inch QNED82BX Mini LED 4K TV as model year 2026; no exact launch day stated.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "LG QNED82BX 55-inch (2026)",
+        "family": "LG QNED82BX"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "televisions",
+      "name_pattern": "\\bQA55S85HAELXL\\b",
+      "mpn_pattern": "QA55S85HAELXL",
+      "release_year": 2026,
+      "url": "https://www.samsung.com/in/support/model/QA55S85HAELXL/",
+      "scope": "Exact Indian model QA55S85HAELXL; Samsung India support identifies it as the S85H OLED television for model year 2026. Only this model code is covered.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "Samsung S85H OLED (QA55S85HAELXL)",
+        "family": "Samsung S85H OLED"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "televisions",
+      "name_pattern": "\\bQA65S85HAELXL\\b",
+      "mpn_pattern": "QA65S85HAELXL",
+      "release_year": 2026,
+      "url": "https://www.samsung.com/in/support/model/QA65S85HAELXL/",
+      "scope": "Exact Indian model QA65S85HAELXL; Samsung India support identifies it as the S85H OLED television for model year 2026. Only this model code is covered.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "Samsung S85H OLED (QA65S85HAELXL)",
+        "family": "Samsung S85H OLED"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "televisions",
+      "name_pattern": "\\bQA55S95HXULXL\\b",
+      "mpn_pattern": "QA55S95HXULXL",
+      "release_year": 2026,
+      "url": "https://www.samsung.com/in/support/model/QA55S95HXULXL/",
+      "scope": "Exact Indian model QA55S95HXULXL; Samsung India support identifies it as the S95H OLED television for model year 2026. Only this model code is covered.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "Samsung S95H OLED (QA55S95HXULXL)",
+        "family": "Samsung S95H OLED"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "televisions",
+      "name_pattern": "\\bQA65S95HXULXL\\b",
+      "mpn_pattern": "QA65S95HXULXL",
+      "release_year": 2026,
+      "url": "https://www.samsung.com/in/support/model/QA65S95HXULXL/",
+      "scope": "Exact Indian model QA65S95HXULXL; Samsung India support identifies it as the S95H OLED television for model year 2026. Only this model code is covered.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "Samsung S95H OLED (QA65S95HXULXL)",
+        "family": "Samsung S95H OLED"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "televisions",
+      "name_pattern": "\\bQA65QN80HAULXL\\b",
+      "mpn_pattern": "QA65QN80HAULXL",
+      "release_year": 2026,
+      "url": "https://www.samsung.com/in/support/model/QA65QN80HAULXL/",
+      "scope": "Exact Indian model QA65QN80HAULXL; Samsung India support identifies it as the QN80H Neo QLED television for model year 2026. Only this model code is covered.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "Samsung QN80H Neo QLED (QA65QN80HAULXL)",
+        "family": "Samsung QN80H Neo QLED"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "televisions",
+      "name_pattern": "\\bUA55M80HAULXL\\b",
+      "mpn_pattern": "UA55M80HAULXL",
+      "release_year": 2026,
+      "url": "https://www.samsung.com/in/support/model/UA55M80HAULXL/",
+      "scope": "Exact Indian model UA55M80HAULXL; Samsung India support identifies it as the M80H Mini LED television for model year 2026. Only this model code is covered.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "Samsung M80H Mini LED (UA55M80HAULXL)",
+        "family": "Samsung M80H Mini LED"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "televisions",
+      "name_pattern": "\\bQA75LS03HEUXXL\\b",
+      "mpn_pattern": "QA75LS03HEUXXL",
+      "release_year": 2026,
+      "url": "https://www.samsung.com/in/support/model/QA75LS03HEUXXL/",
+      "scope": "Exact Indian model QA75LS03HEUXXL; Samsung India support identifies it as the LS03H The Frame television for model year 2026. Only this model code is covered.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "Samsung LS03H The Frame (QA75LS03HEUXXL)",
+        "family": "Samsung LS03H The Frame"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "televisions",
+      "name_pattern": "\\bUA55U8300HULXL\\b",
+      "mpn_pattern": "UA55U8300HULXL",
+      "release_year": 2026,
+      "url": "https://www.samsung.com/in/support/model/UA55U8300HULXL/",
+      "scope": "Exact Indian model UA55U8300HULXL; Samsung India support identifies it as the U8300H Crystal UHD television for model year 2026. Only this model code is covered.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "Samsung U8300H Crystal UHD (UA55U8300HULXL)",
+        "family": "Samsung U8300H Crystal UHD"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "refrigerators",
+      "name_pattern": "\\bRT40H28U2PHL\\b",
+      "mpn_pattern": "RT40H28U2PHL",
+      "release_date": "2026-02-04",
+      "url": "https://www.samsung.com/in/refrigerators/double-door/convertible-double-door-refrigerator-236l-silver-rt40h28u2phl/",
+      "scope": "Exact Indian refrigerator model RT40H28U2PHL; Samsung India product page publishes launch date 2026-02-04.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "Samsung RT40H28U2P refrigerator",
+        "family": "Samsung RT40H28U2P"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "refrigerators",
+      "name_pattern": "\\bRT41HG6A42B1HL\\b",
+      "mpn_pattern": "RT41HG6A42B1HL",
+      "release_date": "2026-01-22",
+      "url": "https://www.samsung.com/in/refrigerators/double-door/rt6300dh-bespoke-ai-double-door-refrigerator-396l-silver-rt41hg6a42b1hl/",
+      "scope": "Exact Indian refrigerator model RT41HG6A42B1HL; Samsung India product page publishes launch date 2026-01-22.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "Samsung RT41HG6A42B1 refrigerator",
+        "family": "Samsung RT41HG6A42B1"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "refrigerators",
+      "name_pattern": "\\bRT40H28W2PNL\\b",
+      "mpn_pattern": "RT40H28W2PNL",
+      "release_date": "2026-01-30",
+      "url": "https://www.samsung.com/in/refrigerators/double-door/tmf-refrigerator-rt80h22c-all-around-cooling-236l-silver-rt40h28w2pnl/",
+      "scope": "Exact Indian refrigerator model RT40H28W2PNL; Samsung India product page publishes launch date 2026-01-30.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "Samsung RT40H28W2P refrigerator",
+        "family": "Samsung RT40H28W2P"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "refrigerators",
+      "name_pattern": "\\bRT40H30U2KHL\\b",
+      "mpn_pattern": "RT40H30U2KHL",
+      "release_date": "2026-02-04",
+      "url": "https://www.samsung.com/in/multistore/in_1001/pd.RT40H30U2KHL/",
+      "scope": "Exact Indian refrigerator model RT40H30U2KHL; Samsung India product page publishes launch date 2026-02-04.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "Samsung RT40H30U2K refrigerator",
+        "family": "Samsung RT40H30U2K"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "refrigerators",
+      "name_pattern": "\\bRT38HG5A42S8HL\\b",
+      "mpn_pattern": "RT38HG5A42S8HL",
+      "release_date": "2026-01-30",
+      "url": "https://www.samsung.com/in/multistore/in_1001/pd.RT38HG5A42S8HL/",
+      "scope": "Exact Indian refrigerator model RT38HG5A42S8HL; Samsung India product page publishes launch date 2026-01-30.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "Samsung RT38HG5A42S8 refrigerator",
+        "family": "Samsung RT38HG5A42S8"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "refrigerators",
+      "name_pattern": "\\bRT45HG6A22SLHL\\b",
+      "mpn_pattern": "RT45HG6A22SLHL",
+      "release_date": "2026-02-20",
+      "url": "https://www.samsung.com/in/refrigerators/double-door/rt6300dh-top-mount-freezer-twin-cooling-plus-419l-silver-rt45hg6a22slhl/",
+      "scope": "Exact Indian refrigerator model RT45HG6A22SLHL; Samsung India product page publishes launch date 2026-02-20.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "Samsung RT45HG6A22SL refrigerator",
+        "family": "Samsung RT45HG6A22SL"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "refrigerators",
+      "name_pattern": "\\bRT41HG6A22S8HL\\b",
+      "mpn_pattern": "RT41HG6A22S8HL",
+      "release_date": "2026-01-22",
+      "url": "https://www.samsung.com/in/refrigerators/double-door/rt6300dh-bespoke-ai-double-door-refrigerator-396l-silver-rt41hg6a22s8hl/",
+      "scope": "Exact Indian refrigerator model RT41HG6A22S8HL; Samsung India product page publishes launch date 2026-01-22.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "Samsung RT41HG6A22S8 refrigerator",
+        "family": "Samsung RT41HG6A22S8"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "refrigerators",
+      "name_pattern": "\\bRR20H1723S8HL\\b",
+      "mpn_pattern": "RR20H1723S8HL",
+      "release_date": "2026-01-12",
+      "url": "https://www.samsung.com/in/refrigerators/one-door/rr1500mh-oen-door-stylish-crown-design-183l-silver-rr20h1723s8-hl/",
+      "scope": "Exact Indian refrigerator model RR20H1723S8HL; Samsung India product page publishes launch date 2026-01-12.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "Samsung RR20H1723S8 refrigerator",
+        "family": "Samsung RR20H1723S8"
+      }
+    },
+    {
+      "reviewed_on": "2026-10-24",
+      "brand": "OnePlus",
+      "type_id": "smartphones",
+      "name_pattern": "^OnePlus 13 5G\\s",
+      "release_date": "2025-01-07",
+      "url": "https://www.oneplus.in/press/press-release/oneplus-launches-new-flagship-series-oneplus-13-and-oneplus-13r",
+      "scope": "OnePlus India press release dates the global launch of the exact OnePlus 13 generation. India retailer offers confirm the listed configurations are sold in India.",
+      "verified_model": {
+        "name": "OnePlus 13",
+        "family": "OnePlus 13"
+      },
+      "verified_mpn": "CPH2649",
+      "identifier_url": "https://www.oneplus.in/oneplus-easy-upgrades/terms-and-conditions"
+    },
+    {
+      "reviewed_on": "2026-10-24",
+      "brand": "OnePlus",
+      "type_id": "smartphones",
+      "name_pattern": "^OnePlus 13R 5G\\s",
+      "release_date": "2025-01-07",
+      "url": "https://www.oneplus.in/press/press-release/oneplus-launches-new-flagship-series-oneplus-13-and-oneplus-13r",
+      "scope": "OnePlus India press release dates the global launch of the exact OnePlus 13R generation. India retailer offers confirm the listed configurations are sold in India.",
+      "verified_model": {
+        "name": "OnePlus 13R",
+        "family": "OnePlus 13"
+      },
+      "verified_mpn": "CPH2691",
+      "identifier_url": "https://www.oneplus.in/oneplus-easy-upgrades/terms-and-conditions"
+    },
+    {
+      "reviewed_on": "2026-10-24",
+      "brand": "Samsung",
+      "type_id": "smartphones",
+      "name_pattern": "^Samsung Galaxy S25 5G (?:256|512) GB\\b",
+      "release_date": "2025-01-23",
+      "url": "https://news.samsung.com/in/samsung-india-launches-galaxy-s25-series-your-true-ai-companion-pre-order-now-for-exciting-offers",
+      "scope": "Galaxy S25 base model only; Samsung India confirms 256GB and 512GB configurations and announced the series on 23 January 2025. The 128GB listing is excluded because this launch evidence does not confirm it.",
+      "verified_model": {
+        "name": "Galaxy S25",
+        "family": "Galaxy S25"
+      }
+    },
+    {
+      "brand": "Google",
+      "type_id": "smartphones",
+      "name_pattern": "^Google Pixel 10a\\b",
+      "release_date": "2026-03-06",
+      "url": "https://blog.google/intl/en-in/products/hardware/pixel-10a-everything-you-need-at-a-price-youll-love/",
+      "scope": "Exact Google Pixel 10a India model; Google says it is available in India starting 6 March 2026.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "Pixel 10a",
+        "family": "Pixel 10a"
+      }
+    },
+    {
+      "reviewed_on": "2026-10-24",
+      "brand": "Google",
+      "type_id": "smartphones",
+      "name_pattern": "^Google Pixel 10(?!a\\b)(?!\\s+Pro\\b)",
+      "release_date": "2025-08-28",
+      "url": "https://blog.google/intl/en-in/products/hardware/powerful-and-proactive-pixel-10-phones-are-here/",
+      "scope": "Pixel 10 exact India generation; Google India identifies this model generation and says retail shelves begin 28 August 2025.",
+      "verified_model": {
+        "name": "Pixel 10",
+        "family": "Pixel 10"
+      }
+    },
+    {
+      "reviewed_on": "2026-10-24",
+      "brand": "Google",
+      "type_id": "smartphones",
+      "name_pattern": "^Google Pixel 10 Pro(?!\\s+XL\\b)",
+      "release_date": "2025-08-28",
+      "url": "https://blog.google/intl/en-in/products/hardware/powerful-and-proactive-pixel-10-phones-are-here/",
+      "scope": "Pixel 10 Pro exact India generation; Google India identifies this model generation and says retail shelves begin 28 August 2025.",
+      "verified_model": {
+        "name": "Pixel 10 Pro",
+        "family": "Pixel 10"
+      }
+    },
+    {
+      "reviewed_on": "2026-10-24",
+      "brand": "Google",
+      "type_id": "smartphones",
+      "name_pattern": "^Google Pixel 10 Pro XL\\b",
+      "release_date": "2025-08-28",
+      "url": "https://blog.google/intl/en-in/products/hardware/powerful-and-proactive-pixel-10-phones-are-here/",
+      "scope": "Pixel 10 Pro XL exact India generation; Google India identifies this model generation and says retail shelves begin 28 August 2025.",
+      "verified_model": {
+        "name": "Pixel 10 Pro XL",
+        "family": "Pixel 10"
+      }
+    },
+    {
+      "reviewed_on": "2026-10-24",
+      "brand": "Google",
+      "type_id": "smartphones",
+      "name_pattern": "^Google Pixel 11(?!\\s+Pro(?:\\s+XL)?\\b)",
+      "release_date": "2026-08-20",
+      "url": "https://blog.google/intl/en-in/products/hardware/the-pixel-11-series-your-most-personal-pixel-yet/",
+      "scope": "Pixel 11 exact India generation; Google India says retail shelves begin 20 August 2026.",
+      "verified_model": {
+        "name": "Pixel 11",
+        "family": "Pixel 11"
+      }
+    },
+    {
+      "reviewed_on": "2026-10-24",
+      "brand": "Google",
+      "type_id": "smartphones",
+      "name_pattern": "^Google Pixel 11 Pro(?!\\s+XL\\b)",
+      "release_date": "2026-08-20",
+      "url": "https://blog.google/intl/en-in/products/hardware/the-pixel-11-series-your-most-personal-pixel-yet/",
+      "scope": "Pixel 11 Pro exact India generation; Google India says retail shelves begin 20 August 2026.",
+      "verified_model": {
+        "name": "Pixel 11 Pro",
+        "family": "Pixel 11"
+      }
+    },
+    {
+      "reviewed_on": "2026-10-24",
+      "brand": "Google",
+      "type_id": "smartphones",
+      "name_pattern": "^Google Pixel 11 Pro XL\\b",
+      "release_date": "2026-08-20",
+      "url": "https://blog.google/intl/en-in/products/hardware/the-pixel-11-series-your-most-personal-pixel-yet/",
+      "scope": "Pixel 11 Pro XL exact India generation; Google India says retail shelves begin 20 August 2026.",
+      "verified_model": {
+        "name": "Pixel 11 Pro XL",
+        "family": "Pixel 11"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "smartphones",
+      "name_pattern": "\\bGalaxy A06 5G\\b",
+      "release_date": "2025-02-19",
+      "url": "https://news.samsung.com/in/samsung-india-launches-galaxy-a06-5g-kaam-ka-5g-with-superfast-connectivity-powerful-performance-at-an-affordable-price",
+      "scope": "Exact Galaxy A06 5G generation. Samsung India states India retail availability began 19 February 2025. Does not cover Galaxy A06 LTE or other generations.",
+      "reviewed_on": "2026-10-24",
+      "family_key": "samsung-galaxy-a06",
+      "family_name": "Samsung Galaxy A06",
+      "model_name": "Samsung Galaxy A06 5G",
+      "verified_model": {
+        "name": "Samsung Galaxy A06 5G",
+        "family": "Samsung Galaxy A06"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "smartphones",
+      "name_pattern": "\\bGalaxy A17 5G\\b",
+      "release_date": "2025-09-03",
+      "url": "https://news.samsung.com/in/samsung-launches-stylish-galaxy-a17-5g-with-ai-innovations-enhanced-durability-and-ois-enabled-no-shake-camera",
+      "scope": "Exact Galaxy A17 5G generation. Samsung India states availability across Indian retail stores began on launch day, 3 September 2025. Does not cover Galaxy A17 LTE or other generations.",
+      "reviewed_on": "2026-10-24",
+      "family_key": "samsung-galaxy-a17",
+      "family_name": "Samsung Galaxy A17",
+      "model_name": "Samsung Galaxy A17 5G",
+      "verified_model": {
+        "name": "Samsung Galaxy A17 5G",
+        "family": "Samsung Galaxy A17"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "smartphones",
+      "name_pattern": "\\bGalaxy Z Fold8 5G\\b",
+      "release_date": "2026-08-07",
+      "url": "https://news.samsung.com/in/samsung-officially-launches-galaxy-z-fold8-ultra-fold8-flip8-watch-ultra2-and-watch9",
+      "scope": "Exact Galaxy Z Fold8 generation. Samsung India states retail availability from 7 August 2026; excludes Z Fold8 Ultra and accessories.",
+      "reviewed_on": "2026-10-24",
+      "family_key": "samsung-galaxy-z-fold8",
+      "family_name": "Samsung Galaxy Z Fold8",
+      "model_name": "Samsung Galaxy Z Fold8",
+      "verified_model": {
+        "name": "Samsung Galaxy Z Fold8",
+        "family": "Samsung Galaxy Z Fold8"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "smartphones",
+      "name_pattern": "\\bGalaxy A56 5G\\b",
+      "release_date": "2025-03-03",
+      "url": "https://news.samsung.com/in/samsung-india-launches-galaxy-a56-5g-galaxy-a36-5g-featuring-awesome-intelligence-all-new-design-and-enhanced-durability",
+      "scope": "Exact Galaxy A56 5G generation. Samsung India announced launch and current purchase availability on 3 March 2025.",
+      "reviewed_on": "2026-10-24",
+      "family_key": "samsung-galaxy-a56",
+      "family_name": "Samsung Galaxy A56",
+      "model_name": "Samsung Galaxy A56 5G",
+      "verified_model": {
+        "name": "Samsung Galaxy A56 5G",
+        "family": "Samsung Galaxy A56"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "smartphones",
+      "name_pattern": "\\bGalaxy A57 5G\\b",
+      "release_date": "2026-04-10",
+      "url": "https://news.samsung.com/global/samsung-unveils-galaxy-a57-5g-and-galaxy-a37-5g-packing-pro-level-features-at-awesome-price",
+      "scope": "Exact Galaxy A57 5G generation. Samsung gives 10 April 2026 as availability in select markets; current India retailer product listing is verified separately.",
+      "reviewed_on": "2026-10-24",
+      "family_key": "samsung-galaxy-a57",
+      "family_name": "Samsung Galaxy A57",
+      "model_name": "Samsung Galaxy A57 5G",
+      "verified_model": {
+        "name": "Samsung Galaxy A57 5G",
+        "family": "Samsung Galaxy A57"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "smartphones",
+      "name_pattern": "\\bGalaxy A37 5G\\b",
+      "release_date": "2026-04-10",
+      "url": "https://news.samsung.com/global/samsung-unveils-galaxy-a57-5g-and-galaxy-a37-5g-packing-pro-level-features-at-awesome-price",
+      "scope": "Exact Galaxy A37 5G generation. Samsung gives 10 April 2026 as availability in select markets; current India retailer product listing is verified separately.",
+      "reviewed_on": "2026-10-24",
+      "family_key": "samsung-galaxy-a37",
+      "family_name": "Samsung Galaxy A37",
+      "model_name": "Samsung Galaxy A37 5G",
+      "verified_model": {
+        "name": "Samsung Galaxy A37 5G",
+        "family": "Samsung Galaxy A37"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "smartphones",
+      "name_pattern": "\\bGalaxy A27 5G\\b",
+      "release_date": "2026-07-03",
+      "url": "https://news.samsung.com/in/samsung-galaxy-a27-5g-launches-in-india-at-inr-28999-with-cashback-and-zero-down-payment-emi-schemes",
+      "scope": "Exact Galaxy A27 5G generation. Samsung India says retail and online availability starts 3 July 2026.",
+      "reviewed_on": "2026-10-24",
+      "family_key": "samsung-galaxy-a27",
+      "family_name": "Samsung Galaxy A27",
+      "model_name": "Samsung Galaxy A27 5G",
+      "verified_model": {
+        "name": "Samsung Galaxy A27 5G",
+        "family": "Samsung Galaxy A27"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "smartphones",
+      "name_pattern": "\\bGalaxy Z Fold7 5G\\b",
+      "release_date": "2025-07-25",
+      "url": "https://news.samsung.com/in/samsung-galaxy-z-fold7-raising-the-bar-for-smartphones",
+      "scope": "Exact Galaxy Z Fold7 generation. Samsung India states general availability begins 25 July 2025; preorder date is not used.",
+      "reviewed_on": "2026-10-24",
+      "family_key": "samsung-galaxy-z-fold7",
+      "family_name": "Samsung Galaxy Z Fold7",
+      "model_name": "Samsung Galaxy Z Fold7",
+      "verified_model": {
+        "name": "Samsung Galaxy Z Fold7",
+        "family": "Samsung Galaxy Z Fold7"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "smartphones",
+      "name_pattern": "\\bGalaxy Z Fold\\s?8 Ultra 5G\\b",
+      "release_date": "2026-08-07",
+      "url": "https://news.samsung.com/in/samsung-officially-launches-galaxy-z-fold8-ultra-fold8-flip8-watch-ultra2-and-watch9",
+      "scope": "Exact Galaxy Z Fold8 Ultra generation, including the retailer's spaced Fold 8 spelling. Samsung India states retail availability from 7 August 2026.",
+      "reviewed_on": "2026-10-24",
+      "family_key": "samsung-galaxy-z-fold8-ultra",
+      "family_name": "Samsung Galaxy Z Fold8",
+      "model_name": "Samsung Galaxy Z Fold8 Ultra",
+      "verified_model": {
+        "name": "Samsung Galaxy Z Fold8 Ultra",
+        "family": "Samsung Galaxy Z Fold8"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "smartphones",
+      "name_pattern": "\\bGalaxy Z Flip8 5G\\b",
+      "release_date": "2026-08-07",
+      "url": "https://news.samsung.com/in/samsung-officially-launches-galaxy-z-fold8-ultra-fold8-flip8-watch-ultra2-and-watch9",
+      "scope": "Exact Galaxy Z Flip8 generation. Samsung India states retail availability from 7 August 2026.",
+      "reviewed_on": "2026-10-24",
+      "family_key": "samsung-galaxy-z-flip8",
+      "family_name": "Samsung Galaxy Z Flip8",
+      "model_name": "Samsung Galaxy Z Flip8",
+      "verified_model": {
+        "name": "Samsung Galaxy Z Flip8",
+        "family": "Samsung Galaxy Z Flip8"
+      }
+    },
+    {
+      "brand": "Apple",
+      "type_id": "smartphones",
+      "name_pattern": "^Apple iPhone 14(?=.*\\bYellow\\b)",
+      "release_date": "2023-03-14",
+      "url": "https://www.apple.com/in/newsroom/2023/03/hello-yellow-apple-introduces-new-iphone-14-and-iphone-14-plus/",
+      "scope": "Yellow iPhone 14 variant only. Apple states availability in India begins 14 March 2023; other colors retain the 2022 generation date and are outside the four-year window.",
+      "reviewed_on": "2026-10-24",
+      "family_key": "apple-iphone-14",
+      "family_name": "Apple iPhone 14",
+      "model_name": "Apple iPhone 14",
+      "verified_model": {
+        "name": "Apple iPhone 14",
+        "family": "Apple iPhone 14"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "televisions",
+      "name_pattern": "QA(?:55|65|77)S85HAELXL",
+      "mpn_pattern": "QA(?:55|65|77)S85HAELXL",
+      "release_date": "2026-05-26",
+      "url": "https://news.samsung.com/in/samsung-brings-2026-vision-ai-tv-lineup-in-india-launches-72-models-across-micro-rgb-oled-neo-qled-the-frame-mini-led-and-uhd-tvs",
+      "support_urls": [
+        "https://www.samsung.com/in/support/model/QA55S85HAELXL/",
+        "https://www.samsung.com/in/support/model/QA65S85HAELXL/",
+        "https://www.samsung.com/in/tvs/oled-tv/s85h-77-inch-oled-4k-smart-tv-qa77s85haelxl/"
+      ],
+      "scope": "Samsung India states its 2026 OLED lineup, including S85H, launched in India on 26 May 2026 and was available starting that day. Exact Indian 55/65/77-inch S85H MPNs only; Samsung product/support pages identify these model codes as 2026 S85H TVs.",
+      "reviewed_on": "2026-10-24",
+      "family_key": "samsung-s85h-oled",
+      "family_name": "Samsung S85H OLED",
+      "model_name": "Samsung S85H OLED 4K Smart TV",
+      "verified_model": {
+        "name": "Samsung S85H OLED 4K Smart TV",
+        "family": "Samsung S85H OLED"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "televisions",
+      "name_pattern": "QA(?:65S90HAELXL|77S90HAULXL)",
+      "mpn_pattern": "QA(?:65S90HAELXL|77S90HAULXL)",
+      "release_date": "2026-05-26",
+      "url": "https://news.samsung.com/in/samsung-brings-2026-vision-ai-tv-lineup-in-india-launches-72-models-across-micro-rgb-oled-neo-qled-the-frame-mini-led-and-uhd-tvs",
+      "support_urls": [
+        "https://www.samsung.com/in/support/model/QA65S90HAELXL/",
+        "https://www.samsung.com/in/support/model/QA77S90HAULXL/"
+      ],
+      "scope": "Samsung India states its 2026 OLED lineup, including S90H, launched in India on 26 May 2026 and was available starting that day. Exact Indian 65/77-inch S90H MPNs only; Samsung support identifies both as 2026 S90H OLED TVs.",
+      "reviewed_on": "2026-10-24",
+      "family_key": "samsung-s90h-oled",
+      "family_name": "Samsung S90H OLED",
+      "model_name": "Samsung S90H OLED 4K Smart TV",
+      "verified_model": {
+        "name": "Samsung S90H OLED 4K Smart TV",
+        "family": "Samsung S90H OLED"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "televisions",
+      "name_pattern": "75M70H",
+      "mpn_pattern": "UA75M70HAULXL",
+      "release_date": "2026-05-13",
+      "url": "https://news.samsung.com/in/samsung-unveils-next-gen-vision-ai-powered-mini-led-tvs-for-enhanced-viewing-in-india",
+      "support_urls": [
+        "https://www.samsung.com/in/support/model/UA75M70HAULXL/"
+      ],
+      "scope": "Samsung India announced the 2026 Mini LED TV range on 13 May 2026, with availability through leading Indian retail and online channels. Samsung support identifies exact Indian MPN UA75M70HAULXL as a 2026 M70H Mini LED TV; exact model code only.",
+      "reviewed_on": "2026-10-24",
+      "family_key": "samsung-m70h-mini-led",
+      "family_name": "Samsung M70H Mini LED",
+      "model_name": "Samsung M70H Mini LED 4K Smart TV",
+      "verified_model": {
+        "name": "Samsung M70H Mini LED 4K Smart TV",
+        "family": "Samsung M70H Mini LED"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "air_conditioners",
+      "name_pattern": "AR50H19D1XH",
+      "mpn_pattern": "AR50H19D1XH",
+      "release_date": "2026-01-30",
+      "url": "https://news.samsung.com/in/samsung-announces-100-bespoke-ai-air-conditioner-lineup-in-india-launches-23-models",
+      "support_urls": [
+        "https://www.samsung.com/in/support/model/AR50H19D1XHNNA/"
+      ],
+      "scope": "Samsung India launched its 2026 Bespoke AI AC lineup on 30 January 2026. Samsung India labels exact model AR50H19D1XH as a 2026 product; the exact model code is required, with current India store product listing verified separately.",
+      "reviewed_on": "2026-10-24",
+      "family_key": "samsung-ar50h19d1xh-ac",
+      "family_name": "Samsung Bespoke AI Split AC",
+      "model_name": "Samsung AR50H19D1XH 1.5 Ton 3 Star Inverter AC",
+      "verified_model": {
+        "name": "Samsung AR50H19D1XH 1.5 Ton 3 Star Inverter AC",
+        "family": "Samsung Bespoke AI Split AC"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "air_conditioners",
+      "name_pattern": "AR60H19D13W",
+      "mpn_pattern": "AR60H19D13W",
+      "release_date": "2026-01-30",
+      "url": "https://news.samsung.com/in/samsung-announces-100-bespoke-ai-air-conditioner-lineup-in-india-launches-23-models",
+      "support_urls": [
+        "https://www.samsung.com/in/air-conditioners/split-ac/bespoke-ai-windfree-inverter-split-ac-5-10-kw-1-5-3-star-2026-ar60h19d13wnna/"
+      ],
+      "scope": "Samsung India launched its 2026 Bespoke AI AC lineup on 30 January 2026. Samsung India labels exact model AR60H19D13W as a 2026 product; the exact model code is required, with current India store product listing verified separately.",
+      "reviewed_on": "2026-10-24",
+      "family_key": "samsung-ar60h19d13w-ac",
+      "family_name": "Samsung Bespoke AI WindFree Split AC",
+      "model_name": "Samsung AR60H19D13W 1.5 Ton 3 Star WindFree Inverter AC",
+      "verified_model": {
+        "name": "Samsung AR60H19D13W 1.5 Ton 3 Star WindFree Inverter AC",
+        "family": "Samsung Bespoke AI WindFree Split AC"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "televisions",
+      "name_pattern": "(?:55QN80H|65QN80H)",
+      "mpn_pattern": "QA(?:55|65)QN80HAULXL",
+      "release_date": "2026-05-26",
+      "url": "https://news.samsung.com/in/samsung-brings-2026-vision-ai-tv-lineup-in-india-launches-72-models-across-micro-rgb-oled-neo-qled-the-frame-mini-led-and-uhd-tvs",
+      "support_urls": [
+        "https://www.samsung.com/in/support/model/QA55QN80HAULXL/",
+        "https://www.samsung.com/in/support/model/QA65QN80HAULXL/"
+      ],
+      "scope": "Samsung India identifies exact 55/65-inch QN80H MPNs as 2026 Neo QLED TVs; its 2026 India TV launch announcement says the lineup, including QN80H, was available starting 26 May 2026. Exact MPNs only.",
+      "reviewed_on": "2026-10-24",
+      "family_key": "samsung-qn80h-neo-qled",
+      "family_name": "Samsung QN80H Neo QLED",
+      "model_name": "Samsung QN80H Neo QLED 4K Smart TV",
+      "verified_model": {
+        "name": "Samsung QN80H Neo QLED 4K Smart TV",
+        "family": "Samsung QN80H Neo QLED"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "televisions",
+      "name_pattern": "UA(?:65|75|85)U8500HULXL",
+      "mpn_pattern": "UA(?:65|75|85)U8500HULXL",
+      "release_date": "2026-05-26",
+      "url": "https://news.samsung.com/in/samsung-brings-2026-vision-ai-tv-lineup-in-india-launches-72-models-across-micro-rgb-oled-neo-qled-the-frame-mini-led-and-uhd-tvs",
+      "support_urls": [
+        "https://www.samsung.com/in/support/model/UA65U8500HULXL/",
+        "https://www.samsung.com/in/support/model/UA75U8500HULXL/",
+        "https://www.samsung.com/in/support/model/UA85U8500HULXL/"
+      ],
+      "scope": "Samsung India support identifies the exact 65/75/85-inch U8500H MPNs as 2026 Crystal UHD TVs; Samsung's India 2026 TV lineup announcement says UHD models were available from 26 May 2026. Exact MPNs only.",
+      "reviewed_on": "2026-10-24",
+      "family_key": "samsung-u8500h-crystal-uhd",
+      "family_name": "Samsung U8500H Crystal UHD",
+      "model_name": "Samsung U8500H Crystal UHD 4K Smart TV",
+      "verified_model": {
+        "name": "Samsung U8500H Crystal UHD 4K Smart TV",
+        "family": "Samsung U8500H Crystal UHD"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "televisions",
+      "name_pattern": "UA75U8300HULXL",
+      "mpn_pattern": "UA75U8300HULXL",
+      "release_date": "2026-05-26",
+      "url": "https://news.samsung.com/in/samsung-brings-2026-vision-ai-tv-lineup-in-india-launches-72-models-across-micro-rgb-oled-neo-qled-the-frame-mini-led-and-uhd-tvs",
+      "support_urls": [
+        "https://www.samsung.com/in/support/model/UA75U8300HULXL/"
+      ],
+      "scope": "Samsung India support identifies exact MPN UA75U8300HULXL as a 2026 Crystal UHD television; Samsung's India 2026 TV lineup announcement says UHD models were available from 26 May 2026. Exact MPN only.",
+      "reviewed_on": "2026-10-24",
+      "family_key": "samsung-u8300h-crystal-uhd",
+      "family_name": "Samsung U8300H Crystal UHD",
+      "model_name": "Samsung U8300H Crystal UHD 4K Smart TV",
+      "verified_model": {
+        "name": "Samsung U8300H Crystal UHD 4K Smart TV",
+        "family": "Samsung U8300H Crystal UHD"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "televisions",
+      "name_pattern": "UA43DUE70BKLXL",
+      "mpn_pattern": "UA43DUE70BKLXL",
+      "release_date": "2024-04-10",
+      "url": "https://www.samsung.com/in/tvs/uhd-4k-tv/due70-43-inch-crystal-uhd-4k-tizen-os-smart-tv-ua43due70bklxl/",
+      "support_urls": [
+        "https://www.samsung.com/in/support/model/UA43DUE70BKLXL/"
+      ],
+      "scope": "Exact Indian DUE70 model UA43DUE70BKLXL. Samsung's India product page identifies this as the 2024 model and publishes its launch date as 10 April 2024.",
+      "reviewed_on": "2026-10-24",
+      "family_key": "samsung-due70-crystal-uhd-2024",
+      "family_name": "Samsung DUE70 Crystal UHD",
+      "model_name": "Samsung DUE70 Crystal UHD 4K Smart TV",
+      "verified_model": {
+        "name": "Samsung DUE70 Crystal UHD 4K Smart TV",
+        "family": "Samsung DUE70 Crystal UHD"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "smartphones",
+      "name_pattern": "\\bGalaxy F17\\b",
+      "mpn_pattern": "SME176[A-Z0-9]+",
+      "release_date": "2025-09-11",
+      "url": "https://news.samsung.com/in/samsung-launches-incredibly-thin-and-durable-galaxy-f17-5g-with-segment-leading-features",
+      "scope": "Samsung Newsroom India dates the Galaxy F17 5G launch and says India retail, Samsung.com and Flipkart availability began that day. Apply only to exact SM-E176 model-code variants in this family.",
+      "reviewed_on": "2026-10-24",
+      "family_key": "samsung-galaxy-f17-5g",
+      "family_name": "Samsung Galaxy F17 5G",
+      "model_name": "Samsung Galaxy F17 5G",
+      "verified_model": {
+        "name": "Samsung Galaxy F17 5G",
+        "family": "Samsung Galaxy F17 5G"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "smartphones",
+      "name_pattern": "\\bGalaxy F56\\b",
+      "mpn_pattern": "SME566B[A-Z0-9]+",
+      "release_date": "2025-05-07",
+      "url": "https://www.samsung.com/in/smartphones/galaxy-f/galaxy-f56-5g-green-128gb-sm-e566bzgains/",
+      "support_urls": [
+        "https://news.samsung.com/in/samsung-launches-galaxy-f56-its-slimmest-f-series-smartphone-in-india"
+      ],
+      "scope": "Samsung India?s exact F56 product page publishes a launch date of 7 May 2025. Apply only to SM-E566B Galaxy F56 5G variants; the corresponding India launch announcement identifies the 8/128 GB and 8/256 GB storage variants.",
+      "reviewed_on": "2026-10-24",
+      "family_key": "samsung-galaxy-f56-5g",
+      "family_name": "Samsung Galaxy F56 5G",
+      "model_name": "Samsung Galaxy F56 5G",
+      "verified_model": {
+        "name": "Samsung Galaxy F56 5G",
+        "family": "Samsung Galaxy F56 5G"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "smartphones",
+      "name_pattern": "\\bGalaxy Z Flip7\\b",
+      "mpn_pattern": "SMF766B[A-Z0-9]+",
+      "release_date": "2025-07-09",
+      "url": "https://www.samsung.com/in/smartphones/galaxy-z/galaxy-z-flip7-coralred-512gb-sm-f766bzreins/buy/",
+      "support_urls": [
+        "https://www.samsung.com/in/support/model/SM-F766BZRAINS/"
+      ],
+      "scope": "Samsung India?s Galaxy Z Flip7 product listing publishes 9 July 2025 as its launch date. Apply only to India SM-F766B Galaxy Z Flip7 model-code variants.",
+      "reviewed_on": "2026-10-24",
+      "family_key": "samsung-galaxy-z-flip7",
+      "family_name": "Samsung Galaxy Z Flip7",
+      "model_name": "Samsung Galaxy Z Flip7",
+      "verified_model": {
+        "name": "Samsung Galaxy Z Flip7",
+        "family": "Samsung Galaxy Z Flip7"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "tablets",
+      "name_pattern": "\\bGalaxy Tab S10 Lite\\b",
+      "mpn_pattern": "SMX40[06][A-Z0-9]+",
+      "release_date": "2025-09-04",
+      "url": "https://www.samsung.com/in/tablets/galaxy-tab-s/galaxy-tab-s10-lite-coralred-256gb-sm-x400nzreinu/",
+      "support_urls": [
+        "https://www.samsung.com/in/support/model/SM-X400NZAAINU/",
+        "https://www.samsung.com/in/support/model/SM-X406BZAAINU/"
+      ],
+      "scope": "Samsung India product pages for Galaxy Tab S10 Lite Wi-Fi and 5G variants publish a 4 September 2025 launch date. Apply only to exact SM-X400 (Wi-Fi) and SM-X406 (5G) Tab S10 Lite codes.",
+      "reviewed_on": "2026-10-24",
+      "family_key": "samsung-galaxy-tab-s10-lite",
+      "family_name": "Samsung Galaxy Tab S10 Lite",
+      "model_name": "Samsung Galaxy Tab S10 Lite",
+      "verified_model": {
+        "name": "Samsung Galaxy Tab S10 Lite",
+        "family": "Samsung Galaxy Tab S10 Lite"
+      }
+    },
+    {
+      "brand": "OnePlus",
+      "type_id": "smartphones",
+      "name_pattern": "\\bNord CE6 Lite\\b",
+      "mpn_pattern": "CPH2943",
+      "release_date": "2026-05-07",
+      "url": "https://www.oneplus.in/nord-ce6-lite",
+      "scope": "OnePlus India?s Nord CE6 Lite specification page dates its India launch-market claims to 7 May 2026. Apply only to India-store-listed records with exact model code CPH2943 and the Nord CE6 Lite name.",
+      "reviewed_on": "2026-10-24",
+      "family_key": "oneplus-nord-ce6-lite",
+      "family_name": "OnePlus Nord CE6 Lite",
+      "model_name": "OnePlus Nord CE6 Lite",
+      "verified_model": {
+        "name": "OnePlus Nord CE6 Lite",
+        "family": "OnePlus Nord CE6 Lite"
+      }
+    },
+    {
+      "brand": "OnePlus",
+      "type_id": "smartphones",
+      "name_pattern": "\\bNord 6\\b",
+      "mpn_pattern": "CPH2767",
+      "release_date": "2026-04-07",
+      "url": "https://www.oneplus.in/nord-6",
+      "scope": "OnePlus India?s Nord 6 page states launch-market facts for India as of 7 April 2026. Apply only to exact CPH2767 listings whose title identifies Nord 6, excluding other models that share a retailer-parsed code.",
+      "reviewed_on": "2026-10-24",
+      "family_key": "oneplus-nord-6",
+      "family_name": "OnePlus Nord 6",
+      "model_name": "OnePlus Nord 6",
+      "verified_model": {
+        "name": "OnePlus Nord 6",
+        "family": "OnePlus Nord 6"
+      }
+    },
+    {
+      "brand": "OnePlus",
+      "type_id": "smartphones",
+      "name_pattern": "\\bN6x\\b.*\\b4\\s*GB\\s*RAM\\b",
+      "mpn_pattern": "CPH2971",
+      "release_date": "2026-07-31",
+      "url": "https://www.oneplus.in/n6x",
+      "scope": "OnePlus India identifies N6x India launch-date evidence as 31 July 2026 and documents only 4 GB physical RAM variants (64/128 GB storage). Apply only to exact CPH2971 records whose listing also states the verified 4 GB physical RAM configuration; 6 GB claims are held for review.",
+      "reviewed_on": "2026-10-24",
+      "family_key": "oneplus-n6-series",
+      "family_name": "OnePlus N6 Series",
+      "model_name": "OnePlus N6x",
+      "verified_model": {
+        "name": "OnePlus N6x",
+        "family": "OnePlus N6 Series"
+      }
+    },
+    {
+      "brand": "OnePlus",
+      "type_id": "smartphones",
+      "name_pattern": "\\bN6\\b",
+      "mpn_pattern": "CPH2955",
+      "release_date": "2026-06-30",
+      "url": "https://www.oneplus.in/launch/oneplus-n6",
+      "scope": "OnePlus India?s N6 launch page identifies 30 June 2026 as the India launch date. Apply only to exact CPH2955 listings named OnePlus N6.",
+      "reviewed_on": "2026-10-24",
+      "family_key": "oneplus-n6-series",
+      "family_name": "OnePlus N6 Series",
+      "model_name": "OnePlus N6",
+      "verified_model": {
+        "name": "OnePlus N6",
+        "family": "OnePlus N6 Series"
+      }
+    },
+    {
+      "brand": "OnePlus",
+      "type_id": "smartphones",
+      "name_pattern": "\\bN6 Lite\\b",
+      "mpn_pattern": "CPH2993",
+      "release_date": "2026-09-22",
+      "url": "https://www.oneplus.in/n6-lite",
+      "scope": "OnePlus India describes the N6 Lite as launched in India and dates the launch-market data on its official product page to 22 September 2026. Apply only to exact CPH2993 listings named N6 Lite.",
+      "reviewed_on": "2026-10-24",
+      "family_key": "oneplus-n6-series",
+      "family_name": "OnePlus N6 Series",
+      "model_name": "OnePlus N6 Lite",
+      "verified_model": {
+        "name": "OnePlus N6 Lite",
+        "family": "OnePlus N6 Series"
+      }
+    },
+    {
+      "brand": "OnePlus",
+      "type_id": "smartphones",
+      "name_pattern": "\\bOnePlus 13s\\b",
+      "mpn_pattern": "CPH2723",
+      "release_date": "2025-06-05",
+      "url": "https://www.oneplus.in/launch/13s",
+      "scope": "OnePlus India?s official 13s launch page dates the India launch event to 5 June 2025 at 12 noon IST. Apply only to exact CPH2723 OnePlus 13s listings.",
+      "reviewed_on": "2026-10-24",
+      "family_key": "oneplus-13-series",
+      "family_name": "OnePlus 13 Series",
+      "model_name": "OnePlus 13s",
+      "verified_model": {
+        "name": "OnePlus 13s",
+        "family": "OnePlus 13 Series"
+      }
+    },
+    {
+      "brand": "LG",
+      "type_id": "air_conditioners",
+      "name_pattern": ".*",
+      "mpn_pattern": "USQ12YNXE",
+      "release_date": "2025-02-04",
+      "url": "https://www.lg.com/in/air-conditioners/split-air-conditioners/us-q12ynxe/",
+      "scope": "LG India's active model catalog lists exact model code US-Q12YNXE with ec_model_release_date 2025-02-04; apply only this code. Publication still requires a matching new, Indian retailer product listing.",
+      "source_field": "ec_model_release_date",
+      "reviewed_on": "2026-10-24",
+      "family_key": "lg:air_conditioners:USQ12YNXE",
+      "family_name": "LG US-Q12YNXE",
+      "model_name": "LG US-Q12YNXE",
+      "verified_model": {
+        "name": "LG US-Q12YNXE",
+        "family": "LG US-Q12YNXE"
+      }
+    },
+    {
+      "brand": "LG",
+      "type_id": "dishwashers",
+      "name_pattern": ".*",
+      "mpn_pattern": "DFB435FV",
+      "release_date": "2026-01-13",
+      "url": "https://www.lg.com/in/dishwasher/dfb435fv/",
+      "scope": "LG India's active model catalog lists exact model code DFB435FV with ec_model_release_date 2026-01-13; apply only this code. Publication still requires a matching new, Indian retailer product listing.",
+      "source_field": "ec_model_release_date",
+      "reviewed_on": "2026-10-24",
+      "family_key": "lg:dishwashers:DFB435FV",
+      "family_name": "LG DFB435FV",
+      "model_name": "LG DFB435FV",
+      "verified_model": {
+        "name": "LG DFB435FV",
+        "family": "LG DFB435FV"
+      }
+    },
+    {
+      "brand": "LG",
+      "type_id": "microwaves",
+      "name_pattern": ".*",
+      "mpn_pattern": "MC3286BLU",
+      "release_date": "2023-11-22",
+      "url": "https://www.lg.com/in/microwave-ovens/convection-microwave/mc3286blu/",
+      "scope": "LG India's active model catalog lists exact model code MC3286BLU with ec_model_release_date 2023-11-22; apply only this code. Publication still requires a matching new, Indian retailer product listing.",
+      "source_field": "ec_model_release_date",
+      "reviewed_on": "2026-10-24",
+      "family_key": "lg:microwaves:MC3286BLU",
+      "family_name": "LG MC3286BLU",
+      "model_name": "LG MC3286BLU",
+      "verified_model": {
+        "name": "LG MC3286BLU",
+        "family": "LG MC3286BLU"
+      }
+    },
+    {
+      "brand": "LG",
+      "type_id": "microwaves",
+      "name_pattern": ".*",
+      "mpn_pattern": "MJ2887BHTM",
+      "release_date": "2024-12-02",
+      "url": "https://www.lg.com/in/microwave-ovens/charcoal-convection-microwave/mj2887bhtm/",
+      "scope": "LG India's active model catalog lists exact model code MJ2887BHTM with ec_model_release_date 2024-12-02; apply only this code. Publication still requires a matching new, Indian retailer product listing.",
+      "source_field": "ec_model_release_date",
+      "reviewed_on": "2026-10-24",
+      "family_key": "lg:microwaves:MJ2887BHTM",
+      "family_name": "LG MJ2887BHTM",
+      "model_name": "LG MJ2887BHTM",
+      "verified_model": {
+        "name": "LG MJ2887BHTM",
+        "family": "LG MJ2887BHTM"
+      }
+    },
+    {
+      "brand": "LG",
+      "type_id": "microwaves",
+      "name_pattern": ".*",
+      "mpn_pattern": "MJEN286UFW",
+      "release_date": "2023-02-24",
+      "url": "https://www.lg.com/in/microwave-ovens/wifi-enabled-charcoal-convection-microwave/mjen286ufw/",
+      "scope": "LG India's active model catalog lists exact model code MJEN286UFW with ec_model_release_date 2023-02-24; apply only this code. Publication still requires a matching new, Indian retailer product listing.",
+      "source_field": "ec_model_release_date",
+      "reviewed_on": "2026-10-24",
+      "family_key": "lg:microwaves:MJEN286UFW",
+      "family_name": "LG MJEN286UFW",
+      "model_name": "LG MJEN286UFW",
+      "verified_model": {
+        "name": "LG MJEN286UFW",
+        "family": "LG MJEN286UFW"
+      }
+    },
+    {
+      "brand": "LG",
+      "type_id": "refrigerators",
+      "name_pattern": ".*",
+      "mpn_pattern": "GLB257DBM3",
+      "release_date": "2023-09-19",
+      "url": "https://www.lg.com/in/refrigerators/side-by-side-refrigerators/gl-b257dbm3/",
+      "scope": "LG India's active model catalog lists exact model code GL-B257DBM3 with ec_model_release_date 2023-09-19; apply only this code. Publication still requires a matching new, Indian retailer product listing.",
+      "source_field": "ec_model_release_date",
+      "reviewed_on": "2026-10-24",
+      "family_key": "lg:refrigerators:GLB257DBM3",
+      "family_name": "LG GL-B257DBM3",
+      "model_name": "LG GL-B257DBM3",
+      "verified_model": {
+        "name": "LG GL-B257DBM3",
+        "family": "LG GL-B257DBM3"
+      }
+    },
+    {
+      "brand": "LG",
+      "type_id": "refrigerators",
+      "name_pattern": ".*",
+      "mpn_pattern": "GLB257DLN3",
+      "release_date": "2023-09-15",
+      "url": "https://www.lg.com/in/refrigerators/side-by-side-refrigerators/gl-b257dln3/",
+      "scope": "LG India's active model catalog lists exact model code GL-B257DLN3 with ec_model_release_date 2023-09-15; apply only this code. Publication still requires a matching new, Indian retailer product listing.",
+      "source_field": "ec_model_release_date",
+      "reviewed_on": "2026-10-24",
+      "family_key": "lg:refrigerators:GLB257DLN3",
+      "family_name": "LG GL-B257DLN3",
+      "model_name": "LG GL-B257DLN3",
+      "verified_model": {
+        "name": "LG GL-B257DLN3",
+        "family": "LG GL-B257DLN3"
+      }
+    },
+    {
+      "brand": "LG",
+      "type_id": "refrigerators",
+      "name_pattern": ".*",
+      "mpn_pattern": "GLB257EES3",
+      "release_date": "2023-09-19",
+      "url": "https://www.lg.com/in/refrigerators/side-by-side-refrigerators/gl-b257ees3/",
+      "scope": "LG India's active model catalog lists exact model code GL-B257EES3 with ec_model_release_date 2023-09-19; apply only this code. Publication still requires a matching new, Indian retailer product listing.",
+      "source_field": "ec_model_release_date",
+      "reviewed_on": "2026-10-24",
+      "family_key": "lg:refrigerators:GLB257EES3",
+      "family_name": "LG GL-B257EES3",
+      "model_name": "LG GL-B257EES3",
+      "verified_model": {
+        "name": "LG GL-B257EES3",
+        "family": "LG GL-B257EES3"
+      }
+    },
+    {
+      "brand": "LG",
+      "type_id": "refrigerators",
+      "name_pattern": ".*",
+      "mpn_pattern": "GLB3426BDPZ",
+      "release_date": "2026-04-01",
+      "url": "https://www.lg.com/in/refrigerators/double-door-refrigerators/glb3426bdpz/",
+      "scope": "LG India's active model catalog lists exact model code GLB3426BDPZ with ec_model_release_date 2026-04-01; apply only this code. Publication still requires a matching new, Indian retailer product listing.",
+      "source_field": "ec_model_release_date",
+      "reviewed_on": "2026-10-24",
+      "family_key": "lg:refrigerators:GLB3426BDPZ",
+      "family_name": "LG GLB3426BDPZ",
+      "model_name": "LG GLB3426BDPZ",
+      "verified_model": {
+        "name": "LG GLB3426BDPZ",
+        "family": "LG GLB3426BDPZ"
+      }
+    },
+    {
+      "brand": "LG",
+      "type_id": "refrigerators",
+      "name_pattern": ".*",
+      "mpn_pattern": "GLB3426BEBM",
+      "release_date": "2026-04-01",
+      "url": "https://www.lg.com/in/refrigerators/double-door-refrigerators/glb3426bebm/",
+      "scope": "LG India's active model catalog lists exact model code GLB3426BEBM with ec_model_release_date 2026-04-01; apply only this code. Publication still requires a matching new, Indian retailer product listing.",
+      "source_field": "ec_model_release_date",
+      "reviewed_on": "2026-10-24",
+      "family_key": "lg:refrigerators:GLB3426BEBM",
+      "family_name": "LG GLB3426BEBM",
+      "model_name": "LG GLB3426BEBM",
+      "verified_model": {
+        "name": "LG GLB3426BEBM",
+        "family": "LG GLB3426BEBM"
+      }
+    },
+    {
+      "brand": "LG",
+      "type_id": "refrigerators",
+      "name_pattern": ".*",
+      "mpn_pattern": "GLD0536VRSW",
+      "release_date": "2026-02-27",
+      "url": "https://www.lg.com/in/refrigerators/single-door-refrigerators/gld0536vrsw/",
+      "scope": "LG India's active model catalog lists exact model code GLD0536VRSW with ec_model_release_date 2026-02-27; apply only this code. Publication still requires a matching new, Indian retailer product listing.",
+      "source_field": "ec_model_release_date",
+      "reviewed_on": "2026-10-24",
+      "family_key": "lg:refrigerators:GLD0536VRSW",
+      "family_name": "LG GLD0536VRSW",
+      "model_name": "LG GLD0536VRSW",
+      "verified_model": {
+        "name": "LG GLD0536VRSW",
+        "family": "LG GLD0536VRSW"
+      }
+    },
+    {
+      "brand": "LG",
+      "type_id": "refrigerators",
+      "name_pattern": ".*",
+      "mpn_pattern": "GLD1936YAPZ",
+      "release_date": "2026-06-24",
+      "url": "https://www.lg.com/in/refrigerators/single-door-refrigerators/gld1936yapz/",
+      "scope": "LG India's active model catalog lists exact model code GLD1936YAPZ with ec_model_release_date 2026-06-24; apply only this code. Publication still requires a matching new, Indian retailer product listing.",
+      "source_field": "ec_model_release_date",
+      "reviewed_on": "2026-10-24",
+      "family_key": "lg:refrigerators:GLD1936YAPZ",
+      "family_name": "LG GLD1936YAPZ",
+      "model_name": "LG GLD1936YAPZ",
+      "verified_model": {
+        "name": "LG GLD1936YAPZ",
+        "family": "LG GLD1936YAPZ"
+      }
+    },
+    {
+      "brand": "LG",
+      "type_id": "refrigerators",
+      "name_pattern": ".*",
+      "mpn_pattern": "GLD201ASCU",
+      "release_date": "2025-03-19",
+      "url": "https://www.lg.com/in/refrigerators/single-door-refrigerators/gl-d201ascu-s/",
+      "scope": "LG India's active model catalog lists exact model code GL-D201ASCU with ec_model_release_date 2025-03-19; apply only this code. Publication still requires a matching new, Indian retailer product listing.",
+      "source_field": "ec_model_release_date",
+      "reviewed_on": "2026-10-24",
+      "family_key": "lg:refrigerators:GLD201ASCU",
+      "family_name": "LG GL-D201ASCU",
+      "model_name": "LG GL-D201ASCU",
+      "verified_model": {
+        "name": "LG GL-D201ASCU",
+        "family": "LG GL-D201ASCU"
+      }
+    },
+    {
+      "brand": "LG",
+      "type_id": "refrigerators",
+      "name_pattern": ".*",
+      "mpn_pattern": "GLD2156ZHSL",
+      "release_date": "2026-03-02",
+      "url": "https://www.lg.com/in/refrigerators/single-door-refrigerators/gld2156zhsl/",
+      "scope": "LG India's active model catalog lists exact model code GLD2156ZHSL with ec_model_release_date 2026-03-02; apply only this code. Publication still requires a matching new, Indian retailer product listing.",
+      "source_field": "ec_model_release_date",
+      "reviewed_on": "2026-10-24",
+      "family_key": "lg:refrigerators:GLD2156ZHSL",
+      "family_name": "LG GLD2156ZHSL",
+      "model_name": "LG GLD2156ZHSL",
+      "verified_model": {
+        "name": "LG GLD2156ZHSL",
+        "family": "LG GLD2156ZHSL"
+      }
+    },
+    {
+      "brand": "LG",
+      "type_id": "refrigerators",
+      "name_pattern": ".*",
+      "mpn_pattern": "GLD2356ZABW",
+      "release_date": "2026-05-27",
+      "url": "https://www.lg.com/in/refrigerators/single-door-refrigerators/gld2356zabw/",
+      "scope": "LG India's active model catalog lists exact model code GLD2356ZABW with ec_model_release_date 2026-05-27; apply only this code. Publication still requires a matching new, Indian retailer product listing.",
+      "source_field": "ec_model_release_date",
+      "reviewed_on": "2026-10-24",
+      "family_key": "lg:refrigerators:GLD2356ZABW",
+      "family_name": "LG GLD2356ZABW",
+      "model_name": "LG GLD2356ZABW",
+      "verified_model": {
+        "name": "LG GLD2356ZABW",
+        "family": "LG GLD2356ZABW"
+      }
+    },
+    {
+      "brand": "LG",
+      "type_id": "refrigerators",
+      "name_pattern": ".*",
+      "mpn_pattern": "GLD2736YBPZ",
+      "release_date": "2026-05-27",
+      "url": "https://www.lg.com/in/refrigerators/single-door-refrigerators/gld2736ybpz/",
+      "scope": "LG India's active model catalog lists exact model code GLD2736YBPZ with ec_model_release_date 2026-05-27; apply only this code. Publication still requires a matching new, Indian retailer product listing.",
+      "source_field": "ec_model_release_date",
+      "reviewed_on": "2026-10-24",
+      "family_key": "lg:refrigerators:GLD2736YBPZ",
+      "family_name": "LG GLD2736YBPZ",
+      "model_name": "LG GLD2736YBPZ",
+      "verified_model": {
+        "name": "LG GLD2736YBPZ",
+        "family": "LG GLD2736YBPZ"
+      }
+    },
+    {
+      "brand": "LG",
+      "type_id": "refrigerators",
+      "name_pattern": ".*",
+      "mpn_pattern": "GLD2736YBRW",
+      "release_date": "2026-05-27",
+      "url": "https://www.lg.com/in/refrigerators/single-door-refrigerators/gld2736ybrw/",
+      "scope": "LG India's active model catalog lists exact model code GLD2736YBRW with ec_model_release_date 2026-05-27; apply only this code. Publication still requires a matching new, Indian retailer product listing.",
+      "source_field": "ec_model_release_date",
+      "reviewed_on": "2026-10-24",
+      "family_key": "lg:refrigerators:GLD2736YBRW",
+      "family_name": "LG GLD2736YBRW",
+      "model_name": "LG GLD2736YBRW",
+      "verified_model": {
+        "name": "LG GLD2736YBRW",
+        "family": "LG GLD2736YBRW"
+      }
+    },
+    {
+      "brand": "LG",
+      "type_id": "refrigerators",
+      "name_pattern": ".*",
+      "mpn_pattern": "GLT2216XZDS",
+      "release_date": "2026-04-13",
+      "url": "https://www.lg.com/in/refrigerators/double-door-refrigerators/glt2216xzds/",
+      "scope": "LG India's active model catalog lists exact model code GLT2216XZDS with ec_model_release_date 2026-04-13; apply only this code. Publication still requires a matching new, Indian retailer product listing.",
+      "source_field": "ec_model_release_date",
+      "reviewed_on": "2026-10-24",
+      "family_key": "lg:refrigerators:GLT2216XZDS",
+      "family_name": "LG GLT2216XZDS",
+      "model_name": "LG GLT2216XZDS",
+      "verified_model": {
+        "name": "LG GLT2216XZDS",
+        "family": "LG GLT2216XZDS"
+      }
+    },
+    {
+      "brand": "LG",
+      "type_id": "refrigerators",
+      "name_pattern": ".*",
+      "mpn_pattern": "GLT2526XWSL",
+      "release_date": "2026-04-16",
+      "url": "https://www.lg.com/in/refrigerators/double-door-refrigerators/glt2526xwsl/",
+      "scope": "LG India's active model catalog lists exact model code GLT2526XWSL with ec_model_release_date 2026-04-16; apply only this code. Publication still requires a matching new, Indian retailer product listing.",
+      "source_field": "ec_model_release_date",
+      "reviewed_on": "2026-10-24",
+      "family_key": "lg:refrigerators:GLT2526XWSL",
+      "family_name": "LG GLT2526XWSL",
+      "model_name": "LG GLT2526XWSL",
+      "verified_model": {
+        "name": "LG GLT2526XWSL",
+        "family": "LG GLT2526XWSL"
+      }
+    },
+    {
+      "brand": "LG",
+      "type_id": "refrigerators",
+      "name_pattern": ".*",
+      "mpn_pattern": "GLT2826XWPZ",
+      "release_date": "2026-04-13",
+      "url": "https://www.lg.com/in/refrigerators/double-door-refrigerators/glt2826xwpz/",
+      "scope": "LG India's active model catalog lists exact model code GLT2826XWPZ with ec_model_release_date 2026-04-13; apply only this code. Publication still requires a matching new, Indian retailer product listing.",
+      "source_field": "ec_model_release_date",
+      "reviewed_on": "2026-10-24",
+      "family_key": "lg:refrigerators:GLT2826XWPZ",
+      "family_name": "LG GLT2826XWPZ",
+      "model_name": "LG GLT2826XWPZ",
+      "verified_model": {
+        "name": "LG GLT2826XWPZ",
+        "family": "LG GLT2826XWPZ"
+      }
+    },
+    {
+      "brand": "LG",
+      "type_id": "refrigerators",
+      "name_pattern": ".*",
+      "mpn_pattern": "GLT3426SNBM",
+      "release_date": "2026-04-24",
+      "url": "https://www.lg.com/in/refrigerators/double-door-refrigerators/glt3426snbm/",
+      "scope": "LG India's active model catalog lists exact model code GLT3426SNBM with ec_model_release_date 2026-04-24; apply only this code. Publication still requires a matching new, Indian retailer product listing.",
+      "source_field": "ec_model_release_date",
+      "reviewed_on": "2026-10-24",
+      "family_key": "lg:refrigerators:GLT3426SNBM",
+      "family_name": "LG GLT3426SNBM",
+      "model_name": "LG GLT3426SNBM",
+      "verified_model": {
+        "name": "LG GLT3426SNBM",
+        "family": "LG GLT3426SNBM"
+      }
+    },
+    {
+      "brand": "LG",
+      "type_id": "refrigerators",
+      "name_pattern": ".*",
+      "mpn_pattern": "GLT3426SNUS",
+      "release_date": "2026-06-17",
+      "url": "https://www.lg.com/in/refrigerators/double-door-refrigerators/glt3426snus/",
+      "scope": "LG India's active model catalog lists exact model code GLT3426SNUS with ec_model_release_date 2026-06-17; apply only this code. Publication still requires a matching new, Indian retailer product listing.",
+      "source_field": "ec_model_release_date",
+      "reviewed_on": "2026-10-24",
+      "family_key": "lg:refrigerators:GLT3426SNUS",
+      "family_name": "LG GLT3426SNUS",
+      "model_name": "LG GLT3426SNUS",
+      "verified_model": {
+        "name": "LG GLT3426SNUS",
+        "family": "LG GLT3426SNUS"
+      }
+    },
+    {
+      "brand": "LG",
+      "type_id": "refrigerators",
+      "name_pattern": ".*",
+      "mpn_pattern": "GLT3836TVRS",
+      "release_date": "2026-06-17",
+      "url": "https://www.lg.com/in/refrigerators/double-door-refrigerators/glt3836tvrs/",
+      "scope": "LG India's active model catalog lists exact model code GLT3836TVRS with ec_model_release_date 2026-06-17; apply only this code. Publication still requires a matching new, Indian retailer product listing.",
+      "source_field": "ec_model_release_date",
+      "reviewed_on": "2026-10-24",
+      "family_key": "lg:refrigerators:GLT3836TVRS",
+      "family_name": "LG GLT3836TVRS",
+      "model_name": "LG GLT3836TVRS",
+      "verified_model": {
+        "name": "LG GLT3836TVRS",
+        "family": "LG GLT3836TVRS"
+      }
+    },
+    {
+      "brand": "LG",
+      "type_id": "refrigerators",
+      "name_pattern": ".*",
+      "mpn_pattern": "GLT4026SNBM",
+      "release_date": "2026-05-20",
+      "url": "https://www.lg.com/in/refrigerators/double-door-refrigerators/glt4026snbm/",
+      "scope": "LG India's active model catalog lists exact model code GLT4026SNBM with ec_model_release_date 2026-05-20; apply only this code. Publication still requires a matching new, Indian retailer product listing.",
+      "source_field": "ec_model_release_date",
+      "reviewed_on": "2026-10-24",
+      "family_key": "lg:refrigerators:GLT4026SNBM",
+      "family_name": "LG GLT4026SNBM",
+      "model_name": "LG GLT4026SNBM",
+      "verified_model": {
+        "name": "LG GLT4026SNBM",
+        "family": "LG GLT4026SNBM"
+      }
+    },
+    {
+      "brand": "LG",
+      "type_id": "refrigerators",
+      "name_pattern": ".*",
+      "mpn_pattern": "GLT4416CCES",
+      "release_date": "2026-04-08",
+      "url": "https://www.lg.com/in/refrigerators/double-door-refrigerators/glt4416cces/",
+      "scope": "LG India's active model catalog lists exact model code GLT4416CCES with ec_model_release_date 2026-04-08; apply only this code. Publication still requires a matching new, Indian retailer product listing.",
+      "source_field": "ec_model_release_date",
+      "reviewed_on": "2026-10-24",
+      "family_key": "lg:refrigerators:GLT4416CCES",
+      "family_name": "LG GLT4416CCES",
+      "model_name": "LG GLT4416CCES",
+      "verified_model": {
+        "name": "LG GLT4416CCES",
+        "family": "LG GLT4416CCES"
+      }
+    },
+    {
+      "brand": "LG",
+      "type_id": "refrigerators",
+      "name_pattern": ".*",
+      "mpn_pattern": "GLT4626TEBM",
+      "release_date": "2026-06-17",
+      "url": "https://www.lg.com/in/refrigerators/double-door-refrigerators/glt4626tebm/",
+      "scope": "LG India's active model catalog lists exact model code GLT4626TEBM with ec_model_release_date 2026-06-17; apply only this code. Publication still requires a matching new, Indian retailer product listing.",
+      "source_field": "ec_model_release_date",
+      "reviewed_on": "2026-10-24",
+      "family_key": "lg:refrigerators:GLT4626TEBM",
+      "family_name": "LG GLT4626TEBM",
+      "model_name": "LG GLT4626TEBM",
+      "verified_model": {
+        "name": "LG GLT4626TEBM",
+        "family": "LG GLT4626TEBM"
+      }
+    },
+    {
+      "brand": "LG",
+      "type_id": "refrigerators",
+      "name_pattern": ".*",
+      "mpn_pattern": "GLT6816ODPZ",
+      "release_date": "2026-03-16",
+      "url": "https://www.lg.com/in/refrigerators/double-door-refrigerators/glt6816odpz/",
+      "scope": "LG India's active model catalog lists exact model code GLT6816ODPZ with ec_model_release_date 2026-03-16; apply only this code. Publication still requires a matching new, Indian retailer product listing.",
+      "source_field": "ec_model_release_date",
+      "reviewed_on": "2026-10-24",
+      "family_key": "lg:refrigerators:GLT6816ODPZ",
+      "family_name": "LG GLT6816ODPZ",
+      "model_name": "LG GLT6816ODPZ",
+      "verified_model": {
+        "name": "LG GLT6816ODPZ",
+        "family": "LG GLT6816ODPZ"
+      }
+    },
+    {
+      "brand": "LG",
+      "type_id": "refrigerators",
+      "name_pattern": ".*",
+      "mpn_pattern": "GVF25FFGHB",
+      "release_date": "2025-10-12",
+      "url": "https://www.lg.com/in/refrigerators/french-door-refrigerators/gv-f25ffghb/",
+      "scope": "LG India's active model catalog lists exact model code GV-F25FFGHB with ec_model_release_date 2025-10-12; apply only this code. Publication still requires a matching new, Indian retailer product listing.",
+      "source_field": "ec_model_release_date",
+      "reviewed_on": "2026-10-24",
+      "family_key": "lg:refrigerators:GVF25FFGHB",
+      "family_name": "LG GV-F25FFGHB",
+      "model_name": "LG GV-F25FFGHB",
+      "verified_model": {
+        "name": "LG GV-F25FFGHB",
+        "family": "LG GV-F25FFGHB"
+      }
+    },
+    {
+      "brand": "LG",
+      "type_id": "refrigerators",
+      "name_pattern": ".*",
+      "mpn_pattern": "GVK25FFGFB",
+      "release_date": "2025-10-12",
+      "url": "https://www.lg.com/in/refrigerators/french-door-refrigerators/gv-k25ffgfb/",
+      "scope": "LG India's active model catalog lists exact model code GV-K25FFGFB with ec_model_release_date 2025-10-12; apply only this code. Publication still requires a matching new, Indian retailer product listing.",
+      "source_field": "ec_model_release_date",
+      "reviewed_on": "2026-10-24",
+      "family_key": "lg:refrigerators:GVK25FFGFB",
+      "family_name": "LG GV-K25FFGFB",
+      "model_name": "LG GV-K25FFGFB",
+      "verified_model": {
+        "name": "LG GV-K25FFGFB",
+        "family": "LG GV-K25FFGFB"
+      }
+    },
+    {
+      "brand": "LG",
+      "type_id": "washers",
+      "name_pattern": ".*",
+      "mpn_pattern": "FHD1207STB",
+      "release_date": "2025-06-23",
+      "url": "https://www.lg.com/in/laundry/washer-dryers/fhd1207stb/",
+      "scope": "LG India's active model catalog lists exact model code FHD1207STB with ec_model_release_date 2025-06-23; apply only this code. Publication still requires a matching new, Indian retailer product listing.",
+      "source_field": "ec_model_release_date",
+      "reviewed_on": "2026-10-24",
+      "family_key": "lg:washers:FHD1207STB",
+      "family_name": "LG FHD1207STB",
+      "model_name": "LG FHD1207STB",
+      "verified_model": {
+        "name": "LG FHD1207STB",
+        "family": "LG FHD1207STB"
+      }
+    },
+    {
+      "brand": "LG",
+      "type_id": "washers",
+      "name_pattern": ".*",
+      "mpn_pattern": "FHP1410Z3M",
+      "release_date": "2025-06-20",
+      "url": "https://www.lg.com/in/laundry/front-loading-washing-machines/fhp1410z3m/",
+      "scope": "LG India's active model catalog lists exact model code FHP1410Z3M with ec_model_release_date 2025-06-20; apply only this code. Publication still requires a matching new, Indian retailer product listing.",
+      "source_field": "ec_model_release_date",
+      "reviewed_on": "2026-10-24",
+      "family_key": "lg:washers:FHP1410Z3M",
+      "family_name": "LG FHP1410Z3M",
+      "model_name": "LG FHP1410Z3M",
+      "verified_model": {
+        "name": "LG FHP1410Z3M",
+        "family": "LG FHP1410Z3M"
+      }
+    },
+    {
+      "brand": "LG",
+      "type_id": "washers",
+      "name_pattern": ".*",
+      "mpn_pattern": "T80KMMB3Z",
+      "release_date": "2025-09-25",
+      "url": "https://www.lg.com/in/laundry/top-loading-washing-machines/t80kmmb3z/",
+      "scope": "LG India's active model catalog lists exact model code T80KMMB3Z with ec_model_release_date 2025-09-25; apply only this code. Publication still requires a matching new, Indian retailer product listing.",
+      "source_field": "ec_model_release_date",
+      "reviewed_on": "2026-10-24",
+      "family_key": "lg:washers:T80KMMB3Z",
+      "family_name": "LG T80KMMB3Z",
+      "model_name": "LG T80KMMB3Z",
+      "verified_model": {
+        "name": "LG T80KMMB3Z",
+        "family": "LG T80KMMB3Z"
+      }
+    },
+    {
+      "brand": "LG",
+      "type_id": "washers",
+      "name_pattern": ".*",
+      "mpn_pattern": "T80KMOB1Z",
+      "release_date": "2025-10-15",
+      "url": "https://www.lg.com/in/laundry/top-loading-washing-machines/t80kmob1z/",
+      "scope": "LG India's active model catalog lists exact model code T80KMOB1Z with ec_model_release_date 2025-10-15; apply only this code. Publication still requires a matching new, Indian retailer product listing.",
+      "source_field": "ec_model_release_date",
+      "reviewed_on": "2026-10-24",
+      "family_key": "lg:washers:T80KMOB1Z",
+      "family_name": "LG T80KMOB1Z",
+      "model_name": "LG T80KMOB1Z",
+      "verified_model": {
+        "name": "LG T80KMOB1Z",
+        "family": "LG T80KMOB1Z"
+      }
+    },
+    {
+      "brand": "LG",
+      "type_id": "washers",
+      "name_pattern": ".*",
+      "mpn_pattern": "T80VBMB1Z",
+      "release_date": "2024-11-11",
+      "url": "https://www.lg.com/in/laundry/top-loading-washing-machines/t80vbmb1z/",
+      "scope": "LG India's active model catalog lists exact model code T80VBMB1Z with ec_model_release_date 2024-11-11; apply only this code. Publication still requires a matching new, Indian retailer product listing.",
+      "source_field": "ec_model_release_date",
+      "reviewed_on": "2026-10-24",
+      "family_key": "lg:washers:T80VBMB1Z",
+      "family_name": "LG T80VBMB1Z",
+      "model_name": "LG T80VBMB1Z",
+      "verified_model": {
+        "name": "LG T80VBMB1Z",
+        "family": "LG T80VBMB1Z"
+      }
+    },
+    {
+      "brand": "LG",
+      "type_id": "washers",
+      "name_pattern": ".*",
+      "mpn_pattern": "T90KMOB1Z",
+      "release_date": "2025-10-15",
+      "url": "https://www.lg.com/in/laundry/top-loading-washing-machines/t90kmob1z/",
+      "scope": "LG India's active model catalog lists exact model code T90KMOB1Z with ec_model_release_date 2025-10-15; apply only this code. Publication still requires a matching new, Indian retailer product listing.",
+      "source_field": "ec_model_release_date",
+      "reviewed_on": "2026-10-24",
+      "family_key": "lg:washers:T90KMOB1Z",
+      "family_name": "LG T90KMOB1Z",
+      "model_name": "LG T90KMOB1Z",
+      "verified_model": {
+        "name": "LG T90KMOB1Z",
+        "family": "LG T90KMOB1Z"
+      }
+    },
+    {
+      "brand": "LG",
+      "type_id": "washers",
+      "name_pattern": ".*",
+      "mpn_pattern": "THD11SWM",
+      "release_date": "2023-12-07",
+      "url": "https://www.lg.com/in/laundry/top-loading-washing-machines/thd11swm/",
+      "scope": "LG India's active model catalog lists exact model code THD11SWM with ec_model_release_date 2023-12-07; apply only this code. Publication still requires a matching new, Indian retailer product listing.",
+      "source_field": "ec_model_release_date",
+      "reviewed_on": "2026-10-24",
+      "family_key": "lg:washers:THD11SWM",
+      "family_name": "LG THD11SWM",
+      "model_name": "LG THD11SWM",
+      "verified_model": {
+        "name": "LG THD11SWM",
+        "family": "LG THD11SWM"
+      }
+    },
+    {
+      "brand": "LG",
+      "type_id": "washers",
+      "name_pattern": ".*",
+      "mpn_pattern": "TX511SWO",
+      "release_date": "2025-10-03",
+      "url": "https://www.lg.com/in/laundry/top-loading-washing-machines/tx511swo/",
+      "scope": "LG India's active model catalog lists exact model code TX511SWO with ec_model_release_date 2025-10-03; apply only this code. Publication still requires a matching new, Indian retailer product listing.",
+      "source_field": "ec_model_release_date",
+      "reviewed_on": "2026-10-24",
+      "family_key": "lg:washers:TX511SWO",
+      "family_name": "LG TX511SWO",
+      "model_name": "LG TX511SWO",
+      "verified_model": {
+        "name": "LG TX511SWO",
+        "family": "LG TX511SWO"
+      }
+    },
+    {
+      "brand": "OPPO",
+      "type_id": "smartphones",
+      "name_pattern": "\\bOPPO A6s 5G\\b",
+      "release_date": "2026-03-18",
+      "url": "https://www.oppo.com/in/newsroom/press/oppo-india-launches-a6s/",
+      "scope": "OPPO India states A6s 5G was available from 18 March 2026. Exact A6s 5G generation only.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "OPPO A6s 5G",
+        "family": "OPPO A6s"
+      },
+      "family_key": "oppo_a6s_5g",
+      "family_name": "OPPO A6s",
+      "model_name": "OPPO A6s 5G",
+      "specifications_url": "https://www.oppo.com/in/smartphones/series-a/a6s-5g/",
+      "model_specifications": {
+        "Processor": "MediaTek Dimensity 6300",
+        "Display size": "6.75 inches (17.15 cm)",
+        "Refresh rate": "120 Hz",
+        "Rear camera": "50 MP main + 2 MP secondary",
+        "Front camera": "5 MP",
+        "Wired charging": "45 W SUPERVOOC",
+        "Operating system": "ColorOS 15",
+        "Weight": "212 g",
+        "Battery": "6500 mAh typical"
+      }
+    },
+    {
+      "brand": "OPPO",
+      "type_id": "smartphones",
+      "name_pattern": "\\bOPPO Find X9s(?: 5G)?\\b",
+      "release_date": "2026-05-26",
+      "url": "https://www.oppo.com/in/newsroom/press/oppo-find-x9-series-india-launch-find-x9-ultra-find-x9s/",
+      "scope": "OPPO India states Find X9s sales began 26 May 2026. Does not cover Find X9 Ultra or other generations.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "OPPO Find X9s 5G",
+        "family": "OPPO Find X9"
+      },
+      "family_key": "oppo_find_x9",
+      "family_name": "OPPO Find X9",
+      "model_name": "OPPO Find X9s 5G",
+      "specifications_url": "https://www.oppo.com/in/newsroom/press/oppo-find-x9-series-india-launch-find-x9-ultra-find-x9s/",
+      "model_specifications": {
+        "Processor": "MediaTek Dimensity 9500s",
+        "Display size": "6.59 inches (16.73 cm)",
+        "Display panel": "AMOLED",
+        "Refresh rate": "120 Hz",
+        "Peak brightness": "3600 nits",
+        "Rear camera": "50 MP main + 50 MP ultra-wide + 50 MP 3x telephoto",
+        "Front camera": "32 MP",
+        "Wired charging": "80 W SUPERVOOC",
+        "Operating system": "ColorOS 16",
+        "Water resistance": "IP66, IP68 and IP69",
+        "Weight": "202 g",
+        "Battery": "7025 mAh typical"
+      }
+    },
+    {
+      "brand": "OPPO",
+      "type_id": "smartphones",
+      "name_pattern": "\\bOPPO Reno16(?: 5G)?\\b(?!c)",
+      "release_date": "2026-07-09",
+      "url": "https://www.oppo.com/in/newsroom/press/oppo-india-elevates-photography-reno-16-series-aipotraitcamera/",
+      "scope": "OPPO India states Reno16 5G series purchase availability began 9 July 2026. Exact Reno16 5G model; not Reno16c.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "OPPO Reno16 5G",
+        "family": "OPPO Reno16"
+      },
+      "family_key": "oppo_reno16",
+      "family_name": "OPPO Reno16",
+      "model_name": "OPPO Reno16 5G",
+      "specifications_url": "https://www.oppo.com/in/newsroom/press/oppo-india-elevates-photography-reno-16-series-aipotraitcamera/",
+      "model_specifications": {
+        "Processor": "Qualcomm Snapdragon 7 Gen 4",
+        "Display size": "6.32 inches (16.05 cm)",
+        "Display panel": "AMOLED",
+        "Display resolution": "FHD+",
+        "Refresh rate": "120 Hz",
+        "Peak brightness": "1800 nits",
+        "Rear camera": "50 MP main + 50 MP 3.5x telephoto + 50 MP ultra-wide",
+        "Front camera": "50 MP ultra-wide",
+        "Wired charging": "80 W SUPERVOOC",
+        "Operating system": "ColorOS 16",
+        "Water resistance": "IP66, IP68, IP69 and IP69K",
+        "Weight": "182 g",
+        "Battery": "6700 mAh typical"
+      }
+    },
+    {
+      "brand": "OPPO",
+      "type_id": "smartphones",
+      "name_pattern": "\\bOPPO Reno16c(?: 5G)?\\b",
+      "release_date": "2026-07-09",
+      "url": "https://www.oppo.com/in/newsroom/press/oppo-india-elevates-photography-reno-16-series-aipotraitcamera/",
+      "scope": "OPPO India states Reno16 series purchase availability began 9 July 2026. Exact Reno16c 5G model only.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "OPPO Reno16c 5G",
+        "family": "OPPO Reno16"
+      },
+      "family_key": "oppo_reno16",
+      "family_name": "OPPO Reno16",
+      "model_name": "OPPO Reno16c 5G",
+      "specifications_url": "https://www.oppo.com/in/newsroom/press/oppo-india-elevates-photography-reno-16-series-aipotraitcamera/",
+      "model_specifications": {
+        "Processor": "MediaTek Dimensity 7300",
+        "Display size": "6.57 inches",
+        "Display panel": "AMOLED",
+        "Display resolution": "FHD+",
+        "Refresh rate": "120 Hz",
+        "Rear camera": "50 MP main + 50 MP 3.5x telephoto + 8 MP ultra-wide",
+        "Front camera": "50 MP ultra-wide",
+        "Wired charging": "80 W SUPERVOOC",
+        "Operating system": "ColorOS 16",
+        "Water resistance": "IP66, IP68, IP69 and IP69K",
+        "Weight": "195 g",
+        "Battery": "7000 mAh typical"
+      }
+    },
+    {
+      "brand": "OPPO",
+      "type_id": "smartphones",
+      "name_pattern": "\\bOPPO F33 Pro 5G\\b",
+      "release_date": "2026-04-23",
+      "url": "https://www.oppo.com/in/newsroom/press/oppo-india-launches-oppo-f33-series-5g-in-india/",
+      "scope": "OPPO India states F33 Pro 5G became available for sale on 23 April 2026. Exact Pro model only.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "OPPO F33 Pro 5G",
+        "family": "OPPO F33"
+      },
+      "verified_mpn": "CPH2835",
+      "identifier_url": "https://www.oppo.com/in/smartphones/series-f/f33-pro-5g/specs/",
+      "family_key": "oppo_f33",
+      "family_name": "OPPO F33",
+      "model_name": "OPPO F33 Pro 5G",
+      "specifications_url": "https://www.oppo.com/in/smartphones/series-f/f33-pro-5g/specs/",
+      "model_specifications": {
+        "Processor": "MediaTek Dimensity 6360 MAX",
+        "Display size": "6.57 inches (16.69 cm)",
+        "Display panel": "AMOLED",
+        "Display resolution": "FHD+ 1080 x 2372",
+        "Refresh rate": "Adaptive up to 120 Hz",
+        "Rear camera": "50 MP main + 2 MP monochrome",
+        "Front camera": "50 MP ultra-wide with autofocus",
+        "Wired charging": "80 W SUPERVOOC",
+        "Operating system": "ColorOS 16",
+        "Water resistance": "IP69K, IP68 and IP66",
+        "Weight": "194 g",
+        "Battery": "7000 mAh typical"
+      }
+    },
+    {
+      "brand": "OPPO",
+      "type_id": "smartphones",
+      "name_pattern": "\\bOPPO F33 5G\\b",
+      "release_date": "2026-04-26",
+      "url": "https://www.oppo.com/in/newsroom/press/oppo-india-launches-oppo-f33-series-5g-in-india/",
+      "scope": "OPPO India states F33 5G became available for sale on 26 April 2026. Excludes F33 Pro.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "OPPO F33 5G",
+        "family": "OPPO F33"
+      },
+      "family_key": "oppo_f33",
+      "family_name": "OPPO F33",
+      "model_name": "OPPO F33 5G",
+      "specifications_url": "https://www.oppo.com/in/newsroom/press/oppo-india-launches-oppo-f33-series-5g-in-india/",
+      "model_specifications": {
+        "Processor": "MediaTek Dimensity 6360 MAX",
+        "Display size": "6.57 inches",
+        "Display panel": "AMOLED",
+        "Refresh rate": "120 Hz",
+        "Rear camera": "50 MP main + 2 MP secondary",
+        "Front camera": "16 MP",
+        "Wired charging": "80 W SUPERVOOC",
+        "Operating system": "ColorOS 16",
+        "Water resistance": "IP69, IP68 and IP66",
+        "Weight": "189 g",
+        "Battery": "7000 mAh typical"
+      }
+    },
+    {
+      "brand": "OPPO",
+      "type_id": "smartphones",
+      "name_pattern": "\\bOPPO Find X10 Pro Max 5G\\b",
+      "release_date": "2026-10-22",
+      "url": "https://www.oppo.com/in/articles/find-x10-series/find-x10-details/",
+      "scope": "OPPO India identifies Find X10 Pro Max as an India-sold Find X10 series model and dates the series release to 22 October 2026. Exact Pro Max model only.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "OPPO Find X10 Pro Max 5G",
+        "family": "OPPO Find X10"
+      },
+      "verified_mpn": "CPH2913",
+      "identifier_url": "https://www.oppo.com/in/articles/find-x10-series/find-x10-details/",
+      "family_key": "oppo_find_x10",
+      "family_name": "OPPO Find X10",
+      "model_name": "OPPO Find X10 Pro Max 5G",
+      "specifications_url": "https://www.oppo.com/in/articles/find-x10-series/find-x10-details/",
+      "model_specifications": {
+        "Processor": "MediaTek Dimensity 9600 Pro",
+        "Display size": "6.78 inches (17.23 cm)",
+        "Display resolution": "FHD+ 2772 x 1272",
+        "Refresh rate": "Adaptive up to 120 Hz",
+        "Rear camera": "200 MP main + 200 MP telephoto + 200 MP ultra-wide",
+        "Front camera": "50 MP",
+        "Wired charging": "80 W SUPERVOOC",
+        "Wireless charging": "50 W AIRVOOC",
+        "Operating system": "ColorOS 17",
+        "Water resistance": "IP66, IP68 and IP69",
+        "Battery": "8000 mAh typical"
+      }
+    },
+    {
+      "brand": "OPPO",
+      "type_id": "smartphones",
+      "name_pattern": "\\bOPPO Find X10 5G\\b",
+      "release_date": "2026-10-22",
+      "url": "https://www.oppo.com/in/articles/find-x10-series/find-x10-details/",
+      "scope": "OPPO India dates Find X10 release to 22 October 2026. Exact base Find X10; excludes Pro Max.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "OPPO Find X10 5G",
+        "family": "OPPO Find X10"
+      },
+      "verified_mpn": "CPH2911",
+      "identifier_url": "https://www.oppo.com/in/articles/find-x10-series/find-x10-details/",
+      "family_key": "oppo_find_x10",
+      "family_name": "OPPO Find X10",
+      "model_name": "OPPO Find X10 5G",
+      "specifications_url": "https://www.oppo.com/in/articles/find-x10-series/find-x10-details/",
+      "model_specifications": {
+        "Processor": "MediaTek Dimensity 9600M",
+        "Display size": "6.59 inches (16.74 cm)",
+        "Display resolution": "FHD+ 2768 x 1272",
+        "Refresh rate": "Adaptive 1-120 Hz, up to 144 Hz in supported games",
+        "Rear camera": "200 MP main + 200 MP telephoto + 50 MP ultra-wide",
+        "Front camera": "50 MP",
+        "Wired charging": "80 W SUPERVOOC",
+        "Wireless charging": "50 W AIRVOOC",
+        "Operating system": "ColorOS 17",
+        "Water resistance": "IP66, IP68 and IP69",
+        "Battery": "8000 mAh typical"
+      }
+    },
+    {
+      "brand": "OPPO",
+      "type_id": "smartphones",
+      "name_pattern": "\\bOPPO Reno ?14 5G\\b",
+      "release_date": "2025-07-08",
+      "url": "https://www.oppo.com/in/newsroom/press/oppo-reno14-series-launched/",
+      "scope": "OPPO India Reno14 5G official India on-sale date. Exact Reno14 base model only.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "OPPO Reno14 5G",
+        "family": "OPPO Reno14"
+      },
+      "family_key": "oppo_reno14",
+      "family_name": "OPPO Reno14",
+      "model_name": "OPPO Reno14 5G"
+    },
+    {
+      "brand": "OPPO",
+      "type_id": "smartphones",
+      "name_pattern": "\\bOPPO K13 Turbo Pro(?: 5G)?\\b",
+      "release_date": "2025-08-15",
+      "url": "https://m.thewire.in/article/ptiprnews/oppo-launches-indias-only-smartphones-with-a-cooling-fan-oppo-k13-turbo-pro-5g-and-oppo-k13-turbo-5g/",
+      "scope": "OPPO India press release syndicated by PTI states K13 Turbo Pro 5G first sale on 15 August 2025. Model specifications use OPPO India.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "OPPO K13 Turbo Pro 5G",
+        "family": "OPPO K13 Turbo"
+      },
+      "family_key": "oppo_k13_turbo",
+      "family_name": "OPPO K13 Turbo",
+      "model_name": "OPPO K13 Turbo Pro 5G",
+      "specifications_url": "https://www.oppo.com/in/smartphones/series-k/k13-turbo-pro/",
+      "model_specifications": {
+        "Processor": "Qualcomm Snapdragon 8s Gen 4",
+        "Display size": "6.8 inches (17.27 cm)",
+        "Display resolution": "1.5K 2800 x 1280",
+        "Refresh rate": "120 Hz",
+        "Rear camera": "50 MP main + 2 MP secondary",
+        "Front camera": "16 MP",
+        "Wired charging": "80 W SUPERVOOC",
+        "Operating system": "ColorOS 15",
+        "Water resistance": "IP66, IP68 and IP69",
+        "Battery": "7000 mAh typical"
+      }
+    },
+    {
+      "brand": "OPPO",
+      "type_id": "smartphones",
+      "name_pattern": "\\bOPPO K13 Turbo(?: 5G)?\\b(?!\\s*Pro)",
+      "release_date": "2025-08-18",
+      "url": "https://m.thewire.in/article/ptiprnews/oppo-launches-indias-only-smartphones-with-a-cooling-fan-oppo-k13-turbo-pro-5g-and-oppo-k13-turbo-5g/",
+      "scope": "OPPO India press release syndicated by PTI states K13 Turbo 5G first sale on 18 August 2025. Exact standard model only.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "OPPO K13 Turbo 5G",
+        "family": "OPPO K13 Turbo"
+      },
+      "family_key": "oppo_k13_turbo",
+      "family_name": "OPPO K13 Turbo",
+      "model_name": "OPPO K13 Turbo 5G",
+      "specifications_url": "https://www.oppo.com/in/smartphones/series-k/k13-turbo/specs/",
+      "model_specifications": {
+        "Processor": "MediaTek Dimensity 8450",
+        "Display size": "6.8 inches (17.27 cm)",
+        "Display resolution": "1.5K 2800 x 1280",
+        "Refresh rate": "120 Hz",
+        "Rear camera": "50 MP main + 2 MP secondary",
+        "Front camera": "16 MP",
+        "Wired charging": "80 W SUPERVOOC",
+        "Operating system": "ColorOS 15",
+        "Water resistance": "IP66, IP68 and IP69",
+        "Battery": "7000 mAh typical"
+      }
+    },
+    {
+      "brand": "Realme",
+      "type_id": "smartphones",
+      "name_pattern": "\\bRealme 15 Pro 5G\\b",
+      "release_date": "2025-07-24",
+      "url": "https://www.realme.com/in/newsroom/15-series-with-industry-first-ai-edit-genie",
+      "scope": "Realme India announces the 15 series on 24 July 2025. Exact 15 Pro generation only.",
+      "reviewed_on": "2026-10-24",
+      "verified_model": {
+        "name": "realme 15 Pro 5G",
+        "family": "realme 15"
+      },
+      "family_key": "realme_15",
+      "family_name": "realme 15",
+      "model_name": "realme 15 Pro 5G"
+    },
+    {
+      "brand": "OPPO",
+      "type_id": "smartphones",
+      "name_pattern": "\\bFind X9 Pro(?: 5G)?\\b",
+      "release_date": "2025-11-21",
+      "url": "https://www.oppo.com/in/newsroom/press/oppo-find-x9-series-launched-in-india/",
+      "scope": "Exact OPPO Find X9 Pro India model; OPPO states both Find X9 models were first available for sale in India from 21 November 2025.",
+      "reviewed_on": "2026-10-25",
+      "verified_model": {
+        "name": "OPPO Find X9 Pro 5G",
+        "family": "OPPO Find X9"
+      },
+      "family_key": "oppo-find-x9",
+      "family_name": "OPPO Find X9",
+      "model_name": "OPPO Find X9 Pro 5G"
+    },
+    {
+      "brand": "Xiaomi",
+      "type_id": "smartphones",
+      "name_pattern": "\\bNote 15 Pro\\+?(?: Plus)?(?: 5G)?\\b",
+      "release_date": "2026-01-29",
+      "url": "https://c.mi.com/global/post/1793723",
+      "scope": "Exact Redmi Note 15 Pro and Pro+ models launched in India on 29 January 2026; retail listing supplies India market and saleability evidence.",
+      "reviewed_on": "2026-10-25",
+      "verified_model": {
+        "name": "Redmi Note 15 Pro 5G",
+        "family": "Redmi Note 15"
+      },
+      "family_key": "redmi-note-15",
+      "family_name": "Redmi Note 15",
+      "model_name": "Redmi Note 15 Pro 5G"
+    },
+    {
+      "brand": "Xiaomi",
+      "type_id": "smartphones",
+      "name_pattern": "\\bNote 15 Pro\\+(?: Plus)?(?: 5G)?\\b",
+      "release_date": "2026-01-29",
+      "url": "https://c.mi.com/global/post/1793723",
+      "scope": "Exact Redmi Note 15 Pro+ India model launched on 29 January 2026; retail listing supplies India market and saleability evidence.",
+      "reviewed_on": "2026-10-25",
+      "verified_model": {
+        "name": "Redmi Note 15 Pro+ 5G",
+        "family": "Redmi Note 15"
+      },
+      "family_key": "redmi-note-15",
+      "family_name": "Redmi Note 15",
+      "model_name": "Redmi Note 15 Pro+ 5G"
+    },
+    {
+      "brand": "Redmi",
+      "type_id": "smartphones",
+      "name_pattern": "\\bNote 15 Pro\\+(?: Plus)?(?: 5G)?\\b",
+      "release_date": "2026-01-29",
+      "url": "https://c.mi.com/global/post/1793723",
+      "scope": "Exact Redmi Note 15 Pro+ India model launched on 29 January 2026; retail listing supplies India market and saleability evidence.",
+      "reviewed_on": "2026-10-25",
+      "verified_model": {
+        "name": "Redmi Note 15 Pro+ 5G",
+        "family": "Redmi Note 15"
+      },
+      "family_key": "redmi-note-15",
+      "family_name": "Redmi Note 15",
+      "model_name": "Redmi Note 15 Pro+ 5G"
+    },
+    {
+      "brand": "Redmi",
+      "type_id": "smartphones",
+      "name_pattern": "\\bNote 15 Pro\\b(?!\\s*(?:\\+|Plus))",
+      "release_date": "2026-01-29",
+      "url": "https://c.mi.com/global/post/1793723",
+      "scope": "Exact Redmi Note 15 Pro India model launched on 29 January 2026; retail listing supplies India market and saleability evidence.",
+      "reviewed_on": "2026-10-25",
+      "verified_model": {
+        "name": "Redmi Note 15 Pro 5G",
+        "family": "Redmi Note 15"
+      },
+      "family_key": "redmi-note-15",
+      "family_name": "Redmi Note 15",
+      "model_name": "Redmi Note 15 Pro 5G"
+    },
+    {
+      "brand": "Realme",
+      "type_id": "smartphones",
+      "name_pattern": "\\brealme 16 Pro\\+ 5G\\b",
+      "release_date": "2026-01-06",
+      "url": "https://www.realme.com/in/newsroom/realme-16-pro-series-Urban-Wild-Design-and-200MP-Portrait-Master",
+      "scope": "Exact realme 16 Pro+ 5G India model in the manufacturer-announced 16 Pro series launch on 6 January 2026; retailer listing establishes current India saleability.",
+      "reviewed_on": "2026-10-25",
+      "verified_model": {
+        "name": "realme 16 Pro+ 5G",
+        "family": "realme 16 Pro"
+      },
+      "family_key": "realme-16-pro",
+      "family_name": "realme 16 Pro",
+      "model_name": "realme 16 Pro+ 5G"
+    },
+    {
+      "brand": "Realme",
+      "type_id": "smartphones",
+      "name_pattern": "\\brealme 16 Pro 5G\\b",
+      "release_date": "2026-01-06",
+      "url": "https://www.realme.com/in/newsroom/realme-16-pro-series-Urban-Wild-Design-and-200MP-Portrait-Master",
+      "scope": "Exact realme 16 Pro 5G India model in the manufacturer-announced 16 Pro series launch on 6 January 2026; retailer listing establishes current India saleability.",
+      "reviewed_on": "2026-10-25",
+      "verified_model": {
+        "name": "realme 16 Pro 5G",
+        "family": "realme 16 Pro"
+      },
+      "family_key": "realme-16-pro",
+      "family_name": "realme 16 Pro",
+      "model_name": "realme 16 Pro 5G"
+    },
+    {
+      "brand": "Realme",
+      "type_id": "smartphones",
+      "name_pattern": "\\brealme 16T 5G\\b",
+      "release_date": "2026-05-22",
+      "url": "https://event.realme.com/in/realme-16t-5g-new-launch",
+      "scope": "Exact realme 16T 5G India model; official realme India launch page states launch on 22 May 2026, while retailer listing establishes current India saleability.",
+      "reviewed_on": "2026-10-25",
+      "verified_model": {
+        "name": "realme 16T 5G",
+        "family": "realme 16"
+      },
+      "family_key": "realme-16",
+      "family_name": "realme 16",
+      "model_name": "realme 16T 5G"
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "smartphones",
+      "name_pattern": "\\b(?:Galaxy\\s+)?F36 5G\\b",
+      "release_date": "2025-07-22",
+      "url": "https://news.samsung.com/in/samsung-launches-galaxy-f36-5g-with-premium-leather-finish-segment-leading-camera-and-ai-innovations-in-india",
+      "scope": "Exact Samsung Galaxy F36 5G India model; Samsung Newsroom India dates the launch 22 July 2025. Retailer listing establishes current India saleability.",
+      "reviewed_on": "2026-10-25",
+      "verified_model": {
+        "name": "Samsung Galaxy F36 5G",
+        "family": "Samsung Galaxy F36"
+      },
+      "family_key": "samsung-galaxy-f36",
+      "family_name": "Samsung Galaxy F36",
+      "model_name": "Samsung Galaxy F36 5G"
+    },
+    {
+      "brand": "vivo",
+      "type_id": "smartphones",
+      "name_pattern": "\\bT5x 5G\\b",
+      "release_date": "2026-03-24",
+      "url": "https://vivonewsroom.in/press-release/vivo-unveils-t5x-5g-with-segments-biggest-battery1-and-dimensity-7400-turbo-processor-starting-inr-18999/",
+      "scope": "Exact vivo T5x 5G India model; vivo states first sale began 24 March 2026.",
+      "reviewed_on": "2026-10-25",
+      "verified_model": {
+        "name": "vivo T5x 5G",
+        "family": "vivo T5"
+      },
+      "family_key": "vivo-t5",
+      "family_name": "vivo T5",
+      "model_name": "vivo T5x 5G"
+    },
+    {
+      "brand": "OPPO",
+      "type_id": "smartphones",
+      "name_pattern": "\\bK14 5G\\b",
+      "release_date": "2026-03-20",
+      "url": "https://www.oppo.com/in/newsroom/press/oppo-india-introduces-k14-the-endurance-powerhouse/",
+      "scope": "Exact OPPO K14 5G India model; OPPO states India purchase availability began 20 March 2026.",
+      "reviewed_on": "2026-10-25",
+      "verified_model": {
+        "name": "OPPO K14 5G",
+        "family": "OPPO K14"
+      },
+      "family_key": "oppo-k14",
+      "family_name": "OPPO K14",
+      "model_name": "OPPO K14 5G"
+    },
+    {
+      "brand": "iQOO",
+      "type_id": "smartphones",
+      "name_pattern": "\\b15R 5G\\b",
+      "release_date": "2026-03-03",
+      "url": "https://community.iqoo.com/in/thread/142052",
+      "scope": "Exact iQOO 15R India model; the iQOO India community launch announcement states general sale began 3 March 2026.",
+      "reviewed_on": "2026-10-25",
+      "verified_model": {
+        "name": "iQOO 15R",
+        "family": "iQOO 15"
+      },
+      "family_key": "iqoo-15",
+      "family_name": "iQOO 15",
+      "model_name": "iQOO 15R"
+    },
+    {
+      "brand": "OnePlus",
+      "type_id": "tablets",
+      "name_pattern": "\\bPad Go 2\\b",
+      "release_date": "2025-12-17",
+      "url": "https://www.youtube.com/watch?v=OvmPXDA2j1k",
+      "scope": "Exact OnePlus Pad Go 2 India model; official OnePlus India launch stream confirms the 17 December 2025 launch. Retailer listing establishes current India saleability.",
+      "reviewed_on": "2026-10-25",
+      "verified_model": {
+        "name": "OnePlus Pad Go 2",
+        "family": "OnePlus Pad Go"
+      },
+      "family_key": "oneplus-pad-go",
+      "family_name": "OnePlus Pad Go",
+      "model_name": "OnePlus Pad Go 2"
+    },
+    {
+      "brand": "OnePlus",
+      "type_id": "tablets",
+      "name_pattern": "\\bPad\\s*3\\b",
+      "release_date": "2025-06-05",
+      "url": "https://www.youtube.com/watch?v=aylYEkhItmw",
+      "scope": "Exact OnePlus Pad 3 global model launch, confirmed by OnePlus official launch stream dated 5 June 2025. Retailer listing establishes current India saleability.",
+      "reviewed_on": "2026-10-25",
+      "verified_model": {
+        "name": "OnePlus Pad 3",
+        "family": "OnePlus Pad"
+      },
+      "family_key": "oneplus-pad",
+      "family_name": "OnePlus Pad",
+      "model_name": "OnePlus Pad 3"
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "tablets",
+      "name_pattern": "\\bGalaxy Tab S12 Ultra\\b",
+      "release_date": "2026-10-07",
+      "url": "https://news.samsung.com/in/samsung-galaxy-tab-s12-series-prices-announced-for-indian-market-with-special-deals",
+      "scope": "Exact Samsung Galaxy Tab S12 Ultra India model; Samsung Newsroom India states the series became available in India on 7 October 2026.",
+      "reviewed_on": "2026-10-25",
+      "verified_model": {
+        "name": "Galaxy Tab S12 Ultra",
+        "family": "Galaxy Tab S12"
+      },
+      "family_key": "samsung-galaxy-tab-s12",
+      "family_name": "Galaxy Tab S12",
+      "model_name": "Galaxy Tab S12 Ultra"
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "tablets",
+      "name_pattern": "\\bGalaxy Tab S12\\+(?=\\s|$)",
+      "release_date": "2026-10-07",
+      "url": "https://news.samsung.com/in/samsung-galaxy-tab-s12-series-prices-announced-for-indian-market-with-special-deals",
+      "scope": "Exact Samsung Galaxy Tab S12+ India model; Samsung Newsroom India states the series became available in India on 7 October 2026.",
+      "reviewed_on": "2026-10-25",
+      "verified_model": {
+        "name": "Galaxy Tab S12+",
+        "family": "Galaxy Tab S12"
+      },
+      "family_key": "samsung-galaxy-tab-s12",
+      "family_name": "Galaxy Tab S12",
+      "model_name": "Galaxy Tab S12+"
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "laptops",
+      "name_pattern": "\\bGalaxy Book6(?!\\s+(?:Pro|Ultra))\\b",
+      "release_date": "2026-03-27",
+      "url": "https://news.samsung.com/in/samsung-launches-galaxy-book6-in-india-with-cutting-edge-performance-and-ai-driven-productivity",
+      "scope": "Exact Samsung Galaxy Book6 India model in the Galaxy Book6 series; Samsung Newsroom India dates the series launch to 27 March 2026.",
+      "reviewed_on": "2026-10-25",
+      "verified_model": {
+        "name": "Galaxy Book6",
+        "family": "Galaxy Book6"
+      },
+      "family_key": "samsung-galaxy-book6-series",
+      "family_name": "Galaxy Book6 series",
+      "model_name": "Galaxy Book6"
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "laptops",
+      "name_pattern": "\\bGalaxy Book6\\ Pro\\b",
+      "release_date": "2026-03-27",
+      "url": "https://news.samsung.com/in/samsung-launches-galaxy-book6-in-india-with-cutting-edge-performance-and-ai-driven-productivity",
+      "scope": "Exact Samsung Galaxy Book6 Pro India model in the Galaxy Book6 series; Samsung Newsroom India dates the series launch to 27 March 2026.",
+      "reviewed_on": "2026-10-25",
+      "verified_model": {
+        "name": "Galaxy Book6 Pro",
+        "family": "Galaxy Book6"
+      },
+      "family_key": "samsung-galaxy-book6-series",
+      "family_name": "Galaxy Book6 series",
+      "model_name": "Galaxy Book6 Pro"
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "laptops",
+      "name_pattern": "\\bGalaxy Book6\\ Ultra\\b",
+      "release_date": "2026-03-27",
+      "url": "https://news.samsung.com/in/samsung-launches-galaxy-book6-in-india-with-cutting-edge-performance-and-ai-driven-productivity",
+      "scope": "Exact Samsung Galaxy Book6 Ultra India model in the Galaxy Book6 series; Samsung Newsroom India dates the series launch to 27 March 2026.",
+      "reviewed_on": "2026-10-25",
+      "verified_model": {
+        "name": "Galaxy Book6 Ultra",
+        "family": "Galaxy Book6"
+      },
+      "family_key": "samsung-galaxy-book6-series",
+      "family_name": "Galaxy Book6 series",
+      "model_name": "Galaxy Book6 Ultra"
+    },
+    {
+      "brand": "Apple",
+      "type_id": "smartphones",
+      "name_pattern": "^(?:Apple )?iPhone 17(?:\\s+(?!Pro)|$)",
+      "release_date": "2025-09-19",
+      "url": "https://www.apple.com/in/newsroom/2025/09/apple-introduces-iphone-17/",
+      "scope": "Exact iPhone 17 model across listed storage and finishes; excludes Pro, Pro Max, Air and 17e.",
+      "reviewed_on": "2026-10-26",
+      "verified_model": {
+        "name": "iPhone 17",
+        "family": "iPhone 17"
+      },
+      "specifications_url": "https://support.apple.com/en-in/125089",
+      "model_specifications": {
+        "Display": "6.3-inch Super Retina XDR OLED, 2622 ? 1206, 460 ppi, ProMotion up to 120 Hz, Always-On display",
+        "Processor": "Apple A19; 6-core CPU (2 performance + 4 efficiency)",
+        "Graphics": "5-core Apple GPU with Neural Accelerators; hardware ray tracing",
+        "Neural Engine": "16-core Neural Engine",
+        "Rear camera": "48 MP Dual Fusion system: 48 MP Fusion Main + 48 MP Fusion Ultra Wide; 2? optical-quality telephoto",
+        "Front camera": "18 MP Center Stage with autofocus",
+        "Video recording": "4K Dolby Vision up to 60 fps; spatial video capture",
+        "Wireless connectivity": "5G; Wi-Fi 7; Bluetooth 6; NFC",
+        "Water and dust resistance": "IP68, up to 6 m for 30 minutes under IEC 60529",
+        "Battery life": "Video playback up to 30 hours; streamed playback up to 27 hours",
+        "Connector": "USB-C"
+      }
+    },
+    {
+      "brand": "Apple",
+      "type_id": "smartphones",
+      "name_pattern": "^(?:Apple )?iPhone 17e\\b",
+      "release_date": "2026-03-11",
+      "url": "https://www.apple.com/in/newsroom/2026/03/apple-introduces-iphone-17e/",
+      "scope": "Exact iPhone 17e model across listed storage and finishes.",
+      "reviewed_on": "2026-10-26",
+      "verified_model": {
+        "name": "iPhone 17e",
+        "family": "iPhone 17"
+      },
+      "specifications_url": "https://support.apple.com/en-in/126470",
+      "model_specifications": {
+        "Display": "6.1-inch Super Retina XDR OLED, 2532 ? 1170, 460 ppi, HDR, 800 nits typical / 1,200 nits HDR peak",
+        "Processor": "Apple A19; 6-core CPU (2 performance + 4 efficiency)",
+        "Graphics": "4-core Apple GPU with Neural Accelerators; hardware ray tracing",
+        "Neural Engine": "16-core Neural Engine",
+        "Rear camera": "48 MP Fusion Main with optical image stabilisation and 2? optical-quality telephoto crop",
+        "Front camera": "12 MP TrueDepth camera with Face ID",
+        "Video recording": "4K Dolby Vision up to 60 fps",
+        "Wireless connectivity": "5G; Wi-Fi 6; Bluetooth 5.3; NFC",
+        "Water and dust resistance": "IP68, up to 6 m for 30 minutes under IEC 60529",
+        "Battery life": "Video playback up to 26 hours; streamed playback up to 21 hours",
+        "Connector": "USB-C with USB 2 data up to 480 Mb/s; MagSafe and Qi2 wireless charging up to 15 W"
+      }
+    },
+    {
+      "brand": "Apple",
+      "type_id": "smartphones",
+      "name_pattern": "^(?:Apple )?iPhone Air\\b",
+      "release_date": "2025-09-19",
+      "url": "https://www.apple.com/in/newsroom/2025/09/the-latest-iphone-apple-watch-and-airpods-arrive-in-apple-store-locations/",
+      "scope": "Exact iPhone Air model across listed storage and finishes.",
+      "reviewed_on": "2026-10-26",
+      "verified_model": {
+        "name": "iPhone Air",
+        "family": "iPhone Air"
+      },
+      "specifications_url": "https://support.apple.com/en-in/125092",
+      "model_specifications": {
+        "Display": "6.5-inch Super Retina XDR OLED, 2736 ? 1260, 460 ppi, ProMotion up to 120 Hz, Always-On display",
+        "Processor": "Apple A19 Pro; 6-core CPU (2 performance + 4 efficiency)",
+        "Graphics": "5-core Apple GPU with Neural Accelerators; hardware ray tracing",
+        "Neural Engine": "16-core Neural Engine",
+        "Rear camera": "48 MP Fusion Main with sensor-shift optical image stabilisation and 2? optical-quality telephoto crop",
+        "Front camera": "18 MP Center Stage with autofocus",
+        "Video recording": "4K Dolby Vision up to 60 fps",
+        "Wireless connectivity": "5G; Wi-Fi 7; Bluetooth 6; Thread; NFC",
+        "Water and dust resistance": "IP68, up to 6 m for 30 minutes under IEC 60529",
+        "Battery life": "Video playback up to 27 hours; streamed playback up to 22 hours",
+        "Connector": "USB-C"
+      }
+    },
+    {
+      "brand": "Apple",
+      "type_id": "tablets",
+      "name_pattern": "(?=.*\\biPad Air\\b)(?=.*\\bM2\\b)(?=.*\\b11(?:-?\\s*)inch\\b).*",
+      "release_date": "2024-05-15",
+      "url": "https://www.apple.com/in/newsroom/2024/05/apple-unveils-the-redesigned-11-inch-and-all-new-13-inch-ipad-air-with-m2/",
+      "scope": "11-inch iPad Air (M2) only; excludes the 13-inch model.",
+      "reviewed_on": "2026-10-26",
+      "verified_model": {
+        "name": "iPad Air (M2)",
+        "family": "iPad Air"
+      },
+      "specifications_url": "https://support.apple.com/en-in/119894",
+      "model_specifications": {
+        "Display": "11-inch Liquid Retina LED-backlit IPS, 2360 ? 1640 at 264 ppi, 500 nits",
+        "Processor": "Apple M2; 8-core CPU (4 performance + 4 efficiency)",
+        "Graphics": "9-core Apple GPU",
+        "Neural Engine": "16-core Neural Engine",
+        "Memory": "8 GB RAM",
+        "Rear camera": "12 MP Wide camera, ?/1.8",
+        "Front camera": "12 MP landscape Center Stage camera",
+        "Wireless connectivity": "Wi-Fi 6E; Bluetooth 5.3; 5G on cellular models",
+        "Connector": "USB-C with USB 3 up to 10 Gb/s",
+        "Biometrics": "Touch ID in top button",
+        "Battery life": "Up to 10 hours of Wi-Fi web browsing or video playback",
+        "Audio": "Landscape stereo speakers; dual microphones"
+      }
+    },
+    {
+      "brand": "Apple",
+      "type_id": "tablets",
+      "name_pattern": "(?=.*\\biPad Air\\b)(?=.*\\bM2\\b)(?=.*\\b13(?:-?\\s*)inch\\b).*",
+      "release_date": "2024-05-15",
+      "url": "https://www.apple.com/in/newsroom/2024/05/apple-unveils-the-redesigned-11-inch-and-all-new-13-inch-ipad-air-with-m2/",
+      "scope": "13-inch iPad Air (M2) only; excludes the 11-inch model.",
+      "reviewed_on": "2026-10-26",
+      "verified_model": {
+        "name": "iPad Air (M2)",
+        "family": "iPad Air"
+      },
+      "specifications_url": "https://support.apple.com/en-in/119893",
+      "model_specifications": {
+        "Display": "13-inch Liquid Retina LED-backlit IPS, 2732 ? 2048 at 264 ppi, 600 nits",
+        "Processor": "Apple M2; 8-core CPU (4 performance + 4 efficiency)",
+        "Graphics": "9-core Apple GPU",
+        "Neural Engine": "16-core Neural Engine",
+        "Memory": "8 GB RAM",
+        "Rear camera": "12 MP Wide camera, ?/1.8",
+        "Front camera": "12 MP landscape Center Stage camera",
+        "Wireless connectivity": "Wi-Fi 6E; Bluetooth 5.3; 5G on cellular models",
+        "Connector": "USB-C with USB 3 up to 10 Gb/s",
+        "Biometrics": "Touch ID in top button",
+        "Battery life": "Up to 10 hours of Wi-Fi web browsing or video playback",
+        "Audio": "Landscape stereo speakers; dual microphones"
+      }
+    },
+    {
+      "brand": "Apple",
+      "type_id": "tablets",
+      "name_pattern": "(?=.*\\biPad Air\\b)(?=.*\\bM3\\b)(?=.*\\b11(?:-?\\s*)inch\\b).*",
+      "release_date": "2025-03-12",
+      "url": "https://www.apple.com/in/newsroom/2025/03/apple-introduces-ipad-air-with-powerful-m3-chip-and-new-magic-keyboard/",
+      "scope": "11-inch iPad Air (M3) only; excludes the 13-inch model.",
+      "reviewed_on": "2026-10-26",
+      "verified_model": {
+        "name": "iPad Air (M3)",
+        "family": "iPad Air"
+      },
+      "specifications_url": "https://support.apple.com/en-in/122241",
+      "model_specifications": {
+        "Display": "11-inch Liquid Retina LED-backlit IPS, 2360 ? 1640 at 264 ppi, 500 nits",
+        "Processor": "Apple M3; 8-core CPU (4 performance + 4 efficiency)",
+        "Graphics": "9-core Apple GPU with hardware-accelerated ray tracing",
+        "Neural Engine": "16-core Neural Engine",
+        "Memory": "8 GB RAM",
+        "Media engine": "Hardware-accelerated 8K HEVC, 4K H.264, ProRes and ProRes RAW; AV1 decode",
+        "Rear camera": "12 MP Wide camera, ?/1.8",
+        "Front camera": "12 MP landscape Center Stage camera",
+        "Wireless connectivity": "Wi-Fi 6E; Bluetooth 5.3; 5G on cellular models",
+        "Connector": "USB-C with USB 3 up to 10 Gb/s",
+        "Biometrics": "Touch ID in top button",
+        "Battery life": "Up to 10 hours of Wi-Fi web browsing or video playback"
+      }
+    },
+    {
+      "brand": "Apple",
+      "type_id": "tablets",
+      "name_pattern": "(?=.*\\biPad Air\\b)(?=.*\\bM3\\b)(?=.*\\b13(?:-?\\s*)inch\\b).*",
+      "release_date": "2025-03-12",
+      "url": "https://www.apple.com/in/newsroom/2025/03/apple-introduces-ipad-air-with-powerful-m3-chip-and-new-magic-keyboard/",
+      "scope": "13-inch iPad Air (M3) only; excludes the 11-inch model.",
+      "reviewed_on": "2026-10-26",
+      "verified_model": {
+        "name": "iPad Air (M3)",
+        "family": "iPad Air"
+      },
+      "specifications_url": "https://support.apple.com/en-in/122242",
+      "model_specifications": {
+        "Display": "13-inch Liquid Retina LED-backlit IPS, 2732 ? 2048 at 264 ppi, 600 nits",
+        "Processor": "Apple M3; 8-core CPU (4 performance + 4 efficiency)",
+        "Graphics": "9-core Apple GPU with hardware-accelerated ray tracing",
+        "Neural Engine": "16-core Neural Engine",
+        "Memory": "8 GB RAM",
+        "Media engine": "Hardware-accelerated 8K HEVC, 4K H.264, ProRes and ProRes RAW; AV1 decode",
+        "Rear camera": "12 MP Wide camera, ?/1.8",
+        "Front camera": "12 MP landscape Center Stage camera",
+        "Wireless connectivity": "Wi-Fi 6E; Bluetooth 5.3; 5G on cellular models",
+        "Connector": "USB-C with USB 3 up to 10 Gb/s",
+        "Biometrics": "Touch ID in top button",
+        "Battery life": "Up to 10 hours of Wi-Fi web browsing or video playback"
+      }
+    },
+    {
+      "brand": "Apple",
+      "type_id": "tablets",
+      "name_pattern": "^.*\\biPad Pro\\b.*\\bM4\\b.*",
+      "release_date": "2024-05-15",
+      "url": "https://www.apple.com/in/newsroom/2024/05/apple-unveils-stunning-new-ipad-pro-with-m4-chip-and-apple-pencil-pro/",
+      "scope": "Exact iPad Pro (M4) 11-inch and 13-inch variants; shared facts and explicit storage-tier CPU/memory configurations only.",
+      "reviewed_on": "2026-10-26",
+      "verified_model": {
+        "name": "iPad Pro (M4)",
+        "family": "iPad Pro"
+      },
+      "specifications_url": "https://support.apple.com/en-in/119891",
+      "model_specifications": {
+        "Display technology": "Ultra Retina XDR tandem OLED with ProMotion adaptive 10?120 Hz, P3 and True Tone",
+        "Processor": "Apple M4; 9-core CPU (3 performance + 6 efficiency) on 256/512 GB, 10-core CPU (4 performance + 6 efficiency) on 1/2 TB",
+        "Graphics": "10-core Apple GPU with hardware-accelerated ray tracing",
+        "Neural Engine": "16-core Neural Engine",
+        "Memory": "8 GB unified memory on 256/512 GB; 16 GB on 1/2 TB",
+        "Rear camera": "12 MP Wide camera with Adaptive True Tone flash and LiDAR Scanner",
+        "Front camera": "12 MP landscape TrueDepth Center Stage camera",
+        "Wireless connectivity": "Wi-Fi 6E; Bluetooth 5.3; 5G on cellular models",
+        "Connector": "Thunderbolt / USB 4 over USB-C",
+        "Biometrics": "Face ID",
+        "Battery life": "Up to 10 hours of Wi-Fi web browsing or video playback",
+        "Audio": "Four-speaker audio; studio-quality four-mic array"
+      }
+    },
+    {
+      "brand": "Apple",
+      "type_id": "tablets",
+      "name_pattern": "^.*\\biPad mini\\b.*\\bA17 Pro\\b.*",
+      "release_date": "2024-10-23",
+      "url": "https://www.apple.com/in/newsroom/2024/10/apple-introduces-powerful-new-ipad-mini-built-for-apple-intelligence/",
+      "scope": "iPad mini (A17 Pro) storage, finish and Wi-Fi/cellular variants.",
+      "reviewed_on": "2026-10-26",
+      "verified_model": {
+        "name": "iPad mini (A17 Pro)",
+        "family": "iPad mini"
+      },
+      "specifications_url": "https://support.apple.com/en-in/121456",
+      "model_specifications": {
+        "Display": "8.3-inch Liquid Retina LED-backlit IPS, 2266 ? 1488 at 326 ppi, 500 nits",
+        "Processor": "Apple A17 Pro; 6-core CPU (2 performance + 4 efficiency)",
+        "Graphics": "5-core Apple GPU",
+        "Neural Engine": "16-core Neural Engine",
+        "Rear camera": "12 MP Wide camera, ?/1.8; 4K video up to 60 fps",
+        "Front camera": "12 MP Center Stage camera",
+        "Wireless connectivity": "Wi-Fi 6E; Bluetooth 5.3; 5G on cellular models",
+        "Connector": "USB-C with USB 3 up to 10 Gb/s",
+        "Biometrics": "Touch ID in top button",
+        "Battery life": "Up to 10 hours of Wi-Fi web browsing or video playback",
+        "Audio": "Landscape stereo speakers; dual microphones"
+      }
+    },
+    {
+      "release_date": "2023-09-22",
+      "url": "https://www.apple.com/in/newsroom/2023/09/iphone-15-lineup-and-new-apple-watch-lineup-arrive-worldwide/",
+      "reviewed_on": "2026-10-26",
+      "brand": "Apple",
+      "type_id": "smartphones",
+      "name_pattern": "^(?:Apple )?iPhone 15(?:\\s+(?!Plus|Pro)|$)",
+      "scope": "Exact iPhone 15 base model across listed storage and finishes; excludes Plus and Pro models.",
+      "verified_model": {
+        "name": "iPhone 15",
+        "family": "iPhone 15"
+      },
+      "specifications_url": "https://support.apple.com/en-in/111831",
+      "model_specifications": {
+        "Display": "6.1-inch Super Retina XDR OLED, 2556 ? 1179 at 460 ppi; Dynamic Island; HDR",
+        "Processor": "Apple A16 Bionic; 6-core CPU (2 performance + 4 efficiency)",
+        "Graphics": "5-core Apple GPU",
+        "Neural Engine": "16-core Neural Engine",
+        "Rear camera": "48 MP Main with sensor-shift optical stabilisation + 12 MP Ultra Wide; 2? optical-quality telephoto",
+        "Front camera": "12 MP TrueDepth camera with autofocus and Face ID",
+        "Video recording": "4K Dolby Vision up to 60 fps",
+        "Wireless connectivity": "5G; Wi-Fi 6; Bluetooth 5.3; NFC; second-generation Ultra Wideband",
+        "Water and dust resistance": "IP68, up to 6 m for 30 minutes under IEC 60529",
+        "Battery life": "Video playback up to 20 hours; streamed playback up to 16 hours",
+        "Connector": "USB-C with USB 2 data up to 480 Mb/s; MagSafe wireless charging up to 15 W"
+      }
+    },
+    {
+      "release_date": "2023-09-22",
+      "url": "https://www.apple.com/in/newsroom/2023/09/iphone-15-lineup-and-new-apple-watch-lineup-arrive-worldwide/",
+      "reviewed_on": "2026-10-26",
+      "brand": "Apple",
+      "type_id": "smartphones",
+      "name_pattern": "^(?:Apple )?iPhone 15 Plus\\b",
+      "scope": "Exact iPhone 15 Plus model across listed storage and finishes.",
+      "verified_model": {
+        "name": "iPhone 15 Plus",
+        "family": "iPhone 15"
+      },
+      "specifications_url": "https://support.apple.com/en-in/111830",
+      "model_specifications": {
+        "Display": "6.7-inch Super Retina XDR OLED, 2796 ? 1290 at 460 ppi; Dynamic Island; HDR",
+        "Processor": "Apple A16 Bionic; 6-core CPU (2 performance + 4 efficiency)",
+        "Graphics": "5-core Apple GPU",
+        "Neural Engine": "16-core Neural Engine",
+        "Rear camera": "48 MP Main with sensor-shift optical stabilisation + 12 MP Ultra Wide; 2? optical-quality telephoto",
+        "Front camera": "12 MP TrueDepth camera with autofocus and Face ID",
+        "Video recording": "4K Dolby Vision up to 60 fps",
+        "Wireless connectivity": "5G; Wi-Fi 6; Bluetooth 5.3; NFC; second-generation Ultra Wideband",
+        "Water and dust resistance": "IP68, up to 6 m for 30 minutes under IEC 60529",
+        "Battery life": "Video playback up to 26 hours; streamed playback up to 20 hours",
+        "Connector": "USB-C with USB 2 data up to 480 Mb/s; MagSafe wireless charging up to 15 W"
+      }
+    },
+    {
+      "release_date": "2023-09-22",
+      "url": "https://www.apple.com/in/newsroom/2023/09/iphone-15-lineup-and-new-apple-watch-lineup-arrive-worldwide/",
+      "reviewed_on": "2026-10-26",
+      "brand": "Apple",
+      "type_id": "smartphones",
+      "name_pattern": "^(?:Apple )?iPhone 15 Pro(?!\\s+Max)\\b",
+      "scope": "Exact iPhone 15 Pro model across listed storage and finishes; excludes Pro Max.",
+      "verified_model": {
+        "name": "iPhone 15 Pro",
+        "family": "iPhone 15"
+      },
+      "specifications_url": "https://support.apple.com/en-in/111829",
+      "model_specifications": {
+        "Display": "6.1-inch Super Retina XDR OLED, 2556 ? 1179 at 460 ppi; Always-On; ProMotion up to 120 Hz",
+        "Processor": "Apple A17 Pro; 6-core CPU (2 performance + 4 efficiency)",
+        "Graphics": "6-core Apple GPU",
+        "Neural Engine": "16-core Neural Engine",
+        "Rear camera": "48 MP Main + 12 MP Ultra Wide + 12 MP 2? telephoto + 12 MP 3? telephoto; LiDAR Scanner",
+        "Front camera": "12 MP TrueDepth camera with autofocus and Face ID",
+        "Video recording": "4K Dolby Vision up to 60 fps; ProRes up to 4K 60 fps with external recording",
+        "Wireless connectivity": "5G; Wi-Fi 6E; Bluetooth 5.3; Thread; NFC; second-generation Ultra Wideband",
+        "Water and dust resistance": "IP68, up to 6 m for 30 minutes under IEC 60529",
+        "Battery life": "Video playback up to 23 hours; streamed playback up to 20 hours",
+        "Connector": "USB-C with USB 3 data up to 10 Gb/s; MagSafe and Qi2 wireless charging",
+        "Biometrics": "Face ID; LiDAR Scanner"
+      }
+    },
+    {
+      "release_date": "2023-09-22",
+      "url": "https://www.apple.com/in/newsroom/2023/09/iphone-15-lineup-and-new-apple-watch-lineup-arrive-worldwide/",
+      "reviewed_on": "2026-10-26",
+      "brand": "Apple",
+      "type_id": "smartphones",
+      "name_pattern": "^(?:Apple )?iPhone 15 Pro Max\\b",
+      "scope": "Exact iPhone 15 Pro Max model across listed storage and finishes.",
+      "verified_model": {
+        "name": "iPhone 15 Pro Max",
+        "family": "iPhone 15"
+      },
+      "specifications_url": "https://support.apple.com/en-in/111828",
+      "model_specifications": {
+        "Display": "6.7-inch Super Retina XDR OLED, 2796 ? 1290 at 460 ppi; Always-On; ProMotion up to 120 Hz",
+        "Processor": "Apple A17 Pro; 6-core CPU (2 performance + 4 efficiency)",
+        "Graphics": "6-core Apple GPU",
+        "Neural Engine": "16-core Neural Engine",
+        "Rear camera": "48 MP Main + 12 MP Ultra Wide + 12 MP 2? telephoto + 12 MP 5? tetraprism telephoto; LiDAR Scanner",
+        "Front camera": "12 MP TrueDepth camera with autofocus and Face ID",
+        "Video recording": "4K Dolby Vision up to 60 fps; ProRes up to 4K 60 fps with external recording",
+        "Wireless connectivity": "5G; Wi-Fi 6E; Bluetooth 5.3; Thread; NFC; second-generation Ultra Wideband",
+        "Water and dust resistance": "IP68, up to 6 m for 30 minutes under IEC 60529",
+        "Battery life": "Video playback up to 29 hours; streamed playback up to 25 hours",
+        "Connector": "USB-C with USB 3 data up to 10 Gb/s; MagSafe and Qi2 wireless charging",
+        "Biometrics": "Face ID; LiDAR Scanner"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "tablets",
+      "name_pattern": "\\bGalaxy Tab A11\\b",
+      "mpn_pattern": "^SM-X135GZAEINS$",
+      "release_date": "2025-09-19",
+      "url": "https://www.samsung.com/in/business/tablets/galaxy-tab-a/galaxy-tab-a11-gray-128gb-sm-x135gzaeins/",
+      "scope": "Exact Indian Galaxy Tab A11 8 GB/128 GB Wi-Fi+LTE part code SM-X135GZAEINS; Samsung India states launch date 19 September 2025.",
+      "reviewed_on": "2026-10-26",
+      "verified_model": {
+        "name": "Samsung Galaxy Tab A11",
+        "family": "Galaxy Tab A11"
+      },
+      "specifications_url": "https://www.samsung.com/in/business/tablets/galaxy-tab-a/galaxy-tab-a11-gray-128gb-sm-x135gzaeins/"
+    },
+    {
+      "brand": "Lenovo",
+      "type_id": "tablets",
+      "name_pattern": "\\bYoga Tab Plus\\b",
+      "mpn_pattern": "^ZAEG0042IN$",
+      "release_year": 2025,
+      "url": "https://news.lenovo.com/pressroom/press-releases/expand-and-empower-creativity-with-ai-enabled-new-lenovo-yoga-and-ideapad-devices/",
+      "scope": "Exact Yoga Tab Plus India part code ZAEG0042IN. Lenovo announced this model with expected availability beginning January 2025; stored at year precision because the precise India first-sale day is not stated.",
+      "reviewed_on": "2026-10-26",
+      "verified_model": {
+        "name": "Lenovo Yoga Tab Plus",
+        "family": "Yoga Tab Plus"
+      }
+    },
+    {
+      "brand": "ASUS",
+      "type_id": "desktops",
+      "name_pattern": "\\bNUC\\s*14\\s*Pro\\+\\b",
+      "mpn_pattern": "^90AR0051-M000E0$",
+      "release_year": 2024,
+      "url": "https://press.asus.com/news/press-releases/asus-nuc-14-pro-plus/",
+      "scope": "Exact ASUS NUC 14 Pro+ kit code 90AR0051-M000E0. ASUS announced the NUC 14 Pro+ on 8 July 2024; retained at year precision because the source does not establish an exact India release day.",
+      "reviewed_on": "2026-10-26",
+      "verified_model": {
+        "name": "ASUS NUC 14 Pro+",
+        "family": "ASUS NUC 14 Pro+"
+      }
+    },
+    {
+      "brand": "Lenovo",
+      "type_id": "laptops",
+      "name_pattern": "\\bYoga Slim 7\\b",
+      "mpn_pattern": "^83CV.*$",
+      "release_year": 2024,
+      "url": "https://www.lenovo.com/creator/news/post/announcing-the-2024-lenovo-yoga-ideapad-tab-and-more-fz664VDoBHDO17v",
+      "scope": "Lenovo Yoga Slim 7i (14-inch, Gen 9 / 14IMH9) hardware family identified by 83CV model codes. Lenovo announced expected availability beginning April 2024; retained at year precision.",
+      "reviewed_on": "2026-10-26",
+      "verified_model": {
+        "name": "Lenovo Yoga Slim 7i (14-inch, Gen 9)",
+        "family": "Yoga Slim 7i"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "televisions",
+      "name_pattern": "(?:\\bQN950F\\b|\\bQA\\d{2}QN950F[A-Z0-9]*)",
+      "release_date": "2025-05-07",
+      "url": "https://news.samsung.com/in/samsung-unveils-vision-ai-for-neo-qled-oled-qled-and-the-frame-tvs-bringing-intelligent-immersive-adaptive-screens-to-indian-consumers",
+      "scope": "Samsung India announced the 2025 Neo QLED 8K lineup and explicitly identifies QN950F; India pre-orders began 7 May 2025. Applies only to QN950F series model names or QA model codes.",
+      "reviewed_on": "2026-10-26",
+      "verified_model": {
+        "name": "Samsung QN950F Neo QLED 8K TV",
+        "family": "Samsung Neo QLED 8K TV"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "televisions",
+      "name_pattern": "(?:\\bQN90F\\b|\\bQA\\d{2}QN90F[A-Z0-9]*)",
+      "release_date": "2025-05-07",
+      "url": "https://news.samsung.com/in/samsung-unveils-vision-ai-for-neo-qled-oled-qled-and-the-frame-tvs-bringing-intelligent-immersive-adaptive-screens-to-indian-consumers",
+      "scope": "Samsung India names QN90F in its 2025 Neo QLED 4K lineup and states India pre-orders began 7 May 2025. Applies only to QN90F series model names or QA model codes.",
+      "reviewed_on": "2026-10-26",
+      "verified_model": {
+        "name": "Samsung QN90F Neo QLED 4K TV",
+        "family": "Samsung Neo QLED 4K TV"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "televisions",
+      "name_pattern": "(?:\\bQN85F\\b|\\bQA\\d{2}QN85F[A-Z0-9]*)",
+      "release_date": "2025-05-07",
+      "url": "https://news.samsung.com/in/samsung-unveils-vision-ai-for-neo-qled-oled-qled-and-the-frame-tvs-bringing-intelligent-immersive-adaptive-screens-to-indian-consumers",
+      "scope": "Samsung India names QN85F in its 2025 Neo QLED 4K lineup and states India pre-orders began 7 May 2025. Applies only to QN85F series model names or QA model codes.",
+      "reviewed_on": "2026-10-26",
+      "verified_model": {
+        "name": "Samsung QN85F Neo QLED 4K TV",
+        "family": "Samsung Neo QLED 4K TV"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "televisions",
+      "name_pattern": "(?:\\bQN80F\\b|\\bQA\\d{2}QN80F[A-Z0-9]*)",
+      "release_date": "2025-05-07",
+      "url": "https://news.samsung.com/in/samsung-unveils-vision-ai-for-neo-qled-oled-qled-and-the-frame-tvs-bringing-intelligent-immersive-adaptive-screens-to-indian-consumers",
+      "scope": "Samsung India names QN80F in its 2025 Neo QLED 4K lineup and states India pre-orders began 7 May 2025. Applies only to QN80F series model names or QA model codes.",
+      "reviewed_on": "2026-10-26",
+      "verified_model": {
+        "name": "Samsung QN80F Neo QLED 4K TV",
+        "family": "Samsung Neo QLED 4K TV"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "televisions",
+      "name_pattern": "(?:\\bQN70F\\b|\\bQA\\d{2}QN70F[A-Z0-9]*)",
+      "release_date": "2025-05-07",
+      "url": "https://news.samsung.com/in/samsung-unveils-vision-ai-for-neo-qled-oled-qled-and-the-frame-tvs-bringing-intelligent-immersive-adaptive-screens-to-indian-consumers",
+      "scope": "Samsung India names QN70F in its 2025 Neo QLED 4K lineup and states India pre-orders began 7 May 2025. Applies only to QN70F series model names or QA model codes.",
+      "reviewed_on": "2026-10-26",
+      "verified_model": {
+        "name": "Samsung QN70F Neo QLED 4K TV",
+        "family": "Samsung Neo QLED 4K TV"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "televisions",
+      "name_pattern": "(?:\\bR85H\\b|\\bMRA\\d{2,3}R85H[A-Z0-9]*)",
+      "release_date": "2026-05-26",
+      "url": "https://news.samsung.com/in/samsung-brings-2026-vision-ai-tv-lineup-in-india-launches-72-models-across-micro-rgb-oled-neo-qled-the-frame-mini-led-and-uhd-tvs",
+      "scope": "Samsung India launched its 2026 TV lineup on 26 May 2026 and explicitly lists Micro RGB R85H across 55?115 inch sizes. Applies only to R85H model names or MRA product codes.",
+      "reviewed_on": "2026-10-26",
+      "verified_model": {
+        "name": "Samsung R85H Micro RGB TV",
+        "family": "Samsung Micro RGB TV"
+      }
+    },
+    {
+      "brand": "Apple",
+      "type_id": "tablets",
+      "name_pattern": "^Apple iPad Pro 7th Gen 2024\\b",
+      "release_date": "2024-05-15",
+      "url": "https://www.apple.com/in/newsroom/2024/05/apple-unveils-stunning-new-ipad-pro-with-m4-chip-and-apple-pencil-pro/",
+      "scope": "Apple India announced order availability on 7 May 2024 and in-store availability from 15 May 2024. Reliance listing identifies this as iPad Pro 7th Gen 2024; applies only to the 2024 M4 iPad Pro generation.",
+      "reviewed_on": "2026-10-26",
+      "verified_model": {
+        "name": "Apple iPad Pro (M4, 2024)",
+        "family": "Apple iPad Pro M4"
+      }
+    },
+    {
+      "brand": "Microsoft",
+      "type_id": "laptops",
+      "name_pattern": "^Microsoft Surface 15 Windows Laptop \\(Qualcomm Snapdragon X2 Elite",
+      "mpn_pattern": "EP260[0-9]{3}",
+      "release_date": "2026-06-16",
+      "url": "https://blogs.windows.com/devices/2026/06/16/introducing-the-next-surface-pro-and-surface-laptop-built-for-performance-and-flexibility/",
+      "scope": "Microsoft Devices Blog says the Snapdragon X2 Surface Laptop 15-inch is available starting 16 June 2026. India retailer listings identify Surface 15 X2 Elite configurations; applies only to those 15-inch X2 Elite names with EP2-60xxx model codes.",
+      "reviewed_on": "2026-10-26",
+      "verified_model": {
+        "name": "Microsoft Surface Laptop 15 (Snapdragon X2 Elite, 2026)",
+        "family": "Microsoft Surface Laptop X2"
+      }
+    },
+    {
+      "brand": "OnePlus",
+      "type_id": "smartphones",
+      "name_pattern": "\\bOnePlus 15\\b(?!R)",
+      "mpn_pattern": "CPH2745",
+      "release_date": "2025-11-13",
+      "url": "https://www.youtube.com/watch?v=v69oThCzBCI",
+      "scope": "OnePlus India official launch stream was dated 13 November 2025; applies only to India retailer listings for model CPH2745 named OnePlus 15, not 15R.",
+      "reviewed_on": "2026-10-26",
+      "verified_model": {
+        "name": "OnePlus 15",
+        "family": "OnePlus 15"
+      }
+    },
+    {
+      "brand": "OnePlus",
+      "type_id": "smartphones",
+      "name_pattern": "\\bOnePlus 15R\\b",
+      "mpn_pattern": "CPH2767",
+      "release_date": "2025-12-17",
+      "url": "https://www.oneplus.in/launch/oneplus-15r",
+      "scope": "OnePlus India launch page states OnePlus 15R launched in Bengaluru on 17 December 2025; applies only to CPH2767 OnePlus 15R listings.",
+      "reviewed_on": "2026-10-26",
+      "verified_model": {
+        "name": "OnePlus 15R",
+        "family": "OnePlus 15R"
+      }
+    },
+    {
+      "brand": "OnePlus",
+      "type_id": "smartphones",
+      "name_pattern": "\\bOnePlus Nord CE6\\b(?!\\s+Lite)",
+      "mpn_pattern": "CPH2805",
+      "release_date": "2026-05-07",
+      "url": "https://community.oneplus.com/thread/2107576229249941513",
+      "scope": "OnePlus India Community launch announcement gives 7 May 2026; applies only to Nord CE6 model code CPH2805 and excludes CE6 Lite.",
+      "reviewed_on": "2026-10-26",
+      "verified_model": {
+        "name": "OnePlus Nord CE6",
+        "family": "OnePlus Nord CE6"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "televisions",
+      "name_pattern": "\\bQ7F\\b",
+      "mpn_pattern": "QA43Q7F[A-Z0-9]*",
+      "release_date": "2025-03-24",
+      "url": "https://www.samsung.com/in/tvs/qled-tv/q7f-43-inch-qled-4k-vision-ai-smart-tv-qa43q7faaulxl/",
+      "scope": "Samsung India product specifications list a 24 March 2025 launch date for the exact 43-inch Q7F variant.",
+      "reviewed_on": "2026-10-26",
+      "verified_model": {
+        "name": "Samsung Q7F 43-inch (2025)",
+        "family": "Samsung Q7F 2025"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "televisions",
+      "name_pattern": "\\bQ7F\\b",
+      "mpn_pattern": "QA50Q7F[A-Z0-9]*",
+      "release_date": "2025-03-24",
+      "url": "https://www.samsung.com/in/tvs/qled-tv/q7f-50-inch-qled-4k-vision-ai-smart-tv-qa50q7faaulxl/",
+      "scope": "Samsung India product page for the exact 50-inch Q7F lists a 24 March 2025 launch date.",
+      "reviewed_on": "2026-10-26",
+      "verified_model": {
+        "name": "Samsung Q7F 50-inch (2025)",
+        "family": "Samsung Q7F 2025"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "televisions",
+      "name_pattern": "\\bQ7F\\b",
+      "mpn_pattern": "QA55Q7F[A-Z0-9]*",
+      "release_date": "2025-03-24",
+      "url": "https://www.samsung.com/in/tvs/qled-tv/q7f-55-inch-qled-4k-vision-ai-smart-tv-qa55q7faaulxl/",
+      "scope": "Samsung India product page for the exact 55-inch Q7F lists a 24 March 2025 launch date.",
+      "reviewed_on": "2026-10-26",
+      "verified_model": {
+        "name": "Samsung Q7F 55-inch (2025)",
+        "family": "Samsung Q7F 2025"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "televisions",
+      "name_pattern": "\\bQ7F\\b",
+      "mpn_pattern": "QA65Q7F[A-Z0-9]*",
+      "release_date": "2025-03-24",
+      "url": "https://www.samsung.com/in/tvs/qled-tv/q7f-65-inch-qled-4k-vision-ai-smart-tv-qa65q7faaulxl/",
+      "scope": "Samsung India product page for the exact 65-inch Q7F lists a 24 March 2025 launch date.",
+      "reviewed_on": "2026-10-26",
+      "verified_model": {
+        "name": "Samsung Q7F 65-inch (2025)",
+        "family": "Samsung Q7F 2025"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "televisions",
+      "name_pattern": "\\bQ7F\\b",
+      "mpn_pattern": "QA75Q7F[A-Z0-9]*",
+      "release_date": "2025-04-21",
+      "url": "https://www.samsung.com/in/tvs/qled-tv/q7f-75-inch-qled-4k-vision-ai-smart-tv-qa75q7faauxxl/",
+      "scope": "Samsung India product specifications list a 21 April 2025 launch date for the exact 75-inch Q7F variant.",
+      "reviewed_on": "2026-10-26",
+      "verified_model": {
+        "name": "Samsung Q7F 75-inch (2025)",
+        "family": "Samsung Q7F 2025"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "televisions",
+      "name_pattern": "\\bQ7F\\b",
+      "mpn_pattern": "QA85Q7F[A-Z0-9]*",
+      "release_year": 2025,
+      "url": "https://www.samsung.com/in/support/model.QA85Q7FAAUXXL/",
+      "scope": "Samsung India support identifies the exact 85-inch Q7F as a 2025 model; no exact India launch day was published on the checked page, so only the year is recorded.",
+      "reviewed_on": "2026-10-26",
+      "verified_model": {
+        "name": "Samsung Q7F 85-inch (2025)",
+        "family": "Samsung Q7F 2025"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "televisions",
+      "name_pattern": "\\bQ8F\\b",
+      "mpn_pattern": "QA43Q8F[A-Z0-9]*",
+      "release_date": "2025-05-05",
+      "url": "https://www.samsung.com/in/tvs/qled-tv/q8f-43-inch-qled-4k-smart-tv-qa43q8faaulxl/",
+      "scope": "Samsung India Q8F 43-inch product page lists a 5 May 2025 launch date.",
+      "reviewed_on": "2026-10-26",
+      "verified_model": {
+        "name": "Samsung Q8F 43-inch (2025)",
+        "family": "Samsung Q8F 2025"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "televisions",
+      "name_pattern": "\\bQ8F\\b",
+      "mpn_pattern": "QA50Q8F[A-Z0-9]*",
+      "release_date": "2025-05-05",
+      "url": "https://www.samsung.com/in/tvs/qled-tv/q8f-50-inch-qled-4k-smart-tv-qa50q8faaulxl/",
+      "scope": "Samsung India Q8F 50-inch product page lists a 5 May 2025 launch date.",
+      "reviewed_on": "2026-10-26",
+      "verified_model": {
+        "name": "Samsung Q8F 50-inch (2025)",
+        "family": "Samsung Q8F 2025"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "televisions",
+      "name_pattern": "\\bQ8F\\b",
+      "mpn_pattern": "QA55Q8F[A-Z0-9]*",
+      "release_date": "2025-05-05",
+      "url": "https://www.samsung.com/in/tvs/qled-tv/q8f-55-inch-qled-4k-smart-tv-qa55q8faaulxl/",
+      "scope": "Samsung India Q8F 55-inch product page lists a 5 May 2025 launch date.",
+      "reviewed_on": "2026-10-26",
+      "verified_model": {
+        "name": "Samsung Q8F 55-inch (2025)",
+        "family": "Samsung Q8F 2025"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "televisions",
+      "name_pattern": "\\bQ8F\\b",
+      "mpn_pattern": "QA65Q8F[A-Z0-9]*",
+      "release_date": "2025-05-05",
+      "url": "https://www.samsung.com/in/tvs/qled-tv/q8f-65-inch-qled-4k-smart-tv-qa65q8faaulxl/",
+      "scope": "Samsung India Q8F 65-inch product page lists a 5 May 2025 launch date.",
+      "reviewed_on": "2026-10-26",
+      "verified_model": {
+        "name": "Samsung Q8F 65-inch (2025)",
+        "family": "Samsung Q8F 2025"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "televisions",
+      "name_pattern": "\\bQ8F\\b",
+      "mpn_pattern": "QA75Q8F[A-Z0-9]*",
+      "release_date": "2025-04-14",
+      "url": "https://www.samsung.com/in/tvs/qled-tv/q8f-75-inch-qled-4k-smart-tv-qa75q8faaulxl/",
+      "scope": "Samsung India Q8F 75-inch product page lists a 14 April 2025 launch date.",
+      "reviewed_on": "2026-10-26",
+      "verified_model": {
+        "name": "Samsung Q8F 75-inch (2025)",
+        "family": "Samsung Q8F 2025"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "televisions",
+      "name_pattern": "\\bQ8F\\b",
+      "mpn_pattern": "QA85Q8F[A-Z0-9]*",
+      "release_date": "2025-04-14",
+      "url": "https://www.samsung.com/in/tvs/qled-tv/q8f-85-inch-qled-4k-smart-tv-qa85q8faauxxl/",
+      "scope": "Samsung India product page for the exact 85-inch Q8F lists a 14 April 2025 launch date.",
+      "reviewed_on": "2026-10-26",
+      "verified_model": {
+        "name": "Samsung Q8F 85-inch (2025)",
+        "family": "Samsung Q8F 2025"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "televisions",
+      "name_pattern": "\\bU8600\\b",
+      "mpn_pattern": "UA43U8600F[A-Z0-9]*",
+      "release_date": "2025-03-10",
+      "url": "https://www.samsung.com/in/tvs/uhd-4k-tv/u8600f-43-inch-crystal-uhd-4k-smart-tv-ua43u8600fulxl/",
+      "scope": "Samsung India product page for the exact 43-inch U8600F lists a 10 March 2025 launch date.",
+      "reviewed_on": "2026-10-26",
+      "verified_model": {
+        "name": "Samsung U8600F 43-inch (2025)",
+        "family": "Samsung U8600F 2025"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "televisions",
+      "name_pattern": "\\bU8600\\b",
+      "mpn_pattern": "UA50U8600F[A-Z0-9]*",
+      "release_year": 2025,
+      "url": "https://www.samsung.com/in/tvs/uhd-4k-tv/u8600f-50-inch-crystal-uhd-4k-smart-tv-ua50u8600fulxl/",
+      "scope": "Samsung India identifies the exact 50-inch U8600F as a 2025 model; no exact launch day was found, so only the year is recorded.",
+      "reviewed_on": "2026-10-26",
+      "verified_model": {
+        "name": "Samsung U8600F 50-inch (2025)",
+        "family": "Samsung U8600F 2025"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "televisions",
+      "name_pattern": "\\bU8600\\b",
+      "mpn_pattern": "UA55U8600F[A-Z0-9]*",
+      "release_date": "2025-03-17",
+      "url": "https://www.samsung.com/in/tvs/uhd-4k-tv/u8600f-55-inch-crystal-uhd-4k-smart-tv-ua55u8600fulxl/",
+      "scope": "Samsung India product page for the exact 55-inch U8600F lists a 17 March 2025 launch date.",
+      "reviewed_on": "2026-10-26",
+      "verified_model": {
+        "name": "Samsung U8600F 55-inch (2025)",
+        "family": "Samsung U8600F 2025"
+      }
+    },
+    {
+      "brand": "Samsung",
+      "type_id": "televisions",
+      "name_pattern": "\\bU8600\\b",
+      "mpn_pattern": "UA65U8600F[A-Z0-9]*",
+      "release_date": "2025-03-24",
+      "url": "https://www.samsung.com/in/tvs/uhd-4k-tv/u8600f-65-inch-crystal-uhd-4k-smart-tv-ua65u8600fulxl/",
+      "scope": "Samsung India product page for the exact 65-inch U8600F lists a 24 March 2025 launch date.",
+      "reviewed_on": "2026-10-26",
+      "verified_model": {
+        "name": "Samsung U8600F 65-inch (2025)",
+        "family": "Samsung U8600F 2025"
+      }
+    },
+    {
+      "brand": "Apple",
+      "type_id": "desktops",
+      "release_date": "2026-09-22",
+      "url": "https://www.apple.com/in/newsroom/2026/09/the-new-mac-mini-and-mac-studio-are-available-today/",
+      "scope": "Mac mini with M6; Apple India availability starts 22 September 2026.",
+      "reviewed_on": "2026-10-26",
+      "name_pattern": "^.*\\bMac mini\\b.*\\bM6 chip\\b.*",
+      "verified_model": {
+        "name": "Mac mini M6",
+        "family": "Mac mini"
+      }
+    },
+    {
+      "brand": "Apple",
+      "type_id": "desktops",
+      "release_date": "2026-09-22",
+      "url": "https://www.apple.com/in/newsroom/2026/09/the-new-mac-mini-and-mac-studio-are-available-today/",
+      "scope": "Mac mini with M5 Pro; Apple India availability starts 22 September 2026.",
+      "reviewed_on": "2026-10-26",
+      "name_pattern": "^.*\\bMac mini\\b.*\\bM5 Pro chip\\b.*",
+      "verified_model": {
+        "name": "Mac mini M5 Pro",
+        "family": "Mac mini"
+      }
+    },
+    {
+      "brand": "Apple",
+      "type_id": "desktops",
+      "release_date": "2026-09-22",
+      "url": "https://www.apple.com/in/newsroom/2026/09/the-new-mac-mini-and-mac-studio-are-available-today/",
+      "scope": "Mac Studio with M5 Ultra; Apple India availability starts 22 September 2026.",
+      "reviewed_on": "2026-10-26",
+      "name_pattern": "^.*\\bMac Studio\\b.*\\bM5 Ultra chip\\b.*",
+      "verified_model": {
+        "name": "Mac Studio M5 Ultra",
+        "family": "Mac Studio"
+      }
+    }
+  ]
+}

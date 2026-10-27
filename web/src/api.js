@@ -66,6 +66,7 @@ export const api = {
   products: (token, query = '', limit = 250, offset = 0, category = '', brand = '') =>
     request(`/products?q=${encodeURIComponent(query)}&limit=${limit}&offset=${offset}&category=${encodeURIComponent(category)}&brand=${encodeURIComponent(brand)}`, { token }),
   adminProducts: (token, filters) => request(`/admin/products?${queryString(filters)}`, {token}),
+  catalogTaxonomy: token => request('/catalog/taxonomy', {token}),
   catalogSearch: (token, filters) => request(`/catalog/search?${queryString(filters)}`, {token}),
   productSources: token => request('/admin/product-sources',{token}),
   createProductSource: (token,payload)=>request('/admin/product-sources',{token,method:'POST',body:payload}),
@@ -117,6 +118,7 @@ export const api = {
     request(id ? `/buyer/locations/${id}` : '/buyer/locations', { token, method: id ? 'PUT' : 'POST', body: location }),
   setDefaultBuyerLocation: (token, id) => request(`/buyer/locations/${id}/default`, { token, method: 'POST' }),
   deleteBuyerLocation: (token, id) => request(`/buyer/locations/${id}`, { token, method: 'DELETE' }),
+  createCustomProduct: (token, payload) => request('/buyer/custom-products', {token, method:'POST', body:payload}),
   startBid: (token, payload) => request('/buyer/bids', { token, method: 'POST', body: payload }),
   buyerRequests: (token) => request('/buyer/requests?include_closed=true', { token }),
   cancelBuyerRequest: (token, id) => request(`/buyer/requests/${id}`, { token, method: 'DELETE' }),

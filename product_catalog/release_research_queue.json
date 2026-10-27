@@ -1,0 +1,2176 @@
+{
+  "generated_at": "2026-10-26T04:49:47",
+  "rolling_cutoff": "2022-10-26",
+  "models_requiring_research": 12319,
+  "variants_covered": 16970,
+  "excluded": {
+    "restricted_or_promotional_parent": 455,
+    "not_current_new_india_listing": 1232,
+    "product_type_or_condition_review": 14763
+  },
+  "by_type": {
+    "microwaves": 44,
+    "routers": 139,
+    "processors": 159,
+    "water_heaters": 84,
+    "dishwashers": 20,
+    "graphics_cards": 339,
+    "freezers": 19,
+    "motherboards": 393,
+    "cameras": 31,
+    "desktops": 155,
+    "smartphones": 535,
+    "projectors": 115,
+    "ups": 52,
+    "washers": 212,
+    "printers": 379,
+    "televisions": 169,
+    "tablets": 307,
+    "laptops": 542,
+    "monitors": 618,
+    "air_conditioners": 116,
+    "refrigerators": 247,
+    "hard_drives": 284,
+    "led_bulbs": 47,
+    "usb_drives": 36,
+    "switches": 3,
+    "coffee_machines": 11,
+    "air_purifiers": 63,
+    "air_coolers": 91,
+    "vacuum_cleaners": 96,
+    "smartwatches": 896,
+    "earbuds": 550,
+    "headphones": 430,
+    "ram": 593,
+    "soundbars": 259,
+    "network_switches": 118,
+    "ssds": 514,
+    "speakers": 281,
+    "kettles": 14,
+    "juicers": 20,
+    "shavers": 2,
+    "smart_plugs": 5,
+    "chimneys": 21,
+    "gaming_headsets": 43,
+    "hair_dryers": 36,
+    "camera_lenses": 107,
+    "choppers": 4,
+    "multi_cookers": 1,
+    "gaming_keyboards": 68,
+    "game_controllers": 49,
+    "hair_stylers": 14,
+    "cooktops": 54,
+    "toothbrushes": 10,
+    "humidifiers": 10,
+    "sandwich_makers": 11,
+    "air_fryers": 37,
+    "pc_cases": 114,
+    "ovens": 20,
+    "blenders": 19,
+    "garment_steamers": 14,
+    "writing_tablets": 21,
+    "irons": 73,
+    "memory_cards": 46,
+    "power_strips": 63,
+    "mixers": 65,
+    "pc_cooling": 256,
+    "microphones": 32,
+    "voip_phones": 69,
+    "gaming_mice": 132,
+    "trimmers": 36,
+    "massagers": 44,
+    "scanners": 96,
+    "earphones": 146,
+    "nas": 122,
+    "keyboards": 134,
+    "network_adapters": 64,
+    "security_recorders": 33,
+    "usb_hubs": 153,
+    "mice": 411,
+    "fans": 228,
+    "power_banks": 90,
+    "chargers": 220,
+    "security_cameras": 165
+  },
+  "method": [
+    "Search exact manufacturer model once, then apply evidence only to matching variants.",
+    "Use manufacturer press releases, model specifications and explicit Icecat release fields.",
+    "Do not substitute page publication, sitemap modification, catalog-added or certification dates.",
+    "Keep unresolved dates pending; do not invent a day from a year.",
+    "Recheck exact India offers, variant specifications, identity and image before publishing."
+  ],
+  "next_models": [
+    {
+      "id": "37b85ceeb75f930161f35dfa3190bba9d5b273ee005fcfe2c0e8fbb8755f4567",
+      "brand": "Voltas",
+      "type_id": "microwaves",
+      "model": "20 L Convection Microwave Oven, 10 power levels (MC20SD, Silver) , Voltas Beko, A Tata Product",
+      "offer_urls": [
+        "https://www.voltas.com/products/20-l-convection-microwave-oven-10-power-levels-mc20sd-silver-voltas-beko-a-tata-product?variant=40072459026618"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "site:voltas.com \"20 L Convection Microwave Oven, 10 power levels (MC20SD, Silver) , Voltas Beko, A Tata Product\" launch",
+        "\"Voltas\" \"20 L Convection Microwave Oven, 10 power levels (MC20SD, Silver) , Voltas Beko, A Tata Product\" launch release date",
+        "\"Voltas\" \"20 L Convection Microwave Oven, 10 power levels (MC20SD, Silver) , Voltas Beko, A Tata Product\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=site%3Avoltas.com+%2220+L+Convection+Microwave+Oven%2C+10+power+levels+%28MC20SD%2C+Silver%29+%2C+Voltas+Beko%2C+A+Tata+Product%22+launch",
+        "https://www.google.com/search?q=%22Voltas%22+%2220+L+Convection+Microwave+Oven%2C+10+power+levels+%28MC20SD%2C+Silver%29+%2C+Voltas+Beko%2C+A+Tata+Product%22+launch+release+date",
+        "https://www.google.com/search?q=%22Voltas%22+%2220+L+Convection+Microwave+Oven%2C+10+power+levels+%28MC20SD%2C+Silver%29+%2C+Voltas+Beko%2C+A+Tata+Product%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "b3b5b04b1f651c9c1fa7616a3edaa7209e2b2819be48606eb8fe3b4b2876d796",
+      "brand": "Voltas",
+      "type_id": "microwaves",
+      "model": "20 L Smart Solo Microwave Oven (MS20MPW10, White | With Anti bacterial Inner Cavity and Large Turntable) , Voltas Beko, A Tata Product",
+      "offer_urls": [
+        "https://www.voltas.com/products/20-l-smart-solo-microwave-oven-ms20mpw10-white-with-anti-bacterial-inner-cavity-and-large-turntable-voltas-beko-a-tata-product?variant=40072458993850"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "site:voltas.com \"20 L Smart Solo Microwave Oven (MS20MPW10, White | With Anti bacterial Inner Cavity and Large Turntable) , Voltas Beko, A Tata Product\" launch",
+        "\"Voltas\" \"20 L Smart Solo Microwave Oven (MS20MPW10, White | With Anti bacterial Inner Cavity and Large Turntable) , Voltas Beko, A Tata Product\" launch release date",
+        "\"Voltas\" \"20 L Smart Solo Microwave Oven (MS20MPW10, White | With Anti bacterial Inner Cavity and Large Turntable) , Voltas Beko, A Tata Product\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=site%3Avoltas.com+%2220+L+Smart+Solo+Microwave+Oven+%28MS20MPW10%2C+White+%7C+With+Anti+bacterial+Inner+Cavity+and+Large+Turntable%29+%2C+Voltas+Beko%2C+A+Tata+Product%22+launch",
+        "https://www.google.com/search?q=%22Voltas%22+%2220+L+Smart+Solo+Microwave+Oven+%28MS20MPW10%2C+White+%7C+With+Anti+bacterial+Inner+Cavity+and+Large+Turntable%29+%2C+Voltas+Beko%2C+A+Tata+Product%22+launch+release+date",
+        "https://www.google.com/search?q=%22Voltas%22+%2220+L+Smart+Solo+Microwave+Oven+%28MS20MPW10%2C+White+%7C+With+Anti+bacterial+Inner+Cavity+and+Large+Turntable%29+%2C+Voltas+Beko%2C+A+Tata+Product%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "c0d674592bfc9200878d1bf46398e7623975354a4d947c2ece7c23e1de797c9e",
+      "brand": "ASUS",
+      "type_id": "routers",
+      "model": "ASUS AX3000 Dual Band WiFi 6 Router with AiProtection and Compatible with ASUS AiMesh WiFi System",
+      "offer_urls": [
+        "https://www.tpstech.in/products/asus-ax3000-dual-band-wifi-6-router-with-aiprotection-black?variant=39534111653966"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "site:asus.com/in \"ASUS AX3000 Dual Band WiFi 6 Router with AiProtection and Compatible with ASUS AiMesh WiFi System\" launch",
+        "\"ASUS\" \"ASUS AX3000 Dual Band WiFi 6 Router with AiProtection and Compatible with ASUS AiMesh WiFi System\" launch release date",
+        "\"ASUS\" \"ASUS AX3000 Dual Band WiFi 6 Router with AiProtection and Compatible with ASUS AiMesh WiFi System\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=site%3Aasus.com%2Fin+%22ASUS+AX3000+Dual+Band+WiFi+6+Router+with+AiProtection+and+Compatible+with+ASUS+AiMesh+WiFi+System%22+launch",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+AX3000+Dual+Band+WiFi+6+Router+with+AiProtection+and+Compatible+with+ASUS+AiMesh+WiFi+System%22+launch+release+date",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+AX3000+Dual+Band+WiFi+6+Router+with+AiProtection+and+Compatible+with+ASUS+AiMesh+WiFi+System%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "4f7c9a25e6e7ffdb77c9ed2ea5183d3c5e610a5442a687937543452d4d1c36e3",
+      "brand": "ASUS",
+      "type_id": "routers",
+      "model": "ASUS AX5700 RT-AX86U Pro Dual Band AiMesh WiFi 6 Extendable Gaming Router - Black",
+      "offer_urls": [
+        "https://www.tpstech.in/products/asus-ax5700-rt-ax86u-pro-dual-band-wifi-6-gaming-router?variant=51159608557871"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "site:asus.com/in \"ASUS AX5700 RT-AX86U Pro Dual Band AiMesh WiFi 6 Extendable Gaming Router - Black\" launch",
+        "\"ASUS\" \"ASUS AX5700 RT-AX86U Pro Dual Band AiMesh WiFi 6 Extendable Gaming Router - Black\" launch release date",
+        "\"ASUS\" \"ASUS AX5700 RT-AX86U Pro Dual Band AiMesh WiFi 6 Extendable Gaming Router - Black\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=site%3Aasus.com%2Fin+%22ASUS+AX5700+RT-AX86U+Pro+Dual+Band+AiMesh+WiFi+6+Extendable+Gaming+Router+-+Black%22+launch",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+AX5700+RT-AX86U+Pro+Dual+Band+AiMesh+WiFi+6+Extendable+Gaming+Router+-+Black%22+launch+release+date",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+AX5700+RT-AX86U+Pro+Dual+Band+AiMesh+WiFi+6+Extendable+Gaming+Router+-+Black%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "f623019dd3c3b54676d11bc3a87c9ae73ea744073d44e7f8e1ce944b5b18d30e",
+      "brand": "ASUS",
+      "type_id": "routers",
+      "model": "ASUS GT-AC5300 ROG Rapture Tri-band WiFi Gaming Router with Quad-Core Processor",
+      "offer_urls": [
+        "https://www.tpstech.in/products/asus-gt-ac5300-rog-rapture-tri-band-wifi-gaming-router-with-a-quad-core-processor?variant=32009243426894"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "site:asus.com/in \"ASUS GT-AC5300 ROG Rapture Tri-band WiFi Gaming Router with Quad-Core Processor\" launch",
+        "\"ASUS\" \"ASUS GT-AC5300 ROG Rapture Tri-band WiFi Gaming Router with Quad-Core Processor\" launch release date",
+        "\"ASUS\" \"ASUS GT-AC5300 ROG Rapture Tri-band WiFi Gaming Router with Quad-Core Processor\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=site%3Aasus.com%2Fin+%22ASUS+GT-AC5300+ROG+Rapture+Tri-band+WiFi+Gaming+Router+with+Quad-Core+Processor%22+launch",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+GT-AC5300+ROG+Rapture+Tri-band+WiFi+Gaming+Router+with+Quad-Core+Processor%22+launch+release+date",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+GT-AC5300+ROG+Rapture+Tri-band+WiFi+Gaming+Router+with+Quad-Core+Processor%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "78c93a90b05a4319176f9eeaf6507f4e1c34851691846bf7eac2a897cc3bcb37",
+      "brand": "ASUS",
+      "type_id": "routers",
+      "model": "ASUS GT-AX11000 ROG Rapture Tri-band WiFi Gaming Router with a Quad-Core Processor",
+      "offer_urls": [
+        "https://www.tpstech.in/products/asus-gt-ax11000-rog-rapture-tri-band-wifi-gaming-router-with-a-quad-core-processor?variant=31991546871886"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "site:asus.com/in \"ASUS GT-AX11000 ROG Rapture Tri-band WiFi Gaming Router with a Quad-Core Processor\" launch",
+        "\"ASUS\" \"ASUS GT-AX11000 ROG Rapture Tri-band WiFi Gaming Router with a Quad-Core Processor\" launch release date",
+        "\"ASUS\" \"ASUS GT-AX11000 ROG Rapture Tri-band WiFi Gaming Router with a Quad-Core Processor\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=site%3Aasus.com%2Fin+%22ASUS+GT-AX11000+ROG+Rapture+Tri-band+WiFi+Gaming+Router+with+a+Quad-Core+Processor%22+launch",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+GT-AX11000+ROG+Rapture+Tri-band+WiFi+Gaming+Router+with+a+Quad-Core+Processor%22+launch+release+date",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+GT-AX11000+ROG+Rapture+Tri-band+WiFi+Gaming+Router+with+a+Quad-Core+Processor%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "38355d2e244d7bf235b2fcb35c9435aa04b0acfcebfb3327260d23ca78bcbcb4",
+      "brand": "ASUS",
+      "type_id": "routers",
+      "model": "ASUS ROG Rapture GT-AX11000 Tri-Band WiFi 6 Gaming Router – 10 Gigabit Speeds, Triple-Level Game Acceleration, Aura RGB, AiMesh Support",
+      "offer_urls": [
+        "https://www.tpstech.in/products/asus-gt-ax11000pro-wifi6-gaming-router?variant=51740683600175"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "site:asus.com/in \"ASUS ROG Rapture GT-AX11000 Tri-Band WiFi 6 Gaming Router – 10 Gigabit Speeds, Triple-Level Game Acceleration, Aura RGB, AiMesh Support\" launch",
+        "\"ASUS\" \"ASUS ROG Rapture GT-AX11000 Tri-Band WiFi 6 Gaming Router – 10 Gigabit Speeds, Triple-Level Game Acceleration, Aura RGB, AiMesh Support\" launch release date",
+        "\"ASUS\" \"ASUS ROG Rapture GT-AX11000 Tri-Band WiFi 6 Gaming Router – 10 Gigabit Speeds, Triple-Level Game Acceleration, Aura RGB, AiMesh Support\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=site%3Aasus.com%2Fin+%22ASUS+ROG+Rapture+GT-AX11000+Tri-Band+WiFi+6+Gaming+Router+%E2%80%93+10+Gigabit+Speeds%2C+Triple-Level+Game+Acceleration%2C+Aura+RGB%2C+AiMesh+Support%22+launch",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+ROG+Rapture+GT-AX11000+Tri-Band+WiFi+6+Gaming+Router+%E2%80%93+10+Gigabit+Speeds%2C+Triple-Level+Game+Acceleration%2C+Aura+RGB%2C+AiMesh+Support%22+launch+release+date",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+ROG+Rapture+GT-AX11000+Tri-Band+WiFi+6+Gaming+Router+%E2%80%93+10+Gigabit+Speeds%2C+Triple-Level+Game+Acceleration%2C+Aura+RGB%2C+AiMesh+Support%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "b695e2c17f046a918f677bddf6294001d84f7122aab3c9544b7ca22f163bf80e",
+      "brand": "ASUS",
+      "type_id": "routers",
+      "model": "ASUS ROG Rapture GT‐AX11000 Pro Tri‐Band WiFi 6 Gaming Router",
+      "offer_urls": [
+        "https://www.tpstech.in/products/rog-rapture-gt-ax11000-pro-gaming-router?variant=54194618695983"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "site:asus.com/in \"ASUS ROG Rapture GT‐AX11000 Pro Tri‐Band WiFi 6 Gaming Router\" launch",
+        "\"ASUS\" \"ASUS ROG Rapture GT‐AX11000 Pro Tri‐Band WiFi 6 Gaming Router\" launch release date",
+        "\"ASUS\" \"ASUS ROG Rapture GT‐AX11000 Pro Tri‐Band WiFi 6 Gaming Router\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=site%3Aasus.com%2Fin+%22ASUS+ROG+Rapture+GT%E2%80%90AX11000+Pro+Tri%E2%80%90Band+WiFi+6+Gaming+Router%22+launch",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+ROG+Rapture+GT%E2%80%90AX11000+Pro+Tri%E2%80%90Band+WiFi+6+Gaming+Router%22+launch+release+date",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+ROG+Rapture+GT%E2%80%90AX11000+Pro+Tri%E2%80%90Band+WiFi+6+Gaming+Router%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "6ba7d5c68843623129898c1d92d9847a50fe20cc5f66b96c7966084d42b1fc5c",
+      "brand": "ASUS",
+      "type_id": "routers",
+      "model": "ASUS ROG Rapture GT‐AX6000 Dual Band WiFi 6 Gaming Router",
+      "offer_urls": [
+        "https://www.tpstech.in/products/asus-rog-rapture-gt-ax6000-router?variant=54195953172783"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "site:asus.com/in \"ASUS ROG Rapture GT‐AX6000 Dual Band WiFi 6 Gaming Router\" launch",
+        "\"ASUS\" \"ASUS ROG Rapture GT‐AX6000 Dual Band WiFi 6 Gaming Router\" launch release date",
+        "\"ASUS\" \"ASUS ROG Rapture GT‐AX6000 Dual Band WiFi 6 Gaming Router\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=site%3Aasus.com%2Fin+%22ASUS+ROG+Rapture+GT%E2%80%90AX6000+Dual+Band+WiFi+6+Gaming+Router%22+launch",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+ROG+Rapture+GT%E2%80%90AX6000+Dual+Band+WiFi+6+Gaming+Router%22+launch+release+date",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+ROG+Rapture+GT%E2%80%90AX6000+Dual+Band+WiFi+6+Gaming+Router%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "ee68caeb16869f52658a4fb6c24879f8cb7aa21a5fce7ebdbc58ad8e52631ac1",
+      "brand": "ASUS",
+      "type_id": "routers",
+      "model": "ASUS RT-AC53 AC750 Dual Band Gigabit WiFi Router",
+      "offer_urls": [
+        "https://www.tpstech.in/products/asus-rt-ac53-ac750-dual-band-gigabit-wifi-router-with-high-power-design?variant=31969520091214"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "site:asus.com/in \"ASUS RT-AC53 AC750 Dual Band Gigabit WiFi Router\" launch",
+        "\"ASUS\" \"ASUS RT-AC53 AC750 Dual Band Gigabit WiFi Router\" launch release date",
+        "\"ASUS\" \"ASUS RT-AC53 AC750 Dual Band Gigabit WiFi Router\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=site%3Aasus.com%2Fin+%22ASUS+RT-AC53+AC750+Dual+Band+Gigabit+WiFi+Router%22+launch",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+RT-AC53+AC750+Dual+Band+Gigabit+WiFi+Router%22+launch+release+date",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+RT-AC53+AC750+Dual+Band+Gigabit+WiFi+Router%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "15b84efe173ee80c1798851eb254d9c6cc265d20ee33c762c1ac85cc6d0deb3b",
+      "brand": "ASUS",
+      "type_id": "routers",
+      "model": "ASUS RT-AC5300 Tri-Band Gigabit WiFi Gaming Router with MU-MIMO, AiProtection and AiMesh",
+      "offer_urls": [
+        "https://www.tpstech.in/products/asus-rt-ac5300-tri-band-gigabit-wifi-gaming-router-with-mu-mimo-aiprotection-and-aimesh?variant=32013082067022"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "site:asus.com/in \"ASUS RT-AC5300 Tri-Band Gigabit WiFi Gaming Router with MU-MIMO, AiProtection and AiMesh\" launch",
+        "\"ASUS\" \"ASUS RT-AC5300 Tri-Band Gigabit WiFi Gaming Router with MU-MIMO, AiProtection and AiMesh\" launch release date",
+        "\"ASUS\" \"ASUS RT-AC5300 Tri-Band Gigabit WiFi Gaming Router with MU-MIMO, AiProtection and AiMesh\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=site%3Aasus.com%2Fin+%22ASUS+RT-AC5300+Tri-Band+Gigabit+WiFi+Gaming+Router+with+MU-MIMO%2C+AiProtection+and+AiMesh%22+launch",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+RT-AC5300+Tri-Band+Gigabit+WiFi+Gaming+Router+with+MU-MIMO%2C+AiProtection+and+AiMesh%22+launch+release+date",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+RT-AC5300+Tri-Band+Gigabit+WiFi+Gaming+Router+with+MU-MIMO%2C+AiProtection+and+AiMesh%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "8b06951d42314a7a9b953beb0d171890b1733567b79c724d9a34df246b5cbb55",
+      "brand": "ASUS",
+      "type_id": "routers",
+      "model": "ASUS RT-AC59U Dual Band Gigabit WiFi Router with MU-MIMO and Parental Controls",
+      "offer_urls": [
+        "https://www.tpstech.in/products/asus-rt-ac59u-dual-band-gigabit-wifi-router-with-mu-mimo-and-parental-controls?variant=31954559172686"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "site:asus.com/in \"ASUS RT-AC59U Dual Band Gigabit WiFi Router with MU-MIMO and Parental Controls\" launch",
+        "\"ASUS\" \"ASUS RT-AC59U Dual Band Gigabit WiFi Router with MU-MIMO and Parental Controls\" launch release date",
+        "\"ASUS\" \"ASUS RT-AC59U Dual Band Gigabit WiFi Router with MU-MIMO and Parental Controls\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=site%3Aasus.com%2Fin+%22ASUS+RT-AC59U+Dual+Band+Gigabit+WiFi+Router+with+MU-MIMO+and+Parental+Controls%22+launch",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+RT-AC59U+Dual+Band+Gigabit+WiFi+Router+with+MU-MIMO+and+Parental+Controls%22+launch+release+date",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+RT-AC59U+Dual+Band+Gigabit+WiFi+Router+with+MU-MIMO+and+Parental+Controls%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "eecb0f12350eb7bf3a8f2724e634a0ae0dac5f3d27121938b5f2423cc5a89863",
+      "brand": "ASUS",
+      "type_id": "routers",
+      "model": "ASUS RT-AC66U AC1750 Dual Band Gigabit 802.11ac WiFi Router with new ASUS AiCloud service",
+      "offer_urls": [
+        "https://www.tpstech.in/products/asus-rt-ac66u-ac1750-dual-band-gigabit-802-11ac-wifi-router-with-new-asus-aicloud-service?variant=31983270428750"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "site:asus.com/in \"ASUS RT-AC66U AC1750 Dual Band Gigabit 802.11ac WiFi Router with new ASUS AiCloud service\" launch",
+        "\"ASUS\" \"ASUS RT-AC66U AC1750 Dual Band Gigabit 802.11ac WiFi Router with new ASUS AiCloud service\" launch release date",
+        "\"ASUS\" \"ASUS RT-AC66U AC1750 Dual Band Gigabit 802.11ac WiFi Router with new ASUS AiCloud service\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=site%3Aasus.com%2Fin+%22ASUS+RT-AC66U+AC1750+Dual+Band+Gigabit+802.11ac+WiFi+Router+with+new+ASUS+AiCloud+service%22+launch",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+RT-AC66U+AC1750+Dual+Band+Gigabit+802.11ac+WiFi+Router+with+new+ASUS+AiCloud+service%22+launch+release+date",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+RT-AC66U+AC1750+Dual+Band+Gigabit+802.11ac+WiFi+Router+with+new+ASUS+AiCloud+service%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "9d59d5b33735391d1c4c5ce5a92a5337e5e0a7efded79511e9554bcc2f6ffb5f",
+      "brand": "ASUS",
+      "type_id": "routers",
+      "model": "ASUS RT-AC66U B1 AC1750 Dual Band Gigabit WiFi Router with AiProtection Adaptive QoS and Parental Control",
+      "offer_urls": [
+        "https://www.tpstech.in/products/asus-rt-ac66u-b1-ac1750-dual-band-gigabit-wifi-router-with-aiprotection-adaptive-qos-and-parental-control?variant=31977268674638"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "site:asus.com/in \"ASUS RT-AC66U B1 AC1750 Dual Band Gigabit WiFi Router with AiProtection Adaptive QoS and Parental Control\" launch",
+        "\"ASUS\" \"ASUS RT-AC66U B1 AC1750 Dual Band Gigabit WiFi Router with AiProtection Adaptive QoS and Parental Control\" launch release date",
+        "\"ASUS\" \"ASUS RT-AC66U B1 AC1750 Dual Band Gigabit WiFi Router with AiProtection Adaptive QoS and Parental Control\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=site%3Aasus.com%2Fin+%22ASUS+RT-AC66U+B1+AC1750+Dual+Band+Gigabit+WiFi+Router+with+AiProtection+Adaptive+QoS+and+Parental+Control%22+launch",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+RT-AC66U+B1+AC1750+Dual+Band+Gigabit+WiFi+Router+with+AiProtection+Adaptive+QoS+and+Parental+Control%22+launch+release+date",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+RT-AC66U+B1+AC1750+Dual+Band+Gigabit+WiFi+Router+with+AiProtection+Adaptive+QoS+and+Parental+Control%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "e87751e33c98a3b8b2ff4e4f727154db6989b40f7a2a74a34c11b61ae3588cad",
+      "brand": "ASUS",
+      "type_id": "routers",
+      "model": "ASUS RT-AC68U (Pack of 2) AC1900 Dual Band Gigabit WiFi Router with AiMesh and AiProtection support",
+      "offer_urls": [
+        "https://www.tpstech.in/products/asus-rt-ac68u-pack-of-2-ac1900-dual-band-gigabit-wifi-router-with-aimesh-and-aiprotection-support?variant=32027822096462"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "site:asus.com/in \"ASUS RT-AC68U (Pack of 2) AC1900 Dual Band Gigabit WiFi Router with AiMesh and AiProtection support\" launch",
+        "\"ASUS\" \"ASUS RT-AC68U (Pack of 2) AC1900 Dual Band Gigabit WiFi Router with AiMesh and AiProtection support\" launch release date",
+        "\"ASUS\" \"ASUS RT-AC68U (Pack of 2) AC1900 Dual Band Gigabit WiFi Router with AiMesh and AiProtection support\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=site%3Aasus.com%2Fin+%22ASUS+RT-AC68U+%28Pack+of+2%29+AC1900+Dual+Band+Gigabit+WiFi+Router+with+AiMesh+and+AiProtection+support%22+launch",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+RT-AC68U+%28Pack+of+2%29+AC1900+Dual+Band+Gigabit+WiFi+Router+with+AiMesh+and+AiProtection+support%22+launch+release+date",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+RT-AC68U+%28Pack+of+2%29+AC1900+Dual+Band+Gigabit+WiFi+Router+with+AiMesh+and+AiProtection+support%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "c9e749fca9b7dd0b82b1cc52ada145b5412d3375ead08b9b43fb6f98ce925e3f",
+      "brand": "ASUS",
+      "type_id": "routers",
+      "model": "ASUS RT-AC68U AC1900 Dual Band Gigabit WiFi Router with MU-MIMO AiMesh AiProtection and Parental Control",
+      "offer_urls": [
+        "https://www.tpstech.in/products/asus-rt-ac68u-ac1900-dual-band-gigabit-wifi-router-with-mu-mimo-aimesh-aiprotection-and-parental-control?variant=31969845608526"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "site:asus.com/in \"ASUS RT-AC68U AC1900 Dual Band Gigabit WiFi Router with MU-MIMO AiMesh AiProtection and Parental Control\" launch",
+        "\"ASUS\" \"ASUS RT-AC68U AC1900 Dual Band Gigabit WiFi Router with MU-MIMO AiMesh AiProtection and Parental Control\" launch release date",
+        "\"ASUS\" \"ASUS RT-AC68U AC1900 Dual Band Gigabit WiFi Router with MU-MIMO AiMesh AiProtection and Parental Control\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=site%3Aasus.com%2Fin+%22ASUS+RT-AC68U+AC1900+Dual+Band+Gigabit+WiFi+Router+with+MU-MIMO+AiMesh+AiProtection+and+Parental+Control%22+launch",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+RT-AC68U+AC1900+Dual+Band+Gigabit+WiFi+Router+with+MU-MIMO+AiMesh+AiProtection+and+Parental+Control%22+launch+release+date",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+RT-AC68U+AC1900+Dual+Band+Gigabit+WiFi+Router+with+MU-MIMO+AiMesh+AiProtection+and+Parental+Control%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "95c4a07596071b415f1216da5caeacc25d12c47bd54ed1301260c253676d2b12",
+      "brand": "ASUS",
+      "type_id": "routers",
+      "model": "ASUS RT-AC86U (Pack of 2) AC2900 Dual Band Gigabit WiFi Router with AiMesh and AiProtection Support",
+      "offer_urls": [
+        "https://www.tpstech.in/products/asus-rt-ac86u-pack-of-2-ac2900-dual-band-gigabit-wifi-router-with-aimesh-and-aiprotection-support?variant=32028153544782"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "site:asus.com/in \"ASUS RT-AC86U (Pack of 2) AC2900 Dual Band Gigabit WiFi Router with AiMesh and AiProtection Support\" launch",
+        "\"ASUS\" \"ASUS RT-AC86U (Pack of 2) AC2900 Dual Band Gigabit WiFi Router with AiMesh and AiProtection Support\" launch release date",
+        "\"ASUS\" \"ASUS RT-AC86U (Pack of 2) AC2900 Dual Band Gigabit WiFi Router with AiMesh and AiProtection Support\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=site%3Aasus.com%2Fin+%22ASUS+RT-AC86U+%28Pack+of+2%29+AC2900+Dual+Band+Gigabit+WiFi+Router+with+AiMesh+and+AiProtection+Support%22+launch",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+RT-AC86U+%28Pack+of+2%29+AC2900+Dual+Band+Gigabit+WiFi+Router+with+AiMesh+and+AiProtection+Support%22+launch+release+date",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+RT-AC86U+%28Pack+of+2%29+AC2900+Dual+Band+Gigabit+WiFi+Router+with+AiMesh+and+AiProtection+Support%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "e4d4457cbb28aaac20de693a633048acda4b8b9e32fc68af0018c9dfff86f479",
+      "brand": "ASUS",
+      "type_id": "routers",
+      "model": "ASUS RT-AC86U AC2900 Dual Band Gigabit Gaming WiFi Router with MU-MIMO AiMesh AiProtection and WTFast game accelerator",
+      "offer_urls": [
+        "https://www.tpstech.in/products/asus-rt-ac86u-ac2900-dual-band-wifi-router?variant=31979376148558"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "site:asus.com/in \"ASUS RT-AC86U AC2900 Dual Band Gigabit Gaming WiFi Router with MU-MIMO AiMesh AiProtection and WTFast game accelerator\" launch",
+        "\"ASUS\" \"ASUS RT-AC86U AC2900 Dual Band Gigabit Gaming WiFi Router with MU-MIMO AiMesh AiProtection and WTFast game accelerator\" launch release date",
+        "\"ASUS\" \"ASUS RT-AC86U AC2900 Dual Band Gigabit Gaming WiFi Router with MU-MIMO AiMesh AiProtection and WTFast game accelerator\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=site%3Aasus.com%2Fin+%22ASUS+RT-AC86U+AC2900+Dual+Band+Gigabit+Gaming+WiFi+Router+with+MU-MIMO+AiMesh+AiProtection+and+WTFast+game+accelerator%22+launch",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+RT-AC86U+AC2900+Dual+Band+Gigabit+Gaming+WiFi+Router+with+MU-MIMO+AiMesh+AiProtection+and+WTFast+game+accelerator%22+launch+release+date",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+RT-AC86U+AC2900+Dual+Band+Gigabit+Gaming+WiFi+Router+with+MU-MIMO+AiMesh+AiProtection+and+WTFast+game+accelerator%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "2c617dffd9bb09e6b84ab25d6350e8561f32b5956ea71f300f3d4eba453886b1",
+      "brand": "ASUS",
+      "type_id": "routers",
+      "model": "ASUS RT-AC88U AC3100 Dual Band Gigabit WiFi Gaming Router with MU-MIMO, AiProtection and AiMesh",
+      "offer_urls": [
+        "https://www.tpstech.in/products/asus-rt-ac88u-ac3100-dual-band-gigabit-wifi-gaming-router-with-mu-mimo-aiprotection-and-aimesh?variant=32015807086670"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "site:asus.com/in \"ASUS RT-AC88U AC3100 Dual Band Gigabit WiFi Gaming Router with MU-MIMO, AiProtection and AiMesh\" launch",
+        "\"ASUS\" \"ASUS RT-AC88U AC3100 Dual Band Gigabit WiFi Gaming Router with MU-MIMO, AiProtection and AiMesh\" launch release date",
+        "\"ASUS\" \"ASUS RT-AC88U AC3100 Dual Band Gigabit WiFi Gaming Router with MU-MIMO, AiProtection and AiMesh\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=site%3Aasus.com%2Fin+%22ASUS+RT-AC88U+AC3100+Dual+Band+Gigabit+WiFi+Gaming+Router+with+MU-MIMO%2C+AiProtection+and+AiMesh%22+launch",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+RT-AC88U+AC3100+Dual+Band+Gigabit+WiFi+Gaming+Router+with+MU-MIMO%2C+AiProtection+and+AiMesh%22+launch+release+date",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+RT-AC88U+AC3100+Dual+Band+Gigabit+WiFi+Gaming+Router+with+MU-MIMO%2C+AiProtection+and+AiMesh%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "415812544bfe88fed9b0eafcbdd0cffb7ad3275f71fc9f184c677ab83534aaa4",
+      "brand": "ASUS",
+      "type_id": "routers",
+      "model": "ASUS RT-AX53U AX1800 Dual Band WiFi 6 Router with MU-MIMO",
+      "offer_urls": [
+        "https://www.tpstech.in/products/asus-rt-ax53u-ax1800-wifi6-router?variant=54197763244335"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "site:asus.com/in \"ASUS RT-AX53U AX1800 Dual Band WiFi 6 Router with MU-MIMO\" launch",
+        "\"ASUS\" \"ASUS RT-AX53U AX1800 Dual Band WiFi 6 Router with MU-MIMO\" launch release date",
+        "\"ASUS\" \"ASUS RT-AX53U AX1800 Dual Band WiFi 6 Router with MU-MIMO\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=site%3Aasus.com%2Fin+%22ASUS+RT-AX53U+AX1800+Dual+Band+WiFi+6+Router+with+MU-MIMO%22+launch",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+RT-AX53U+AX1800+Dual+Band+WiFi+6+Router+with+MU-MIMO%22+launch+release+date",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+RT-AX53U+AX1800+Dual+Band+WiFi+6+Router+with+MU-MIMO%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "5fdc46ea8548995b4386b5c607656aadf4692fe7d0278c8b6855143bcfe78290",
+      "brand": "ASUS",
+      "type_id": "routers",
+      "model": "ASUS RT-AX82U AX5400 Dual Band WiFi 6 Gaming Router",
+      "offer_urls": [
+        "https://www.tpstech.in/products/asus-rt-ax82u-ax5400-wifi6-gaming-router?variant=54196342423855"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "site:asus.com/in \"ASUS RT-AX82U AX5400 Dual Band WiFi 6 Gaming Router\" launch",
+        "\"ASUS\" \"ASUS RT-AX82U AX5400 Dual Band WiFi 6 Gaming Router\" launch release date",
+        "\"ASUS\" \"ASUS RT-AX82U AX5400 Dual Band WiFi 6 Gaming Router\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=site%3Aasus.com%2Fin+%22ASUS+RT-AX82U+AX5400+Dual+Band+WiFi+6+Gaming+Router%22+launch",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+RT-AX82U+AX5400+Dual+Band+WiFi+6+Gaming+Router%22+launch+release+date",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+RT-AX82U+AX5400+Dual+Band+WiFi+6+Gaming+Router%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "da2dcb4ce1b355024e04d638fae84ce3e75a75969e4b4da187d19d137697d1df",
+      "brand": "ASUS",
+      "type_id": "routers",
+      "model": "ASUS RT-AX92U AX6100 Tri-Band WiFi 6 (802.11ax) Gaming Router with Gear Accelerator, AiProtection and AiMesh",
+      "offer_urls": [
+        "https://www.tpstech.in/products/asus-rt-ax92u-ax6100-tri-band-wifi-6-802-11ax-gaming-router-with-gear-accelerator-aiprotection-and-aimesh?variant=32020834779214"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "site:asus.com/in \"ASUS RT-AX92U AX6100 Tri-Band WiFi 6 (802.11ax) Gaming Router with Gear Accelerator, AiProtection and AiMesh\" launch",
+        "\"ASUS\" \"ASUS RT-AX92U AX6100 Tri-Band WiFi 6 (802.11ax) Gaming Router with Gear Accelerator, AiProtection and AiMesh\" launch release date",
+        "\"ASUS\" \"ASUS RT-AX92U AX6100 Tri-Band WiFi 6 (802.11ax) Gaming Router with Gear Accelerator, AiProtection and AiMesh\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=site%3Aasus.com%2Fin+%22ASUS+RT-AX92U+AX6100+Tri-Band+WiFi+6+%28802.11ax%29+Gaming+Router+with+Gear+Accelerator%2C+AiProtection+and+AiMesh%22+launch",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+RT-AX92U+AX6100+Tri-Band+WiFi+6+%28802.11ax%29+Gaming+Router+with+Gear+Accelerator%2C+AiProtection+and+AiMesh%22+launch+release+date",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+RT-AX92U+AX6100+Tri-Band+WiFi+6+%28802.11ax%29+Gaming+Router+with+Gear+Accelerator%2C+AiProtection+and+AiMesh%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "61a38a8a6e909deaa05baccfb4ed254865747cc934c1ce41acf405de229d40a0",
+      "brand": "ASUS",
+      "type_id": "routers",
+      "model": "ASUS ZenWiFi AX XT8 Tri Band AX6600 Tri-band Mesh WiFi 6 System-2 Pack (White)",
+      "offer_urls": [
+        "https://www.tpstech.in/products/asus-zenwifi-ax-xt8-tri-band-ax6600-tri-band-mesh-wifi-6-system-2-pack-white?variant=51198804459823"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "site:asus.com/in \"ASUS ZenWiFi AX XT8 Tri Band AX6600 Tri-band Mesh WiFi 6 System-2 Pack (White)\" launch",
+        "\"ASUS\" \"ASUS ZenWiFi AX XT8 Tri Band AX6600 Tri-band Mesh WiFi 6 System-2 Pack (White)\" launch release date",
+        "\"ASUS\" \"ASUS ZenWiFi AX XT8 Tri Band AX6600 Tri-band Mesh WiFi 6 System-2 Pack (White)\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=site%3Aasus.com%2Fin+%22ASUS+ZenWiFi+AX+XT8+Tri+Band+AX6600+Tri-band+Mesh+WiFi+6+System-2+Pack+%28White%29%22+launch",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+ZenWiFi+AX+XT8+Tri+Band+AX6600+Tri-band+Mesh+WiFi+6+System-2+Pack+%28White%29%22+launch+release+date",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+ZenWiFi+AX+XT8+Tri+Band+AX6600+Tri-band+Mesh+WiFi+6+System-2+Pack+%28White%29%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "2ce578cd9595361033fd996dd9bf39f997116a2e1c4aaab8de2b1abefdbfc76b",
+      "brand": "ASUS",
+      "type_id": "routers",
+      "model": "ASUS ZenWiFi AX XT8 Tri Band AX6600 Tri-band Mesh WiFi 6 System-2 Pack Black",
+      "offer_urls": [
+        "https://www.tpstech.in/products/asus-zenwifi-ax-xt8-tri-band-ax6600-tri-band-mesh-wifi-6-system-2-pack-black?variant=54158603190575"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "site:asus.com/in \"ASUS ZenWiFi AX XT8 Tri Band AX6600 Tri-band Mesh WiFi 6 System-2 Pack Black\" launch",
+        "\"ASUS\" \"ASUS ZenWiFi AX XT8 Tri Band AX6600 Tri-band Mesh WiFi 6 System-2 Pack Black\" launch release date",
+        "\"ASUS\" \"ASUS ZenWiFi AX XT8 Tri Band AX6600 Tri-band Mesh WiFi 6 System-2 Pack Black\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=site%3Aasus.com%2Fin+%22ASUS+ZenWiFi+AX+XT8+Tri+Band+AX6600+Tri-band+Mesh+WiFi+6+System-2+Pack+Black%22+launch",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+ZenWiFi+AX+XT8+Tri+Band+AX6600+Tri-band+Mesh+WiFi+6+System-2+Pack+Black%22+launch+release+date",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+ZenWiFi+AX+XT8+Tri+Band+AX6600+Tri-band+Mesh+WiFi+6+System-2+Pack+Black%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "5dd51442bb550113974c5793f4db84d2a484452ca91127c705cdc5486133b647",
+      "brand": "ASUS",
+      "type_id": "routers",
+      "model": "ASUS ZenWiFi AX XT8 Tri Band AX6600 WiFi 6 Router with Alexa and AiProtection - 1 Pack Black",
+      "offer_urls": [
+        "https://www.tpstech.in/products/asus-zenwifi-ax-xt8-tri-band-ax6600-wifi-6-router-with-alexa-and-aiprotection-1-pack-white-copy?variant=54158808580399"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "site:asus.com/in \"ASUS ZenWiFi AX XT8 Tri Band AX6600 WiFi 6 Router with Alexa and AiProtection - 1 Pack Black\" launch",
+        "\"ASUS\" \"ASUS ZenWiFi AX XT8 Tri Band AX6600 WiFi 6 Router with Alexa and AiProtection - 1 Pack Black\" launch release date",
+        "\"ASUS\" \"ASUS ZenWiFi AX XT8 Tri Band AX6600 WiFi 6 Router with Alexa and AiProtection - 1 Pack Black\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=site%3Aasus.com%2Fin+%22ASUS+ZenWiFi+AX+XT8+Tri+Band+AX6600+WiFi+6+Router+with+Alexa+and+AiProtection+-+1+Pack+Black%22+launch",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+ZenWiFi+AX+XT8+Tri+Band+AX6600+WiFi+6+Router+with+Alexa+and+AiProtection+-+1+Pack+Black%22+launch+release+date",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+ZenWiFi+AX+XT8+Tri+Band+AX6600+WiFi+6+Router+with+Alexa+and+AiProtection+-+1+Pack+Black%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "6a3f5aa1a3b3dade0854b3bd8242c279dc7abf15e0e56f2a8932a7069d250b44",
+      "brand": "ASUS",
+      "type_id": "routers",
+      "model": "ASUS ZenWiFi AX XT8 Tri Band AX6600 WiFi 6 Router with Alexa and AiProtection - 1 Pack White",
+      "offer_urls": [
+        "https://www.tpstech.in/products/asus-zenwifi-ax-xt8-tri-band-ax6600-wifi-6-router-1-pack-white?variant=39535478407246"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "site:asus.com/in \"ASUS ZenWiFi AX XT8 Tri Band AX6600 WiFi 6 Router with Alexa and AiProtection - 1 Pack White\" launch",
+        "\"ASUS\" \"ASUS ZenWiFi AX XT8 Tri Band AX6600 WiFi 6 Router with Alexa and AiProtection - 1 Pack White\" launch release date",
+        "\"ASUS\" \"ASUS ZenWiFi AX XT8 Tri Band AX6600 WiFi 6 Router with Alexa and AiProtection - 1 Pack White\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=site%3Aasus.com%2Fin+%22ASUS+ZenWiFi+AX+XT8+Tri+Band+AX6600+WiFi+6+Router+with+Alexa+and+AiProtection+-+1+Pack+White%22+launch",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+ZenWiFi+AX+XT8+Tri+Band+AX6600+WiFi+6+Router+with+Alexa+and+AiProtection+-+1+Pack+White%22+launch+release+date",
+        "https://www.google.com/search?q=%22ASUS%22+%22ASUS+ZenWiFi+AX+XT8+Tri+Band+AX6600+WiFi+6+Router+with+Alexa+and+AiProtection+-+1+Pack+White%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "4a4b6106e173ecdb326a5db5ca126820b4eac0b5a2d85e0135ef09b879cbe6d1",
+      "brand": "Bosch",
+      "type_id": "microwaves",
+      "model": "Bosch Series 4 Built in Microwave Oven with Button Door Opening, Turntable, Mechanical Control (Black, BEL550MSOI)",
+      "offer_urls": [
+        "https://www.vijaysales.com/p/152958/bosch-series-4-built-in-microwave-oven-with-button-door-opening-turntable-mechanical-control-black-bel550msoi"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"Bosch\" \"Bosch Series 4 Built in Microwave Oven with Button Door Opening, Turntable, Mechanical Control (Black, BEL550MSOI)\" launch release date",
+        "\"Bosch\" \"Bosch Series 4 Built in Microwave Oven with Button Door Opening, Turntable, Mechanical Control (Black, BEL550MSOI)\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22Bosch%22+%22Bosch+Series+4+Built+in+Microwave+Oven+with+Button+Door+Opening%2C+Turntable%2C+Mechanical+Control+%28Black%2C+BEL550MSOI%29%22+launch+release+date",
+        "https://www.google.com/search?q=%22Bosch%22+%22Bosch+Series+4+Built+in+Microwave+Oven+with+Button+Door+Opening%2C+Turntable%2C+Mechanical+Control+%28Black%2C+BEL550MSOI%29%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "d492be1b2932eda567f2c2206ef45fa7c915035b4e3e07cddd27b3fb90de6ba9",
+      "brand": "CADYCE",
+      "type_id": "routers",
+      "model": "Cadyce CA-M150 150Mbps Wireless N ADSL2+ Modem Router with 4 LAN Ports",
+      "offer_urls": [
+        "https://www.tpstech.in/products/cadyce-ca-m150-wireless-n-adsl2-modem-router?variant=52030559879471"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"CADYCE\" \"Cadyce CA-M150 150Mbps Wireless N ADSL2+ Modem Router with 4 LAN Ports\" launch release date",
+        "\"CADYCE\" \"Cadyce CA-M150 150Mbps Wireless N ADSL2+ Modem Router with 4 LAN Ports\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22CADYCE%22+%22Cadyce+CA-M150+150Mbps+Wireless+N+ADSL2%2B+Modem+Router+with+4+LAN+Ports%22+launch+release+date",
+        "https://www.google.com/search?q=%22CADYCE%22+%22Cadyce+CA-M150+150Mbps+Wireless+N+ADSL2%2B+Modem+Router+with+4+LAN+Ports%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "7e6bdddaf541b63be4eba709fb5607158f2a24a5877ea3f71f390d5a2a20b2b7",
+      "brand": "CADYCE",
+      "type_id": "routers",
+      "model": "Cadyce CA-M300 Wireless N ADSL2+ Modem Router 300Mbps 4-Port LAN",
+      "offer_urls": [
+        "https://www.tpstech.in/products/cadyce-ca-m300-wireless-adsl2-modem-router?variant=52030562042159"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"CADYCE\" \"Cadyce CA-M300 Wireless N ADSL2+ Modem Router 300Mbps 4-Port LAN\" launch release date",
+        "\"CADYCE\" \"Cadyce CA-M300 Wireless N ADSL2+ Modem Router 300Mbps 4-Port LAN\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22CADYCE%22+%22Cadyce+CA-M300+Wireless+N+ADSL2%2B+Modem+Router+300Mbps+4-Port+LAN%22+launch+release+date",
+        "https://www.google.com/search?q=%22CADYCE%22+%22Cadyce+CA-M300+Wireless+N+ADSL2%2B+Modem+Router+300Mbps+4-Port+LAN%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "45f13a129019f56dafe6764b8afbda26506d6b86afc3240468b3c74d87584081",
+      "brand": "CADYCE",
+      "type_id": "routers",
+      "model": "Cadyce CA-RAPO150 150Mbps Wireless N Outdoor AP Router with PoE and 12dBi Antenna",
+      "offer_urls": [
+        "https://www.tpstech.in/products/cadyce-ca-rapo150-wireless-n-outdoor-ap-router?variant=52030569349423"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"CADYCE\" \"Cadyce CA-RAPO150 150Mbps Wireless N Outdoor AP Router with PoE and 12dBi Antenna\" launch release date",
+        "\"CADYCE\" \"Cadyce CA-RAPO150 150Mbps Wireless N Outdoor AP Router with PoE and 12dBi Antenna\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22CADYCE%22+%22Cadyce+CA-RAPO150+150Mbps+Wireless+N+Outdoor+AP+Router+with+PoE+and+12dBi+Antenna%22+launch+release+date",
+        "https://www.google.com/search?q=%22CADYCE%22+%22Cadyce+CA-RAPO150+150Mbps+Wireless+N+Outdoor+AP+Router+with+PoE+and+12dBi+Antenna%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "35e3cb5f919a87051c4f33a736adc0e0270d3e11263c3c4a9a9da6def3c3b305",
+      "brand": "CADYCE",
+      "type_id": "routers",
+      "model": "Cadyce CA-WTR150 150Mbps Wireless N Travel Router with Built-in Battery",
+      "offer_urls": [
+        "https://www.tpstech.in/products/cadyce-ca-wtr150-wireless-n-travel-router?variant=52030566072623"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"CADYCE\" \"Cadyce CA-WTR150 150Mbps Wireless N Travel Router with Built-in Battery\" launch release date",
+        "\"CADYCE\" \"Cadyce CA-WTR150 150Mbps Wireless N Travel Router with Built-in Battery\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22CADYCE%22+%22Cadyce+CA-WTR150+150Mbps+Wireless+N+Travel+Router+with+Built-in+Battery%22+launch+release+date",
+        "https://www.google.com/search?q=%22CADYCE%22+%22Cadyce+CA-WTR150+150Mbps+Wireless+N+Travel+Router+with+Built-in+Battery%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "95faaccae2fb82770bebc33a6a79445d46b616ac4aaaf450297d3ea8a9a6754a",
+      "brand": "Crompton",
+      "type_id": "microwaves",
+      "model": "Crompton GrandArt-Built-in Microwave 25L",
+      "offer_urls": [
+        "https://www.crompton.co.in/products/crompton-grandart-convection-built-in-microwave-oven-25-ltrs?variant=49356904366384"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "site:crompton.co.in \"Crompton GrandArt-Built-in Microwave 25L\" launch",
+        "\"Crompton\" \"Crompton GrandArt-Built-in Microwave 25L\" launch release date",
+        "\"Crompton\" \"Crompton GrandArt-Built-in Microwave 25L\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=site%3Acrompton.co.in+%22Crompton+GrandArt-Built-in+Microwave+25L%22+launch",
+        "https://www.google.com/search?q=%22Crompton%22+%22Crompton+GrandArt-Built-in+Microwave+25L%22+launch+release+date",
+        "https://www.google.com/search?q=%22Crompton%22+%22Crompton+GrandArt-Built-in+Microwave+25L%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "28121540252a9f6f78f1aa8d7d96f480f1e4e4cc47d6abaf8816f3d960b26348",
+      "brand": "Crompton",
+      "type_id": "microwaves",
+      "model": "Crompton Voila- Built-in Microwave 20L",
+      "offer_urls": [
+        "https://www.crompton.co.in/products/crompton-voila-solo-built-in-microwave-oven-20-ltrs?variant=49356964823344"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "site:crompton.co.in \"Crompton Voila- Built-in Microwave 20L\" launch",
+        "\"Crompton\" \"Crompton Voila- Built-in Microwave 20L\" launch release date",
+        "\"Crompton\" \"Crompton Voila- Built-in Microwave 20L\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=site%3Acrompton.co.in+%22Crompton+Voila-+Built-in+Microwave+20L%22+launch",
+        "https://www.google.com/search?q=%22Crompton%22+%22Crompton+Voila-+Built-in+Microwave+20L%22+launch+release+date",
+        "https://www.google.com/search?q=%22Crompton%22+%22Crompton+Voila-+Built-in+Microwave+20L%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "de6718a0fddcae44b6878259cad736828532694b02156f1336f1988303646b66",
+      "brand": "D-Link",
+      "type_id": "routers",
+      "model": "D-Link Eagle Pro AI M15 AX1500 Wi‐Fi 6 Mesh Router – 2‐Pack",
+      "offer_urls": [
+        "https://www.tpstech.in/products/dlink-eagle-pro-ai-m15-ax1500-mesh-2-pack?variant=52141144473903"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"D-Link\" \"D-Link Eagle Pro AI M15 AX1500 Wi‐Fi 6 Mesh Router – 2‐Pack\" launch release date",
+        "\"D-Link\" \"D-Link Eagle Pro AI M15 AX1500 Wi‐Fi 6 Mesh Router – 2‐Pack\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22D-Link%22+%22D-Link+Eagle+Pro+AI+M15+AX1500+Wi%E2%80%90Fi+6+Mesh+Router+%E2%80%93+2%E2%80%90Pack%22+launch+release+date",
+        "https://www.google.com/search?q=%22D-Link%22+%22D-Link+Eagle+Pro+AI+M15+AX1500+Wi%E2%80%90Fi+6+Mesh+Router+%E2%80%93+2%E2%80%90Pack%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "b0ed1b1eddcf59973357c2287e55ace7efb2afe0f017be8a3693897b0a8b687e",
+      "brand": "D-Link",
+      "type_id": "routers",
+      "model": "D-Link G403C 4G LTE N300 Wi‐Fi Router with SIM Slot 150 Mbps LTE Cat 4",
+      "offer_urls": [
+        "https://www.tpstech.in/products/d-link-g403c-4g-lte-n300-router?variant=52141237371183"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"D-Link\" \"D-Link G403C 4G LTE N300 Wi‐Fi Router with SIM Slot 150 Mbps LTE Cat 4\" launch release date",
+        "\"D-Link\" \"D-Link G403C 4G LTE N300 Wi‐Fi Router with SIM Slot 150 Mbps LTE Cat 4\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22D-Link%22+%22D-Link+G403C+4G+LTE+N300+Wi%E2%80%90Fi+Router+with+SIM+Slot+150+Mbps+LTE+Cat+4%22+launch+release+date",
+        "https://www.google.com/search?q=%22D-Link%22+%22D-Link+G403C+4G+LTE+N300+Wi%E2%80%90Fi+Router+with+SIM+Slot+150+Mbps+LTE+Cat+4%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "43032830e932029ad415e1b88b9d3cbba132b105dd09f93f24399a7a2a815c04",
+      "brand": "TP-Link",
+      "type_id": "routers",
+      "model": "Deco AX3000 X50 Whole Home Mesh WiFi 6 System - 1 Pack",
+      "offer_urls": [
+        "https://www.tpstech.in/products/tp-link-deco-x50-ax3000-mesh-wifi6-1pack?variant=51977343893807"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"TP-Link\" \"Deco AX3000 X50 Whole Home Mesh WiFi 6 System - 1 Pack\" launch release date",
+        "\"TP-Link\" \"Deco AX3000 X50 Whole Home Mesh WiFi 6 System - 1 Pack\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22TP-Link%22+%22Deco+AX3000+X50+Whole+Home+Mesh+WiFi+6+System+-+1+Pack%22+launch+release+date",
+        "https://www.google.com/search?q=%22TP-Link%22+%22Deco+AX3000+X50+Whole+Home+Mesh+WiFi+6+System+-+1+Pack%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "f9657fa4606e5f9a1f5a9510ac73fe166eb4de5f5edb4d7ebbeb01367d3e3b55",
+      "brand": "TP-Link",
+      "type_id": "routers",
+      "model": "Deco AX3000 X50 Whole Home Mesh WiFi 6 System - 3 Pack",
+      "offer_urls": [
+        "https://www.tpstech.in/products/tp-link-deco-x50-ax3000-mesh-wifi-6-3pack?variant=51977365750063"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"TP-Link\" \"Deco AX3000 X50 Whole Home Mesh WiFi 6 System - 3 Pack\" launch release date",
+        "\"TP-Link\" \"Deco AX3000 X50 Whole Home Mesh WiFi 6 System - 3 Pack\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22TP-Link%22+%22Deco+AX3000+X50+Whole+Home+Mesh+WiFi+6+System+-+3+Pack%22+launch+release+date",
+        "https://www.google.com/search?q=%22TP-Link%22+%22Deco+AX3000+X50+Whole+Home+Mesh+WiFi+6+System+-+3+Pack%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "36023759d4ef494020dd32a4d4535fcd8233a4c8d77d6d49a6a1cbc40ea5331e",
+      "brand": "D-Link",
+      "type_id": "routers",
+      "model": "D‐Link DIR‐615 Wireless N300 Desktop Router 300 Mbps QoS WPA2",
+      "offer_urls": [
+        "https://www.tpstech.in/products/d-link-dir-615-wireless-n300-router?variant=52141169115439"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"D-Link\" \"D‐Link DIR‐615 Wireless N300 Desktop Router 300 Mbps QoS WPA2\" launch release date",
+        "\"D-Link\" \"D‐Link DIR‐615 Wireless N300 Desktop Router 300 Mbps QoS WPA2\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22D-Link%22+%22D%E2%80%90Link+DIR%E2%80%90615+Wireless+N300+Desktop+Router+300+Mbps+QoS+WPA2%22+launch+release+date",
+        "https://www.google.com/search?q=%22D-Link%22+%22D%E2%80%90Link+DIR%E2%80%90615+Wireless+N300+Desktop+Router+300+Mbps+QoS+WPA2%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "75d4293857dd5bd8d7dca201c8d8053c83784b9735c87516f4b521790b7a0150",
+      "brand": "D-Link",
+      "type_id": "routers",
+      "model": "D‐Link M30 AX3000 WiFi 6 Smart Mesh Dual‐Band Router 3 Gbps AQUILA PRO AI",
+      "offer_urls": [
+        "https://www.tpstech.in/products/d-link-m30-ax3000-wifi6-smart-mesh-router?variant=52141219676463"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"D-Link\" \"D‐Link M30 AX3000 WiFi 6 Smart Mesh Dual‐Band Router 3 Gbps AQUILA PRO AI\" launch release date",
+        "\"D-Link\" \"D‐Link M30 AX3000 WiFi 6 Smart Mesh Dual‐Band Router 3 Gbps AQUILA PRO AI\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22D-Link%22+%22D%E2%80%90Link+M30+AX3000+WiFi+6+Smart+Mesh+Dual%E2%80%90Band+Router+3+Gbps+AQUILA+PRO+AI%22+launch+release+date",
+        "https://www.google.com/search?q=%22D-Link%22+%22D%E2%80%90Link+M30+AX3000+WiFi+6+Smart+Mesh+Dual%E2%80%90Band+Router+3+Gbps+AQUILA+PRO+AI%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "796bbd13f57f8143ecb69334db54f73e8b47f87dc52455a574dc413e7f6ed2e5",
+      "brand": "D-Link",
+      "type_id": "routers",
+      "model": "D‐Link R15 EAGLE PRO AI AX1500 Dual‐Band Wi‐Fi 6 Smart Router AI Mesh WPA3 Gigabit LAN/WAN",
+      "offer_urls": [
+        "https://www.tpstech.in/products/d-link-r15-ax1500-smart-router?variant=52141227409711"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"D-Link\" \"D‐Link R15 EAGLE PRO AI AX1500 Dual‐Band Wi‐Fi 6 Smart Router AI Mesh WPA3 Gigabit LAN/WAN\" launch release date",
+        "\"D-Link\" \"D‐Link R15 EAGLE PRO AI AX1500 Dual‐Band Wi‐Fi 6 Smart Router AI Mesh WPA3 Gigabit LAN/WAN\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22D-Link%22+%22D%E2%80%90Link+R15+EAGLE+PRO+AI+AX1500+Dual%E2%80%90Band+Wi%E2%80%90Fi+6+Smart+Router+AI+Mesh+WPA3+Gigabit+LAN%2FWAN%22+launch+release+date",
+        "https://www.google.com/search?q=%22D-Link%22+%22D%E2%80%90Link+R15+EAGLE+PRO+AI+AX1500+Dual%E2%80%90Band+Wi%E2%80%90Fi+6+Smart+Router+AI+Mesh+WPA3+Gigabit+LAN%2FWAN%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "aded5eba0b8a70f491b622302963a7dc85ba9c14a366a14e8407e0b1ddfa4f91",
+      "brand": "Grandstream",
+      "type_id": "routers",
+      "model": "Grandstream GWN7001 Multi WAN Gigabit VPN Router with 6 Port Gigabit LAN",
+      "offer_urls": [
+        "https://www.tpstech.in/products/grandstream-gwn7001-multi-wan-gigabit-vpn-router?variant=52344931025199"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"Grandstream\" \"Grandstream GWN7001 Multi WAN Gigabit VPN Router with 6 Port Gigabit LAN\" launch release date",
+        "\"Grandstream\" \"Grandstream GWN7001 Multi WAN Gigabit VPN Router with 6 Port Gigabit LAN\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22Grandstream%22+%22Grandstream+GWN7001+Multi+WAN+Gigabit+VPN+Router+with+6+Port+Gigabit+LAN%22+launch+release+date",
+        "https://www.google.com/search?q=%22Grandstream%22+%22Grandstream+GWN7001+Multi+WAN+Gigabit+VPN+Router+with+6+Port+Gigabit+LAN%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "5696af0cb12c7f64cb243f8f7be8f930db084759ffc0906893ffffcc7250b847",
+      "brand": "Grandstream",
+      "type_id": "routers",
+      "model": "Grandstream GWN7002 Multi‐WAN Gigabit VPN Router with 2× 2.5G SFP Ports and 4× Gigabit Ethernet Ports",
+      "offer_urls": [
+        "https://www.tpstech.in/products/grandstream-gwn7002-gigabit-vpn-router?variant=52345024643375"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"Grandstream\" \"Grandstream GWN7002 Multi‐WAN Gigabit VPN Router with 2× 2.5G SFP Ports and 4× Gigabit Ethernet Ports\" launch release date",
+        "\"Grandstream\" \"Grandstream GWN7002 Multi‐WAN Gigabit VPN Router with 2× 2.5G SFP Ports and 4× Gigabit Ethernet Ports\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22Grandstream%22+%22Grandstream+GWN7002+Multi%E2%80%90WAN+Gigabit+VPN+Router+with+2%C3%97+2.5G+SFP+Ports+and+4%C3%97+Gigabit+Ethernet+Ports%22+launch+release+date",
+        "https://www.google.com/search?q=%22Grandstream%22+%22Grandstream+GWN7002+Multi%E2%80%90WAN+Gigabit+VPN+Router+with+2%C3%97+2.5G+SFP+Ports+and+4%C3%97+Gigabit+Ethernet+Ports%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "4d9e3a8e83a4b54e7d89f9259d480636e5af51ffe56703ead709b9c5881bf76b",
+      "brand": "Grandstream",
+      "type_id": "routers",
+      "model": "Grandstream GWN7003 Multi WAN Gigabit VPN Router 4GE 2SFP High Performance Security Router",
+      "offer_urls": [
+        "https://www.tpstech.in/products/grandstream-gwn7003-gigabit-vpn-router?variant=52344218190127"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"Grandstream\" \"Grandstream GWN7003 Multi WAN Gigabit VPN Router 4GE 2SFP High Performance Security Router\" launch release date",
+        "\"Grandstream\" \"Grandstream GWN7003 Multi WAN Gigabit VPN Router 4GE 2SFP High Performance Security Router\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22Grandstream%22+%22Grandstream+GWN7003+Multi+WAN+Gigabit+VPN+Router+4GE+2SFP+High+Performance+Security+Router%22+launch+release+date",
+        "https://www.google.com/search?q=%22Grandstream%22+%22Grandstream+GWN7003+Multi+WAN+Gigabit+VPN+Router+4GE+2SFP+High+Performance+Security+Router%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "290c8e75e4cbf90ed8d5229b36a19988f036d2d788786b16df60de3c264ed33f",
+      "brand": "Grandstream",
+      "type_id": "routers",
+      "model": "Grandstream GWN7062E AX3000 Wi‐Fi 6 Dual‐Band Gigabit Router with VPN & Mesh",
+      "offer_urls": [
+        "https://www.tpstech.in/products/grandstream-gwn7062e-ax3000-wifi6-router?variant=57479011926319"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"Grandstream\" \"Grandstream GWN7062E AX3000 Wi‐Fi 6 Dual‐Band Gigabit Router with VPN & Mesh\" launch release date",
+        "\"Grandstream\" \"Grandstream GWN7062E AX3000 Wi‐Fi 6 Dual‐Band Gigabit Router with VPN & Mesh\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22Grandstream%22+%22Grandstream+GWN7062E+AX3000+Wi%E2%80%90Fi+6+Dual%E2%80%90Band+Gigabit+Router+with+VPN+%26+Mesh%22+launch+release+date",
+        "https://www.google.com/search?q=%22Grandstream%22+%22Grandstream+GWN7062E+AX3000+Wi%E2%80%90Fi+6+Dual%E2%80%90Band+Gigabit+Router+with+VPN+%26+Mesh%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "9fb4bbe493d48ee5f4cb68ce0d5639338d3ba0a30295d6c505bee9253d55a3ea",
+      "brand": "Grandstream",
+      "type_id": "routers",
+      "model": "Grandstream GWN7062M AX3000 Wi‐Fi 6 Dual Band Gigabit Router",
+      "offer_urls": [
+        "https://www.tpstech.in/products/grandstream-gwn7062m-ax3000-wifi6-router?variant=57478862504239"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"Grandstream\" \"Grandstream GWN7062M AX3000 Wi‐Fi 6 Dual Band Gigabit Router\" launch release date",
+        "\"Grandstream\" \"Grandstream GWN7062M AX3000 Wi‐Fi 6 Dual Band Gigabit Router\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22Grandstream%22+%22Grandstream+GWN7062M+AX3000+Wi%E2%80%90Fi+6+Dual+Band+Gigabit+Router%22+launch+release+date",
+        "https://www.google.com/search?q=%22Grandstream%22+%22Grandstream+GWN7062M+AX3000+Wi%E2%80%90Fi+6+Dual+Band+Gigabit+Router%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "0b17da985d3fd6e079efa95db6f3fe6d8fd04c1c5ba085abd61c1586c6406370",
+      "brand": "Grandstream",
+      "type_id": "routers",
+      "model": "Grandstream GWN7664E AX6000 Dual Band WiFi 6 AP with 4x4 MU-MIMO and 2.5G Ports",
+      "offer_urls": [
+        "https://www.tpstech.in/products/grandstream-gwn7664e-wifi6-ax6000-access-point?variant=52345116098863"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"Grandstream\" \"Grandstream GWN7664E AX6000 Dual Band WiFi 6 AP with 4x4 MU-MIMO and 2.5G Ports\" launch release date",
+        "\"Grandstream\" \"Grandstream GWN7664E AX6000 Dual Band WiFi 6 AP with 4x4 MU-MIMO and 2.5G Ports\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22Grandstream%22+%22Grandstream+GWN7664E+AX6000+Dual+Band+WiFi+6+AP+with+4x4+MU-MIMO+and+2.5G+Ports%22+launch+release+date",
+        "https://www.google.com/search?q=%22Grandstream%22+%22Grandstream+GWN7664E+AX6000+Dual+Band+WiFi+6+AP+with+4x4+MU-MIMO+and+2.5G+Ports%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "22bcccc10089910c1a00b63adcba08108608e19db8dca0f8fd85f2e729cfe2a9",
+      "brand": "Grandstream",
+      "type_id": "routers",
+      "model": "Grandstream GWN7670LR Long‐Range Dual‐Band Wi‐Fi 7 Outdoor Access Point with 3.6Gbps Throughput & 2.5G Ethernet/SFP Ports",
+      "offer_urls": [
+        "https://www.tpstech.in/products/grandstream-gwn7670lr-outdoor-wifi7-access-point?variant=52365435535663"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"Grandstream\" \"Grandstream GWN7670LR Long‐Range Dual‐Band Wi‐Fi 7 Outdoor Access Point with 3.6Gbps Throughput & 2.5G Ethernet/SFP Ports\" launch release date",
+        "\"Grandstream\" \"Grandstream GWN7670LR Long‐Range Dual‐Band Wi‐Fi 7 Outdoor Access Point with 3.6Gbps Throughput & 2.5G Ethernet/SFP Ports\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22Grandstream%22+%22Grandstream+GWN7670LR+Long%E2%80%90Range+Dual%E2%80%90Band+Wi%E2%80%90Fi+7+Outdoor+Access+Point+with+3.6Gbps+Throughput+%26+2.5G+Ethernet%2FSFP+Ports%22+launch+release+date",
+        "https://www.google.com/search?q=%22Grandstream%22+%22Grandstream+GWN7670LR+Long%E2%80%90Range+Dual%E2%80%90Band+Wi%E2%80%90Fi+7+Outdoor+Access+Point+with+3.6Gbps+Throughput+%26+2.5G+Ethernet%2FSFP+Ports%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "02f569bb6ad7b694a85bd2519f9625415f710071044bb40577a8809af8495cd4",
+      "brand": "Grandstream",
+      "type_id": "routers",
+      "model": "Grandstream HT812 V2 2-Port Analog Telephone Adapter with Gigabit Router",
+      "offer_urls": [
+        "https://www.tpstech.in/products/grandstream-ht812-v2-sip-ata?variant=58101444084015"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"Grandstream\" \"Grandstream HT812 V2 2-Port Analog Telephone Adapter with Gigabit Router\" launch release date",
+        "\"Grandstream\" \"Grandstream HT812 V2 2-Port Analog Telephone Adapter with Gigabit Router\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22Grandstream%22+%22Grandstream+HT812+V2+2-Port+Analog+Telephone+Adapter+with+Gigabit+Router%22+launch+release+date",
+        "https://www.google.com/search?q=%22Grandstream%22+%22Grandstream+HT812+V2+2-Port+Analog+Telephone+Adapter+with+Gigabit+Router%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "b1e6aaccc69852b1276f928f65ff1080c47776043220a217ff0c90b3ccc86427",
+      "brand": "Haier",
+      "type_id": "microwaves",
+      "model": "Haier 23 L Conventional Microwave Oven Black, HIL2302CRSH",
+      "offer_urls": [
+        "https://www.reliancedigital.in/product/haier-23-l-conventional-microwave-oven-black-hil2302crsh-mid7z1-9604531"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"Haier\" \"Haier 23 L Conventional Microwave Oven Black, HIL2302CRSH\" launch release date",
+        "\"Haier\" \"Haier 23 L Conventional Microwave Oven Black, HIL2302CRSH\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22Haier%22+%22Haier+23+L+Conventional+Microwave+Oven+Black%2C+HIL2302CRSH%22+launch+release+date",
+        "https://www.google.com/search?q=%22Haier%22+%22Haier+23+L+Conventional+Microwave+Oven+Black%2C+HIL2302CRSH%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "79222e63316a9ff1d28975f68402ec15f20a32afe4b0dc19bd637ea6e88a1ddb",
+      "brand": "Haier",
+      "type_id": "microwaves",
+      "model": "Haier 30 L Convection Microwave Oven with In-built Air Fryer Function & Motorized Rotisserie",
+      "offer_urls": [
+        "https://www.reliancedigital.in/product/haier-30-l-convection-microwave-oven-with-in-built-air-fryer-function-motorized-rotisserie-mnd4i9-9996331"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"Haier\" \"Haier 30 L Convection Microwave Oven with In-built Air Fryer Function & Motorized Rotisserie\" launch release date",
+        "\"Haier\" \"Haier 30 L Convection Microwave Oven with In-built Air Fryer Function & Motorized Rotisserie\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22Haier%22+%22Haier+30+L+Convection+Microwave+Oven+with+In-built+Air+Fryer+Function+%26+Motorized+Rotisserie%22+launch+release+date",
+        "https://www.google.com/search?q=%22Haier%22+%22Haier+30+L+Convection+Microwave+Oven+with+In-built+Air+Fryer+Function+%26+Motorized+Rotisserie%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "e2867a0b5bd4893c420ddcaa79724caf6ba84b2dcb2668e531e73161ac8bb128",
+      "brand": "Haier",
+      "type_id": "microwaves",
+      "model": "Haier HIL2001MWPH 20 litres Solo Microwave Oven, 5 Multi Power Level, 35 Mins Cooking Timer, Black",
+      "offer_urls": [
+        "https://www.reliancedigital.in/product/haier-20-litres-solo-microwave-oven-with-5-multi-power-level-hil2001mwph"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"Haier\" \"Haier HIL2001MWPH 20 litres Solo Microwave Oven, 5 Multi Power Level, 35 Mins Cooking Timer, Black\" launch release date",
+        "\"Haier\" \"Haier HIL2001MWPH 20 litres Solo Microwave Oven, 5 Multi Power Level, 35 Mins Cooking Timer, Black\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22Haier%22+%22Haier+HIL2001MWPH+20+litres+Solo+Microwave+Oven%2C+5+Multi+Power+Level%2C+35+Mins+Cooking+Timer%2C+Black%22+launch+release+date",
+        "https://www.google.com/search?q=%22Haier%22+%22Haier+HIL2001MWPH+20+litres+Solo+Microwave+Oven%2C+5+Multi+Power+Level%2C+35+Mins+Cooking+Timer%2C+Black%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "7239927d36a08f4ce35f32ae39419f1578241660118da01909e6c25a9e5011bc",
+      "brand": "Haier",
+      "type_id": "microwaves",
+      "model": "Haier Vogue 20 L Blueberry Solo Microwave Oven with Auto Cook Menus & Digital Display",
+      "offer_urls": [
+        "https://www.reliancedigital.in/product/haier-vogue-20-l-blueberry-solo-microwave-oven-with-auto-cook-menus-digital-display-mnd4i9-9996329"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"Haier\" \"Haier Vogue 20 L Blueberry Solo Microwave Oven with Auto Cook Menus & Digital Display\" launch release date",
+        "\"Haier\" \"Haier Vogue 20 L Blueberry Solo Microwave Oven with Auto Cook Menus & Digital Display\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22Haier%22+%22Haier+Vogue+20+L+Blueberry+Solo+Microwave+Oven+with+Auto+Cook+Menus+%26+Digital+Display%22+launch+release+date",
+        "https://www.google.com/search?q=%22Haier%22+%22Haier+Vogue+20+L+Blueberry+Solo+Microwave+Oven+with+Auto+Cook+Menus+%26+Digital+Display%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "c0f8ddfbc7a4c0de691450782df95e0d87e58ca3f1c6c908d8aa8c502377d598",
+      "brand": "Haier",
+      "type_id": "microwaves",
+      "model": "Haier Vogue 20 L Lemon Solo Microwave Oven with Auto Cook Menus & Digital Display",
+      "offer_urls": [
+        "https://www.reliancedigital.in/product/haier-vogue-20-l-lemon-solo-microwave-oven-with-auto-cook-menus-digital-display-mnd4i9-9996333"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"Haier\" \"Haier Vogue 20 L Lemon Solo Microwave Oven with Auto Cook Menus & Digital Display\" launch release date",
+        "\"Haier\" \"Haier Vogue 20 L Lemon Solo Microwave Oven with Auto Cook Menus & Digital Display\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22Haier%22+%22Haier+Vogue+20+L+Lemon+Solo+Microwave+Oven+with+Auto+Cook+Menus+%26+Digital+Display%22+launch+release+date",
+        "https://www.google.com/search?q=%22Haier%22+%22Haier+Vogue+20+L+Lemon+Solo+Microwave+Oven+with+Auto+Cook+Menus+%26+Digital+Display%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "11adb3cc806b29948d97539ea7c59453f1829ad6ddc1abc4a1a2084b21d51134",
+      "brand": "Haier",
+      "type_id": "microwaves",
+      "model": "Haier Vogue 20 L Peach Solo Microwave Oven with Auto Cook Menus & Digital Display",
+      "offer_urls": [
+        "https://www.reliancedigital.in/product/haier-vogue-20-l-peach-solo-microwave-oven-with-auto-cook-menus-digital-display-mnd4i9-9996330"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"Haier\" \"Haier Vogue 20 L Peach Solo Microwave Oven with Auto Cook Menus & Digital Display\" launch release date",
+        "\"Haier\" \"Haier Vogue 20 L Peach Solo Microwave Oven with Auto Cook Menus & Digital Display\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22Haier%22+%22Haier+Vogue+20+L+Peach+Solo+Microwave+Oven+with+Auto+Cook+Menus+%26+Digital+Display%22+launch+release+date",
+        "https://www.google.com/search?q=%22Haier%22+%22Haier+Vogue+20+L+Peach+Solo+Microwave+Oven+with+Auto+Cook+Menus+%26+Digital+Display%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "441e92d5b082f5ffb7d6094bb6c1208facd66226e1d1cd6c8ef93dd641496e3a",
+      "brand": "IFB",
+      "type_id": "microwaves",
+      "model": "IFB 20 L Mechanical Knob Control, 5 Power Levels, Weight Defrost, Overheating Protection, Child Safety Lock Solo Microwave Oven (20PM-MEC2, White)",
+      "offer_urls": [
+        "https://www.reliancedigital.in/product/ifb-20-litres-solo-microwave-oven-20pm-mec2-l4oe3a"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"IFB\" \"IFB 20 L Mechanical Knob Control, 5 Power Levels, Weight Defrost, Overheating Protection, Child Safety Lock Solo Microwave Oven (20PM-MEC2, White)\" launch release date",
+        "\"IFB\" \"IFB 20 L Mechanical Knob Control, 5 Power Levels, Weight Defrost, Overheating Protection, Child Safety Lock Solo Microwave Oven (20PM-MEC2, White)\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22IFB%22+%22IFB+20+L+Mechanical+Knob+Control%2C+5+Power+Levels%2C+Weight+Defrost%2C+Overheating+Protection%2C+Child+Safety+Lock+Solo+Microwave+Oven+%2820PM-MEC2%2C+White%29%22+launch+release+date",
+        "https://www.google.com/search?q=%22IFB%22+%22IFB+20+L+Mechanical+Knob+Control%2C+5+Power+Levels%2C+Weight+Defrost%2C+Overheating+Protection%2C+Child+Safety+Lock+Solo+Microwave+Oven+%2820PM-MEC2%2C+White%29%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "8834603113a2b87173cbc0dac4413c0d134d21b6bcc62a5533c223a0d45fe52c",
+      "brand": "IFB",
+      "type_id": "microwaves",
+      "model": "IFB 21 L Air fry Convection Microwave Oven, Silver, 21SC5",
+      "offer_urls": [
+        "https://www.reliancedigital.in/product/ifb-21-l-air-fry-convection-microwave-oven-silver-21sc5-msssqa-10454349"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"IFB\" \"IFB 21 L Air fry Convection Microwave Oven, Silver, 21SC5\" launch release date",
+        "\"IFB\" \"IFB 21 L Air fry Convection Microwave Oven, Silver, 21SC5\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22IFB%22+%22IFB+21+L+Air+fry+Convection+Microwave+Oven%2C+Silver%2C+21SC5%22+launch+release+date",
+        "https://www.google.com/search?q=%22IFB%22+%22IFB+21+L+Air+fry+Convection+Microwave+Oven%2C+Silver%2C+21SC5%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "752c62272f6265a9dc0219ae0b16db89c3d7ebf32f1aee905784002acc8beb2d",
+      "brand": "IFB",
+      "type_id": "microwaves",
+      "model": "IFB 24 L Solo Microwave Oven with 69 Auto Cook Menus (24PM2B, Mug Recipes, Steam Clean, Auto Reheat, Power Save, Multi-Stage Cooking)",
+      "offer_urls": [
+        "https://www.reliancedigital.in/product/ifb-24-l-solo-microwave-oven-24pm2b-black-lt5oun-7536849"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"IFB\" \"IFB 24 L Solo Microwave Oven with 69 Auto Cook Menus (24PM2B, Mug Recipes, Steam Clean, Auto Reheat, Power Save, Multi-Stage Cooking)\" launch release date",
+        "\"IFB\" \"IFB 24 L Solo Microwave Oven with 69 Auto Cook Menus (24PM2B, Mug Recipes, Steam Clean, Auto Reheat, Power Save, Multi-Stage Cooking)\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22IFB%22+%22IFB+24+L+Solo+Microwave+Oven+with+69+Auto+Cook+Menus+%2824PM2B%2C+Mug+Recipes%2C+Steam+Clean%2C+Auto+Reheat%2C+Power+Save%2C+Multi-Stage+Cooking%29%22+launch+release+date",
+        "https://www.google.com/search?q=%22IFB%22+%22IFB+24+L+Solo+Microwave+Oven+with+69+Auto+Cook+Menus+%2824PM2B%2C+Mug+Recipes%2C+Steam+Clean%2C+Auto+Reheat%2C+Power+Save%2C+Multi-Stage+Cooking%29%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "708cec89a086b0b57b9ea87d249a600a4d60602e75cd6879c786ea370ee2ec29",
+      "brand": "IFB",
+      "type_id": "microwaves",
+      "model": "IFB 25 L Convection Microwave Oven with Dual Heaters and 360 Degree Convection (25BC3, Combi Cook, Auto Defrost, 10 Power Level, Auto Cook Menus)",
+      "offer_urls": [
+        "https://www.reliancedigital.in/product/ifb-25-litres-convection-microwave-oven-25bc3"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"IFB\" \"IFB 25 L Convection Microwave Oven with Dual Heaters and 360 Degree Convection (25BC3, Combi Cook, Auto Defrost, 10 Power Level, Auto Cook Menus)\" launch release date",
+        "\"IFB\" \"IFB 25 L Convection Microwave Oven with Dual Heaters and 360 Degree Convection (25BC3, Combi Cook, Auto Defrost, 10 Power Level, Auto Cook Menus)\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22IFB%22+%22IFB+25+L+Convection+Microwave+Oven+with+Dual+Heaters+and+360+Degree+Convection+%2825BC3%2C+Combi+Cook%2C+Auto+Defrost%2C+10+Power+Level%2C+Auto+Cook+Menus%29%22+launch+release+date",
+        "https://www.google.com/search?q=%22IFB%22+%22IFB+25+L+Convection+Microwave+Oven+with+Dual+Heaters+and+360+Degree+Convection+%2825BC3%2C+Combi+Cook%2C+Auto+Defrost%2C+10+Power+Level%2C+Auto+Cook+Menus%29%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "6641a8771bf53719fa58feeba1d0567baad43c634837f08cec8e573a4c548912",
+      "brand": "IFB",
+      "type_id": "microwaves",
+      "model": "IFB 30 L Air fry and Rotisserie Convection Microwave Oven, Black, 30BRC4",
+      "offer_urls": [
+        "https://www.reliancedigital.in/product/ifb-30-l-air-fry-and-rotisserie-convection-microwave-oven-black-30brc4-msssqa-10454348"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"IFB\" \"IFB 30 L Air fry and Rotisserie Convection Microwave Oven, Black, 30BRC4\" launch release date",
+        "\"IFB\" \"IFB 30 L Air fry and Rotisserie Convection Microwave Oven, Black, 30BRC4\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22IFB%22+%22IFB+30+L+Air+fry+and+Rotisserie+Convection+Microwave+Oven%2C+Black%2C+30BRC4%22+launch+release+date",
+        "https://www.google.com/search?q=%22IFB%22+%22IFB+30+L+Air+fry+and+Rotisserie+Convection+Microwave+Oven%2C+Black%2C+30BRC4%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "9291753f05f4ed9653a7f3f5e30ba6452cfe01f6a0b4efe153f97e8ce8ea139b",
+      "brand": "IFB",
+      "type_id": "microwaves",
+      "model": "IFB 30BRC3 Convection Microwave Oven 30 L",
+      "offer_urls": [
+        "https://www.reliancedigital.in/product/ifb-30brc3-convection-microwave-oven-30-l-lv6lal-7564234"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"IFB\" \"IFB 30BRC3 Convection Microwave Oven 30 L\" launch release date",
+        "\"IFB\" \"IFB 30BRC3 Convection Microwave Oven 30 L\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22IFB%22+%22IFB+30BRC3+Convection+Microwave+Oven+30+L%22+launch+release+date",
+        "https://www.google.com/search?q=%22IFB%22+%22IFB+30BRC3+Convection+Microwave+Oven+30+L%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "41d834db1a4bdbeebd9b0fb3c34713e77658ade66233ff95f466133d13bde284",
+      "brand": "IFB",
+      "type_id": "microwaves",
+      "model": "IFB 36 L Rotisserie Convection Microwave Oven, Black, 36BRC2",
+      "offer_urls": [
+        "https://www.reliancedigital.in/product/ifb-36-l-rotisserie-convection-microwave-oven-black-36brc2-msssqa-10454347"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"IFB\" \"IFB 36 L Rotisserie Convection Microwave Oven, Black, 36BRC2\" launch release date",
+        "\"IFB\" \"IFB 36 L Rotisserie Convection Microwave Oven, Black, 36BRC2\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22IFB%22+%22IFB+36+L+Rotisserie+Convection+Microwave+Oven%2C+Black%2C+36BRC2%22+launch+release+date",
+        "https://www.google.com/search?q=%22IFB%22+%22IFB+36+L+Rotisserie+Convection+Microwave+Oven%2C+Black%2C+36BRC2%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "12103dac5246ce0e342a0044cbaabc9f0bb566a93d50435adbaf43679e5d3496",
+      "brand": "LG",
+      "type_id": "microwaves",
+      "model": "LG 20 Litres Grill Microwave Oven | Quartz Heater | Indian Cuisine Menus | Steam Clean (MH2044DB, Black)",
+      "offer_urls": [
+        "https://www.vijaysales.com/p/109226/lg-20-l-grill-microwave-oven-quartz-heater-i-wave-technology-indian-cuisine-auto-cook-menu-steam-clean-anti-bacterial-cavity-health-plus-menu-mh2044db-black"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"LG\" \"LG 20 Litres Grill Microwave Oven | Quartz Heater | Indian Cuisine Menus | Steam Clean (MH2044DB, Black)\" launch release date",
+        "\"LG\" \"LG 20 Litres Grill Microwave Oven | Quartz Heater | Indian Cuisine Menus | Steam Clean (MH2044DB, Black)\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22LG%22+%22LG+20+Litres+Grill+Microwave+Oven+%7C+Quartz+Heater+%7C+Indian+Cuisine+Menus+%7C+Steam+Clean+%28MH2044DB%2C+Black%29%22+launch+release+date",
+        "https://www.google.com/search?q=%22LG%22+%22LG+20+Litres+Grill+Microwave+Oven+%7C+Quartz+Heater+%7C+Indian+Cuisine+Menus+%7C+Steam+Clean+%28MH2044DB%2C+Black%29%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "bdb328ed907ed700c679efffaac7f54ac9a7ac5a8636f1986ef3941b32affa1a",
+      "brand": "LG",
+      "type_id": "microwaves",
+      "model": "LG 21 L Convection Microwave Oven, MC2146BL",
+      "offer_urls": [
+        "https://www.reliancedigital.in/product/lg-21-l-convection-microwave-oven-mc2146bl-mi6c87-9594797"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"LG\" \"LG 21 L Convection Microwave Oven, MC2146BL\" launch release date",
+        "\"LG\" \"LG 21 L Convection Microwave Oven, MC2146BL\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22LG%22+%22LG+21+L+Convection+Microwave+Oven%2C+MC2146BL%22+launch+release+date",
+        "https://www.google.com/search?q=%22LG%22+%22LG+21+L+Convection+Microwave+Oven%2C+MC2146BL%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "844820c21aa85b1dc98b13494833b1c64d6f4bfbc5df231f56d1f13a626c0494",
+      "brand": "LG",
+      "type_id": "microwaves",
+      "model": "LG 28 L Convertible Microwave Oven with Air Fry, Charcoal Lighting Heater, 331 Auto Cook Menu Powered by Thinq, MJEN286UHWF, Black",
+      "offer_urls": [
+        "https://www.reliancedigital.in/product/lg-28-l-convertible-microwave-oven-with-air-fry-charcoal-lighting-heater-331-auto-cook-menu-powered-by-thinq-mjen286uhwf-black-mltiaa-9927378"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"LG\" \"LG 28 L Convertible Microwave Oven with Air Fry, Charcoal Lighting Heater, 331 Auto Cook Menu Powered by Thinq, MJEN286UHWF, Black\" launch release date",
+        "\"LG\" \"LG 28 L Convertible Microwave Oven with Air Fry, Charcoal Lighting Heater, 331 Auto Cook Menu Powered by Thinq, MJEN286UHWF, Black\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22LG%22+%22LG+28+L+Convertible+Microwave+Oven+with+Air+Fry%2C+Charcoal+Lighting+Heater%2C+331+Auto+Cook+Menu+Powered+by+Thinq%2C+MJEN286UHWF%2C+Black%22+launch+release+date",
+        "https://www.google.com/search?q=%22LG%22+%22LG+28+L+Convertible+Microwave+Oven+with+Air+Fry%2C+Charcoal+Lighting+Heater%2C+331+Auto+Cook+Menu+Powered+by+Thinq%2C+MJEN286UHWF%2C+Black%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "0f681b08b14e1f7aef442d7f39fcf25994d0bc19998a332d4a92f0753f0c59aa",
+      "brand": "LG",
+      "type_id": "microwaves",
+      "model": "LG 28 Litres Convection Microwave Oven | 251 Auto Cook Menus | Diet Fry | Quartz Heater (MC2846SL, Silver)",
+      "offer_urls": [
+        "https://www.vijaysales.com/p/139912/lg-28-litres-convection-microwave-with-glass-door-251-auto-cook-menus-diet-fry-quartz-heater-mc2846sl-silver"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"LG\" \"LG 28 Litres Convection Microwave Oven | 251 Auto Cook Menus | Diet Fry | Quartz Heater (MC2846SL, Silver)\" launch release date",
+        "\"LG\" \"LG 28 Litres Convection Microwave Oven | 251 Auto Cook Menus | Diet Fry | Quartz Heater (MC2846SL, Silver)\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22LG%22+%22LG+28+Litres+Convection+Microwave+Oven+%7C+251+Auto+Cook+Menus+%7C+Diet+Fry+%7C+Quartz+Heater+%28MC2846SL%2C+Silver%29%22+launch+release+date",
+        "https://www.google.com/search?q=%22LG%22+%22LG+28+Litres+Convection+Microwave+Oven+%7C+251+Auto+Cook+Menus+%7C+Diet+Fry+%7C+Quartz+Heater+%28MC2846SL%2C+Silver%29%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "e1ffd5daac2d47e3ec95d2e008898d87b581c0f34447b3fb70df5bd2e5d99874",
+      "brand": "LG",
+      "type_id": "microwaves",
+      "model": "LG 30 L Solo Microwave Oven, MS3032BK",
+      "offer_urls": [
+        "https://www.reliancedigital.in/product/lg-30-l-solo-microwave-oven-ms3032bk-mio8it-9660367"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"LG\" \"LG 30 L Solo Microwave Oven, MS3032BK\" launch release date",
+        "\"LG\" \"LG 30 L Solo Microwave Oven, MS3032BK\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22LG%22+%22LG+30+L+Solo+Microwave+Oven%2C+MS3032BK%22+launch+release+date",
+        "https://www.google.com/search?q=%22LG%22+%22LG+30+L+Solo+Microwave+Oven%2C+MS3032BK%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "c49b6208a8b55748af78dc386e1974a2629b9917c3da08f8efdf94af96a43475",
+      "brand": "LG",
+      "type_id": "microwaves",
+      "model": "LG 32 L Convertible Microwave Oven with Air Fry, Charcoal Lighting Heater, 431 Auto Cook Menu Powered by Thinq, MJEN326ULWF, Black",
+      "offer_urls": [
+        "https://www.reliancedigital.in/product/lg-32-l-convertible-microwave-oven-with-air-fry-charcoal-lighting-heater-431-auto-cook-menu-powered-by-thinq-mjen326ulwf-black-mltiaa-9927379"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"LG\" \"LG 32 L Convertible Microwave Oven with Air Fry, Charcoal Lighting Heater, 431 Auto Cook Menu Powered by Thinq, MJEN326ULWF, Black\" launch release date",
+        "\"LG\" \"LG 32 L Convertible Microwave Oven with Air Fry, Charcoal Lighting Heater, 431 Auto Cook Menu Powered by Thinq, MJEN326ULWF, Black\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22LG%22+%22LG+32+L+Convertible+Microwave+Oven+with+Air+Fry%2C+Charcoal+Lighting+Heater%2C+431+Auto+Cook+Menu+Powered+by+Thinq%2C+MJEN326ULWF%2C+Black%22+launch+release+date",
+        "https://www.google.com/search?q=%22LG%22+%22LG+32+L+Convertible+Microwave+Oven+with+Air+Fry%2C+Charcoal+Lighting+Heater%2C+431+Auto+Cook+Menu+Powered+by+Thinq%2C+MJEN326ULWF%2C+Black%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "04d8c52850ee549f9693552d6c7c03cd4b3df4f535c3090cea2c0b76969b8e72",
+      "brand": "LG",
+      "type_id": "microwaves",
+      "model": "LG MC2146BV 21L Convection Microwave Oven, 151 Auto Cook Menu, Black",
+      "offer_urls": [
+        "https://www.reliancedigital.in/product/lg-21-litres-convection-microwave-oven-mc2146bv-l4r4oa"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"LG\" \"LG MC2146BV 21L Convection Microwave Oven, 151 Auto Cook Menu, Black\" launch release date",
+        "\"LG\" \"LG MC2146BV 21L Convection Microwave Oven, 151 Auto Cook Menu, Black\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22LG%22+%22LG+MC2146BV+21L+Convection+Microwave+Oven%2C+151+Auto+Cook+Menu%2C+Black%22+launch+release+date",
+        "https://www.google.com/search?q=%22LG%22+%22LG+MC2146BV+21L+Convection+Microwave+Oven%2C+151+Auto+Cook+Menu%2C+Black%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "f8ddd877a37541be7dac6d2714f85c30d664214fd56e776d53961d1faecf223b",
+      "brand": "LG",
+      "type_id": "microwaves",
+      "model": "LG MC2846BR 28 Litres Convection Microwave Oven, 51 Auto Cook Menu, Black",
+      "offer_urls": [
+        "https://www.reliancedigital.in/product/lg-28-litres-convection-microwave-oven-mc2846br-black-l7sz90"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"LG\" \"LG MC2846BR 28 Litres Convection Microwave Oven, 51 Auto Cook Menu, Black\" launch release date",
+        "\"LG\" \"LG MC2846BR 28 Litres Convection Microwave Oven, 51 Auto Cook Menu, Black\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22LG%22+%22LG+MC2846BR+28+Litres+Convection+Microwave+Oven%2C+51+Auto+Cook+Menu%2C+Black%22+launch+release+date",
+        "https://www.google.com/search?q=%22LG%22+%22LG+MC2846BR+28+Litres+Convection+Microwave+Oven%2C+51+Auto+Cook+Menu%2C+Black%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "643cc71ce07a40483b9a7cbdbc7a4580b1ab7a3628ee0108cbd12bd2b8d365d5",
+      "brand": "Maharaja",
+      "type_id": "microwaves",
+      "model": "LG MJ2887BWUM 28L Convection Microwave Oven 301 Auto Cook Menu, Black",
+      "offer_urls": [
+        "https://www.reliancedigital.in/product/lg-mj2887bwum-28l-convection-microwave-oven-301-auto-cook-menu-black-lsydfd-7536714"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"Maharaja\" \"LG MJ2887BWUM 28L Convection Microwave Oven 301 Auto Cook Menu, Black\" launch release date",
+        "\"Maharaja\" \"LG MJ2887BWUM 28L Convection Microwave Oven 301 Auto Cook Menu, Black\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22Maharaja%22+%22LG+MJ2887BWUM+28L+Convection+Microwave+Oven+301+Auto+Cook+Menu%2C+Black%22+launch+release+date",
+        "https://www.google.com/search?q=%22Maharaja%22+%22LG+MJ2887BWUM+28L+Convection+Microwave+Oven+301+Auto+Cook+Menu%2C+Black%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "6a93276d111122b5d0e0f513d8f2095d54c11015fe61d92829bac5d6f674978f",
+      "brand": "LAPCARE",
+      "type_id": "routers",
+      "model": "Lapcare W666 4G SIM WiFi 6 Router with 4 High‐Gain Antennas",
+      "offer_urls": [
+        "https://www.tpstech.in/products/lapcare-w666-4g-sim-wifi6-router?variant=54223383363887"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"LAPCARE\" \"Lapcare W666 4G SIM WiFi 6 Router with 4 High‐Gain Antennas\" launch release date",
+        "\"LAPCARE\" \"Lapcare W666 4G SIM WiFi 6 Router with 4 High‐Gain Antennas\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22LAPCARE%22+%22Lapcare+W666+4G+SIM+WiFi+6+Router+with+4+High%E2%80%90Gain+Antennas%22+launch+release+date",
+        "https://www.google.com/search?q=%22LAPCARE%22+%22Lapcare+W666+4G+SIM+WiFi+6+Router+with+4+High%E2%80%90Gain+Antennas%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "502bf89ddb57ff15bba9dcec534f17a3646ae0a0d28bb47ed38d2f0befc9e1d3",
+      "brand": "Whirlpool",
+      "type_id": "microwaves",
+      "model": "Magicook Pro 20L Convection Microwave (All in One Convection-Oven)",
+      "offer_urls": [
+        "https://india.whirlpool.in/magicook-pro-20-l-microwave/p?skuId=48"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"Whirlpool\" \"Magicook Pro 20L Convection Microwave (All in One Convection-Oven)\" launch release date",
+        "\"Whirlpool\" \"Magicook Pro 20L Convection Microwave (All in One Convection-Oven)\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22Whirlpool%22+%22Magicook+Pro+20L+Convection+Microwave+%28All+in+One+Convection-Oven%29%22+launch+release+date",
+        "https://www.google.com/search?q=%22Whirlpool%22+%22Magicook+Pro+20L+Convection+Microwave+%28All+in+One+Convection-Oven%29%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "926fda7ce6966c48558d06d4dd4b1044c1e1e88f12bf64ce115f42d6cdc4fb49",
+      "brand": "Whirlpool",
+      "type_id": "microwaves",
+      "model": "Magicook Pro 20L Solo Microwave (18 Auto-Cook Menus)",
+      "offer_urls": [
+        "https://india.whirlpool.in/magicook-pro-solo-20-l-microwave--up-to-18-auto-cook-menus-/p?skuId=28"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"Whirlpool\" \"Magicook Pro 20L Solo Microwave (18 Auto-Cook Menus)\" launch release date",
+        "\"Whirlpool\" \"Magicook Pro 20L Solo Microwave (18 Auto-Cook Menus)\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22Whirlpool%22+%22Magicook+Pro+20L+Solo+Microwave+%2818+Auto-Cook+Menus%29%22+launch+release+date",
+        "https://www.google.com/search?q=%22Whirlpool%22+%22Magicook+Pro+20L+Solo+Microwave+%2818+Auto-Cook+Menus%29%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "18640418fc90d77de3b6259e6b0f26df63051a42cd3246bec3af593cab45d269",
+      "brand": "Whirlpool",
+      "type_id": "microwaves",
+      "model": "Magicook Pro 24L Convection Microwave (All in One Convection-Oven)",
+      "offer_urls": [
+        "https://india.whirlpool.in/magicook-pro-24-l-microwave/p?skuId=49"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"Whirlpool\" \"Magicook Pro 24L Convection Microwave (All in One Convection-Oven)\" launch release date",
+        "\"Whirlpool\" \"Magicook Pro 24L Convection Microwave (All in One Convection-Oven)\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22Whirlpool%22+%22Magicook+Pro+24L+Convection+Microwave+%28All+in+One+Convection-Oven%29%22+launch+release+date",
+        "https://www.google.com/search?q=%22Whirlpool%22+%22Magicook+Pro+24L+Convection+Microwave+%28All+in+One+Convection-Oven%29%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "7d7d2e21e52b6e9cdfbc7b36caa5f5d9a082405b4d4b5e2d6d023992b2675ae6",
+      "brand": "Whirlpool",
+      "type_id": "microwaves",
+      "model": "Magicook Pro 25L Grill Microwave (24 Auto-Cook Menus)",
+      "offer_urls": [
+        "https://india.whirlpool.in/magicook-pro-grill-25-l-microwave--up-to-24-auto-cook-menus-/p?skuId=31"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"Whirlpool\" \"Magicook Pro 25L Grill Microwave (24 Auto-Cook Menus)\" launch release date",
+        "\"Whirlpool\" \"Magicook Pro 25L Grill Microwave (24 Auto-Cook Menus)\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22Whirlpool%22+%22Magicook+Pro+25L+Grill+Microwave+%2824+Auto-Cook+Menus%29%22+launch+release+date",
+        "https://www.google.com/search?q=%22Whirlpool%22+%22Magicook+Pro+25L+Grill+Microwave+%2824+Auto-Cook+Menus%29%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "4f6007fb8dc4d20c32ec3c65a100949f33f2c6379e1a68c32dc5898716bd9208",
+      "brand": "Whirlpool",
+      "type_id": "microwaves",
+      "model": "Magicook Pro 25L Solo Microwave (19 Auto-Cook Menus)",
+      "offer_urls": [
+        "https://india.whirlpool.in/magicook-pro-solo-25-l-microwave--up-to-19-auto-cook-menus-/p?skuId=29"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"Whirlpool\" \"Magicook Pro 25L Solo Microwave (19 Auto-Cook Menus)\" launch release date",
+        "\"Whirlpool\" \"Magicook Pro 25L Solo Microwave (19 Auto-Cook Menus)\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22Whirlpool%22+%22Magicook+Pro+25L+Solo+Microwave+%2819+Auto-Cook+Menus%29%22+launch+release+date",
+        "https://www.google.com/search?q=%22Whirlpool%22+%22Magicook+Pro+25L+Solo+Microwave+%2819+Auto-Cook+Menus%29%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "e77246b5840ea18b67fb6e62fcbc04709cc3c71e7f84620a2bd8b7b84522df2d",
+      "brand": "Whirlpool",
+      "type_id": "microwaves",
+      "model": "Magicook Pro 29L Convection Microwave (Air-Fryer with Baking Plate & Rotisserie)",
+      "offer_urls": [
+        "https://india.whirlpool.in/magicook-pro-29l-convection-microwave-air-fryer-with-baking-plate---rotisserie/p?skuId=580"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"Whirlpool\" \"Magicook Pro 29L Convection Microwave (Air-Fryer with Baking Plate & Rotisserie)\" launch release date",
+        "\"Whirlpool\" \"Magicook Pro 29L Convection Microwave (Air-Fryer with Baking Plate & Rotisserie)\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22Whirlpool%22+%22Magicook+Pro+29L+Convection+Microwave+%28Air-Fryer+with+Baking+Plate+%26+Rotisserie%29%22+launch+release+date",
+        "https://www.google.com/search?q=%22Whirlpool%22+%22Magicook+Pro+29L+Convection+Microwave+%28Air-Fryer+with+Baking+Plate+%26+Rotisserie%29%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "453f7e658dd1377a156cba21a862ebfe9dc61713ef4bedfd7e4c3de9b396ddfb",
+      "brand": "Whirlpool",
+      "type_id": "microwaves",
+      "model": "Magicook Pro 29L Convection Microwave (Air-Fryer with Baking Plate)",
+      "offer_urls": [
+        "https://india.whirlpool.in/magicook-pro-29l-convection-microwave-air-fryer-with-baking-plate/p?skuId=579"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"Whirlpool\" \"Magicook Pro 29L Convection Microwave (Air-Fryer with Baking Plate)\" launch release date",
+        "\"Whirlpool\" \"Magicook Pro 29L Convection Microwave (Air-Fryer with Baking Plate)\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22Whirlpool%22+%22Magicook+Pro+29L+Convection+Microwave+%28Air-Fryer+with+Baking+Plate%29%22+launch+release+date",
+        "https://www.google.com/search?q=%22Whirlpool%22+%22Magicook+Pro+29L+Convection+Microwave+%28Air-Fryer+with+Baking+Plate%29%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "1eeb3a44ac06a0ff6514e1ac4d6c25907bffa01c4de17fa712e88c933fea42db",
+      "brand": "MikroTik",
+      "type_id": "routers",
+      "model": "MikroTik L009UiGS-RM Router Dual-Core ARM CPU 8x Gigabit Ethernet 2.5G SFP",
+      "offer_urls": [
+        "https://www.tpstech.in/products/mikrotik-l009uigs-rm-router?variant=52046019199279"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"MikroTik\" \"MikroTik L009UiGS-RM Router Dual-Core ARM CPU 8x Gigabit Ethernet 2.5G SFP\" launch release date",
+        "\"MikroTik\" \"MikroTik L009UiGS-RM Router Dual-Core ARM CPU 8x Gigabit Ethernet 2.5G SFP\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22MikroTik%22+%22MikroTik+L009UiGS-RM+Router+Dual-Core+ARM+CPU+8x+Gigabit+Ethernet+2.5G+SFP%22+launch+release+date",
+        "https://www.google.com/search?q=%22MikroTik%22+%22MikroTik+L009UiGS-RM+Router+Dual-Core+ARM+CPU+8x+Gigabit+Ethernet+2.5G+SFP%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "ebb6eb3d93cfcc291cb8b292a39300b088aebe6085e3e7712b4044dcf7eebfc7",
+      "brand": "MikroTik",
+      "type_id": "routers",
+      "model": "MikroTik RB4011iGS+RM Router Quad-Core 1.4GHz CPU 10x Gigabit Ethernet Ports 1x SFP+ 10Gbps",
+      "offer_urls": [
+        "https://www.tpstech.in/products/mikrotik-rb4011igs-rm-router?variant=52046025851183"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"MikroTik\" \"MikroTik RB4011iGS+RM Router Quad-Core 1.4GHz CPU 10x Gigabit Ethernet Ports 1x SFP+ 10Gbps\" launch release date",
+        "\"MikroTik\" \"MikroTik RB4011iGS+RM Router Quad-Core 1.4GHz CPU 10x Gigabit Ethernet Ports 1x SFP+ 10Gbps\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22MikroTik%22+%22MikroTik+RB4011iGS%2BRM+Router+Quad-Core+1.4GHz+CPU+10x+Gigabit+Ethernet+Ports+1x+SFP%2B+10Gbps%22+launch+release+date",
+        "https://www.google.com/search?q=%22MikroTik%22+%22MikroTik+RB4011iGS%2BRM+Router+Quad-Core+1.4GHz+CPU+10x+Gigabit+Ethernet+Ports+1x+SFP%2B+10Gbps%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "21f5503864541262134f81422081c3d4ba081f6e3297bb6544bd7672eb665791",
+      "brand": "MikroTik",
+      "type_id": "routers",
+      "model": "MikroTik hEX PoE RB960PGS Gigabit Ethernet Router with 5 Ports PoE-Out SFP Enclosure Included",
+      "offer_urls": [
+        "https://www.tpstech.in/products/mikrotik-hex-poe-rb960pgs-gigabit-router?variant=52046003536175"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"MikroTik\" \"MikroTik hEX PoE RB960PGS Gigabit Ethernet Router with 5 Ports PoE-Out SFP Enclosure Included\" launch release date",
+        "\"MikroTik\" \"MikroTik hEX PoE RB960PGS Gigabit Ethernet Router with 5 Ports PoE-Out SFP Enclosure Included\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22MikroTik%22+%22MikroTik+hEX+PoE+RB960PGS+Gigabit+Ethernet+Router+with+5+Ports+PoE-Out+SFP+Enclosure+Included%22+launch+release+date",
+        "https://www.google.com/search?q=%22MikroTik%22+%22MikroTik+hEX+PoE+RB960PGS+Gigabit+Ethernet+Router+with+5+Ports+PoE-Out+SFP+Enclosure+Included%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "c4b189aa0e89a46f92f706933a032122323a4d64728ace14d5b3a7c56d9dd005",
+      "brand": "MikroTik",
+      "type_id": "routers",
+      "model": "MikroTik hEX Refresh E50UG ARM Dual-Core 950MHz Router 512MB RAM 5x Gigabit Ethernet",
+      "offer_urls": [
+        "https://www.tpstech.in/products/mikrotik-hex-refresh-e50ug-router?variant=52046004912431"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"MikroTik\" \"MikroTik hEX Refresh E50UG ARM Dual-Core 950MHz Router 512MB RAM 5x Gigabit Ethernet\" launch release date",
+        "\"MikroTik\" \"MikroTik hEX Refresh E50UG ARM Dual-Core 950MHz Router 512MB RAM 5x Gigabit Ethernet\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22MikroTik%22+%22MikroTik+hEX+Refresh+E50UG+ARM+Dual-Core+950MHz+Router+512MB+RAM+5x+Gigabit+Ethernet%22+launch+release+date",
+        "https://www.google.com/search?q=%22MikroTik%22+%22MikroTik+hEX+Refresh+E50UG+ARM+Dual-Core+950MHz+Router+512MB+RAM+5x+Gigabit+Ethernet%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "5eb04674163b1472063157b329b3b8dcee8551bc34542a2758ba0553da08157e",
+      "brand": "MikroTik",
+      "type_id": "routers",
+      "model": "MikroTik hEX S E60iUGS Wired Router Dual-Core CPU 512MB RAM 5x Gigabit Ethernet 2.5G SFP",
+      "offer_urls": [
+        "https://www.tpstech.in/products/mikrotik-hex-s-e60iugs-router?variant=52046012580143"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"MikroTik\" \"MikroTik hEX S E60iUGS Wired Router Dual-Core CPU 512MB RAM 5x Gigabit Ethernet 2.5G SFP\" launch release date",
+        "\"MikroTik\" \"MikroTik hEX S E60iUGS Wired Router Dual-Core CPU 512MB RAM 5x Gigabit Ethernet 2.5G SFP\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22MikroTik%22+%22MikroTik+hEX+S+E60iUGS+Wired+Router+Dual-Core+CPU+512MB+RAM+5x+Gigabit+Ethernet+2.5G+SFP%22+launch+release+date",
+        "https://www.google.com/search?q=%22MikroTik%22+%22MikroTik+hEX+S+E60iUGS+Wired+Router+Dual-Core+CPU+512MB+RAM+5x+Gigabit+Ethernet+2.5G+SFP%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "a6fc3b1f60e54e09061abd8571bfbbcb53d83e237b3e28ded22f0823299854e8",
+      "brand": "Morphy Richards",
+      "type_id": "microwaves",
+      "model": "Morphy Richards 20 Litres Solo Microwave Oven, Black",
+      "offer_urls": [
+        "https://www.reliancedigital.in/product/morphy-richards-20-litres-solo-microwave-oven-black-mc1lff-9266019"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"Morphy Richards\" \"Morphy Richards 20 Litres Solo Microwave Oven, Black\" launch release date",
+        "\"Morphy Richards\" \"Morphy Richards 20 Litres Solo Microwave Oven, Black\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22Morphy+Richards%22+%22Morphy+Richards+20+Litres+Solo+Microwave+Oven%2C+Black%22+launch+release+date",
+        "https://www.google.com/search?q=%22Morphy+Richards%22+%22Morphy+Richards+20+Litres+Solo+Microwave+Oven%2C+Black%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "7e9bbba89b640e8011279037c54d8b6442fd6137102d05781883f0574ced41f6",
+      "brand": "NETGEAR",
+      "type_id": "routers",
+      "model": "NETGEAR AC1300 Dual Band PoE Insight Managed Smart Cloud Wireless Access Router",
+      "offer_urls": [
+        "https://www.tpstech.in/products/netgear-ac1300-dual-band-poe-insight-managed-smart-cloud-wireless-access-router?variant=39533935198286"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"NETGEAR\" \"NETGEAR AC1300 Dual Band PoE Insight Managed Smart Cloud Wireless Access Router\" launch release date",
+        "\"NETGEAR\" \"NETGEAR AC1300 Dual Band PoE Insight Managed Smart Cloud Wireless Access Router\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22NETGEAR%22+%22NETGEAR+AC1300+Dual+Band+PoE+Insight+Managed+Smart+Cloud+Wireless+Access+Router%22+launch+release+date",
+        "https://www.google.com/search?q=%22NETGEAR%22+%22NETGEAR+AC1300+Dual+Band+PoE+Insight+Managed+Smart+Cloud+Wireless+Access+Router%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "aee70a005232db91b2ce0a076167d58e7dd1c4748d6335f5f3b5f436024bb216",
+      "brand": "NETGEAR",
+      "type_id": "routers",
+      "model": "NETGEAR Nighthawk RAX10 AX1800 Dual-band WIFI 6 Router",
+      "offer_urls": [
+        "https://www.tpstech.in/products/netgear-nighthawk-rax10-dual-band-wifi-6-router?variant=40078210531406"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"NETGEAR\" \"NETGEAR Nighthawk RAX10 AX1800 Dual-band WIFI 6 Router\" launch release date",
+        "\"NETGEAR\" \"NETGEAR Nighthawk RAX10 AX1800 Dual-band WIFI 6 Router\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22NETGEAR%22+%22NETGEAR+Nighthawk+RAX10+AX1800+Dual-band+WIFI+6+Router%22+launch+release+date",
+        "https://www.google.com/search?q=%22NETGEAR%22+%22NETGEAR+Nighthawk+RAX10+AX1800+Dual-band+WIFI+6+Router%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "7d8d683b073b9c502061e79dbb00c100c540117d124e4fbf48ea2af5f208bc9e",
+      "brand": "NETGEAR",
+      "type_id": "routers",
+      "model": "NETGEAR Orbi AC2200 Tri-band Wi-Fi Router",
+      "offer_urls": [
+        "https://www.tpstech.in/products/netgear-orbi-ac2200-tri-band-wifi-system?variant=39931507671118"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"NETGEAR\" \"NETGEAR Orbi AC2200 Tri-band Wi-Fi Router\" launch release date",
+        "\"NETGEAR\" \"NETGEAR Orbi AC2200 Tri-band Wi-Fi Router\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22NETGEAR%22+%22NETGEAR+Orbi+AC2200+Tri-band+Wi-Fi+Router%22+launch+release+date",
+        "https://www.google.com/search?q=%22NETGEAR%22+%22NETGEAR+Orbi+AC2200+Tri-band+Wi-Fi+Router%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "1df981fb6fd6aa9b63f8fb325875d72eb3cf12d7d3328574e259fc26e77d0eb3",
+      "brand": "Panasonic",
+      "type_id": "microwaves",
+      "model": "Panasonic 27 Litres Convection Microwave Oven | Vapour Clean | Twin Turbo Cooking | 137 Auto Cook Menus (NN-CT64HBFDG, Black)",
+      "offer_urls": [
+        "https://www.vijaysales.com/p/146369/panasonic-27-ltrs-convection-microwave-nnct64hbfdg-black"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"Panasonic\" \"Panasonic 27 Litres Convection Microwave Oven | Vapour Clean | Twin Turbo Cooking | 137 Auto Cook Menus (NN-CT64HBFDG, Black)\" launch release date",
+        "\"Panasonic\" \"Panasonic 27 Litres Convection Microwave Oven | Vapour Clean | Twin Turbo Cooking | 137 Auto Cook Menus (NN-CT64HBFDG, Black)\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22Panasonic%22+%22Panasonic+27+Litres+Convection+Microwave+Oven+%7C+Vapour+Clean+%7C+Twin+Turbo+Cooking+%7C+137+Auto+Cook+Menus+%28NN-CT64HBFDG%2C+Black%29%22+launch+release+date",
+        "https://www.google.com/search?q=%22Panasonic%22+%22Panasonic+27+Litres+Convection+Microwave+Oven+%7C+Vapour+Clean+%7C+Twin+Turbo+Cooking+%7C+137+Auto+Cook+Menus+%28NN-CT64HBFDG%2C+Black%29%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "749e0640de2c46273e5d68063f3cffd09bcde7d226829d691e6c8ea802799490",
+      "brand": "Samsung",
+      "type_id": "microwaves",
+      "model": "Samsung 21 L Convection Microwave Oven, CE76JD-B1/XTL",
+      "offer_urls": [
+        "https://www.reliancedigital.in/product/samsung-21-l-convection-microwave-oven-ce76jd-b1xtl-loiwcs-7534712"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "site:news.samsung.com/in \"Samsung 21 L Convection Microwave Oven, CE76JD-B1/XTL\" launch",
+        "\"Samsung\" \"Samsung 21 L Convection Microwave Oven, CE76JD-B1/XTL\" launch release date",
+        "\"Samsung\" \"Samsung 21 L Convection Microwave Oven, CE76JD-B1/XTL\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=site%3Anews.samsung.com%2Fin+%22Samsung+21+L+Convection+Microwave+Oven%2C+CE76JD-B1%2FXTL%22+launch",
+        "https://www.google.com/search?q=%22Samsung%22+%22Samsung+21+L+Convection+Microwave+Oven%2C+CE76JD-B1%2FXTL%22+launch+release+date",
+        "https://www.google.com/search?q=%22Samsung%22+%22Samsung+21+L+Convection+Microwave+Oven%2C+CE76JD-B1%2FXTL%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "2649c58ffa19c7be2c3c75b29d45061bb5325518f4109e7aeb2303cfcf0e7568",
+      "brand": "Samsung",
+      "type_id": "microwaves",
+      "model": "Samsung 28 L Samsung Convection Microwave Oven, MC28A5147VK/TL, Black",
+      "offer_urls": [
+        "https://www.reliancedigital.in/product/samsung-28-l-samsung-convection-microwave-oven-mc28a5147vktl-black-lo2guk-7534605"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "site:news.samsung.com/in \"Samsung 28 L Samsung Convection Microwave Oven, MC28A5147VK/TL, Black\" launch",
+        "\"Samsung\" \"Samsung 28 L Samsung Convection Microwave Oven, MC28A5147VK/TL, Black\" launch release date",
+        "\"Samsung\" \"Samsung 28 L Samsung Convection Microwave Oven, MC28A5147VK/TL, Black\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=site%3Anews.samsung.com%2Fin+%22Samsung+28+L+Samsung+Convection+Microwave+Oven%2C+MC28A5147VK%2FTL%2C+Black%22+launch",
+        "https://www.google.com/search?q=%22Samsung%22+%22Samsung+28+L+Samsung+Convection+Microwave+Oven%2C+MC28A5147VK%2FTL%2C+Black%22+launch+release+date",
+        "https://www.google.com/search?q=%22Samsung%22+%22Samsung+28+L+Samsung+Convection+Microwave+Oven%2C+MC28A5147VK%2FTL%2C+Black%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "5a081a26aca6fc0fdb3f468529902395841641a423ecdc1eb19f15d32bc5279e",
+      "brand": "Samsung",
+      "type_id": "microwaves",
+      "model": "Samsung 28 L SlimFry Convection Microwave Oven, MC28A5025VS",
+      "offer_urls": [
+        "https://www.reliancedigital.in/product/samsung-28-l-slimfry-convection-microwave-oven-mc28a5025vs-ltnyto-7537121"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "site:news.samsung.com/in \"Samsung 28 L SlimFry Convection Microwave Oven, MC28A5025VS\" launch",
+        "\"Samsung\" \"Samsung 28 L SlimFry Convection Microwave Oven, MC28A5025VS\" launch release date",
+        "\"Samsung\" \"Samsung 28 L SlimFry Convection Microwave Oven, MC28A5025VS\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=site%3Anews.samsung.com%2Fin+%22Samsung+28+L+SlimFry+Convection+Microwave+Oven%2C+MC28A5025VS%22+launch",
+        "https://www.google.com/search?q=%22Samsung%22+%22Samsung+28+L+SlimFry+Convection+Microwave+Oven%2C+MC28A5025VS%22+launch+release+date",
+        "https://www.google.com/search?q=%22Samsung%22+%22Samsung+28+L+SlimFry+Convection+Microwave+Oven%2C+MC28A5025VS%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "7271d46d6414833cc6748104da20d552b1b6d6e829ec195ea0547edf0cd30428",
+      "brand": "Samsung",
+      "type_id": "microwaves",
+      "model": "Samsung 28 Litre Convection Microwave Oven with Slim Fry, Indian Auto Cook menu (MC28H5025VR/TL, Black Delight Red Pattern)",
+      "offer_urls": [
+        "https://www.reliancedigital.in/product/samsung-28-litre-convection-microwave-oven-with-slim-fry-indian-auto-cook-menu-mc28h5025vrtl-black-delight-red-pattern-l514r9"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "site:news.samsung.com/in \"Samsung 28 Litre Convection Microwave Oven with Slim Fry, Indian Auto Cook menu (MC28H5025VR/TL, Black Delight Red Pattern)\" launch",
+        "\"Samsung\" \"Samsung 28 Litre Convection Microwave Oven with Slim Fry, Indian Auto Cook menu (MC28H5025VR/TL, Black Delight Red Pattern)\" launch release date",
+        "\"Samsung\" \"Samsung 28 Litre Convection Microwave Oven with Slim Fry, Indian Auto Cook menu (MC28H5025VR/TL, Black Delight Red Pattern)\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=site%3Anews.samsung.com%2Fin+%22Samsung+28+Litre+Convection+Microwave+Oven+with+Slim+Fry%2C+Indian+Auto+Cook+menu+%28MC28H5025VR%2FTL%2C+Black+Delight+Red+Pattern%29%22+launch",
+        "https://www.google.com/search?q=%22Samsung%22+%22Samsung+28+Litre+Convection+Microwave+Oven+with+Slim+Fry%2C+Indian+Auto+Cook+menu+%28MC28H5025VR%2FTL%2C+Black+Delight+Red+Pattern%29%22+launch+release+date",
+        "https://www.google.com/search?q=%22Samsung%22+%22Samsung+28+Litre+Convection+Microwave+Oven+with+Slim+Fry%2C+Indian+Auto+Cook+menu+%28MC28H5025VR%2FTL%2C+Black+Delight+Red+Pattern%29%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "e3d1f90938a74dd5c42bdb0d219538b255f5596902f05c1f7d980b20e50c2b8c",
+      "brand": "Samsung",
+      "type_id": "microwaves",
+      "model": "Samsung 32 Litres Convection Microwave Oven | Masala & Tadka Mode | Sun-Dry Function | Large Turntable (MC32A7056CK, Black)",
+      "offer_urls": [
+        "https://www.vijaysales.com/p/213361/samsung-32-litres-convection-microwave-with-masala-tadka-sun-dry-mode-faster-cooking-large-turntable-mc32a7056ck-black"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "site:news.samsung.com/in \"Samsung 32 Litres Convection Microwave Oven | Masala & Tadka Mode | Sun-Dry Function | Large Turntable (MC32A7056CK, Black)\" launch",
+        "\"Samsung\" \"Samsung 32 Litres Convection Microwave Oven | Masala & Tadka Mode | Sun-Dry Function | Large Turntable (MC32A7056CK, Black)\" launch release date",
+        "\"Samsung\" \"Samsung 32 Litres Convection Microwave Oven | Masala & Tadka Mode | Sun-Dry Function | Large Turntable (MC32A7056CK, Black)\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=site%3Anews.samsung.com%2Fin+%22Samsung+32+Litres+Convection+Microwave+Oven+%7C+Masala+%26+Tadka+Mode+%7C+Sun-Dry+Function+%7C+Large+Turntable+%28MC32A7056CK%2C+Black%29%22+launch",
+        "https://www.google.com/search?q=%22Samsung%22+%22Samsung+32+Litres+Convection+Microwave+Oven+%7C+Masala+%26+Tadka+Mode+%7C+Sun-Dry+Function+%7C+Large+Turntable+%28MC32A7056CK%2C+Black%29%22+launch+release+date",
+        "https://www.google.com/search?q=%22Samsung%22+%22Samsung+32+Litres+Convection+Microwave+Oven+%7C+Masala+%26+Tadka+Mode+%7C+Sun-Dry+Function+%7C+Large+Turntable+%28MC32A7056CK%2C+Black%29%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "8f9d0688abaf8932bcc4afc30edff245c8c5996d23fadaf57143485e00562790",
+      "brand": "Samsung",
+      "type_id": "microwaves",
+      "model": "Samsung MC28A5145VK 28 Litres Convection Microwave Oven, Moisture Sensor, Black",
+      "offer_urls": [
+        "https://www.reliancedigital.in/product/samsung-28-litres-mc28a5145vk-convection-microwave-oven-with-moisture-sensor-kxoudy"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "site:news.samsung.com/in \"Samsung MC28A5145VK 28 Litres Convection Microwave Oven, Moisture Sensor, Black\" launch",
+        "\"Samsung\" \"Samsung MC28A5145VK 28 Litres Convection Microwave Oven, Moisture Sensor, Black\" launch release date",
+        "\"Samsung\" \"Samsung MC28A5145VK 28 Litres Convection Microwave Oven, Moisture Sensor, Black\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=site%3Anews.samsung.com%2Fin+%22Samsung+MC28A5145VK+28+Litres+Convection+Microwave+Oven%2C+Moisture+Sensor%2C+Black%22+launch",
+        "https://www.google.com/search?q=%22Samsung%22+%22Samsung+MC28A5145VK+28+Litres+Convection+Microwave+Oven%2C+Moisture+Sensor%2C+Black%22+launch+release+date",
+        "https://www.google.com/search?q=%22Samsung%22+%22Samsung+MC28A5145VK+28+Litres+Convection+Microwave+Oven%2C+Moisture+Sensor%2C+Black%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "3291be295d4b750fcff3bbffc841504685f9da774faf107a2a02a88d2d78ebf3",
+      "brand": "Samsung",
+      "type_id": "microwaves",
+      "model": "Samsung MC28A6036QK/TL 28 Litre Convection Microwave Oven, Auto Programs, Auto Cook, Black",
+      "offer_urls": [
+        "https://www.reliancedigital.in/product/samsung-28-litre-convection-microwave-oven-with-slimfry-mc28a6036qktl-l514rd"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "site:news.samsung.com/in \"Samsung MC28A6036QK/TL 28 Litre Convection Microwave Oven, Auto Programs, Auto Cook, Black\" launch",
+        "\"Samsung\" \"Samsung MC28A6036QK/TL 28 Litre Convection Microwave Oven, Auto Programs, Auto Cook, Black\" launch release date",
+        "\"Samsung\" \"Samsung MC28A6036QK/TL 28 Litre Convection Microwave Oven, Auto Programs, Auto Cook, Black\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=site%3Anews.samsung.com%2Fin+%22Samsung+MC28A6036QK%2FTL+28+Litre+Convection+Microwave+Oven%2C+Auto+Programs%2C+Auto+Cook%2C+Black%22+launch",
+        "https://www.google.com/search?q=%22Samsung%22+%22Samsung+MC28A6036QK%2FTL+28+Litre+Convection+Microwave+Oven%2C+Auto+Programs%2C+Auto+Cook%2C+Black%22+launch+release+date",
+        "https://www.google.com/search?q=%22Samsung%22+%22Samsung+MC28A6036QK%2FTL+28+Litre+Convection+Microwave+Oven%2C+Auto+Programs%2C+Auto+Cook%2C+Black%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "72d7f1eda41af7f0ab9e802562aa26df5f4240f2fd10366605e89035aefff88e",
+      "brand": "Samsung",
+      "type_id": "microwaves",
+      "model": "Samsung MG23A3515AK/TL, 23 Litre, 2300 Watts Grill Microwave Oven, Grill Fry, Browning, Black",
+      "offer_urls": [
+        "https://www.reliancedigital.in/product/samsung-23-litre-grill-microwave-oven-with-grill-fry-browning-plus-mg23a3515aktl-black-l514r9"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "site:news.samsung.com/in \"Samsung MG23A3515AK/TL, 23 Litre, 2300 Watts Grill Microwave Oven, Grill Fry, Browning, Black\" launch",
+        "\"Samsung\" \"Samsung MG23A3515AK/TL, 23 Litre, 2300 Watts Grill Microwave Oven, Grill Fry, Browning, Black\" launch release date",
+        "\"Samsung\" \"Samsung MG23A3515AK/TL, 23 Litre, 2300 Watts Grill Microwave Oven, Grill Fry, Browning, Black\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=site%3Anews.samsung.com%2Fin+%22Samsung+MG23A3515AK%2FTL%2C+23+Litre%2C+2300+Watts+Grill+Microwave+Oven%2C+Grill+Fry%2C+Browning%2C+Black%22+launch",
+        "https://www.google.com/search?q=%22Samsung%22+%22Samsung+MG23A3515AK%2FTL%2C+23+Litre%2C+2300+Watts+Grill+Microwave+Oven%2C+Grill+Fry%2C+Browning%2C+Black%22+launch+release+date",
+        "https://www.google.com/search?q=%22Samsung%22+%22Samsung+MG23A3515AK%2FTL%2C+23+Litre%2C+2300+Watts+Grill+Microwave+Oven%2C+Grill+Fry%2C+Browning%2C+Black%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "8095ef07b1baabec1a1708e5b32cf89e8e58e595a1dcffbdc4af35f1f93c07c7",
+      "brand": "Synology",
+      "type_id": "routers",
+      "model": "Synology RT6600AX Tri-Band 160MHz 2.5Gbps Quad-core 1.8 GHz Wi-Fi 6 Router - Black",
+      "offer_urls": [
+        "https://www.tpstech.in/products/synology-tri-band-160mhz-2-5gbps-quad-core-wi-fi-router-black?variant=50708494483759"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"Synology\" \"Synology RT6600AX Tri-Band 160MHz 2.5Gbps Quad-core 1.8 GHz Wi-Fi 6 Router - Black\" launch release date",
+        "\"Synology\" \"Synology RT6600AX Tri-Band 160MHz 2.5Gbps Quad-core 1.8 GHz Wi-Fi 6 Router - Black\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22Synology%22+%22Synology+RT6600AX+Tri-Band+160MHz+2.5Gbps+Quad-core+1.8+GHz+Wi-Fi+6+Router+-+Black%22+launch+release+date",
+        "https://www.google.com/search?q=%22Synology%22+%22Synology+RT6600AX+Tri-Band+160MHz+2.5Gbps+Quad-core+1.8+GHz+Wi-Fi+6+Router+-+Black%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "c76bffccbf759635789255d7275300e49478ff980273cb6f9e678493f43e473e",
+      "brand": "Synology",
+      "type_id": "routers",
+      "model": "Synology WRX560 2.5Gbps Ethernet Wireless Dual-Band Wi-Fi 6 Router - Black",
+      "offer_urls": [
+        "https://www.tpstech.in/products/synology-2-5gbps-ethernet-wireless-dual-band-wi-fi-6-router?variant=50708567523631"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"Synology\" \"Synology WRX560 2.5Gbps Ethernet Wireless Dual-Band Wi-Fi 6 Router - Black\" launch release date",
+        "\"Synology\" \"Synology WRX560 2.5Gbps Ethernet Wireless Dual-Band Wi-Fi 6 Router - Black\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22Synology%22+%22Synology+WRX560+2.5Gbps+Ethernet+Wireless+Dual-Band+Wi-Fi+6+Router+-+Black%22+launch+release+date",
+        "https://www.google.com/search?q=%22Synology%22+%22Synology+WRX560+2.5Gbps+Ethernet+Wireless+Dual-Band+Wi-Fi+6+Router+-+Black%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "13f38eb47a4a21b821b1e92b4490bb5302b4d9c7e19604b999deb79eab3a0c00",
+      "brand": "Syrotech",
+      "type_id": "routers",
+      "model": "Syrotech SY-AX1800 WiFi 6 Dual Band AX1800 Gigabit Router",
+      "offer_urls": [
+        "https://www.tpstech.in/products/syrotech-sy-ax1800-wifi6-router?variant=55381162557743"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"Syrotech\" \"Syrotech SY-AX1800 WiFi 6 Dual Band AX1800 Gigabit Router\" launch release date",
+        "\"Syrotech\" \"Syrotech SY-AX1800 WiFi 6 Dual Band AX1800 Gigabit Router\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22Syrotech%22+%22Syrotech+SY-AX1800+WiFi+6+Dual+Band+AX1800+Gigabit+Router%22+launch+release+date",
+        "https://www.google.com/search?q=%22Syrotech%22+%22Syrotech+SY-AX1800+WiFi+6+Dual+Band+AX1800+Gigabit+Router%22+India+launch"
+      ],
+      "variants": 1
+    },
+    {
+      "id": "cf5f773a6ab2e022850594830ad4fa9bc974f454e27fa4e89b4210a8c6e57d58",
+      "brand": "Syrotech",
+      "type_id": "routers",
+      "model": "Syrotech SY-GPON-1100-WDONT 1GE+1FE Single Band ONT WiFi Router",
+      "offer_urls": [
+        "https://www.tpstech.in/products/syrotech-xpon-ont-sy-gpon-1110-wdont?variant=51993469845807"
+      ],
+      "existing_type_count": 2,
+      "priority": 28343,
+      "queries": [
+        "\"Syrotech\" \"Syrotech SY-GPON-1100-WDONT 1GE+1FE Single Band ONT WiFi Router\" launch release date",
+        "\"Syrotech\" \"Syrotech SY-GPON-1100-WDONT 1GE+1FE Single Band ONT WiFi Router\" India launch"
+      ],
+      "search_urls": [
+        "https://www.google.com/search?q=%22Syrotech%22+%22Syrotech+SY-GPON-1100-WDONT+1GE%2B1FE+Single+Band+ONT+WiFi+Router%22+launch+release+date",
+        "https://www.google.com/search?q=%22Syrotech%22+%22Syrotech+SY-GPON-1100-WDONT+1GE%2B1FE+Single+Band+ONT+WiFi+Router%22+India+launch"
+      ],
+      "variants": 1
+    }
+  ]
+}

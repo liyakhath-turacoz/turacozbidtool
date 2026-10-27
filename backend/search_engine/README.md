@@ -1,29 +1,9 @@
-# Catalog search matcher
+# Catalogue search
 
-The buyer catalogue keeps exact and prefix searches in MariaDB. If an exact
-query has no results, the backend sends a compact list of candidate names,
-brands, categories, models and indexed specifications to this small Rust
-matcher. It recovers common misspellings and product wording such as laptop /
-notebook without loading a language model or running a search service.
+Search uses the Tantivy Rust engine through the pinned Python package in `backend/requirements.txt`. No separate server, Cargo build or per-query matcher executable is required.
 
-The matcher uses the Rust `strsim` crate's normalized Damerau-Levenshtein
-similarity for transposed or mistyped letters. Search aliases handle common
-catalog terminology. The fallback is deliberately disabled for explicit RAM
-capacity queries so a request for (for example) `16 GB RAM` never returns a
-different capacity as a fuzzy match.
+Run `python backend/scripts/ingest_india_catalog.py search-index` from the repository root to rebuild. The API also opens or rebuilds the index during startup and checks for catalogue changes while serving requests.
 
-On Windows, build the executable with:
+Generated disk indexes are private runtime data under `indexes/` and are excluded from Git. Generation switching preserves concurrent readers. Each build uses one writer thread with a 16 MB writer heap; that is a writer setting, not a limit on total process memory. Back up the database and catalogue bundle, not the disposable index.
 
-```powershell
-cd backend/search_engine
-.\build.ps1
-```
-
-The generated `bin/catalog_matcher.exe` is used automatically. If the binary
-is absent or fails to launch, the backend uses its small Python fallback. The
-binary handles one query at a time and exits immediately after ranking; it
-does not run as a service.
-
-## License
-
-The `catalog-matcher` binary statically includes the `strsim` 0.11.1 crate by Danny Guo, Titus Wormer, and Akash Kurdekar. `strsim` is licensed under MIT; the full notice is in `licenses/strsim-MIT.txt`.
+The index supports typo/prefix matching, common English and Hinglish aliases, type/brand/year/specification filters, and model grouping. Bids and carts continue to use the exact variant product ID. SQL rechecks product visibility when search results are loaded.

@@ -85,9 +85,9 @@ class MetricCard extends StatelessWidget {
               const SizedBox(height: 10),
               Text(
                 value,
-                style: Theme.of(
-                  context,
-                ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w900),
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.w900,
+                ),
               ),
               Text(label, overflow: TextOverflow.ellipsis),
             ],
@@ -318,9 +318,7 @@ class ProductCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
       clipBehavior: Clip.antiAlias,
       elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: InkWell(
         onTap: onSelect,
         child: DecoratedBox(
@@ -372,7 +370,9 @@ class ProductCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  product.name,
+                  product.variantCount > 1 && product.modelName.isNotEmpty
+                      ? product.modelName
+                      : product.name,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
@@ -381,25 +381,27 @@ class ProductCard extends StatelessWidget {
                     height: 1.2,
                   ),
                 ),
+                if (product.releaseDate != null)
+                  Text(
+                    'Released ${product.releaseDate}',
+                    style: const TextStyle(fontSize: 11, color: Colors.grey),
+                  ),
                 const SizedBox(height: 4),
                 Text(
                   product.specifications.isEmpty
                       ? "Standard Edition"
                       : product.specifications.entries
-                          .map((e) => "${e.key}: ${e.value}")
-                          .take(2)
-                          .join(" | "),
+                            .map((e) => "${e.key}: ${e.value}")
+                            .take(2)
+                            .join(" | "),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 11,
-                    color: Colors.grey,
-                  ),
+                  style: const TextStyle(fontSize: 11, color: Colors.grey),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   product.source == 'icecat'
-                      ? '${product.releaseYear ?? 'Current'} model - Bid for price'
+                      ? 'Request the shop price'
                       : '${money(product.priceMin)} - ${money(product.priceMax)}',
                   style: const TextStyle(
                     fontWeight: FontWeight.w900,
@@ -423,7 +425,13 @@ class ProductCard extends StatelessWidget {
                             ),
                           ),
                           icon: const Icon(Icons.add_shopping_cart, size: 14),
-                          label: const Text('Add', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+                          label: const Text(
+                            'Add',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -440,7 +448,13 @@ class ProductCard extends StatelessWidget {
                             ),
                           ),
                           icon: const Icon(Icons.bolt, size: 14),
-                          label: const Text('Bid', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+                          label: const Text(
+                            'Bid',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                       ),
                     ),

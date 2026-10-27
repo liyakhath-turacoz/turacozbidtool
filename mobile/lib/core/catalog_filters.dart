@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 Map<String, dynamic> emptyCatalogFilters() => {
   'categories': <String>[],
   'product_types': <String>[],
+  'canonical_types': <String>[],
   'brands': <String>[],
   'years': <String>[],
+  'specs': <String, dynamic>{},
   'sort': 'Newest',
 };
 
@@ -23,12 +25,13 @@ class CatalogFacetPicker extends StatelessWidget {
     final selected = List<String>.from(filters[key] ?? []);
     selected.contains(value) ? selected.remove(value) : selected.add(value);
     final next = <String, dynamic>{...filters, key: selected};
-    if (key == 'categories')
+    if (key == 'canonical_types') {
       next.addAll({
+        'specs': <String, dynamic>{},
+        'categories': <String>[],
         'product_types': <String>[],
-        'brands': <String>[],
-        'years': <String>[],
       });
+    }
     onChanged(next);
   }
 
@@ -38,8 +41,7 @@ class CatalogFacetPicker extends StatelessWidget {
     children: [
       if (!specsOnly)
         for (final entry in {
-          'categories': 'Categories',
-          'product_types': 'Product type',
+          'canonical_types': 'Product type',
           'brands': 'Brand / manufacturer',
         }.entries)
           FacetChoices(
@@ -51,6 +53,25 @@ class CatalogFacetPicker extends StatelessWidget {
             selected: List<String>.from(filters[entry.key] ?? []),
             onToggle: (value) => toggle(entry.key, value),
           ),
+      for (final entry in Map<String, dynamic>.from(
+        facets['specs'] ?? {},
+      ).entries)
+        FacetChoices(
+          label: entry.value['label'].toString(),
+          rows: List<Map<String, dynamic>>.from(entry.value['values'] ?? []),
+          selected: List<String>.from(
+            (filters['specs'] ?? {})[entry.key] ?? [],
+          ),
+          onToggle: (value) {
+            final specs = Map<String, dynamic>.from(filters['specs'] ?? {});
+            final selected = List<String>.from(specs[entry.key] ?? []);
+            selected.contains(value)
+                ? selected.remove(value)
+                : selected.add(value);
+            specs[entry.key] = selected;
+            onChanged({...filters, 'specs': specs});
+          },
+        ),
       FacetChoices(
         label: 'Release year',
         rows: List<Map<String, dynamic>>.from(facets['years'] ?? []),
@@ -93,9 +114,10 @@ class _FacetChoicesState extends State<FacetChoices> {
     ];
     final rows = choices
         .where(
-          (row) => row['value'].toString().toLowerCase().contains(
-            search.toLowerCase(),
-          ),
+          (row) => (row['label'] ?? row['value'])
+              .toString()
+              .toLowerCase()
+              .contains(search.toLowerCase()),
         )
         .toList();
     final showAll = ['Categories', 'Product type'].contains(widget.label);
@@ -123,7 +145,7 @@ class _FacetChoicesState extends State<FacetChoices> {
             title: Text(
               row['value'] == 'unknown'
                   ? 'Year not supplied'
-                  : row['value'].toString(),
+                  : (row['label'] ?? row['value']).toString(),
             ),
             subtitle: Text('${row['count']} products'),
             value: widget.selected.contains(row['value'].toString()),

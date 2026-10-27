@@ -75,7 +75,10 @@ class ProductItem {
     required this.specifications,
     this.imageUrl = '',
     this.releaseYear,
+    this.releaseDate,
     this.source = 'manual',
+    this.variantCount = 1,
+    this.modelName = '',
   });
 
   final String id;
@@ -91,7 +94,10 @@ class ProductItem {
   final Map<String, String> specifications;
   final String imageUrl;
   final int? releaseYear;
+  final String? releaseDate;
   final String source;
+  final int variantCount;
+  final String modelName;
 
   factory ProductItem.fromJson(Map<String, dynamic> json) => ProductItem(
     id: json['id']?.toString() ?? '',
@@ -108,7 +114,10 @@ class ProductItem {
     specifications: Map<String, String>.from(json['specifications'] ?? {}),
     imageUrl: json['image_url']?.toString() ?? '',
     releaseYear: int.tryParse(json['release_year']?.toString() ?? ''),
+    releaseDate: json['release_date']?.toString(),
     source: json['source']?.toString() ?? 'manual',
+    variantCount: int.tryParse(json['variant_count']?.toString() ?? '') ?? 1,
+    modelName: json['model_name']?.toString() ?? '',
   );
 }
 
@@ -200,7 +209,9 @@ class BidRecord {
     quantity: int.tryParse(json['quantity']?.toString() ?? '') ?? 1,
     selectable: json['selectable'] == true || json['selectable'] == 1,
     isMine: json['is_mine'] == true || json['is_mine'] == 1,
-    installationIncluded: json['installation_included'] == true || json['installation_included'] == 1,
+    installationIncluded:
+        json['installation_included'] == true ||
+        json['installation_included'] == 1,
     product: json['product']?.toString() ?? '',
     buyer: json['buyer']?.toString() ?? '',
     buyerAddress: json['buyer_address']?.toString() ?? '',

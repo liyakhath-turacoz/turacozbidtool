@@ -11,7 +11,7 @@ SEARCH='https://lgcorporationproduction0fxcu0qx.org.coveo.com/rest/search/v2'
 # IDs come from data-facets.inputCategoryId on the official category pages.
 CATEGORIES={'Air conditioners':'CT52006744','Refrigerators':'CT52006709','Microwave ovens':'CT52006695','Washing machines':'CT52006634','Freezers':'CT53101137','Dishwashers':'CT52006645'}
 FIELDS=['ec_model_release_date','ec_model_year','ec_model_id','ec_model_name','ec_model_url_path','ec_user_friendly_name','ec_sku',
-    'ec_stock_status','ec_preorder_flag','ec_medium_image_addr','ec_small_image_addr','ec_filter_category_name','ec_model_status_code']
+    'ec_preorder_flag','ec_medium_image_addr','ec_small_image_addr','ec_filter_category_name','ec_model_status_code']
 
 
 def normalize(raw,item):

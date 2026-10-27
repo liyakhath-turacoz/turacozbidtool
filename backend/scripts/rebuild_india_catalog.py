@@ -172,7 +172,7 @@ def get_json(url):
 
 
 def samsung_candidates(fields, departments, as_of, cache, reuse_cache=False):
-    """Accept exact Samsung India variants only when their own Offer says InStock."""
+    """Accept exact Samsung India variants with a public India product listing."""
     found = []
     for section, family, kind in [('smartphones', 'galaxy-s26', 'Smartphones'), ('smartphones', 'galaxy-s26-ultra', 'Smartphones'), ('smartphones', 'galaxy-a27', 'Smartphones'), ('tablets', 'galaxy-tab-s12', 'Tablets')]:
         url = f'https://www.samsung.com/in/{section}/{family}/buy/'
@@ -193,7 +193,7 @@ def samsung_candidates(fields, departments, as_of, cache, reuse_cache=False):
                     variants = group.get('hasVariant', []) if group.get('@type') == 'ProductGroup' else [group]
                     for product in variants:
                         offer = product.get('offers') or {}
-                        if not isinstance(offer, dict) or offer.get('priceCurrency') != 'INR' or not str(offer.get('availability', '')).endswith('/InStock'):
+                        if not isinstance(offer, dict) or offer.get('priceCurrency') != 'INR':
                             continue
                         if not str(offer.get('itemCondition', '')).endswith('/NewCondition'):
                             continue
@@ -210,10 +210,10 @@ def samsung_candidates(fields, departments, as_of, cache, reuse_cache=False):
                             specs['Storage' if i == 0 else 'RAM'] = memory
                         if len(specs) < 2:continue
                         row = dict.fromkeys(fields, '')
-                        row.update(category_code='A',department=departments['A'],subcategory=kind,product_type=kind,product_name=name,manufacturer='Samsung',brand='Samsung',model=sku,manufacturer_part_number=sku,description=name+'. '+text(product.get('description'))[:450],specifications_json=json.dumps(specs),product_url=offer.get('url') or url,product_source_url=url,price_source_url=url,release_date_precision='unknown',official_price=str(price),price_currency='INR',price_type='current_store_selling_price',price_market='India',source_attribution='Samsung India exact-variant structured Offer',collected_on=as_of,verification_status='india_store_in_stock_image_verified',notes=f'Exact SKU offer declares NewCondition and InStock on {as_of}. No launch date inferred. Reconfirm price and delivery pincode before buying.')
+                        row.update(category_code='A',department=departments['A'],subcategory=kind,product_type=kind,product_name=name,manufacturer='Samsung',brand='Samsung',model=sku,manufacturer_part_number=sku,description=name+'. '+text(product.get('description'))[:450],specifications_json=json.dumps(specs),product_url=offer.get('url') or url,product_source_url=url,price_source_url=url,release_date_precision='unknown',official_price=str(price),price_currency='INR',price_type='current_store_selling_price',price_market='India',source_attribution='Samsung India exact-variant product listing',collected_on=as_of,verification_status='india_store_listing_image_verified',notes=f'Exact SKU product listing and INR price observed on Samsung India on {as_of}; stock is not used as an inclusion criterion. No release date inferred.')
                         found.append((row,[photo],{'store':'https://www.samsung.com/in','store_product_id':sku,'variant_id':sku,'sku':sku,'listed_at':None}))
         except (requests.RequestException, ValueError, KeyError):
-            print(f'No usable exact-SKU stock evidence: {url}', flush=True)
+            print(f'No usable exact-SKU India product listing: {url}', flush=True)
     return found
 
 
@@ -284,10 +284,10 @@ def make_row(url, brand, product, fields, departments, as_of, cutoff):
             price = Decimal(str(v.get('price', '0')))
         except InvalidOperation:
             continue
-        if v.get('available') is True and Decimal('100') <= price <= Decimal('2000000'):
+        if Decimal('100') <= price <= Decimal('2000000'):
             candidates.append((price, v))
     if not candidates:
-        return None, 'out_of_stock_or_invalid_price'
+        return None, 'invalid_price'
     price, variant = min(candidates, key=lambda v: v[0])
     variant_title = text(variant.get('title'))
     description, specs = specifications(product.get('body_html'), title)
@@ -329,9 +329,9 @@ def make_row(url, brand, product, fields, departments, as_of, cutoff):
                product_url=f"{url}/products/{product['handle']}?variant={variant['id']}",
                release_date_precision='unknown', official_price=str(price), price_currency='INR',
                price_type='current_store_selling_price', price_market='India',
-               source_attribution=f'{url.split("//")[1]} public India store inventory', collected_on=as_of,
-               verification_status='india_store_in_stock_image_verified',
-               notes=f'In stock according to store inventory on {as_of}. Store listing created {created}; this is NOT a release date. Exact selected variant: {variant_title}. Availability, delivery pincode and price must be reconfirmed before purchase. Store product ID {product["id"]}; variant ID {variant["id"]}.')
+               source_attribution=f'{url.split("//")[1]} public India store listing', collected_on=as_of,
+               verification_status='india_store_listing_image_verified',
+               notes=f'India store product listing and price observed on {as_of}; stock is not used as an inclusion criterion. Store listing created {created}; this is NOT a release date. Exact selected variant: {variant_title}. Current listing and price should be reconfirmed before purchase. Store product ID {product["id"]}; variant ID {variant["id"]}.')
     row['product_source_url'] = row['price_source_url'] = row['product_url']
     return (row, photos[:3], {'store': url, 'store_product_id': str(product['id']), 'variant_id': str(variant['id']), 'sku': sku, 'listed_at': created}), ''
 
@@ -380,7 +380,7 @@ def main():
     parser.add_argument('--as-of', type=date.fromisoformat, default=datetime.now(ZoneInfo('Asia/Kolkata')).date())
     parser.add_argument('--listed-since', type=date.fromisoformat, required=True)
     parser.add_argument('--max-pages', type=int, default=4)
-    parser.add_argument('--reuse-cache', action='store_true', help='Replay same-day evidence for debugging; omit for a fresh stock check')
+    parser.add_argument('--reuse-cache', action='store_true', help='Replay same-day product-listing evidence for debugging')
     parser.add_argument('--output', type=Path, default=ROOT / '.firecrawl' / 'india-catalog-staged')
     args = parser.parse_args()
     if not args.reuse_cache and args.as_of != datetime.now(ZoneInfo('Asia/Kolkata')).date():
@@ -433,7 +433,7 @@ def main():
         if sku_key:skus.add(sku_key)
         unique.append(candidate)
     candidates = unique
-    print(f'Candidates meeting stock/detail/recency gates: {len(candidates)}; downloading exact-product photos', flush=True)
+    print(f'Candidates meeting listing/detail/recency gates: {len(candidates)}; downloading exact-product photos', flush=True)
     accepted, evidence = [], []
     previous = out / 'availability_evidence.json'
     known = {r['image_source_url']: r for r in json.loads(previous.read_text(encoding='utf-8'))} if previous.exists() else {}
@@ -442,7 +442,7 @@ def main():
             if result:
                 row, proof = result
                 accepted.append(row)
-                evidence.append({'product_name': row['product_name'], **proof, 'checked_on': as_of, 'availability': 'in_stock', 'currency': 'INR', 'price': row['official_price'], 'purchase_url': row['product_url']})
+                evidence.append({'product_name': row['product_name'], **proof, 'checked_on': as_of, 'market_presence': 'listed_in_india', 'market_presence_basis': 'india_store_product_page', 'currency': 'INR', 'price': row['official_price'], 'purchase_url': row['product_url']})
             else:
                 rejected['image_download_or_decode_failed'] += 1
             if index % 100 == 0:
@@ -453,7 +453,7 @@ def main():
         writer.writeheader()
         writer.writerows(accepted)
     (out / 'availability_evidence.json').write_text(json.dumps(evidence, ensure_ascii=False, indent=2), encoding='utf-8')
-    report = {'as_of': as_of, 'listing_cutoff': cutoff, 'scanned': len(products), 'accepted': len(accepted), 'brands': dict(Counter(r['brand'] for r in accepted)), 'categories': dict(Counter(r['department'] for r in accepted)), 'rejected': dict(rejected), 'unavailable_sources': errors, 'limitations': ['Store listing date is not release date; unknown release dates remain blank.', 'Availability is a point-in-time store claim, not a reservation or delivery-pincode guarantee.', 'Only current structured public inventory from the configured Indian stores is covered.']}
+    report = {'as_of': as_of, 'listing_cutoff': cutoff, 'scanned': len(products), 'accepted': len(accepted), 'brands': dict(Counter(r['brand'] for r in accepted)), 'categories': dict(Counter(r['department'] for r in accepted)), 'rejected': dict(rejected), 'unavailable_sources': errors, 'limitations': ['Store listing date is not release date; unknown release dates remain blank.', 'An India product page establishes market presence; stock is not inferred.', 'Only current structured public listings from the configured Indian stores are covered.']}
     (out / 'verification_report.json').write_text(json.dumps(report, indent=2), encoding='utf-8')
     print(json.dumps(report, indent=2), flush=True)
 

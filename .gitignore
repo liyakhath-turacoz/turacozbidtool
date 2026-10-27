@@ -18,3 +18,5 @@ _private_configuration.py
 mobile/android/.kotlin/
 *.apk
 *.aab
+
+backend/search_engine/indexes/

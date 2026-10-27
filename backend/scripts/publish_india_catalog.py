@@ -32,21 +32,21 @@ def write_csv(path, fields, rows):
 def documentation(folder, rows, report):
     lines = ['# Current India store catalogue', '',
         f'Verified on **{report["as_of"]}**: **{len(rows):,} purchasable variants**, **{len(report["brands"])} brands**, **{len(report["categories"])} departments**.', '',
-        'Every visible row has an in-stock store variant, positive INR selling price, technical details, a purchase URL and a decoded, locally stored product photograph. Prices and stock are point-in-time store claims. Reconfirm delivery pincode, stock and price before purchase.', '',
+        'Every visible row has an India store product listing, positive INR selling price, technical details, a purchase URL and a decoded, locally stored product photograph. Stock is not an inclusion criterion; recheck the current product listing and price before purchase.', '',
         '## Coverage', '', '| Department | Products |', '|---|---:|']
     lines += [f'| {name} | {count} |' for name,count in report['categories'].items()]
     lines += ['', '## Evidence and files', '',
         '- all_products.csv, A–P exports, master_catalogue.xlsx and the root product_inventory.xlsx contain the same replacement records.',
-        '- availability_evidence.json records the exact store variant/SKU, stock-check date, selling price, original photo URL and downloaded image SHA-256.',
+        '- availability_evidence.json records the exact India store listing/variant, observed date, selling price, original photo URL and downloaded image SHA-256.',
         '- verification_report.json records scan totals, rejected inventory and coverage limitations.',
         '- images/ contains the product photos served at /catalog-images/. Web and mobile use the same assets.', '',
         '## Acceptance rules', '',
-        f'Store inventory must have a positive INR price and an available exact variant. Storefront currency is independently checked. Store listings created before {report["listing_cutoff"]} are excluded. Samsung variants use explicit new-condition, InStock Offers from current India buy pages instead of a listing-age estimate.', '',
+        f'An India store product page must show a positive INR price and exact variant details. Storefront currency is independently checked. Store listings created before {report["listing_cutoff"]} are excluded. Samsung variants use explicit new-condition Offers from current India product pages instead of a listing-age estimate.', '',
         'Store listing dates are NOT manufacturer release dates. Unknown release dates and years remain blank. Coverage is a verified subset of the configured stores; it does not claim every Indian store or every latest launch.', '',
         'Refurbished, renewed, pre-owned, preorder, gift/bundle, incomplete, unmatched-colour-image and known legacy-generation records are excluded. Exact name and SKU duplicates are removed. Missing metadata is not invented.', '',
         '## Refresh and deployment', '',
         'Install backend/scripts/requirements-catalog.txt. Run rebuild_india_catalog.py with the current India verification date and desired listing cutoff, then inspect .firecrawl/india-catalog-staged/verification_report.json. Run publish_india_catalog.py without flags to validate; --apply publishes and imports.', '',
-        'Publication rejects empty/suspiciously small snapshots, inventory evidence older than seven days, missing details, duplicate identities or mismatched/missing downloaded photos. An imported snapshot does not reserve stock or refresh itself.', '',
+        'Publication rejects empty/suspiciously small snapshots, product-page evidence older than 30 days, missing details, duplicate identities or mismatched/missing downloaded photos. An imported snapshot does not refresh itself.', '',
         'Backups are private under backend/recovery/ and excluded from Git. Unreferenced old products are deleted; historical products remain hidden for bid/cart references. Legacy import schedules and automatic startup bundle imports are disabled by default.', '',
         'Deploy product_catalog/images with the backend. Restart a backend running without reload to enable the /catalog-images/ route.']
     body='\n'.join(lines)+'\n'
@@ -72,7 +72,7 @@ def exports(folder, rows, fields, plans):
         summaries.append({'category_code': code, 'department': plan['department'], 'products': len(group), 'brands': len({r['brand'] for r in group}), 'status': 'VERIFIED_SUBSET' if group else 'NO_VERIFIED_INVENTORY'})
         coverage.append({'category_code':code, 'products':len(group), 'with_price':len(group), 'with_image':len(group), 'with_specs':len(group), 'with_store_source':len(group), 'with_verified_release_date':0})
         brands.extend({'category_code':code, 'brand':brand, 'products':count} for brand,count in sorted(Counter(r['brand'] for r in group).items()))
-        plan.update(status='VERIFIED_SUBSET' if group else 'NO_VERIFIED_INVENTORY', review_status='VERIFIED_SUBSET' if group else 'NO_VERIFIED_INVENTORY', processing_rule='Include only fresh India in-stock exact-variant inventory with decoded local photo and source evidence; no exhaustive coverage claim.')
+        plan.update(status='VERIFIED_SUBSET' if group else 'NO_VERIFIED_LISTING', review_status='VERIFIED_SUBSET' if group else 'NO_VERIFIED_LISTING', processing_rule='Include exact India store product listings with decoded local photos and source evidence; no stock check or exhaustive coverage claim.')
     write_csv(folder/'master_summary.csv', list(summaries[0]), summaries)
     write_csv(folder/'brand_summary.csv', ['category_code','brand','products'], brands)
     write_csv(folder/'category_coverage.csv', list(coverage[0]), coverage)

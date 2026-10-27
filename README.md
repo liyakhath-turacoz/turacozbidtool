@@ -10,7 +10,7 @@ A location-based bidding marketplace where buyers request offers and eligible de
 - `product_catalog/` — current India catalog and locally stored product images.
 - `products/` — optional Open Icecat bundle and import instructions.
 
-The current India store catalog contains 1,479 variants across 70 brands and 16 departments. Product availability, price, and stock are point-in-time claims; confirm them with the linked store before purchase. Details are in [product_catalog/README.md](product_catalog/README.md).
+The current India store catalog contains 1,516 variants across 82 brands and 16 departments. Product availability, price, and stock are point-in-time claims; confirm them with the linked store before purchase. Details are in [product_catalog/README.md](product_catalog/README.md).
 
 ## Requirements
 
@@ -52,7 +52,17 @@ Build a release APK with `flutter build apk --release --dart-define=API_BASE_URL
 
 ## Catalog import
 
-The bundled India catalog is the current buyer catalog. The optional Open Icecat bundle is imported explicitly; see [products/README.md](products/README.md) for its format and import command. Startup bundle import is disabled unless `TURACOZ_IMPORT_PRODUCTS_ON_STARTUP=true` is configured.
+The bundled India catalog is the current buyer catalog. The India-first ingestion pipeline stages retailer inventory and enriches exact matches with Icecat; publication requires verified India stock and recent manufacturer release evidence (see the catalogue README). Legacy global source fetches remain hidden and cannot overwrite visible catalogue variants. Startup bundle import is disabled unless `TURACOZ_IMPORT_PRODUCTS_ON_STARTUP=true` is configured.
+
+## Product search and requests
+
+The API embeds Tantivy, a Rust inverted index installed with the backend requirements. It supports typo and prefix matching, English/Hinglish aliases, and product-type, brand and specification facets. Buyer browsing groups variants by hardware model; the variant selector supplies the exact product ID for bidding or cart actions. No separate search server is required.
+
+Search indexes are disposable runtime data under `backend/search_engine/indexes/`. Startup opens or builds the index. To rebuild explicitly, run `python backend/scripts/ingest_india_catalog.py search-index`. See [search setup](backend/search_engine/README.md).
+
+Buyers can describe a custom product from web or mobile search. These descriptions stay private to the buyer and matching bid workflows. A request with no matching shop remains active until its deadline; eligible shops can discover it on subsequent request polls. Catalogue IDs and historical bid/cart references are retained.
+
+The catalogue is still a verified subset, not a complete India-market database. The [catalogue README](product_catalog/README.md) records counts, remaining quality issues and the model-level release-date research process.
 
 ## Deployment
 
