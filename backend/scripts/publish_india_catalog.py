@@ -36,7 +36,7 @@ def documentation(folder, rows, report):
         '## Coverage', '', '| Department | Products |', '|---|---:|']
     lines += [f'| {name} | {count} |' for name,count in report['categories'].items()]
     lines += ['', '## Evidence and files', '',
-        '- all_products.csv, A–P exports, master_catalogue.xlsx and the root product_inventory.xlsx contain the same replacement records.',
+        '- all_products.csv is the canonical product import file; master_catalogue.xlsx and the root product_inventory.xlsx are generated workbook views.',
         '- availability_evidence.json records the exact India store listing/variant, observed date, selling price, original photo URL and downloaded image SHA-256.',
         '- verification_report.json records scan totals, rejected inventory and coverage limitations.',
         '- images/ contains the product photos served at /catalog-images/. Web and mobile use the same assets.', '',
@@ -61,8 +61,6 @@ def exports(folder, rows, fields, plans):
     for plan in plans:
         code = plan['department_code']
         group = [r for r in rows if r['category_code'] == code]
-        filename = next(folder.glob(code + '-*.csv')).name
-        write_csv(folder / filename, fields, group)
         sheet = wb.create_sheet(code)
         sheet.append(fields)
         for row in group:

@@ -1,4 +1,4 @@
-"""Import the reviewed, standalone A–P catalogue into the app.
+"""Import the reviewed, canonical product catalogue CSV into the app.
 
 Old product rows are hidden from product browsing but retained for bid, cart,
 and audit references in replacement mode. Use --apply --append-only to insert

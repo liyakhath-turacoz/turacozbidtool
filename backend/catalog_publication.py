@@ -17,6 +17,7 @@ from . import bulk_catalog as bulk, catalog_taxonomy as taxonomy, product_identi
 from . import catalogue_app_import as importer
 from . import catalog_metadata
 from .catalog_importer import connect
+from .catalog_validation import is_safe_remote_image_url
 
 FOLDER=bulk.ROOT/'product_catalog'
 
@@ -121,8 +122,12 @@ def audit_existing(apply_metadata=False):
             if (p.get('release_date') or year_only) and proof_kind not in {'official_release_date','manufacturer_release','manufacturer_model_year','icecat_explicit_release','india_store_launch_year'}:
                 problems.append('unsupported_release_evidence')
             if not identity.gtins(p.get('gtin')):problems.append('missing_gtin')
-            image=FOLDER/'images'/str(p.get('image_url') or '').rsplit('/',1)[-1]
-            if not p.get('image_url') or not image.is_file():problems.append('missing_local_image')
+            image_url=str(p.get('image_url') or '')
+            image=FOLDER/'images'/image_url.rsplit('/',1)[-1]
+            remote_ok=(p.get('verification_status')=='india_store_listing_image_verified' and
+                       is_safe_remote_image_url(image_url))
+            if not image_url or (not image.is_file() and not remote_ok):
+                problems.append('missing_product_image')
             try:specs=json.loads(p.get('manual_specifications') or '{}')
             except (TypeError,ValueError):specs={}
             if typeid and taxonomy.missing_attributes(typeid,specs):problems.append('missing_type_attributes')
@@ -200,7 +205,6 @@ def exports(rows,fields):
     wb=Workbook();wb.remove(wb.active);summaries=[];coverage=[];brands=[];years=[]
     for p in plans:
         code=p['department_code'];group=[r for r in rows if r['category_code']==code]
-        write_csv(next(FOLDER.glob(code+'-*.csv')),fields,group)
         sheet=wb.create_sheet(code);sheet.append(fields)
         for r in group:sheet.append([r.get(k,'') for k in fields])
         sheet.freeze_panes='A2';sheet.auto_filter.ref=sheet.dimensions
@@ -216,9 +220,9 @@ def exports(rows,fields):
     temp=FOLDER/'master_catalogue.tmp.xlsx';wb.save(temp);temp.replace(FOLDER/'master_catalogue.xlsx')
     report_path=FOLDER/'verification_report.json'
     report=json.loads(report_path.read_text(encoding='utf-8')) if report_path.exists() else {}
-    report.setdefault('legacy_initial_scan',{'scanned':report.get('scanned'),'accepted_before_bulk':report.get('accepted'),
-        'note':'Legacy rejection/listing-cutoff counts refer to the original collection, not subsequent bulk ingestion.'})
-    report.update(accepted=len(rows),brands=dict(sorted(Counter(r['brand'] for r in rows).items())),
+    for stale_key in ('listing_cutoff','scanned','rejected','unavailable_sources','append_only_additions','legacy_initial_scan'):
+        report.pop(stale_key,None)
+    report.update(as_of=date.today().isoformat(),accepted=len(rows),brands=dict(sorted(Counter(r['brand'] for r in rows).items())),
         categories=dict(sorted(Counter(r['department'] for r in rows).items())),with_exact_release_date=sum(bool(r['release_date']) for r in rows),
         bulk_ingestion_report='bulk_ingestion_report.json')
     report_path.write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')

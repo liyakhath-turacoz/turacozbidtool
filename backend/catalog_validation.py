@@ -2,6 +2,7 @@
 from datetime import date, datetime
 from decimal import Decimal, InvalidOperation
 import json
+import ipaddress
 from pathlib import Path
 import re
 from urllib.parse import urlparse
@@ -11,6 +12,27 @@ try:
     from .product_identity import norm_brand, norm_text
 except ImportError:  # direct-script import compatibility
     from product_identity import norm_brand, norm_text
+
+
+def is_safe_remote_image_url(value):
+    """Accept only public HTTPS image URLs already checked during catalog ingestion."""
+    try:
+        parsed = urlparse(str(value or ''))
+        host = (parsed.hostname or '').lower().rstrip('.')
+        if (parsed.scheme != 'https' or not host or parsed.username or parsed.password or
+                parsed.port not in (None, 443) or host == 'localhost' or
+                host.endswith(('.localhost', '.local', '.internal'))):
+            return False
+        try:
+            address = ipaddress.ip_address(host)
+        except ValueError:
+            address = None
+        if address and (address.is_private or address.is_loopback or address.is_link_local or
+                        address.is_multicast or address.is_reserved or address.is_unspecified):
+            return False
+        return True
+    except (TypeError, ValueError):
+        return False
 
 
 def validate_snapshot(rows, image_directory: Path, today=None):
@@ -49,11 +71,14 @@ def validate_snapshot(rows, image_directory: Path, today=None):
         except (InvalidOperation, KeyError, TypeError, ValueError) as exc:
             raise ValueError(f'Invalid product {name}: {exc}') from exc
         image = row.get('image_url', '')
-        if not re.fullmatch(r'/catalog-images/[0-9a-f]{24}\.webp', image):
+        if re.fullmatch(r'/catalog-images/[0-9a-f]{24}\.webp', image):
+            path = image_directory / image.rsplit('/', 1)[1]
+            if not path.is_file() or path.stat().st_size < 500:
+                raise ValueError(f'Missing downloaded product photo: {name}')
+        elif status == 'india_store_listing_image_verified' and is_safe_remote_image_url(image):
+            pass
+        else:
             raise ValueError(f'Unverified or unsafe image path: {name}')
-        path = image_directory / image.rsplit('/', 1)[1]
-        if not path.is_file() or path.stat().st_size < 500:
-            raise ValueError(f'Missing downloaded product photo: {name}')
         # Preserve meaningful model punctuation: ``Pro`` and ``Pro+`` are
         # different phone models, while ordinary spacing/punctuation changes
         # still collapse through the shared identity normalizer.
