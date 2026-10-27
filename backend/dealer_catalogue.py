@@ -43,10 +43,39 @@ ALIASES: dict[str, tuple[str, ...]] = {
     "price": ("price", "mrp", "yourprice", "sellingprice", "rate", "pricers", "rs"),
 }
 
-TEMPLATE_HEADERS = ["Name", "Brand", "Model", "Part number (MPN)", "Barcode (EAN)", "Category", "Item type", "Description", "Your SKU", "Your price (Rs.)"]
+TEMPLATE_HEADERS = [
+    "Product name (replace or delete sample rows)",
+    "Brand",
+    "Model (model code)",
+    "Part number (MPN, optional)",
+    "Barcode (EAN/UPC, optional)",
+    "Category (department)",
+    "Item type (subcategory)",
+    "Description (key technical specifications)",
+    "Your SKU (optional)",
+    "Your price (Rs., sample only)",
+]
 TEMPLATE_ROWS = [
-    ["Samsung 55 inch 4K Smart TV", "Samsung", "UA55AU7700", "UA55AU7700KLXL", "", "TVs, Video & Home Entertainment", "Televisions", "Crystal 4K UHD, 3 HDMI ports", "TV-SAM-55", "42990"],
-    ["Philips Air Fryer 4.1 L", "Philips", "HD9252/90", "", "8710103834012", "Kitchen Appliances", "Air Fryers", "", "", ""],
+    ["Samsung Galaxy S25 Ultra 256 GB, Titanium Black", "Samsung", "SM-S938B", "SM-S938B/DS", "", "Mobile Phones & Tablets", "Smartphones", "Display: 6.9-inch QHD+ Dynamic AMOLED 2X, 120 Hz; RAM: 12 GB; storage: 256 GB; processor: Snapdragon 8 Elite; rear cameras: 200 MP main, 50 MP ultrawide, 50 MP telephoto; connectivity: 5G, Wi-Fi 7, Bluetooth; colour: Titanium Black", "EX-SAM-S25U-256", "129999"],
+    ["Apple iPhone 17 256 GB, Black", "Apple", "iPhone 17 256 GB", "", "195950643442", "Mobile Phones & Tablets", "Smartphones", "Storage: 256 GB; display: 6.3-inch Super Retina XDR; chip: A19; camera: 48 MP Fusion system; connectivity: 5G, Wi-Fi, Bluetooth; colour: Black", "EX-APL-IP17-256-BLK", "94900"],
+    ["Apple iPad Air 11-inch (M3) 256 GB Wi-Fi, Space Grey", "Apple", "iPad Air 11-inch M3 Wi-Fi", "A3266", "", "Mobile Phones & Tablets", "Tablets", "Display: 11-inch Liquid Retina; chip: Apple M3; storage: 256 GB; connectivity: Wi-Fi 6E, Bluetooth; ports: USB-C; colour: Space Grey", "EX-APL-IPADAIR-256", "74900"],
+    ["Lenovo IdeaPad Slim 5 14-inch, 16 GB RAM, 1 TB SSD", "Lenovo", "IdeaPad Slim 5 14IMH9", "14IMH9", "", "Computers, Laptops & IT Equipment", "Laptops", "Processor: Intel Core Ultra 5; memory: 16 GB; storage: 1 TB NVMe SSD; display: 14-inch OLED, 2.8K; graphics: integrated Intel Arc; operating system: Windows 11; ports: USB-C, USB-A, HDMI", "EX-LEN-SLIM5-14", "89990"],
+    ["Dell Inspiron 3030 Desktop, Core i5, 16 GB RAM, 512 GB SSD", "Dell", "Inspiron 3030 Desktop", "D3030-16-512", "", "Computers, Laptops & IT Equipment", "Desktop Computers", "Processor: Intel Core i5; memory: 16 GB DDR5; storage: 512 GB NVMe SSD; graphics: integrated; operating system: Windows 11; includes: tower, keyboard and mouse", "EX-DEL-DESKTOP-3030", "64990"],
+    ["LG UltraGear 27-inch QHD Gaming Monitor, 165 Hz", "LG", "27GP850-B", "27GP850-B", "", "Computers, Laptops & IT Equipment", "Monitors", "Screen: 27-inch IPS; resolution: 2560 x 1440; refresh rate: 165 Hz (180 Hz overclock); response time: 1 ms; ports: 2 HDMI, DisplayPort; stand: height, tilt and pivot adjustment", "EX-LG-27GP850", "34990"],
+    ["Samsung 55-inch Neo QLED 4K Smart TV QN90F", "Samsung", "QA55QN90FAULXL", "QA55QN90FAULXL", "", "TVs, Video & Home Entertainment", "Televisions", "Screen: 55-inch Neo QLED; resolution: 3840 x 2160; refresh rate: 120 Hz; HDR: Quantum HDR; smart platform: Tizen; connectivity: Wi-Fi, Bluetooth; ports: HDMI, USB; include screen size and model suffix", "EX-SAM-QN90F-55", "159990"],
+    ["Sony WH-1000XM5 Wireless Noise-Cancelling Headphones, Black", "Sony", "WH-1000XM5", "WH1000XM5/B", "", "Audio, Headphones & Speakers", "Headphones", "Type: over-ear wireless; noise cancellation: adaptive ANC; microphones: 8; battery: up to 30 hours with ANC; charging: USB-C; connectivity: Bluetooth, 3.5 mm audio; colour: Black", "EX-SONY-XM5-BLK", "29990"],
+    ["LG 655 L Side-by-Side Refrigerator, Matte Black", "LG", "GC-B257KQMV", "GC-B257KQMV", "", "Large Home Appliances", "Refrigerators", "Capacity: 655 L; configuration: side-by-side; cooling: inverter compressor, frost-free; features: door cooling, multi-air flow; energy rating: enter the label rating; dimensions: enter width x height x depth", "EX-LG-FRIDGE-655", "89990"],
+    ["Bosch 9 kg Front-Load Washing Machine, 1400 rpm", "Bosch", "WGA24400IN", "WGA24400IN", "", "Large Home Appliances", "Washing Machines", "Capacity: 9 kg; type: front-load, fully automatic; spin speed: 1400 rpm; motor: EcoSilence Drive; programmes: list the included wash cycles; energy rating: enter the label rating; colour: Silver", "EX-BOSCH-WM-9KG", "64990"],
+    ["Daikin 1.5 Ton 5-Star Inverter Split Air Conditioner", "Daikin", "FTKM50U", "FTKM50U", "", "Air Conditioning, Cooling & Air Quality", "Air Conditioners", "Capacity: 1.5 ton; type: inverter split AC; energy rating: 5-star; refrigerant: R-32; features: copper condenser, PM 2.5 filter; include indoor/outdoor unit model suffix and applicable ISEER value", "EX-DAIKIN-AC-15T", "57990"],
+    ["Samsung 28 L Convection Microwave Oven", "Samsung", "MC28A5145VK/TL", "MC28A5145VK/TL", "", "Kitchen Appliances", "Microwave ovens", "Capacity: 28 L; type: convection; power: enter microwave/grill/convection wattage; programmes: list key modes; control: touch; colour: Black; include installation or included accessories if relevant", "EX-SAM-MWO-28L", "16990"],
+    ["Sony Alpha 7 IV Full-Frame Mirrorless Camera Body", "Sony", "ILCE-7M4", "ILCE-7M4/BQ IN5", "", "Cameras, Photography & Imaging", "Cameras", "Sensor: 33 MP full-frame Exmor R CMOS; processor: BIONZ XR; stabilisation: 5-axis IBIS; video: 4K 60p; autofocus: real-time tracking; lens: body only; mount: Sony E", "EX-SONY-A7IV-BODY", "219990"],
+    ["Sony WF-1000XM5 True Wireless Earbuds, Black", "Sony", "WF-1000XM5", "WF1000XM5/B", "", "Audio, Headphones & Speakers", "Earbuds", "Type: true wireless in-ear; noise cancellation: ANC; microphones: 6; battery: up to 8 hours per charge, with charging case; charging: USB-C, Qi wireless; connectivity: Bluetooth; colour: Black", "EX-SONY-WF5-BLK", "24990"],
+    ["Apple Watch Series 10 GPS 46 mm, Jet Black Aluminium", "Apple", "Watch Series 10 GPS 46 mm", "A2998", "", "Wearables & Smart Devices", "Smartwatches", "Case: 46 mm aluminium; display: Always-On Retina LTPO3 OLED; connectivity: GPS, Bluetooth, Wi-Fi; sensors: heart rate, ECG, temperature, blood oxygen where supported; water resistance: 50 m; band size: specify", "EX-APL-WATCH10-46", "46900"],
+    ["Sony PlayStation 5 Slim Disc Edition", "Sony", "CFI-2008A01", "CFI-2008A01", "", "Gaming & Virtual Reality", "Gaming Consoles", "Edition: slim with disc drive; storage: 1 TB SSD; output: up to 4K, 120 Hz; connectivity: Wi-Fi 6, Bluetooth, HDMI; includes: DualSense controller; specify region and bundled games", "EX-SONY-PS5-SLIM", "54990"],
+    ["TP-Link Archer AX55 Wi-Fi 6 Router", "TP-Link", "Archer AX55", "ARCHER-AX55", "", "Networking, GPS & Communication", "Routers", "Wireless standard: Wi-Fi 6 (802.11ax); class: AX3000 dual-band; ports: 1 Gigabit WAN, 4 Gigabit LAN, USB 3.0; features: WPA3, OFDMA, OneMesh; include hardware revision", "EX-TPL-AX55", "7990"],
+    ["HP LaserJet MFP M234sdw Monochrome Printer", "HP", "LaserJet MFP M234sdw", "6GX01A", "", "Printers, Scanners & Office Electronics", "Printers", "Type: monochrome laser multifunction; functions: print, scan, copy; print speed: enter ppm; duplex: automatic; connectivity: Wi-Fi, Ethernet, USB; include toner/cartridge code", "EX-HP-M234SDW", "21999"],
+    ["APC Back-UPS 1100 VA, BX1100C-IN", "APC", "BX1100C-IN", "BX1100C-IN", "", "Power Backup, Batteries & Electrical Equipment", "UPS", "Capacity: 1100 VA; topology: line-interactive; output: 230 V; outlets: specify count and type; battery: replaceable; backup time: depends on connected load; include battery warranty", "EX-APC-BX1100", "8999"],
+    ["Ambrane 20,000 mAh 22.5 W Power Bank", "Ambrane", "Stylo 20K", "Stylo 20K", "", "Power Backup, Batteries & Electrical Equipment", "Power banks", "Capacity: 20,000 mAh; rated output: specify Wh; maximum output: 22.5 W; ports: USB-A, USB-C; charging protocols: list supported standards; include colour and exact model suffix", "EX-AMBRANE-20K", "1999"],
 ]
 
 
