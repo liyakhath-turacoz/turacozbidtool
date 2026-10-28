@@ -3,18 +3,24 @@ A,Apple,763
 A,Asus,2
 A,Google,39
 A,Grandstream,3
+A,HMD,1
 A,IQOO,26
+A,Infinix,1
 A,JIO,6
+A,Lava,1
 A,Lenovo,28
-A,Motorola,8
+A,Mivi,1
+A,Motorola,10
 A,Nothing,24
 A,OPPO,124
 A,One Plus,73
-A,POCO,71
+A,POCO,72
 A,Realme,110
-A,Samsung,244
+A,Samsung,245
+A,TECNO,1
 A,VIVO,112
 A,Xiaomi,114
+A,vivo,1
 B,ADATA,63
 B,ADATA XPG,1
 B,AGARO,8
@@ -23,7 +29,7 @@ B,ANTEC,2
 B,AOC,26
 B,ARCTIC,34
 B,ASRock,40
-B,ASUS,187
+B,ASUS,188
 B,ASUSTOR,10
 B,Acer,92
 B,Ant Esports,1
@@ -188,12 +194,12 @@ E,Faber,1
 E,Foxsky,8
 E,Godrej,27
 E,HOSHIZAKI,1
-E,Haier,33
+E,Haier,35
 E,Havells,1
 E,IFB,5
 E,Karbonn,1
 E,Kelvinator,8
-E,LG,58
+E,LG,59
 E,LIEBHERR,1
 E,LLOYD,3
 E,LYF,1
@@ -270,9 +276,9 @@ H,Dyson,3
 H,Eureka Forbes,2
 H,Foxsky,1
 H,General,10
-H,Godrej,3
+H,Godrej,4
 H,HISENSE,3
-H,Haier,4
+H,Haier,5
 H,Hitachi,12
 H,Honeywell,1
 H,IFB,4

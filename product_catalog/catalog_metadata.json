@@ -741,6 +741,12 @@
         "type_id": "unclassified"
       },
       {
+        "id": "03c7d7ed4967beb2c0a8f989fd701fac46c56b93b6f9fbb66cb5ad9b32862183",
+        "brand": "Haier",
+        "name": "Haier Spartan AI Tower AC",
+        "type_id": "air_conditioners"
+      },
+      {
         "id": "03cde558316a753c3966026bc5af936ad4e0c43ced7469a63230b64523c867b5",
         "brand": "Lenovo",
         "name": "Lenovo Idea Tab Pro Gen 2 33.02 cm (13 inch) Wi-Fi Tablet with Pen, 256 GB, 12 GB RAM, Luna Grey, ZAHD0729IN",
@@ -1543,6 +1549,12 @@
         "brand": "Wonderchef",
         "name": "Ruby Sleek Chimney — 60cm",
         "type_id": "chimneys"
+      },
+      {
+        "id": "08062f9db668a03b61a101a2581f2cf0e4fbe6e308488597194dc4775e707454",
+        "brand": "Samsung",
+        "name": "Galaxy F70",
+        "type_id": "ram"
       },
       {
         "id": "080c8252417e8b246f68b767651f743bbbda1e8397ab3bde9ea3e3cdcce6421e",
@@ -2353,6 +2365,12 @@
         "brand": "Apple",
         "name": "13-inch iPad Air Wi-Fi + Cellular 512GB - Blue (M4)",
         "type_id": "tablets"
+      },
+      {
+        "id": "0c06c0f1bccf448a731237a183cba3577edafe16776ca6df889dea3e98ad081d",
+        "brand": "vivo",
+        "name": "vivo T5",
+        "type_id": "ram"
       },
       {
         "id": "0c1c48ecce24b77f973b87492d8d5dabba32d2932e14f68956b1833b94b6fa11",
@@ -20607,6 +20625,12 @@
         "type_id": "chargers"
       },
       {
+        "id": "66282dddecf1fd7f3d3637670ed156804c9c2104f40659b81c546ca95e0e670f",
+        "brand": "ASUS",
+        "name": "ASUS Vivobook S14",
+        "type_id": "laptops"
+      },
+      {
         "id": "662eebd29ed2d99ce91dc47adbe7be466074a6104ae1e805d6afe45c6fac9fab",
         "brand": "Zebronics",
         "name": "Zeb Juke bar 9540",
@@ -21235,6 +21259,12 @@
         "brand": "MSI",
         "name": "MSI MAG 274URFW 27\" 4K UHD 160Hz 1ms Gaming Monitor",
         "type_id": "monitors"
+      },
+      {
+        "id": "6917b14faf9eac7c431ac3bf2d669bea1c5fde9d607a9a0ac2873d1b4eab5a07",
+        "brand": "LG",
+        "name": "LG French Door Refrigerator",
+        "type_id": "refrigerators"
       },
       {
         "id": "691bc13c79494800d56ac046edd675ca6b8585c38cb2a568c113ac58fec867fd",
@@ -23775,6 +23805,12 @@
         "type_id": "motherboards"
       },
       {
+        "id": "74d18509293bc4633485b288acc449314fb126aaad7e93855d6340a8cc650950",
+        "brand": "Mivi",
+        "name": "Mivi One",
+        "type_id": "ram"
+      },
+      {
         "id": "74e0fc25aa316c6f3a6d90b723efc3b44f2a593e18bb1125c2de67ea2d17f4db",
         "brand": "AGARO",
         "name": "MG-4760 4 in 1 Multi Grooming and trimmer Kit",
@@ -24115,6 +24151,12 @@
         "brand": "BPL",
         "name": "BPL 281 Litre 2 Star Frost Free, Double Door Refrigerator, Inox HS, BRF-I300RBPHSI",
         "type_id": "refrigerators"
+      },
+      {
+        "id": "7662d465c7f9548862f75445f7f547330c36a53c90cd3ac9bd565f5661d2f365",
+        "brand": "Motorola",
+        "name": "Motorola Edge 70",
+        "type_id": "ram"
       },
       {
         "id": "766bcf1d8695e6649a8a34c7f06b7d0bbfdf06bef06e9d0f8bde66ae4887b0fa",
@@ -26955,6 +26997,12 @@
         "type_id": "nas"
       },
       {
+        "id": "844b2f7e3fe187317e2fc0e77a9bbc90df52d00b70ac1cd4075b9843ef5cd438",
+        "brand": "Infinix",
+        "name": "HOT 70 Pro",
+        "type_id": "ram"
+      },
+      {
         "id": "8455b01e43aede2f6a21fe0dc674b46e6a175d8216aa3b320fcfb2b9c5ba715c",
         "brand": "TVSE",
         "name": "TVS Electronics MN-26NW Multifunction Mono Laser Printer",
@@ -27085,6 +27133,12 @@
         "brand": "Portronics",
         "name": "Aqua 65",
         "type_id": "power_banks"
+      },
+      {
+        "id": "850877db516b8335fcff28e0406b6f3529a26302720b621ce6677b84cc514172",
+        "brand": "Godrej",
+        "name": "Godrej J Series",
+        "type_id": "air_conditioners"
       },
       {
         "id": "8509d601c6d76ce28fc3bb52bcbdd6191fa1cf12d8037840d91b8ac5c3ee9694",
@@ -27729,6 +27783,12 @@
         "type_id": "ssds"
       },
       {
+        "id": "883937b6006b4358b7eef6c40ace5c02ef8205ff4f000d9ab4b6a018aef81c79",
+        "brand": "Motorola",
+        "name": "Moto G Max",
+        "type_id": "ram"
+      },
+      {
         "id": "883dcc671ced315c9d710d05acce33b812c5334b722e34433f32ac48dcd7fe2c",
         "brand": "ASUS",
         "name": "ASUS RT-AC68U (Pack of 2) AC1900 Dual Band Gigabit WiFi Router with AiMesh and AiProtection support",
@@ -27859,6 +27919,12 @@
         "brand": "AGARO",
         "name": "Regency Cordless Stick Vacuum Cleaner",
         "type_id": "vacuum_cleaners"
+      },
+      {
+        "id": "88b856fb27876e67a98ee05992a474629d2f4ee26101b7e8009f2443fb0c2aa1",
+        "brand": "Haier",
+        "name": "Haier M3 Series",
+        "type_id": "washers"
       },
       {
         "id": "88c7477f0124b54ee8bc702fda8d4234a4fd51d7c8579cb3e1df5db79278e80c",
@@ -33405,6 +33471,12 @@
         "type_id": "graphics_cards"
       },
       {
+        "id": "a38ec753dcc58f51203698a05048824015caae98fce1a252854b000ce9a96ea5",
+        "brand": "HMD",
+        "name": "Vibe2 Pro",
+        "type_id": "ram"
+      },
+      {
         "id": "a393aa503bed5336ed253c7beec1253a5fbdf5378df848d1cda6fc3b7bdc5803",
         "brand": "AOC",
         "name": "AOC Q27G11E 27\" QHD Gaming Monitor with 180Hz Fast IPS",
@@ -34213,6 +34285,12 @@
         "brand": "Kelvinator",
         "name": "Kelvinator KDP-08B01S 8 Place Dishwasher with Intense Wash Technology, Silver",
         "type_id": "dishwashers"
+      },
+      {
+        "id": "a777b1c50b2fa542545c18711ee61eac836c04bcd5698655d0d82e4e0c5a7ceb",
+        "brand": "Lava",
+        "name": "Virat Curve",
+        "type_id": "ram"
       },
       {
         "id": "a78112f85f5a2a757656ade4a70d45e83d175efeb99424b0c81e3e1e122c9047",
@@ -45999,6 +46077,12 @@
         "type_id": "pc_cases"
       },
       {
+        "id": "e0979af33111802a5e3ca73f1055d84b8ebd7a93981b9f3f6519878849861c8a",
+        "brand": "TECNO",
+        "name": "TECNO Pova 8",
+        "type_id": "ram"
+      },
+      {
         "id": "e0aa4476232dbe698f095e28a30acf37b216e0ab82d2184cf1e7491787367433",
         "brand": "LAPCARE",
         "name": "Lapcare Roxx 30W Portable Party Speaker with RGB Lights TWS Function 8H Playtime",
@@ -46297,6 +46381,12 @@
         "brand": "DCode",
         "name": "Dcode DC3R1 Thermal Receipt Printer with USB, LAN & Bluetooth for POS Billing Systems",
         "type_id": "unclassified"
+      },
+      {
+        "id": "e1fdf73aea305f3bb76c16628fbe7ea1b0ee223792adc567be19ae276590f9bd",
+        "brand": "POCO",
+        "name": "POCO X8",
+        "type_id": "ram"
       },
       {
         "id": "e1fed539cd6117d6f03d608b6e3f8aebd17c363d66ea1adc6f82bcdadaa8b6ec",
@@ -51769,6 +51859,12 @@
         "brand": "Zebronics",
         "name": "Zeb Juke bar 200A",
         "type_id": "soundbars"
+      },
+      {
+        "id": "fc88eaae736fb2a1d9d632177e8531b82fe281aee374746763f7599612e65f70",
+        "brand": "Haier",
+        "name": "Haier In-Vista",
+        "type_id": "refrigerators"
       },
       {
         "id": "fc8d06206909cc1e0cd87f50749674b53f5eea34490ddfdd237ecc239e6aafc0",
@@ -68925,6 +69021,14 @@
         "family_id": "546b9dee00dcf3247a9dbb7bfc4c5ba5a47f5e2cf44a9ba4424c3851609c6888"
       },
       {
+        "id": "35dc16a8518f35335710226d101673660256306189b7e77dfa31749677d57fd7",
+        "brand": "Haier",
+        "name": "Spartan AI Tower HTA24S-GAI3NB-I",
+        "type_id": "air_conditioners",
+        "created_at": "2026-10-28 00:00:00",
+        "family_id": "03c7d7ed4967beb2c0a8f989fd701fac46c56b93b6f9fbb66cb5ad9b32862183"
+      },
+      {
         "id": "35e3cb5f919a87051c4f33a736adc0e0270d3e11263c3c4a9a9da6def3c3b305",
         "brand": "CADYCE",
         "name": "Cadyce CA-WTR150 150Mbps Wireless N Travel Router with Built-in Battery",
@@ -71253,6 +71357,14 @@
         "family_id": "7ba9215b7f908bb335e66cbfc85a71cf75c1dd8c3958f125d2cae05ad7a74fd3"
       },
       {
+        "id": "3def38f5618e3595ce50c3a3a8034848724f29e930021b626125dbcd1da0e474",
+        "brand": "LG",
+        "name": "GVB23FFLMB",
+        "type_id": "refrigerators",
+        "created_at": "2026-10-28 00:00:00",
+        "family_id": "6917b14faf9eac7c431ac3bf2d669bea1c5fde9d607a9a0ac2873d1b4eab5a07"
+      },
+      {
         "id": "3df0d4fa35eb35161f5f18d31c0f090d65238c8809ecf4d5e048abbdbd38e1d5",
         "brand": "ASUS",
         "name": "ASUS ROG Strix OLED XG32UCWG 31.5 Inch 4K Gaming Monitor",
@@ -72613,6 +72725,14 @@
         "family_id": "6968602ff2537b09b8783f6dca4607f85f033b46faf1155111b9e35c2506e573"
       },
       {
+        "id": "42c8621e0e4b74c5747fea53391247ad323a3491769eaced28392aa7c2ca79b9",
+        "brand": "TECNO",
+        "name": "Pova 8 Pro 5G",
+        "type_id": "ram",
+        "created_at": "2026-10-28 00:00:00",
+        "family_id": "e0979af33111802a5e3ca73f1055d84b8ebd7a93981b9f3f6519878849861c8a"
+      },
+      {
         "id": "42cb98a2fccc2a9435921dbb23ea9aa318f27a3e4138af4feb29433ddb7b2f4f",
         "brand": "Cooler Master",
         "name": "Cooler Master QUBE 540 Stardust Iron ATX Mid‐Tower Computer Case",
@@ -73635,6 +73755,14 @@
         "type_id": "motherboards",
         "created_at": "2026-10-27 06:50:25",
         "family_id": "72bfde3cc511bd63d6c91d40dafbcb21f0246f46e5f58a407e70d334e3e75171"
+      },
+      {
+        "id": "465569cac96f29c443ccd4158baf994da825a2a6a8659ff781ee3cd539732fb7",
+        "brand": "Motorola",
+        "name": "G Max 5G",
+        "type_id": "ram",
+        "created_at": "2026-10-28 00:00:00",
+        "family_id": "883937b6006b4358b7eef6c40ace5c02ef8205ff4f000d9ab4b6a018aef81c79"
       },
       {
         "id": "465ab82239801913d2ae7cd46331c4ab86fab4fe9db361207b97420774735895",
@@ -74931,6 +75059,14 @@
         "type_id": "ram",
         "created_at": "2026-10-27 06:50:17",
         "family_id": "380671819c41b906b337a4a91922189e6ed37de0143519a677193c33a9228f42"
+      },
+      {
+        "id": "4b3412d5bf7b1b3d52352ffba66f3d55d229d190dc289d6877182ebbacf5b9a2",
+        "brand": "ASUS",
+        "name": "Vivobook S14 S5452MA-TM198WS",
+        "type_id": "laptops",
+        "created_at": "2026-10-28 00:00:00",
+        "family_id": "66282dddecf1fd7f3d3637670ed156804c9c2104f40659b81c546ca95e0e670f"
       },
       {
         "id": "4b3afa943f90441cb870b72a1d87d59b5cf6e2398ef7d5c416c8f6c7982a5ac4",
@@ -76883,6 +77019,14 @@
         "type_id": "laptops",
         "created_at": "2026-10-27 06:50:19",
         "family_id": "821337ce1c2eb5c8b354c58b52d8ee687d87baf5faf61a222df31e948941df80"
+      },
+      {
+        "id": "530cf6a19e065322b4fe121de13fdb3767ab36024894127d52054bb94ebe73fb",
+        "brand": "Infinix",
+        "name": "HOT 70 Pro 5G",
+        "type_id": "ram",
+        "created_at": "2026-10-28 00:00:00",
+        "family_id": "844b2f7e3fe187317e2fc0e77a9bbc90df52d00b70ac1cd4075b9843ef5cd438"
       },
       {
         "id": "530e88a36ac0eb01f4525e574eb40d34a306593aaad350d3657559e220a7cde5",
@@ -79915,6 +80059,14 @@
         "type_id": "ssds",
         "created_at": "2026-10-27 06:50:39",
         "family_id": "0d6cf4244d4a0f881efe7531c143be7ceb1ce4f0e6c0368a8d1720ad62e83fdc"
+      },
+      {
+        "id": "5ccb7d560c3a6b1d0eb65cea7f1f9b8e05b12f66592a9e82475c579284a17172",
+        "brand": "Mivi",
+        "name": "One 5G",
+        "type_id": "ram",
+        "created_at": "2026-10-28 00:00:00",
+        "family_id": "74d18509293bc4633485b288acc449314fb126aaad7e93855d6340a8cc650950"
       },
       {
         "id": "5cd3206ad63cfec38c24d32b893886572fcd1870b67496154b71b799c662504f",
@@ -87917,6 +88069,14 @@
         "family_id": "44449852a22d532ea4c857b57ab1fae0a5df92062ff96538663846ad18460f1e"
       },
       {
+        "id": "773360a4d931848f6afd3fb16ac69dc8c35753a4984d6739da4808928edfaf7c",
+        "brand": "HMD",
+        "name": "Vibe2 Pro 5G",
+        "type_id": "ram",
+        "created_at": "2026-10-28 00:00:00",
+        "family_id": "a38ec753dcc58f51203698a05048824015caae98fce1a252854b000ce9a96ea5"
+      },
+      {
         "id": "77348a36cd7bdf20fe48883c06567d64c7e45cb526ddbd6fa75960cd8494a918",
         "brand": "Synology",
         "name": "Synology 4GB DDR4 RAM 2666MHz SO-DIMM Unbuffered Memory for NAS",
@@ -88563,6 +88723,14 @@
         "type_id": "headphones",
         "created_at": "2026-10-27 06:50:06",
         "family_id": "97cc6d18e59a4e0bd3c723782e08ec651c576cabf9e6f49a10545bf17d5c878e"
+      },
+      {
+        "id": "79cb252fd174196b67c962fcf6b005e7cfe958d552ea1f2dca2d00ac389aceeb",
+        "brand": "Motorola",
+        "name": "Edge 70 Max",
+        "type_id": "ram",
+        "created_at": "2026-10-28 00:00:00",
+        "family_id": "7662d465c7f9548862f75445f7f547330c36a53c90cd3ac9bd565f5661d2f365"
       },
       {
         "id": "79cfa229e7c6da8d2ea1eb58a01e2d7d3991d8a4390e64a21f9a73e298e1edf9",
@@ -93283,6 +93451,14 @@
         "type_id": "graphics_cards",
         "created_at": "2026-10-27 06:50:15",
         "family_id": "8fdd3009044dc9e1f828250ef604514d38e730180ba208647fdf9430d56899af"
+      },
+      {
+        "id": "8a5cf48c7fa30d0e9618db8f14faa954a540196b3937bac389604a903c9a973d",
+        "brand": "Godrej",
+        "name": "J Series HIC 18J5TG",
+        "type_id": "air_conditioners",
+        "created_at": "2026-10-28 00:00:00",
+        "family_id": "850877db516b8335fcff28e0406b6f3529a26302720b621ce6677b84cc514172"
       },
       {
         "id": "8a74e5bae83b2b1de3c90d98fb88e0df34272924b3b0563707cb04d5c1cf4991",
@@ -104837,6 +105013,14 @@
         "family_id": "531e842de974896c6684a34a85b4bacd2f5757c5d924a792c449e0f52857b44d"
       },
       {
+        "id": "b04cfac73573391ca46464981ed9c087a3c433061776a0c62154085254bfbd6b",
+        "brand": "Haier",
+        "name": "In-Vista 5-Door",
+        "type_id": "refrigerators",
+        "created_at": "2026-10-28 00:00:00",
+        "family_id": "fc88eaae736fb2a1d9d632177e8531b82fe281aee374746763f7599612e65f70"
+      },
+      {
         "id": "b054ac02466580e4790524865ffe586bf7d83b4a995a7aae59a8ca5fa3a4a849",
         "brand": "G.SKILL",
         "name": "G.Skill Ripjaws S5 32GB DDR5 RAM 5200MHz CL40 Desktop Memory",
@@ -112117,6 +112301,14 @@
         "family_id": "22392ed87df1f64626102759aa5d994e2e05ca47bfbe751b6cfe4acd1ffabdc5"
       },
       {
+        "id": "c8216faecb2b841f868f8d5c528a6927de7b6cfda30238b1920a9b1197645187",
+        "brand": "Lava",
+        "name": "Virat Curve 5G",
+        "type_id": "ram",
+        "created_at": "2026-10-28 00:00:00",
+        "family_id": "a777b1c50b2fa542545c18711ee61eac836c04bcd5698655d0d82e4e0c5a7ceb"
+      },
+      {
         "id": "c82f671505f39ac23d68f7b0b35a107606d7a8a538dedc5ecd244729027ebd02",
         "brand": "Sony",
         "name": "Sony 215 cm (85 inch) 4K Ultra HD Bravia 3 Smart TV, 85XR35M2",
@@ -115749,6 +115941,14 @@
         "family_id": "3d2882032509f94bfebb8846c573b94e4cd6be92dbfa37db0486110be42cda3d"
       },
       {
+        "id": "d3c64282112668556bc205182d40d5d5db90017ad6b5998c21a9d8c1dd61af3e",
+        "brand": "vivo",
+        "name": "T5e",
+        "type_id": "ram",
+        "created_at": "2026-10-28 00:00:00",
+        "family_id": "0c06c0f1bccf448a731237a183cba3577edafe16776ca6df889dea3e98ad081d"
+      },
+      {
         "id": "d3c6c9c3d13c5a6315e36111be624e98d64418d49340382069d72b032f84dc6c",
         "brand": "Zebronics",
         "name": "Zeb Hyper",
@@ -115995,6 +116195,14 @@
         "type_id": "headphones",
         "created_at": "2026-10-27 06:50:24",
         "family_id": "477f31c08b40437aedc3b53c4e6615ae7eabd8175fe1f94dacf2a5028f99ac78"
+      },
+      {
+        "id": "d48d2cda27e398488c9c649579acf06afd6c3941eb698801c69afec63fc08586",
+        "brand": "POCO",
+        "name": "X8 5G",
+        "type_id": "ram",
+        "created_at": "2026-10-28 00:00:00",
+        "family_id": "e1fdf73aea305f3bb76c16628fbe7ea1b0ee223792adc567be19ae276590f9bd"
       },
       {
         "id": "d49045502dd7915a74de5e92e21f28d3af08c2b610598bec5dcaae6c3ab7fc34",
@@ -124541,6 +124749,14 @@
         "family_id": "4cb08fb641a13df4dff8122758f2d8ddfa9203f9dc3e1874ffe7ebc59c1794b8"
       },
       {
+        "id": "f290ca375391359f5d462ee8b245561091324e8be4381e46e672d63f7394e19c",
+        "brand": "Haier",
+        "name": "M3 Series HW120-DM12LC3GNU1",
+        "type_id": "washers",
+        "created_at": "2026-10-28 00:00:00",
+        "family_id": "88b856fb27876e67a98ee05992a474629d2f4ee26101b7e8009f2443fb0c2aa1"
+      },
+      {
         "id": "f2c3bbb080fa10a1c329982eda760da948b831004a61f73d015893c851f74a78",
         "brand": "BROTHER",
         "name": "Brother DCP‐T230 Ink Tank Multifunction Printer (Print, Scan, Copy) High Volume, Low-Cost Printing for Home & Office",
@@ -125867,6 +126083,14 @@
         "type_id": "unclassified",
         "created_at": "2026-10-23 14:58:24",
         "family_id": "7fd00bc9a45cd1a0bf84216af23aedfafa7375174c913108fd629028d55a271f"
+      },
+      {
+        "id": "f7391b5abb51943bbf2427c5d792028b1b339b8c70817e0bea5a5954f9f5dac5",
+        "brand": "Samsung",
+        "name": "Galaxy F70 Pro 5G",
+        "type_id": "ram",
+        "created_at": "2026-10-28 00:00:00",
+        "family_id": "08062f9db668a03b61a101a2581f2cf0e4fbe6e308488597194dc4775e707454"
       },
       {
         "id": "f7394902748f522650b0a0e63aecfd415dfc76b6d89c8fdb199c5ecf8c6fc755",
@@ -131151,6 +131375,14 @@
         "checked_at": "2026-10-26 09:08:18"
       },
       {
+        "product_id": "09a4de60-4f89-5224-a504-d16942ab0b6a",
+        "type_id": "ram",
+        "taxonomy_version": 10,
+        "path_json": "[\"Computing\",\"Components\",\"RAM\"]",
+        "reason": "product noun in title",
+        "checked_at": "2026-10-28 00:00:00"
+      },
+      {
         "product_id": "09a81cc6-bbca-590b-b470-3ffe72616b5a",
         "type_id": "ram",
         "taxonomy_version": 10,
@@ -134469,6 +134701,14 @@
         "path_json": "[\"Wearables\",\"Watches\",\"Smartwatches\"]",
         "reason": "product noun in title",
         "checked_at": "2026-10-27 06:50:07"
+      },
+      {
+        "product_id": "14a9ffcc-4784-5eeb-b377-b5d3e9544308",
+        "type_id": "ram",
+        "taxonomy_version": 10,
+        "path_json": "[\"Computing\",\"Components\",\"RAM\"]",
+        "reason": "product noun in title",
+        "checked_at": "2026-10-28 00:00:00"
       },
       {
         "product_id": "14aa2aff-a9f1-5509-af01-0c4437a3a52c",
@@ -146159,6 +146399,14 @@
         "checked_at": "2026-10-27 06:50:31"
       },
       {
+        "product_id": "3bfee543-b1e2-5d11-802c-a57eee280a0c",
+        "type_id": "ram",
+        "taxonomy_version": 10,
+        "path_json": "[\"Computing\",\"Components\",\"RAM\"]",
+        "reason": "product noun in title",
+        "checked_at": "2026-10-28 00:00:00"
+      },
+      {
         "product_id": "3bfef4d7-ad7f-5685-bc17-1db64c925bc7",
         "type_id": "smartphones",
         "taxonomy_version": 10,
@@ -156431,6 +156679,14 @@
         "checked_at": "2026-10-27 06:50:53"
       },
       {
+        "product_id": "5f144fad-cc79-53e4-a777-d191c6624f31",
+        "type_id": "refrigerators",
+        "taxonomy_version": 10,
+        "path_json": "[\"Home appliances\",\"Refrigeration\",\"Refrigerators\"]",
+        "reason": "product noun in title",
+        "checked_at": "2026-10-28 00:00:00"
+      },
+      {
         "product_id": "5f14801d-4908-5d2f-9979-e895de7c151a",
         "type_id": "earbuds",
         "taxonomy_version": 10,
@@ -157133,6 +157389,14 @@
         "path_json": "[\"Computing\",\"Storage\",\"Hard disk drives\"]",
         "reason": "product noun in title",
         "checked_at": "2026-10-27 06:50:37"
+      },
+      {
+        "product_id": "611cda9e-e8c6-567d-bbff-827d50f96aa7",
+        "type_id": "ram",
+        "taxonomy_version": 10,
+        "path_json": "[\"Computing\",\"Components\",\"RAM\"]",
+        "reason": "product noun in title",
+        "checked_at": "2026-10-28 00:00:00"
       },
       {
         "product_id": "611fdf2c-d6ef-5516-a124-13e775f30911",
@@ -160157,6 +160421,14 @@
         "path_json": "[\"Computing\",\"Storage\",\"Hard disk drives\"]",
         "reason": "product noun in title",
         "checked_at": "2026-10-27 06:50:41"
+      },
+      {
+        "product_id": "6b7f06e0-de62-5439-9660-bc37bce168fa",
+        "type_id": "refrigerators",
+        "taxonomy_version": 10,
+        "path_json": "[\"Home appliances\",\"Refrigeration\",\"Refrigerators\"]",
+        "reason": "product noun in title",
+        "checked_at": "2026-10-28 00:00:00"
       },
       {
         "product_id": "6b8008bd-4e5a-5cd7-b76f-f5ea9bf9d2b6",
@@ -163461,6 +163733,14 @@
         "path_json": "[\"Climate & air care\",\"Air circulation\",\"Fans\"]",
         "reason": "exact retailer product type",
         "checked_at": "2026-10-24 15:42:42"
+      },
+      {
+        "product_id": "7815edbc-17a2-5b8b-b891-6b5bb668c90d",
+        "type_id": "ram",
+        "taxonomy_version": 10,
+        "path_json": "[\"Computing\",\"Components\",\"RAM\"]",
+        "reason": "product noun in title",
+        "checked_at": "2026-10-28 00:00:00"
       },
       {
         "product_id": "7820fd43-5930-5402-ae80-8c9dc9a11ee8",
@@ -168447,6 +168727,14 @@
         "checked_at": "2026-10-27 06:50:33"
       },
       {
+        "product_id": "89c4f09f-629e-551a-9999-c1f368ce82dc",
+        "type_id": "air_conditioners",
+        "taxonomy_version": 10,
+        "path_json": "[\"Climate & air care\",\"Cooling\",\"Air conditioners\"]",
+        "reason": "product noun in title",
+        "checked_at": "2026-10-28 00:00:00"
+      },
+      {
         "product_id": "89c8ef06-42ff-5bcc-969c-f1be1e1bbab6",
         "type_id": "mice",
         "taxonomy_version": 10,
@@ -169181,6 +169469,14 @@
         "path_json": "[\"Computing\",\"Computers\",\"Laptops\"]",
         "reason": "product noun in title",
         "checked_at": "2026-10-27 06:50:49"
+      },
+      {
+        "product_id": "8cb65155-c0aa-5243-ac38-dfaeba23a43e",
+        "type_id": "ram",
+        "taxonomy_version": 10,
+        "path_json": "[\"Computing\",\"Components\",\"RAM\"]",
+        "reason": "product noun in title",
+        "checked_at": "2026-10-28 00:00:00"
       },
       {
         "product_id": "8cb835a1-8afe-5908-aa8c-8aa54ed19219",
@@ -170045,6 +170341,14 @@
         "path_json": "[\"Audio\",\"Personal audio\",\"Headphones\"]",
         "reason": "product noun in title",
         "checked_at": "2026-10-27 06:50:45"
+      },
+      {
+        "product_id": "8ff1c2cb-3d3c-5814-8fa0-ce35d5643165",
+        "type_id": "ram",
+        "taxonomy_version": 10,
+        "path_json": "[\"Computing\",\"Components\",\"RAM\"]",
+        "reason": "product noun in title",
+        "checked_at": "2026-10-28 00:00:00"
       },
       {
         "product_id": "8ffacdb8-5fd4-5ef8-ab7d-08cfd12d3fc4",
@@ -172861,6 +173165,14 @@
         "path_json": "[\"Home appliances\",\"Refrigeration\",\"Refrigerators\"]",
         "reason": "product noun in title",
         "checked_at": "2026-10-26 09:08:13"
+      },
+      {
+        "product_id": "99554d16-9828-5f79-a4f6-869d450a9a6a",
+        "type_id": "laptops",
+        "taxonomy_version": 10,
+        "path_json": "[\"Computing\",\"Computers\",\"Laptops\"]",
+        "reason": "exact retailer product type",
+        "checked_at": "2026-10-28 00:00:00"
       },
       {
         "product_id": "995bd27b-d25c-5515-9ec6-2c0d387ed111",
@@ -180615,6 +180927,14 @@
         "checked_at": "2026-10-27 06:50:20"
       },
       {
+        "product_id": "b4dec3b7-1725-59c7-8b18-def8b8a82837",
+        "type_id": "ram",
+        "taxonomy_version": 10,
+        "path_json": "[\"Computing\",\"Components\",\"RAM\"]",
+        "reason": "product noun in title",
+        "checked_at": "2026-10-28 00:00:00"
+      },
+      {
         "product_id": "b4e42048-b494-5e32-83fc-cbd0c8c74ef5",
         "type_id": "graphics_cards",
         "taxonomy_version": 10,
@@ -181125,6 +181445,14 @@
         "path_json": "[\"Phones & tablets\",\"Mobile phones\",\"Smartphones\"]",
         "reason": "product noun in title",
         "checked_at": "2026-10-26 03:16:39"
+      },
+      {
+        "product_id": "b65b7e3d-961f-5787-b802-bc5a10afbe39",
+        "type_id": "ram",
+        "taxonomy_version": 10,
+        "path_json": "[\"Computing\",\"Components\",\"RAM\"]",
+        "reason": "product noun in title",
+        "checked_at": "2026-10-28 00:00:00"
       },
       {
         "product_id": "b668fef8-7670-5c88-b611-e31feccd311b",
@@ -189399,6 +189727,14 @@
         "checked_at": "2026-10-26 09:08:23"
       },
       {
+        "product_id": "d442ba22-7a6a-513f-b6c2-bc5231923c61",
+        "type_id": "ram",
+        "taxonomy_version": 10,
+        "path_json": "[\"Computing\",\"Components\",\"RAM\"]",
+        "reason": "product noun in title",
+        "checked_at": "2026-10-28 00:00:00"
+      },
+      {
         "product_id": "d46214de-cb3d-54d3-b9ed-850621cbfb56",
         "type_id": "motherboards",
         "taxonomy_version": 10,
@@ -193031,6 +193367,14 @@
         "checked_at": "2026-10-27 06:50:36"
       },
       {
+        "product_id": "e1174ec1-e4c9-5262-9a78-9b219aab58ac",
+        "type_id": "washers",
+        "taxonomy_version": 10,
+        "path_json": "[\"Home appliances\",\"Laundry\",\"Washing machines\"]",
+        "reason": "exact retailer product type",
+        "checked_at": "2026-10-28 00:00:00"
+      },
+      {
         "product_id": "e11e8b40-efd1-58bc-950d-400c2cd45ae9",
         "type_id": "garment_steamers",
         "taxonomy_version": 3,
@@ -194173,6 +194517,14 @@
         "path_json": "[\"Audio\",\"Personal audio\",\"Earphones\"]",
         "reason": "product noun in title",
         "checked_at": "2026-10-27 06:50:14"
+      },
+      {
+        "product_id": "e438b58e-c405-5297-8149-6ac9a45c544f",
+        "type_id": "air_conditioners",
+        "taxonomy_version": 10,
+        "path_json": "[\"Climate & air care\",\"Cooling\",\"Air conditioners\"]",
+        "reason": "exact retailer product type",
+        "checked_at": "2026-10-28 00:00:00"
       },
       {
         "product_id": "e4484a38-2096-5da5-b5df-ac7fb928e3a7",
@@ -204380,6 +204732,13 @@
         "identity_basis": "brand_mpn_variant"
       },
       {
+        "product_id": "09a4de60-4f89-5224-a504-d16942ab0b6a",
+        "family_id": "530cf6a19e065322b4fe121de13fdb3767ab36024894127d52054bb94ebe73fb",
+        "identity_key": "c7b189602e2aa011191c0d5edf8fc276dc82b6b686948555b3b69c7430675939",
+        "attributes_json": "{\"Color\":\"Dive Blue\",\"Connectivity\":\"Dual SIM, 5G\",\"Display size\":\"6.76 inches\",\"RAM\":\"6 GB\"}",
+        "identity_basis": "manufacturer_evidence"
+      },
+      {
         "product_id": "09a81cc6-bbca-590b-b470-3ffe72616b5a",
         "family_id": "3fcd3becdb948bd96c2027094bccec0ef0cef3189ca461bec470e8290d8dbff7",
         "identity_key": "2f0c1bb549aa594e391e9edb8b7b5d946102e2120db3d99dcf360a0252138fc4",
@@ -207283,6 +207642,13 @@
         "identity_key": "5c00e45ba7ccd73f9bde92766bdb0397e5d081f028043a25c99179293f0d82a5",
         "attributes_json": "{\"Color\": \"Active Black\"}",
         "identity_basis": "brand_name_variant"
+      },
+      {
+        "product_id": "14a9ffcc-4784-5eeb-b377-b5d3e9544308",
+        "family_id": "d3c64282112668556bc205182d40d5d5db90017ad6b5998c21a9d8c1dd61af3e",
+        "identity_key": "7ce5a9bfc2cf36d250a7276698ea42bb9f65c7e87727161facfe42e12163ff2e",
+        "attributes_json": "{\"Color\":\"Shadow Grey\",\"Connectivity\":\"4G LTE\",\"Display size\":\"6.74 inches\"}",
+        "identity_basis": "manufacturer_evidence"
       },
       {
         "product_id": "14aa2aff-a9f1-5509-af01-0c4437a3a52c",
@@ -217547,6 +217913,13 @@
         "identity_basis": "brand_mpn_variant"
       },
       {
+        "product_id": "3bfee543-b1e2-5d11-802c-a57eee280a0c",
+        "family_id": "d48d2cda27e398488c9c649579acf06afd6c3941eb698801c69afec63fc08586",
+        "identity_key": "54d2d8c40dd83d6dbd7332464e81c7a154df63d2d8c65101698aff09ef0f4ae2",
+        "attributes_json": "{\"Capacity\":\"128 GB\",\"Color\":\"Fiery Orange\",\"Connectivity\":\"Dual SIM, 5G\",\"Display size\":\"6.83 inches\"}",
+        "identity_basis": "manufacturer_evidence"
+      },
+      {
         "product_id": "3bfef4d7-ad7f-5685-bc17-1db64c925bc7",
         "family_id": "976a833f999a5f0aa66cb5129273cc85e99cfd66202c07c916908a8598365d2d",
         "identity_key": "61af376dd8aeab3713a678704dc0208abce273f21692d08eaf1a55975d106786",
@@ -226542,6 +226915,13 @@
         "identity_basis": "brand_name_variant"
       },
       {
+        "product_id": "5f144fad-cc79-53e4-a777-d191c6624f31",
+        "family_id": "3def38f5618e3595ce50c3a3a8034848724f29e930021b626125dbcd1da0e474",
+        "identity_key": "72398d80ee66ffad67e2cd86381153e089b6f831d9ce65849b2a8b3f0ead29f5",
+        "attributes_json": "{\"Capacity\":\"574 L\",\"Color\":\"Prime Silver\"}",
+        "identity_basis": "manufacturer_evidence"
+      },
+      {
         "product_id": "5f14801d-4908-5d2f-9979-e895de7c151a",
         "family_id": "65ccdbb6eb78b516ba35a002c464c4b48d27a4f54a458fb189d741b57316a767",
         "identity_key": "af2aaf57a338fbb188b495f93160b5679e4ac023efc6aaac5955d5dadaa2ceb5",
@@ -227156,6 +227536,13 @@
         "identity_key": "35193890cfe97b3f91d4992b3db09a23c20bfe69626470165420e7017f61a412",
         "attributes_json": "{\"Storage\": \"8TB\"}",
         "identity_basis": "brand_name_variant"
+      },
+      {
+        "product_id": "611cda9e-e8c6-567d-bbff-827d50f96aa7",
+        "family_id": "773360a4d931848f6afd3fb16ac69dc8c35753a4984d6739da4808928edfaf7c",
+        "identity_key": "7cfd53f1d00d35561e0d47aa8d315b051e7367e41b91576ff450b768f0c5fb14",
+        "attributes_json": "{\"Capacity\":\"128 GB\",\"Color\":\"Silver Mist\",\"Connectivity\":\"Dual SIM, 5G\",\"Display size\":\"6.78 inches\",\"RAM\":\"6 GB\"}",
+        "identity_basis": "manufacturer_evidence"
       },
       {
         "product_id": "611fdf2c-d6ef-5516-a124-13e775f30911",
@@ -229802,6 +230189,13 @@
         "identity_key": "afb11de9ddc365ddeb18091015e9a4de8b99596a70f2fd20c6f7d551b44d2434",
         "attributes_json": "{\"Color\": \"Silver\", \"Storage\": \"2TB\"}",
         "identity_basis": "brand_name_variant"
+      },
+      {
+        "product_id": "6b7f06e0-de62-5439-9660-bc37bce168fa",
+        "family_id": "b04cfac73573391ca46464981ed9c087a3c433061776a0c62154085254bfbd6b",
+        "identity_key": "3f46e59a9d98a246dbc1b9cb9bb1cf33b936c858d10c4fdd8645de04d2a5bd3d",
+        "attributes_json": "{\"Color\":\"Ornate Black\"}",
+        "identity_basis": "manufacturer_evidence"
       },
       {
         "product_id": "6b8008bd-4e5a-5cd7-b76f-f5ea9bf9d2b6",
@@ -232693,6 +233087,13 @@
         "identity_key": "5787be2d4be1fbbd0b10e8db26ca05997466ea00e19eb5eb67d5072ff5380cd6",
         "attributes_json": "{}",
         "identity_basis": "existing_retailer_variant"
+      },
+      {
+        "product_id": "7815edbc-17a2-5b8b-b891-6b5bb668c90d",
+        "family_id": "465569cac96f29c443ccd4158baf994da825a2a6a8659ff781ee3cd539732fb7",
+        "identity_key": "352af4b53430e3e08bb7bac8ec2e393a0991a8fb5da31886dff90b5e9ff0c1de",
+        "attributes_json": "{\"Color\":\"PANTONE Alaskan Blue\",\"Display size\":\"6.72 inches\"}",
+        "identity_basis": "manufacturer_evidence"
       },
       {
         "product_id": "7820fd43-5930-5402-ae80-8c9dc9a11ee8",
@@ -237070,6 +237471,13 @@
         "identity_basis": "brand_name_variant"
       },
       {
+        "product_id": "89c4f09f-629e-551a-9999-c1f368ce82dc",
+        "family_id": "8a5cf48c7fa30d0e9618db8f14faa954a540196b3937bac389604a903c9a973d",
+        "identity_key": "6d5e1129d2b2e6a7ab3240002a73bf700ab5fde4a09e5d817f06be631916ca36",
+        "attributes_json": "{}",
+        "identity_basis": "manufacturer_evidence"
+      },
+      {
         "product_id": "89c8ef06-42ff-5bcc-969c-f1be1e1bbab6",
         "family_id": "3120daa61c0fc40a0aa05a84995010cde6d1b2786a7b1888b4053926e3c4541b",
         "identity_key": "160f3ef1b60e791c14c23ad6b27225ecc5462d06b5b586fec7e6f0a1fd1ff6d1",
@@ -237712,6 +238120,13 @@
         "identity_key": "1ce896ab0e844e916434fd425ab1d19c923c53b9a67f651b7f3ea00ad12f9248",
         "attributes_json": "{\"Color\": \"Black\", \"Display size\": \"13 in\"}",
         "identity_basis": "brand_mpn_variant"
+      },
+      {
+        "product_id": "8cb65155-c0aa-5243-ac38-dfaeba23a43e",
+        "family_id": "42c8621e0e4b74c5747fea53391247ad323a3491769eaced28392aa7c2ca79b9",
+        "identity_key": "0bcf1890d94be4de35b872cd0d19caed98ebbd9bd877cb1ca3373bea7d8770a5",
+        "attributes_json": "{\"Color\":\"Arc White\",\"Display size\":\"6.78 inches\"}",
+        "identity_basis": "manufacturer_evidence"
       },
       {
         "product_id": "8cb835a1-8afe-5908-aa8c-8aa54ed19219",
@@ -238468,6 +238883,13 @@
         "identity_key": "1b33bc6d35ce31d083f3cef8c4bca6882ff652121a74bc3ad1ba01e41e1f3d5c",
         "attributes_json": "{\"Color\": \"Electric Blue\"}",
         "identity_basis": "brand_name_variant"
+      },
+      {
+        "product_id": "8ff1c2cb-3d3c-5814-8fa0-ce35d5643165",
+        "family_id": "f7391b5abb51943bbf2427c5d792028b1b339b8c70817e0bea5a5954f9f5dac5",
+        "identity_key": "2055f37015fd11fde6b5ec64acf703673cbb8cbd358b99604c954a057b8f7dfc",
+        "attributes_json": "{\"Color\":\"Alpha Black\",\"Display size\":\"6.7 inches\"}",
+        "identity_basis": "manufacturer_evidence"
       },
       {
         "product_id": "8ffacdb8-5fd4-5ef8-ab7d-08cfd12d3fc4",
@@ -240932,6 +241354,13 @@
         "identity_key": "29f2f17840b790fbcb21c624d110ce046d903e9a0850282d5f35a7089c2769c8",
         "attributes_json": "{\"Variant\": \"Imperial Steel\"}",
         "identity_basis": "manufacturer_model_variant"
+      },
+      {
+        "product_id": "99554d16-9828-5f79-a4f6-869d450a9a6a",
+        "family_id": "4b3412d5bf7b1b3d52352ffba66f3d55d229d190dc289d6877182ebbacf5b9a2",
+        "identity_key": "d78cacb70e4f33cf01063b17ed04cb03d33a0c3e38f66dddc11f32719f5fe2c3",
+        "attributes_json": "{\"Color\":\"Cool Silver\",\"Display size\":\"14 inches\"}",
+        "identity_basis": "manufacturer_evidence"
       },
       {
         "product_id": "995bd27b-d25c-5515-9ec6-2c0d387ed111",
@@ -247738,6 +248167,13 @@
         "identity_basis": "brand_name_variant"
       },
       {
+        "product_id": "b4dec3b7-1725-59c7-8b18-def8b8a82837",
+        "family_id": "79cb252fd174196b67c962fcf6b005e7cfe958d552ea1f2dca2d00ac389aceeb",
+        "identity_key": "889336291557760e998a1c754a149240825c256973c047665e822f55902d6368",
+        "attributes_json": "{\"Capacity\":\"256 GB\",\"Color\":\"PANTONE Aqua Gray\",\"Display size\":\"6.8 inches\",\"RAM\":\"8 GB\"}",
+        "identity_basis": "manufacturer_evidence"
+      },
+      {
         "product_id": "b4e42048-b494-5e32-83fc-cbd0c8c74ef5",
         "family_id": "97ce4d819fab6a42a431b125b72a40be32cc749c4306c12447a081a2aacc9ce6",
         "identity_key": "7a0be149e3fcf36ac54fcf71baa7679761429ca95335da42240a346675fb0061",
@@ -248184,6 +248620,13 @@
         "identity_key": "f3ba6b29705e16e315c104df87bddc25140b0f2fc4cacd8f336e8b3e1741cab6",
         "attributes_json": "{\"Color\": \"Black Titanium\", \"Connectivity\": \"5G; Wi-Fi 6E; Bluetooth 5.3; Thread; NFC; second-generation Ultra Wideband\", \"Storage\": \"1TB\"}",
         "identity_basis": "manufacturer_model_variant"
+      },
+      {
+        "product_id": "b65b7e3d-961f-5787-b802-bc5a10afbe39",
+        "family_id": "5ccb7d560c3a6b1d0eb65cea7f1f9b8e05b12f66592a9e82475c579284a17172",
+        "identity_key": "15a2f971855db74f9b205e1893747e7fe8a4cd83ecf8c9051e5ea23f6e6c765b",
+        "attributes_json": "{\"Capacity\":\"128 GB\",\"Color\":\"Dark Blue\",\"Display size\":\"6.745 inches\",\"RAM\":\"6 GB\"}",
+        "identity_basis": "manufacturer_evidence"
       },
       {
         "product_id": "b668fef8-7670-5c88-b611-e31feccd311b",
@@ -255431,6 +255874,13 @@
         "identity_basis": "manufacturer_model_variant"
       },
       {
+        "product_id": "d442ba22-7a6a-513f-b6c2-bc5231923c61",
+        "family_id": "c8216faecb2b841f868f8d5c528a6927de7b6cfda30238b1920a9b1197645187",
+        "identity_key": "56123c87caa052e148102df5a27f12580ffc8efec784afffd8a6d1bb30782e95",
+        "attributes_json": "{\"Capacity\":\"128 GB\",\"Color\":\"Ellora Slate\",\"Display size\":\"6.67 inches\"}",
+        "identity_basis": "manufacturer_evidence"
+      },
+      {
         "product_id": "d46214de-cb3d-54d3-b9ed-850621cbfb56",
         "family_id": "4dee4bbed52fed01ec7ae8bbeb76bf450ab215bbea43af7f3f2fd06df01cf0aa",
         "identity_key": "5701e352dcd748482a8a1bfdc47e1a069da3acd552ccc0295069858efc13731d",
@@ -258616,6 +259066,13 @@
         "identity_basis": "brand_mpn_variant"
       },
       {
+        "product_id": "e1174ec1-e4c9-5262-9a78-9b219aab58ac",
+        "family_id": "f290ca375391359f5d462ee8b245561091324e8be4381e46e672d63f7394e19c",
+        "identity_key": "e2d2a7d5a770c9d580d5653e3c05b0be3cbc45662b0416fd6095dbb87cb67c77",
+        "attributes_json": "{\"Color\":\"Black\"}",
+        "identity_basis": "manufacturer_evidence"
+      },
+      {
         "product_id": "e11e8b40-efd1-58bc-950d-400c2cd45ae9",
         "family_id": "5e75714d906deb4360339d5d203dcf444d33bf67ac1df08c59a389399fcabbfa",
         "identity_key": "4173e3a625d9723514cbd24e4bbff4b9d4c76b4ee8ddfc514af9b068dbdecfe2",
@@ -259615,6 +260072,13 @@
         "identity_key": "39822fc083835f9710933164fa6368f46ce93ed494916452a90b909fbcd56a71",
         "attributes_json": "{\"Color\": \"Black\"}",
         "identity_basis": "brand_name_variant"
+      },
+      {
+        "product_id": "e438b58e-c405-5297-8149-6ac9a45c544f",
+        "family_id": "35dc16a8518f35335710226d101673660256306189b7e77dfa31749677d57fd7",
+        "identity_key": "93962effbbf1659df20ae8d997ec8253008830fb5724d18c74f1d80e43ac234f",
+        "attributes_json": "{\"Color\":\"Pearl White Luxury Gold\"}",
+        "identity_basis": "manufacturer_evidence"
       },
       {
         "product_id": "e4484a38-2096-5da5-b5df-ac7fb928e3a7",
