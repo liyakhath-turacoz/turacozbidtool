@@ -2,20 +2,21 @@
 
 | Snapshot metric | Count |
 | --- | --- |
-| As of | 2026-10-27 |
+| As of | 2026-10-28 |
 | Visible product records / variants | 9,195 |
 | Original records retained | 3,164 |
 | New records added | 6,031 |
 | Exact existing matches refreshed | 442 |
 | Departments / product types | 16 / 99 |
-| Normalized brands | 238 |
+| Normalized brands | 253 |
 | Rows with verified image files | 9,195 / 9,195 |
 | Rows with positive INR listed price | 9,195 / 9,195 |
 | Rows with GTIN | 342 / 9,195 |
-| Rows with release year | 4,344 / 9,195 |
+| Rows with release year | 4,807 / 9,195 |
+| Rows with blank release year | 4,388 / 9,195 |
 | Newly imported rows with verified year at ingestion | 33 |
-| Rows enriched in current exact-name research pass | 801 |
-| Release research evidence rows | 2,510 |
+| New release years verified in this pass | 202 |
+| Release research evidence rows | 2,973 |
 
 ## Department coverage
 
