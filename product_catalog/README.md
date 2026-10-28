@@ -64,7 +64,7 @@
 | Data | Rule |
 | --- | --- |
 | India listing | India-facing product/store listing with a positive INR price; stock status is not required. |
-| Release year | Keep only explicitly supported release years; unknown years remain blank. |
+| Release year | Some sourced CSV years use listing or availability evidence and require review as release dates; unknown years remain blank. |
 | GTIN | Use a source-provided valid GTIN; it is optional. |
 | Specifications | New rows require at least five structured specification fields and a detailed description. |
 | Images | Product images are locally downloaded, decoded, and stored as content-hash WebP files. |
@@ -80,7 +80,7 @@
 | category_plan.csv | Active department and category mapping. |
 | source_registry.json | Configured India source registry. |
 | availability_evidence.json | Product listing, price, and image evidence. |
-| release_research_evidence.csv | Verified release-year/date sources. |
+| release_research_evidence.csv | Sources for release-year research, including listing and availability evidence. |
 | catalog_metadata.json | Family/model/variant and type metadata. |
 | images/*.webp | Referenced product images plus images retained for hidden historical product rows. |
 

@@ -28,7 +28,9 @@
 | Release year populated | 4,807 | 52.3% |
 | Release year blank | 4,388 | 47.7% |
 | Exact release date populated | 2,029 | 22.1% |
-| Verified release year in live database | 3,883 | Database evidence basis |
+| Release year populated in local database | 3,883 | Local database snapshot |
+| Application-verified years in local database | 3,453 | Supported evidence categories |
+| CSV years absent from local database | 924 | Evidence review needed |
 | Newly imported rows with verified year at ingestion | 33 | Initial import |
 | New release years verified in this pass | 202 | Exact brand/model source review |
 | New rows with GTIN | 250 | New additions |
@@ -862,7 +864,7 @@
 | Price | India-listed INR amount in `official_price`; value may represent current selling price or MRP as specified by `price_type`. |
 | Product detail | Complete descriptions, all specifications, evidence, and source URLs are in `product_catalog/all_products.csv`. The inventory below shows three key specification fields for quick review. |
 | Images | Image links point to the local catalog WebP used by the app. |
-| Release year | Blank means no year is recorded; years are not inferred from listing or sitemap dates. |
+| Release year | CSV years are sourced; some use listing or availability evidence and require review as release dates. Blank means no year is recorded. |
 
 
 ## Price range by department
