@@ -274,7 +274,7 @@
     "TVs, Video & Home Entertainment": 225,
     "Wearables & Smart Devices": 337
   },
-  "with_exact_release_date": 1587,
+  "with_exact_release_date": 2029,
   "bulk_ingestion_report": "bulk_ingestion_report.json",
   "population_update": {
     "original_visible_records": 3164,

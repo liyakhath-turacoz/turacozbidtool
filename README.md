@@ -10,7 +10,7 @@ A location-based bidding marketplace where buyers request offers and eligible de
 - `product_catalog/` — current India catalog and locally stored product images.
 - `products/` — optional Open Icecat bundle and import instructions.
 
-The current India store catalog contains 1,516 variants across 82 brands and 16 departments. Product availability, price, and stock are point-in-time claims; confirm them with the linked store before purchase. Details are in [product_catalog/README.md](product_catalog/README.md).
+The current India store catalog contains 9,195 listed variants across 238 brands and 16 departments. Product availability, price, and stock are point-in-time claims; confirm them with the linked store before purchase. Details are in [product_catalog/README.md](product_catalog/README.md).
 
 ## Requirements
 
