@@ -2,7 +2,7 @@
 
 | Snapshot metric | Count |
 | --- | ---: |
-| As of | 2026-10-28 |
+| As of | 2026-10-29 |
 | Visible product records / variants | 9,211 |
 | Original records retained | 3,164 |
 | New records added | 6,047 |
@@ -11,9 +11,9 @@
 | Rows with verified local images | 9,211 / 9,211 |
 | Rows with positive INR listed price | 9,211 / 9,211 |
 | Rows with GTIN | 342 / 9,211 |
-| Rows with release year | 4,882 / 9,211 |
-| Rows with blank release year | 4,329 / 9,211 |
-| Release research evidence rows | 3,059 |
+| Rows with release year | 5,429 / 9,211 |
+| Rows with blank release year | 3,782 / 9,211 |
+| Release research evidence rows | 3,606 |
 
 ## Department coverage
 
